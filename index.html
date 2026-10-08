@@ -7,10 +7,9 @@ layout: default
 
 <section class="hero hero-home">
   <h1 class="hero-logo">
-    <span class="visually-hidden">{{ site.title }}</span>
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="{{ '/assets/img/logo/pere-logo.webp' | relative_url }}">
-      <img class="hero-logo-img" src="{{ '/assets/img/logo/pere-logo-anim.webp' | relative_url }}" alt="" width="800" height="507" fetchpriority="high">
+      <img class="hero-logo-img" src="{{ '/assets/img/logo/pere-logo-anim.webp' | relative_url }}" alt="{{ site.title }}" width="800" height="507" fetchpriority="high">
     </picture>
   </h1>
   <p class="lede">{{ site.tagline }} Play in your browser, no installs, and follow every update as it ships.</p>
