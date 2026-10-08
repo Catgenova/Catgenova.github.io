@@ -1,0 +1,23 @@
+{% comment %}
+  Usage: {% include ad-slot.html slot="home" %}
+  Shows a real AdSense unit once site.ads.adsense_client and the slot id are set
+  in _config.yml; until then shows a house slot linking to /advertise/.
+{% endcomment %}
+{% assign slot_id = site.ads.slots[include.slot] %}
+<aside class="ad-slot" aria-label="Advertisement">
+  <span class="ad-label">Ad</span>
+  {% if site.ads.adsense_client != "" and slot_id and slot_id != "" %}
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="{{ site.ads.adsense_client }}"
+       data-ad-slot="{{ slot_id }}"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  {% else %}
+  <a class="ad-house" href="{{ '/advertise/' | relative_url }}">
+    <strong>Your game or project here</strong>
+    <span>Reach players who love small web games &rarr;</span>
+  </a>
+  {% endif %}
+</aside>

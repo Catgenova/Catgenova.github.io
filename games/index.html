@@ -1,0 +1,13 @@
+---
+layout: default
+title: Games
+description: Every Pere Games title, playable in your browser.
+---
+<h1>Games</h1>
+<p class="lede">Everything we've made, playable in your browser.</p>
+<div class="game-grid">
+  {% assign games = site.games | sort: "order" %}
+  {% for game in games %}
+    {% include game-card.html game=game %}
+  {% endfor %}
+</div>

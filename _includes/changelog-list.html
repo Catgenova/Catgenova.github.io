@@ -1,0 +1,18 @@
+{% comment %}
+  Usage: {% include changelog-list.html entries=some_entries %}
+  Entries should already be filtered and sorted newest first.
+{% endcomment %}
+<ol class="changelog">
+  {% for entry in include.entries %}
+  {% assign game = site.games | where: "slug", entry.game | first %}
+  <li class="changelog-item" data-game="{{ entry.game }}">
+    <div class="changelog-head">
+      <time datetime="{{ entry.date | date_to_xmlschema }}">{{ entry.date | date: "%b %-d, %Y" }}</time>
+      {% if game %}<a class="tag" href="{{ game.url | relative_url }}">{{ game.title }}</a>{% endif %}
+      {% if entry.version %}<code class="version">v{{ entry.version }}</code>{% endif %}
+    </div>
+    <h3><a href="{{ entry.url | relative_url }}">{{ entry.title }}</a></h3>
+    <div class="changelog-body">{{ entry.content | markdownify }}</div>
+  </li>
+  {% endfor %}
+</ol>

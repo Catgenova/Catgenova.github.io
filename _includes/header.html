@@ -1,0 +1,17 @@
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="{{ '/' | relative_url }}">
+      <img src="{{ '/assets/img/favicon.svg' | relative_url }}" alt="" width="28" height="28">
+      <span>{{ site.title }}</span>
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        {% for item in site.data.nav %}
+        {% assign active = false %}
+        {% if page.url == item.url or page.url contains item.url %}{% assign active = true %}{% endif %}
+        <li><a href="{{ item.url | relative_url }}"{% if active %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+</header>

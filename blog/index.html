@@ -1,0 +1,21 @@
+---
+layout: default
+title: Blog
+description: Dev notes, behind-the-scenes and announcements from Pere Games.
+---
+<div class="section-head">
+  <h1>Blog</h1>
+  <a href="{{ '/blog/feed.xml' | relative_url }}">RSS</a>
+</div>
+<p class="lede">Dev notes, behind-the-scenes and announcements.</p>
+<ul class="post-list post-list-lg">
+  {% for post in site.posts %}
+  <li>
+    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+    <div>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      {% if post.excerpt %}<p class="muted">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>{% endif %}
+    </div>
+  </li>
+  {% endfor %}
+</ul>

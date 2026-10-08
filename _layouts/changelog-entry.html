@@ -1,0 +1,14 @@
+---
+layout: default
+---
+{% assign game = site.games | where: "slug", page.game | first %}
+<article class="prose">
+  <p class="eyebrow"><a href="{{ '/changelog/' | relative_url }}">&larr; Changelog</a></p>
+  <h1>{{ page.title }}</h1>
+  <p class="byline">
+    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+    {% if game %} · <a href="{{ game.url | relative_url }}">{{ game.title }}</a>{% endif %}
+    {% if page.version %} · <code class="version">v{{ page.version }}</code>{% endif %}
+  </p>
+  {{ content }}
+</article>

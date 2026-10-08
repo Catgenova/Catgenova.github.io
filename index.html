@@ -1,0 +1,56 @@
+---
+layout: default
+---
+{% assign games = site.games | sort: "order" %}
+{% assign featured = games | where: "featured", true %}
+{% assign updates = site.changelog | sort: "date" | reverse %}
+
+<section class="hero">
+  <h1>{{ site.title }}</h1>
+  <p class="lede">{{ site.tagline }} Play in your browser, no installs, and follow every update as it ships.</p>
+  <div class="game-actions">
+    <a class="btn btn-primary btn-lg" href="{{ '/games/' | relative_url }}">Browse games</a>
+    <a class="btn btn-lg" href="{{ '/changelog/' | relative_url }}">What's new</a>
+  </div>
+</section>
+
+<section aria-labelledby="featured-heading">
+  <div class="section-head">
+    <h2 id="featured-heading">Featured games</h2>
+    <a href="{{ '/games/' | relative_url }}">All games &rarr;</a>
+  </div>
+  <div class="game-grid">
+    {% if featured.size > 0 %}{% assign shown = featured %}{% else %}{% assign shown = games %}{% endif %}
+    {% for game in shown limit: 6 %}
+      {% include game-card.html game=game %}
+    {% endfor %}
+  </div>
+</section>
+
+{% include ad-slot.html slot="home" %}
+
+<div class="split">
+  <section aria-labelledby="updates-heading">
+    <div class="section-head">
+      <h2 id="updates-heading">Latest updates</h2>
+      <a href="{{ '/changelog/' | relative_url }}">Changelog &rarr;</a>
+    </div>
+    {% assign recent = updates | slice: 0, 4 %}
+    {% include changelog-list.html entries=recent %}
+  </section>
+
+  <section aria-labelledby="blog-heading">
+    <div class="section-head">
+      <h2 id="blog-heading">From the blog</h2>
+      <a href="{{ '/blog/' | relative_url }}">Blog &rarr;</a>
+    </div>
+    <ul class="post-list">
+      {% for post in site.posts limit: 4 %}
+      <li>
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>

@@ -1,0 +1,39 @@
+---
+layout: default
+---
+{% assign entries = site.changelog | where: "game", page.slug | sort: "date" | reverse %}
+<section class="game-hero">
+  <div class="game-hero-text">
+    <p class="eyebrow"><a href="{{ '/games/' | relative_url }}">&larr; All games</a></p>
+    <h1>{{ page.title }}</h1>
+    <p class="lede">{{ page.tagline }}</p>
+    <div class="game-meta">
+      <span class="status status-{{ page.status | slugify }}">{{ page.status }}</span>
+      {% for tag in page.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+    </div>
+    <div class="game-actions">
+      {% if page.play_url %}<a class="btn btn-primary btn-lg" href="{{ page.play_url }}">Play {{ page.title }}</a>{% endif %}
+      {% if page.source_url %}<a class="btn btn-lg" href="{{ page.source_url }}">Source</a>{% endif %}
+    </div>
+  </div>
+  {% if page.cover %}
+  <img class="game-hero-cover" src="{{ page.cover | relative_url }}" alt="{{ page.title }} cover art">
+  {% endif %}
+</section>
+
+<div class="split">
+  <div class="prose">
+    <h2>About</h2>
+    {{ content }}
+  </div>
+  <aside>
+    <h2>Recent updates</h2>
+    {% if entries.size > 0 %}
+      {% assign recent = entries | slice: 0, 5 %}
+      {% include changelog-list.html entries=recent %}
+      <p><a href="{{ '/changelog/' | relative_url }}?game={{ page.slug }}">Full changelog &rarr;</a></p>
+    {% else %}
+      <p class="muted">No updates posted yet.</p>
+    {% endif %}
+  </aside>
+</div>
