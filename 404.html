@@ -4,6 +4,15 @@ title: Page not found
 permalink: /404.html
 sitemap: false
 ---
+<script>
+  // Games that moved: send old links to the new path, keeping the rest of the URL.
+  (function () {
+    var moved = { wurm: "wildermon" };
+    var m = location.pathname.match(/^\/([^\/]+)(\/.*)?$/);
+    var to = m && moved[m[1].toLowerCase()];
+    if (to) location.replace("/" + to + (m[2] || "/") + location.search + location.hash);
+  })();
+</script>
 <section class="hero">
   <h1>404</h1>
   <p class="lede">That page wandered off. If you followed an old link to a game, it may have moved.</p>
