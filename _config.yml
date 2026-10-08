@@ -19,8 +19,10 @@ social:
   # discord: https://discord.gg/your-invite
 
 # Ad space. Leave adsense_client empty to show the house "advertise here" slot.
-# When you get approved, set it (e.g. "ca-pub-1234567890") and fill in slot ids,
-# then uncomment the line in /ads.txt.
+# Setting adsense_client adds Google's verification tag and ad script to every
+# page (enough for Auto ads) and fills in /ads.txt. Slot ids are only needed
+# for the fixed ad boxes on the home page and under blog posts.
+# Use the full id from AdSense, e.g. "ca-pub-1234567890123456".
 ads:
   adsense_client: ""
   slots:

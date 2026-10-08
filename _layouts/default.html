@@ -13,6 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   {% if site.ads.adsense_client != "" %}
+  <meta name="google-adsense-account" content="{{ site.ads.adsense_client }}">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ site.ads.adsense_client }}" crossorigin="anonymous"></script>
   {% endif %}
 </head>
