@@ -88,7 +88,7 @@ main.wrap { flex: 1; padding-top: 40px; padding-bottom: 64px; }
   border-bottom: 1px solid var(--border);
 }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; flex-wrap: wrap; }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.15rem; color: var(--text); text-decoration: none; }
+.brand { display: flex; align-items: center; gap: 10px; padding: 4px 0; font-weight: 700; font-size: 1.15rem; color: var(--text); text-decoration: none; }
 .nav { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
 .nav a { display: block; padding: 6px 12px; border-radius: 999px; color: var(--muted); text-decoration: none; font-weight: 500; }
 .nav a:hover { color: var(--text); background: var(--surface-2); }
@@ -139,7 +139,19 @@ a.tag:hover { color: var(--accent); }
 /* Sections */
 
 .hero { padding: 32px 0 48px; }
-.hero h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); background: linear-gradient(90deg, var(--accent), var(--highlight)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* Home hero: the animated logo canvas is larger than the settled logo (room
+   for the splash), so it overflows a box sized to the final logo. */
+.hero-home { text-align: center; padding-top: clamp(72px, 14vw, 150px); overflow-x: clip; }
+.hero-home .lede { margin-left: auto; margin-right: auto; }
+.hero-home .game-actions { justify-content: center; }
+.hero-logo { position: relative; width: min(520px, 78%); aspect-ratio: 1688 / 824; margin: 0 auto 32px; }
+.hero-logo-img { position: absolute; max-width: none; width: 145.97%; height: auto; left: -25.59%; top: -64.93%; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-img { width: 100%; left: 0; top: 0; }
+}
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.hero h1:not(.hero-logo) { font-size: clamp(2.5rem, 8vw, 4.5rem); background: linear-gradient(90deg, var(--accent), var(--highlight)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
 .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 16px; }
 .section-head h1, .section-head h2 { margin: 0; }

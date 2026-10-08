@@ -79,3 +79,21 @@ bundle exec jekyll serve
 ```
 
 Then open http://localhost:4000.
+
+## Logo
+
+`_source/logo-frames/` holds the original 2700×1636 PNG frames of the logo
+animation. Folders starting with `_` aren't published. The site uses files
+generated from them in `assets/img/logo/`:
+
+- `pere-logo-anim.webp`: home page animation (24 fps, plays once)
+- `pere-logo.webp`: final frame, shown instead when the visitor prefers reduced motion
+- `pere-logo-nav.png`: final frame for the header bar
+
+To regenerate the animation:
+
+```sh
+ffmpeg -framerate 30 -start_number 1 -i _source/logo-frames/Pere-logo_%05d.png \
+  -vf "crop=2464:1562:83:60,fps=24,scale=800:-1:flags=lanczos" \
+  -c:v libwebp_anim -quality 50 -compression_level 4 -loop 1 assets/img/logo/pere-logo-anim.webp
+```
