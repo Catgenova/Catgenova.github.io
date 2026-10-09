@@ -21,7 +21,7 @@ Game front matter:
 title: Wildermon
 tagline: One-line pitch shown on cards.
 status: Live          # Live, Beta, Early Access or In Development
-tags: [Browser, Online saves]
+tags: [MMO, Open World]   # each tag links to /games/?tag=<tag>
 featured: true        # show on the home page
 order: 1              # sort order on the games page
 play_url: /wildermon/

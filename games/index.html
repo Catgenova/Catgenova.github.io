@@ -3,11 +3,23 @@ layout: default
 title: Games
 description: Every Pere Games title, playable in your browser.
 ---
+{% assign games = site.games | sort: "order" %}
+{% assign all_tags = games | map: "tags" | join: "|" | split: "|" | uniq | sort_natural %}
 <h1>Games</h1>
 <p class="lede">Everything we've made, playable in your browser.</p>
+
+<div class="filters" role="group" aria-label="Filter by tag" data-filters hidden>
+  <button type="button" class="chip" data-filter="" aria-pressed="true">All</button>
+  {% for tag in all_tags %}
+  <button type="button" class="chip" data-filter="{{ tag | slugify }}" aria-pressed="false">{{ tag }}</button>
+  {% endfor %}
+</div>
+
 <div class="game-grid">
-  {% assign games = site.games | sort: "order" %}
   {% for game in games %}
     {% include game-card.html game=game %}
   {% endfor %}
 </div>
+<p class="muted" data-empty hidden>No games with that tag yet.</p>
+
+<script src="{{ '/assets/js/filter.js' | relative_url }}" data-items=".game-card" data-attr="tags" data-param="tag" defer></script>

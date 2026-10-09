@@ -231,3 +231,6 @@ section + section, section + .ad-slot, .ad-slot + .split, .ad-slot + section { m
   .game-card { transition: none; }
   .game-card:hover { transform: none; }
 }
+
+.game-card[hidden] { display: none; }
+.tag-more { background: transparent; border: 1px dashed var(--border); }

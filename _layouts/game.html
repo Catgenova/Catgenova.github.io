@@ -9,7 +9,7 @@ layout: default
     <p class="lede">{{ page.tagline }}</p>
     <div class="game-meta">
       <span class="status status-{{ page.status | slugify }}">{{ page.status }}</span>
-      {% for tag in page.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+      {% for tag in page.tags %}{% include tag-link.html tag=tag %}{% endfor %}
     </div>
     <div class="game-actions">
       {% if page.play_url %}<a class="btn btn-primary btn-lg" href="{{ page.play_url }}">Play {{ page.title }}</a>{% endif %}

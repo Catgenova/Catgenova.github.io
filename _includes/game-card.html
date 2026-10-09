@@ -1,5 +1,5 @@
 {% assign game = include.game %}
-<article class="game-card">
+<article class="game-card" data-tags="{% for tag in game.tags %}{{ tag | slugify }} {% endfor %}">
   <a class="game-cover" href="{{ game.url | relative_url }}" tabindex="-1" aria-hidden="true">
     {% if game.cover %}
     <img src="{{ game.cover | relative_url }}" alt="" loading="lazy">
@@ -10,7 +10,8 @@
   <div class="game-body">
     <div class="game-meta">
       <span class="status status-{{ game.status | slugify }}">{{ game.status }}</span>
-      {% for tag in game.tags limit: 3 %}<span class="tag">{{ tag }}</span>{% endfor %}
+      {% for tag in game.tags limit: 4 %}{% include tag-link.html tag=tag %}{% endfor %}
+      {% if game.tags.size > 4 %}<a class="tag tag-more" href="{{ game.url | relative_url }}">+{{ game.tags.size | minus: 4 }} more</a>{% endif %}
     </div>
     <h3><a href="{{ game.url | relative_url }}">{{ game.title }}</a></h3>
     <p>{{ game.tagline }}</p>
