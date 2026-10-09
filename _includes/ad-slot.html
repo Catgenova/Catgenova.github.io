@@ -1,12 +1,16 @@
 {% comment %}
   Usage: {% include ad-slot.html slot="home" %}
   Shows a real AdSense unit once site.ads.adsense_client and the slot id are set
-  in _config.yml; until then shows a house slot linking to /advertise/.
+  in _config.yml. Until then it shows a house slot linking to /advertise/, or
+  nothing while the advertise section is switched off.
 {% endcomment %}
 {% assign slot_id = site.ads.slots[include.slot] %}
+{% assign has_ad = false %}
+{% if site.ads.adsense_client != "" and slot_id and slot_id != "" %}{% assign has_ad = true %}{% endif %}
+{% if has_ad or site.sections.advertise %}
 <aside class="ad-slot" aria-label="Advertisement">
   <span class="ad-label">Ad</span>
-  {% if site.ads.adsense_client != "" and slot_id and slot_id != "" %}
+  {% if has_ad %}
   <ins class="adsbygoogle"
        style="display:block"
        data-ad-client="{{ site.ads.adsense_client }}"
@@ -21,3 +25,4 @@
   </a>
   {% endif %}
 </aside>
+{% endif %}

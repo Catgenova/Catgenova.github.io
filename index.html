@@ -34,28 +34,28 @@ layout: default
 
 {% include ad-slot.html slot="home" %}
 
-<div class="split">
-  <section aria-labelledby="updates-heading">
-    <div class="section-head">
-      <h2 id="updates-heading">Latest updates</h2>
-      <a href="{{ '/changelog/' | relative_url }}">Changelog &rarr;</a>
-    </div>
-    {% assign recent = updates | slice: 0, 4 %}
-    {% include changelog-list.html entries=recent %}
-  </section>
+<section aria-labelledby="updates-heading">
+  <div class="section-head">
+    <h2 id="updates-heading">Latest updates</h2>
+    <a href="{{ '/changelog/' | relative_url }}">Changelog &rarr;</a>
+  </div>
+  {% assign recent = updates | slice: 0, 4 %}
+  {% include changelog-list.html entries=recent %}
+</section>
 
-  <section aria-labelledby="blog-heading">
-    <div class="section-head">
-      <h2 id="blog-heading">From the blog</h2>
-      <a href="{{ '/blog/' | relative_url }}">Blog &rarr;</a>
-    </div>
-    <ul class="post-list">
-      {% for post in site.posts limit: 4 %}
-      <li>
-        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
-        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-</div>
+{% if site.sections.blog %}
+<section aria-labelledby="blog-heading">
+  <div class="section-head">
+    <h2 id="blog-heading">From the blog</h2>
+    <a href="{{ '/blog/' | relative_url }}">Blog &rarr;</a>
+  </div>
+  <ul class="post-list">
+    {% for post in site.posts limit: 4 %}
+    <li>
+      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}

@@ -1,4 +1,5 @@
 ---
+published: false
 layout: page
 title: Advertise
 description: Put your game or project in front of Pere Games players.

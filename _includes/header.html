@@ -6,6 +6,7 @@
     <nav aria-label="Main">
       <ul class="nav">
         {% for item in site.data.nav %}
+        {% if item.section and site.sections[item.section] == false %}{% continue %}{% endif %}
         {% assign active = false %}
         {% if page.url == item.url or page.url contains item.url %}{% assign active = true %}{% endif %}
         <li><a href="{{ item.url | relative_url }}"{% if active %} aria-current="page"{% endif %}>{{ item.title }}</a></li>

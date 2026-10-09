@@ -37,9 +37,16 @@ collections:
     output: true
     permalink: /changelog/:name/
 
+# Sections switched off for now. To bring one back, set it to true here AND
+# remove `published: false` from its page (blog/index.html or
+# advertise/index.md); for the blog, also from the posts default below.
+sections:
+  blog: false
+  advertise: false
+
 defaults:
   - scope: { path: "", type: posts }
-    values: { layout: post, permalink: "/blog/:year/:month/:title/" }
+    values: { layout: post, permalink: "/blog/:year/:month/:title/", published: false }
   - scope: { path: "", type: games }
     values: { layout: game }
   - scope: { path: "", type: changelog }
@@ -60,6 +67,7 @@ excerpt_separator: <!--more-->
 
 exclude:
   - README.md
+  - CLAUDE.md
   - Gemfile
   - Gemfile.lock
   - vendor

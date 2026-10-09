@@ -4,5 +4,7 @@
   url: /changelog/
 - title: Blog
   url: /blog/
+  section: blog
 - title: Advertise
   url: /advertise/
+  section: advertise
