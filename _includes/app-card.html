@@ -1,0 +1,21 @@
+{% assign app = include.app %}
+<article class="game-card">
+  <a class="game-cover" href="{{ app.app_url | relative_url }}" tabindex="-1" aria-hidden="true">
+    {% if app.cover %}
+    <img src="{{ app.cover | relative_url }}" alt="" loading="lazy">
+    {% else %}
+    <span class="game-cover-fallback">{{ app.title | slice: 0 }}</span>
+    {% endif %}
+  </a>
+  <div class="game-body">
+    <div class="game-meta">
+      <span class="status status-{{ app.status | slugify }}">{{ app.status }}</span>
+      {% for tag in app.tags limit: 4 %}<span class="tag">{{ tag }}</span>{% endfor %}
+    </div>
+    <h3><a href="{{ app.app_url | relative_url }}">{{ app.title }}</a></h3>
+    <p>{{ app.tagline }}</p>
+    <div class="game-actions">
+      <a class="btn btn-primary" href="{{ app.app_url | relative_url }}">Open {{ app.title }}</a>
+    </div>
+  </div>
+</article>

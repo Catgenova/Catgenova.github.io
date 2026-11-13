@@ -4,6 +4,7 @@ layout: default
 {% assign games = site.games | sort: "order" %}
 {% assign featured = games | where: "featured", true %}
 {% assign updates = site.changelog | sort: "date" | reverse %}
+{% assign apps = site.apps | sort: "order" %}
 
 <section class="hero hero-home">
   <h1 class="hero-logo">
@@ -31,6 +32,19 @@ layout: default
     {% endfor %}
   </div>
 </section>
+
+{% if apps.size > 0 %}
+<section aria-labelledby="apps-heading">
+  <div class="section-head">
+    <h2 id="apps-heading">Apps</h2>
+  </div>
+  <div class="game-grid">
+    {% for app in apps %}
+      {% include app-card.html app=app %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
 
 {% include ad-slot.html slot="home" %}
 

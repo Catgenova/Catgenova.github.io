@@ -36,6 +36,10 @@ collections:
   changelog:
     output: true
     permalink: /changelog/:name/
+  # Apps are listed on the home page and link straight to the app, so they
+  # have no page of their own.
+  apps:
+    output: false
 
 # Sections switched off for now. To bring one back, set it to true here AND
 # remove `published: false` from its page (blog/index.html or

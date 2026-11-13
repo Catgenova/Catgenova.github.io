@@ -9,6 +9,7 @@ builds automatically, so there is no build step to run.
 | What | Where | Notes |
 | --- | --- | --- |
 | A game | `_games/<slug>.md` | Copy `wildermon.md`. The filename is the slug, used by changelog entries and for the page URL `/games/<slug>/`. |
+| An app | `_apps/<slug>.md` | Copy `fretspeak.md`. Listed under Apps on the home page; `app_url` is where Open goes. The app's own files live in a folder such as `fretspeak/`. |
 | A changelog entry | `_changelog/YYYY-MM-DD-<short-name>.md` | Needs `title`, `game: <slug>` and `date`. `version` is optional. The body is markdown. |
 | A blog post | `_posts/YYYY-MM-DD-<title>.md` | Needs `title`. Put `<!--more-->` after the intro to set the excerpt. |
 | Cover art | `assets/img/games/` | 16:9 works best. Set `cover:` in the game file. |
