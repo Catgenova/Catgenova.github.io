@@ -638,8 +638,14 @@ const A_SHAPES = { '':[null,0,2,2,2,0], m:[null,0,2,2,1,0], '7':[null,0,2,0,2,0]
   '5':[null,0,2,2,null,null], sus2:[null,0,2,2,0,0], sus4:[null,0,2,2,3,0], dim:[null,0,1,2,1,null], aug:[null,0,3,2,2,1],
   '6':[null,0,2,2,2,2], m6:[null,0,2,2,1,2], add9:[null,0,2,4,2,0], dim7:[null,0,1,2,1,2], m7b5:[null,0,1,0,1,null], '7sus4':[null,0,2,0,3,0] };
 
-const EXAMPLE = '[Intro] h Em q 4:2 3:0 | h C q 4:2 2:1 | h G q 1:3 1:3h5 | h D q 2:3p2 3:2 | ' +
-                '[Riff] e 6:0 6:3 5:0 5:2 q 5:2b4 5:0 | q 6:3 e 6:0 6:0 h 6:0~ |';
+// Earlier versions opened with an example tab. An untouched copy of it is removed on load.
+const OLD_EXAMPLE_TITLE = 'Example: E minor warm-up', OLD_EXAMPLE_HASH = 1786096394;
+function isUntouchedExample(s) {
+  if (!s || s.title !== OLD_EXAMPLE_TITLE) return false;
+  const j = JSON.stringify(s.items); let h = 5381;
+  for (let i = 0; i < j.length; i++) h = ((h * 33) ^ j.charCodeAt(i)) >>> 0;
+  return h === OLD_EXAMPLE_HASH;
+}
 
 /* ---------- Storage ---------- */
 const store = {
@@ -684,12 +690,6 @@ function normalizeSong(o) {
   o.items.forEach((it) => { if (it.t === 'n') { if (!DUR[it.d]) it.d = 'e'; it.dot = !!it.dot; } });
   if (!o.items.length) o.items.push({ t: 'n', n: new Array(o.tuning.length).fill(''), d: 'e', dot: false });
   return o;
-}
-function exampleSong() {
-  const notes = TUNINGS.standard.notes.slice();
-  const r = parseQuick(EXAMPLE, notes, null);
-  const items = r.items; items.push({ t: 'n', n: new Array(6).fill(''), d: 'q', dot: false });
-  return normalizeSong({ id: newId(), title: 'Example: E minor warm-up', tuningKey: 'standard', tuning: notes, time: '4/4', timed: true, items, updated: Date.now() });
 }
 function blankSong(from) {
   const tuning = from ? from.tuning.slice() : TUNINGS.standard.notes.slice();
@@ -2295,17 +2295,22 @@ function syncControls() {
 }
 
 /* ---------- Start ---------- */
+// Opens the most recently saved tab. With nothing saved, starts with a blank tab.
 function loadLibrary() {
   const saved = store.get(LS_LIB);
   const out = { currentId: null, songs: {} };
   if (saved && saved.songs) {
-    Object.values(saved.songs).forEach((s) => { if (validSong(s)) { const c = normalizeSong(s); out.songs[c.id] = c; } });
-    out.currentId = saved.currentId;
+    Object.values(saved.songs).forEach((s) => {
+      if (validSong(s) && !isUntouchedExample(s)) { const c = normalizeSong(s); out.songs[c.id] = c; }
+    });
   }
   const old = store.get(LS_OLD_SONG);   // tab saved by the first version, before the library existed
-  if (validSong(old) && !Object.keys(out.songs).length) { const c = normalizeSong(old); c.updated = c.updated || Date.now(); out.songs[c.id] = c; out.currentId = c.id; }
-  if (!Object.keys(out.songs).length) { const ex = exampleSong(); out.songs[ex.id] = ex; out.currentId = ex.id; }
-  if (!out.songs[out.currentId]) out.currentId = Object.values(out.songs).sort((a, b) => (b.updated || 0) - (a.updated || 0))[0].id;
+  if (validSong(old) && !Object.keys(out.songs).length && old.title !== OLD_EXAMPLE_TITLE) {
+    const c = normalizeSong(old); c.updated = c.updated || Date.now(); out.songs[c.id] = c;
+  }
+  const latest = Object.values(out.songs).sort((a, b) => (b.updated || 0) - (a.updated || 0))[0];
+  if (latest) out.currentId = latest.id;
+  else { const blank = blankSong(null); out.songs[blank.id] = blank; out.currentId = blank.id; }
   return out;
 }
 lib = loadLibrary();
