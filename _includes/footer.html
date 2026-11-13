@@ -4,8 +4,6 @@
     <ul class="footer-links">
       <li><a href="{{ '/privacy/' | relative_url }}">Privacy</a></li>
       {% if site.sections.blog %}<li><a href="{{ '/blog/feed.xml' | relative_url }}">Blog RSS</a></li>{% endif %}
-      <li><a href="{{ '/changelog/feed.xml' | relative_url }}">Changelog RSS</a></li>
-      {% if site.social.github %}<li><a href="https://github.com/{{ site.social.github }}">GitHub</a></li>{% endif %}
       {% if site.social.itch %}<li><a href="https://{{ site.social.itch }}.itch.io">itch.io</a></li>{% endif %}
       {% if site.social.bluesky %}<li><a href="https://bsky.app/profile/{{ site.social.bluesky }}">Bluesky</a></li>{% endif %}
       {% if site.social.discord %}<li><a href="{{ site.social.discord }}">Discord</a></li>{% endif %}
