@@ -113,7 +113,9 @@ section { display: grid; gap: 1rem; min-width: 0; }
 .lede { color: var(--muted); }
 
 /* Form controls */
-.fields { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; }
+.fields { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1rem; }
+.fields .field { grid-column: span 2; }
+.fields .field.wide { grid-column: span 3; }
 .field { display: grid; gap: 0.3rem; min-width: 0; align-content: start; }
 .field label, .label { font-weight: 700; font-size: 0.95rem; }
 input[type="text"], input[type="number"], select, textarea {
@@ -236,7 +238,8 @@ caption { text-align: left; font-weight: 700; padding-bottom: 0.4rem; }
 
 @media (max-width: 760px) {
   .fields { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .fields .field:first-child, .fields .field:nth-child(2) { grid-column: 1 / -1; }
+  .fields .field, .fields .field.wide { grid-column: span 1; }
+  .fields .field.wide, .fields .field.sound { grid-column: 1 / -1; }
   .two { grid-template-columns: minmax(0, 1fr); }
   .lib-item { grid-template-columns: minmax(0, 1fr); }
   :root { --grid-size: 1.1rem; }
@@ -271,13 +274,21 @@ caption { text-align: left; font-weight: 700; padding-bottom: 0.4rem; }
   <section aria-labelledby="h-song">
     <h2 id="h-song" class="sr-only">Song details</h2>
     <div class="fields">
-      <div class="field">
+      <div class="field wide">
         <label for="title">Song title</label>
         <input type="text" id="title" autocomplete="off">
       </div>
-      <div class="field">
+      <div class="field wide">
         <label for="tuning">Tuning</label>
         <select id="tuning"></select>
+      </div>
+      <div class="field sound">
+        <label for="sound">Playback sound</label>
+        <select id="sound">
+          <option value="acoustic">Acoustic guitar</option>
+          <option value="clean">Electric guitar, clean</option>
+          <option value="drive">Electric guitar, overdrive</option>
+        </select>
       </div>
       <div class="field">
         <label for="timesig">Time signature</label>
@@ -404,10 +415,11 @@ caption { text-align: left; font-weight: 700; padding-bottom: 0.4rem; }
       <dl class="syntax">
         <dt>6:3</dt><dd>String 6, fret 3. Strings count from 1 (the thinnest) to 6 (the thickest).</dd>
         <dt>5:2+4:0</dt><dd>Several strings at once: join them with a plus sign.</dd>
-        <dt>3:5h7</dt><dd>Techniques: h hammer-on, p pull-off, b bend, r release, / slide up, \ slide down, ~ vibrato, x muted.</dd>
+        <dt>3:5h7</dt><dd>Techniques: h hammer-on, p pull-off, b bend, r release, / slide up, \ slide down, ~ or v vibrato, x muted.</dd>
         <dt>G, Am, F#m, D7</dt><dd>A chord name, starting with a capital letter, adds a full chord shape.</dd>
         <dt>x32010</dt><dd>A chord written string 6 to 1. Use dashes for frets above 9: x-12-14-14-13-x.</dd>
         <dt>w h q e s</dt><dd>Note lengths: whole, half, quarter, eighth, sixteenth. Add a dot for dotted, as in q. The length applies to everything after it.</dd>
+        <dt>2w 3w 4w</dt><dd>Hold a note or rest for two, three or four whole notes. It carries on through the bars after it.</dd>
         <dt>|</dt><dd>Bar line.</dd>
         <dt>-</dt><dd>A rest, with the current length.</dd>
         <dt>Em*4</dt><dd>Repeat anything with a star and a count.</dd>
@@ -529,7 +541,8 @@ caption { text-align: left; font-weight: 700; padding-bottom: 0.4rem; }
         <tr><td><kbd>0</kbd> to <kbd>9</kbd></td><td>Enter a fret. Type two digits in a row for frets 10 and up.</td></tr>
         <tr><td><kbd>x</kbd></td><td>Muted string.</td></tr>
         <tr><td><kbd>h</kbd> <kbd>p</kbd> <kbd>b</kbd> <kbd>r</kbd> <kbd>/</kbd> <kbd>\</kbd> <kbd>~</kbd></td><td>Add a technique after the fret: hammer-on, pull-off, bend, release, slide up, slide down, vibrato. Then type the target fret, for example 5 h 7.</td></tr>
-        <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>Make this column's note shorter or longer: sixteenth, eighth, quarter, half, whole.</td></tr>
+        <tr><td><kbd>v</kbd></td><td>Vibrato, the same as <kbd>~</kbd>. For example 7 v.</td></tr>
+        <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>Make this column's note shorter or longer: sixteenth, eighth, quarter, half, whole, then 2, 3 and 4 whole notes for notes held through the next bars.</td></tr>
         <tr><td><kbd>.</kbd></td><td>Dotted note on or off.</td></tr>
         <tr><td><kbd>l</kbd></td><td>Say this column's note length and how full the bar is.</td></tr>
         <tr><td><kbd>Enter</kbd></td><td>Go to the next column, adding one at the end if needed. New columns copy the current note length.</td></tr>
@@ -544,7 +557,7 @@ caption { text-align: left; font-weight: 700; padding-bottom: 0.4rem; }
         <tr><td><kbd>Shift</kbd>+<kbd>Space</kbd></td><td>Play from here to the end. <kbd>Escape</kbd> stops.</td></tr>
         <tr><td><kbd>w</kbd></td><td>Where am I: bar, position, length, string and the whole column.</td></tr>
         <tr><td><kbd>Shift</kbd>+<kbd>W</kbd></td><td>Read the whole bar.</td></tr>
-        <tr><td><kbd>t</kbd></td><td>Read the tuning and time signature.</td></tr>
+        <tr><td><kbd>t</kbd></td><td>Read the tuning, time signature and playback sound.</td></tr>
         <tr><td><kbd>q</kbd></td><td>Jump to quick entry. <kbd>Escape</kbd> there comes back.</td></tr>
         <tr><td><kbd>Control</kbd>+<kbd>Z</kbd>, <kbd>Control</kbd>+<kbd>Y</kbd></td><td>Undo and redo. Command on a Mac.</td></tr>
         <tr><td><kbd>?</kbd></td><td>Hear a short key summary.</td></tr>
@@ -606,13 +619,17 @@ const TUNINGS = {
 };
 // Note lengths, longest first. Beats are counted in quarter notes.
 const DUR = {
+  w4: { beats: 16, name: '4 whole notes', letter: '4W', long: true },
+  w3: { beats: 12, name: '3 whole notes', letter: '3W', long: true },
+  w2: { beats: 8, name: '2 whole notes', letter: '2W', long: true },
   w: { beats: 4, name: 'whole', letter: 'W' },
   h: { beats: 2, name: 'half', letter: 'H' },
   q: { beats: 1, name: 'quarter', letter: 'Q' },
   e: { beats: 0.5, name: 'eighth', letter: 'E' },
   s: { beats: 0.25, name: 'sixteenth', letter: 'S' },
 };
-const DUR_ORDER = ['w', 'h', 'q', 'e', 's'];
+const DUR_ORDER = ['w4', 'w3', 'w2', 'w', 'h', 'q', 'e', 's'];
+const SOUNDS = { acoustic: 'Acoustic guitar', clean: 'Electric guitar, clean', drive: 'Electric guitar, overdrive' };
 const TECH_WORDS = { h: 'hammer-on', p: 'pull-off', b: 'bend', r: 'release', '/': 'slide up', '\\': 'slide down', '~': 'vibrato' };
 const TOKEN_RE = /^(?:x|\d{1,2}(?:[hpbr\/\\~]\d{0,2})*)$/;
 const QUALITIES = [
@@ -668,7 +685,11 @@ const newId = () => 's' + Date.now().toString(36) + Math.random().toString(36).s
 const durOf = (it) => (it && DUR[it.d] ? it.d : 'e');
 const beatsOf = (it) => DUR[durOf(it)].beats * (it.dot ? 1.5 : 1);
 const lenLabel = (it) => DUR[durOf(it)].letter + (it.dot ? '.' : '');
+const isLong = (it) => it.t === 'n' && !!DUR[durOf(it)].long;
 const lenSpoken = (it) => (it.dot ? 'dotted ' : '') + DUR[durOf(it)].name;
+// "quarter note", "dotted half note", "note held for 2 whole notes"
+const lenNote = (it) => (isLong(it) ? `note held for ${DUR[durOf(it)].name}` : `${lenSpoken(it)} note`);
+const lenLead = (it) => (isLong(it) ? `Held for ${DUR[durOf(it)].name}` : lenSpoken(it));
 const emptyCol = (count = n(), like = null) => ({ t: 'n', n: new Array(count).fill(''), d: like ? durOf(like) : 'e', dot: like ? !!like.dot : false });
 const isEmptyCol = (it) => it.t === 'n' && it.n.every((x) => !x);
 const pc = (m) => ((m % 12) + 12) % 12;
@@ -687,7 +708,8 @@ function normalizeSong(o) {
   if (!o.tuningKey) o.tuningKey = 'standard';
   if (!/^\d+\/\d+$/.test(o.time || '')) o.time = '4/4';
   if (typeof o.title !== 'string') o.title = '';
-  o.items.forEach((it) => { if (it.t === 'n') { if (!DUR[it.d]) it.d = 'e'; it.dot = !!it.dot; } });
+  if (!SOUNDS[o.sound]) o.sound = 'acoustic';
+  o.items.forEach((it) => { if (it.t === 'n') { if (!DUR[it.d]) it.d = 'e'; it.dot = !!it.dot && !DUR[it.d].long; } });
   if (!o.items.length) o.items.push({ t: 'n', n: new Array(o.tuning.length).fill(''), d: 'e', dot: false });
   return o;
 }
@@ -695,7 +717,7 @@ function blankSong(from) {
   const tuning = from ? from.tuning.slice() : TUNINGS.standard.notes.slice();
   return normalizeSong({
     id: newId(), title: '', tuningKey: from ? from.tuningKey : 'standard', tuning, customTuning: from ? from.customTuning : undefined,
-    time: from ? from.time : '4/4', timed: false, items: [{ t: 'n', n: new Array(tuning.length).fill(''), d: 'q', dot: false }], updated: Date.now(),
+    time: from ? from.time : '4/4', sound: from ? from.sound : 'acoustic', timed: false, items: [{ t: 'n', n: new Array(tuning.length).fill(''), d: 'q', dot: false }], updated: Date.now(),
   });
 }
 
@@ -789,35 +811,49 @@ function identifyChord(it) {
 function colSummary(it, withLen) {
   const played = [];
   for (let s = it.n.length - 1; s >= 0; s--) if (it.n[s]) played.push(s);
-  const len = withLen ? lenSpoken(it) + ' ' : '';
-  if (!played.length) return len + 'rest';
+  if (!played.length) return withLen ? (isLong(it) ? `rest held for ${DUR[durOf(it)].name}` : `${lenSpoken(it)} rest`) : 'rest';
   const ch = identifyChord(it);
   if (played.length <= 2) {
     const parts = played.map((s) => `string ${s + 1} ${speakToken(it.n[s])}`);
-    return (withLen ? lenSpoken(it) + '. ' : '') + (ch ? ch.spoken + '. ' : '') + parts.join(', ');
+    return (withLen ? lenLead(it) + '. ' : '') + (ch ? ch.spoken + '. ' : '') + parts.join(', ');
   }
   const list = [];
   for (let s = it.n.length - 1; s >= 0; s--) list.push(it.n[s] ? speakToken(it.n[s], true) : 'dash');
-  return `${withLen ? lenSpoken(it) + '. ' : ''}${ch ? ch.spoken : 'Chord'}. Strings ${it.n.length} to 1: ${list.join(', ')}`;
+  return `${withLen ? lenLead(it) + '. ' : ''}${ch ? ch.spoken : 'Chord'}. Strings ${it.n.length} to 1: ${list.join(', ')}`;
 }
 
 /* ---------- Bars and time ---------- */
 function timeSig() { const [a, b] = song.time.split('/').map(Number); return { num: a, den: b, cap: a * 4 / b }; }
-function barMap() {
-  const list = []; const map = new Array(song.items.length);
+// Written bars, in order. Each bar also gets its number in the music (`num`): a note of
+// 2W or longer at the end of a bar holds through the bars after it, which are skipped.
+function barMap(items = song.items) {
+  const list = []; const map = new Array(items.length);
   let b = { items: [], beats: 0 }; let lastNote = false;
-  song.items.forEach((it, k) => {
+  items.forEach((it, k) => {
     if (it.t === 'bar') { map[k] = list.length; list.push(b); b = { items: [], beats: 0 }; lastNote = false; }
     else if (it.t === 'sec') { if (lastNote) { list.push(b); b = { items: [], beats: 0 }; } map[k] = list.length; lastNote = false; }
     else { map[k] = list.length; b.items.push(k); b.beats += beatsOf(it); lastNote = true; }
   });
   if (b.items.length || !list.length) list.push(b);
+  const { cap } = timeSig();
+  let num = 1, carry = 0;
+  list.forEach((bar) => {
+    bar.num = num; bar.carryIn = carry; bar.total = carry + bar.beats; bar.hold = null;
+    const last = bar.items.length ? items[bar.items[bar.items.length - 1]] : null;
+    if (last && isLong(last) && bar.total > cap + 1e-9) {
+      const over = bar.total - cap;
+      const bars = Math.floor(over / cap + 1e-9);
+      const rem = Math.max(0, over - bars * cap);
+      bar.hold = { bars, rem: rem > 1e-9 ? rem : 0 };
+      num += 1 + bars; carry = bar.hold.rem;
+    } else { num += 1; carry = 0; }
+  });
   return { list, map };
 }
 function posInfo(i = cur.i) {
   const { list, map } = barMap();
-  const bi = map[i]; const bar = list[bi] || { items: [], beats: 0 };
-  return { bar: bi + 1, pos: bar.items.indexOf(i) + 1, count: bar.items.length, beats: bar.beats, list, map };
+  const bi = map[i]; const bar = list[bi] || { items: [], beats: 0, total: 0, carryIn: 0, hold: null, num: bi + 1 };
+  return { bar: bar.num, pos: bar.items.indexOf(i) + 1, count: bar.items.length, barObj: bar, list, map };
 }
 function amountWord(x) {
   const whole = Math.floor(x + 1e-9); const f = Math.round((x - whole) * 1000) / 1000;
@@ -826,17 +862,28 @@ function amountWord(x) {
   if (!fr) return String(Math.round(x * 100) / 100);
   return whole ? `${whole} and ${fr}` : fr;
 }
-// "3 of 4 beats", "full", "1 beat too many".
-function barFill(beats) {
+// "3 of 4 beats", "full, 4 beats", "1 beat too many", or how far a held note carries on.
+function barFill(bar) {
   const { den, cap, num } = timeSig();
   const unitBeats = 4 / den;
   const unit = den === 4 ? 'beat' : den === 8 ? 'eighth' : den === 2 ? 'half note' : 'beat';
-  const have = beats / unitBeats;
-  const plural = (x) => (Math.abs(x - 1) < 1e-9 ? unit : unit + 's');
-  if (Math.abs(beats - cap) < 1e-6) return { full: true, text: `full, ${num} ${plural(num)}` };
-  if (beats < cap) return { full: false, text: `${amountWord(have)} of ${num} ${unit}s` };
-  const over = have - num;
-  return { full: false, text: `${amountWord(have)} ${plural(have)}, ${amountWord(over)} ${plural(over)} too many for ${song.time}` };
+  const plural = (x) => (x <= 1 + 1e-9 ? unit : unit + 's');
+  const amount = (beats) => { const u = beats / unitBeats; return `${amountWord(u)} ${plural(u)}`; };
+  const total = bar.total != null ? bar.total : bar.beats;
+  let full, text;
+  if (bar.hold) {
+    full = true;
+    const first = bar.num + 1, k = bar.hold.bars, parts = [];
+    if (k === 1) parts.push(`through bar ${first}`);
+    else if (k === 2) parts.push(`through bars ${first} and ${first + 1}`);
+    else if (k > 2) parts.push(`through bars ${first} to ${first + k - 1}`);
+    if (bar.hold.rem) parts.push(`${amount(bar.hold.rem)} into bar ${bar.num + k + 1}`);
+    text = `full, and the last note holds ${parts.join(' and ')}`;
+  } else if (Math.abs(total - cap) < 1e-6) { full = true; text = `full, ${num} ${plural(num)}`; }
+  else if (total < cap) { full = false; text = `${amountWord(total / unitBeats)} of ${num} ${unit}s`; }
+  else { full = false; text = `${amount(total)}, ${amount(total - cap)} too many for ${song.time}`; }
+  if (bar.carryIn) text += `, including ${amount(bar.carryIn)} held over from the bar before`;
+  return { full, text, hold: !!bar.hold };
 }
 function sectionAt(i) {
   for (let k = i; k >= 0; k--) if (song.items[k].t === 'sec') return song.items[k].name;
@@ -865,7 +912,8 @@ function say(msg) {
 
 /* ---------- Audio ---------- */
 let actx = null, master = null;
-const bufCache = new Map(), active = new Set();
+const bufCache = new Map(), active = new Set(), buses = {};
+const soundOf = () => (song && SOUNDS[song.sound] ? song.sound : 'acoustic');
 let timers = [], playing = false;
 function audio() {
   if (!actx) {
@@ -879,37 +927,70 @@ function audio() {
   return actx;
 }
 // Karplus-Strong plucked string. Returns the buffer and the playback rate that corrects period rounding.
-function pluck(midi) {
-  if (bufCache.has(midi)) return bufCache.get(midi);
-  const sr = actx.sampleRate, f = 440 * Math.pow(2, (midi - 69) / 12);
-  const N = Math.max(2, Math.round(sr / f));
-  const len = Math.floor(sr * 2.4);
+// The electric string is brighter and rings for several seconds, longest on the low strings.
+function pluck(midi, electric) {
+  const key = (electric ? 'e' : 'a') + midi;
+  if (bufCache.has(key)) return bufCache.get(key);
+  const sr = electric ? 16000 : actx.sampleRate, f = 440 * Math.pow(2, (midi - 69) / 12);
+  const S = electric ? 0.12 : 0.5;                 // damping filter weight; smaller rings longer
+  const N = Math.max(2, Math.round(sr / f + S));   // the loop below repeats every N - S samples
+  const len = Math.floor(sr * (electric ? 8 : 2.4));
+  const loss = electric ? Math.pow(0.1, 1 / (9 * Math.pow(82 / f, 0.35) * f)) : 0.997;
   const buf = actx.createBuffer(1, len, sr), d = buf.getChannelData(0);
   const ring = new Float32Array(N);
   let prev = 0;
-  for (let i = 0; i < N; i++) { prev = prev * 0.45 + (Math.random() * 2 - 1) * 0.55; ring[i] = prev; }
+  for (let i = 0; i < N; i++) { prev = prev * (electric ? 0.15 : 0.45) + (Math.random() * 2 - 1) * (electric ? 0.85 : 0.55); ring[i] = prev; }
   let idx = 0, peak = 0;
   for (let i = 0; i < len; i++) {
     const nx = idx + 1 === N ? 0 : idx + 1;
     const v = ring[idx]; d[i] = v; if (Math.abs(v) > peak) peak = Math.abs(v);
-    ring[idx] = 0.4985 * (v + ring[nx]);
+    ring[idx] = loss * ((1 - S) * v + S * ring[nx]);
     idx = nx;
   }
-  const g = peak ? 0.8 / peak : 1, fade = Math.floor(sr * 0.08);
+  const g = peak ? 0.8 / peak : 1, fade = Math.floor(sr * (electric ? 0.4 : 0.08));
   for (let i = 0; i < len; i++) d[i] *= g * (i > len - fade ? (len - i) / fade : 1);
-  const out = { buf, rate: (f * N) / sr };
-  bufCache.set(midi, out);
+  const out = { buf, rate: (f * (N - S)) / sr };
+  bufCache.set(key, out);
   return out;
 }
+// Where notes go: straight out for acoustic; through an amp for electric.
+function bus(kind) {
+  if (kind === 'acoustic') return master;
+  if (buses[kind]) return buses[kind];
+  const input = actx.createGain();
+  const hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 90;
+  const lp = actx.createBiquadFilter(); lp.type = 'lowpass';
+  input.connect(hp);
+  if (kind === 'clean') {
+    lp.frequency.value = 4200; lp.Q.value = 0.9;
+    const comp = actx.createDynamicsCompressor(); comp.threshold.value = -20; comp.ratio.value = 3;
+    const out = actx.createGain(); out.gain.value = 0.9;
+    hp.connect(lp); lp.connect(comp); comp.connect(out); out.connect(master);
+  } else {
+    const drive = actx.createGain(); drive.gain.value = 7;
+    const shaper = actx.createWaveShaper();
+    const curve = new Float32Array(2048);
+    for (let i = 0; i < curve.length; i++) { const x = (i / (curve.length - 1)) * 2 - 1; curve[i] = Math.tanh(3 * x) / Math.tanh(3); }
+    shaper.curve = curve; shaper.oversample = '4x';
+    const mid = actx.createBiquadFilter(); mid.type = 'peaking'; mid.frequency.value = 800; mid.Q.value = 0.8; mid.gain.value = 4;
+    lp.frequency.value = 3400;
+    const out = actx.createGain(); out.gain.value = 0.3;
+    hp.connect(drive); drive.connect(shaper); shaper.connect(mid); mid.connect(lp); lp.connect(out); out.connect(master);
+  }
+  buses[kind] = input;
+  return input;
+}
 function voice(midi, when, gain = 1, muted = false, maxLen = 0) {
-  const p = pluck(midi);
+  const kind = soundOf();
+  const p = pluck(midi, kind !== 'acoustic');
   const src = actx.createBufferSource(); src.buffer = p.buf;
   src.playbackRate.setValueAtTime(p.rate, when);
   const g = actx.createGain(); g.gain.setValueAtTime(gain, when);
   if (muted) g.gain.setTargetAtTime(0, when + 0.02, 0.015);
   else if (maxLen) g.gain.setTargetAtTime(0, when + maxLen, 0.04);
-  src.connect(g); g.connect(master);
-  src.start(when); src.stop(when + (muted ? 0.2 : p.buf.duration / p.rate));
+  src.connect(g); g.connect(bus(kind));
+  const natural = p.buf.duration / p.rate;
+  src.start(when); src.stop(when + (muted ? 0.2 : maxLen ? Math.min(natural, maxLen + 0.4) : natural));
   active.add(src); src.onended = () => active.delete(src);
   return { src, g, rate: p.rate };
 }
@@ -921,17 +1002,21 @@ function playToken(s, tok, when, gain, len = 0.8) {
   if (parts[0] === 'x') { voice(base + 5, when, gain * 0.6, true); return; }
   const steps = parts.filter((p) => /[hpbr\/\\]/.test(p)).length;
   const dt = Math.min(0.17, len / (steps + 1));
-  const ring = Math.max(len * 1.6, 0.35);
+  const ring = Math.max(len * (soundOf() === 'acoustic' ? 1.6 : 1.05), 0.35);
   let fret = +parts[0], t = when, voiceFret = fret;
   let v = voice(base + fret, t, gain, false, ring);
   for (let k = 1; k < parts.length; k++) {
     const p = parts[k], nxt = parts[k + 1];
     const target = nxt && /\d/.test(nxt) ? +nxt : null;
     if (p === '~') {
+      // Vibrato: the pitch swings about a third of a semitone each way, easing in, for the whole note.
+      const start = t + 0.08;
       const lfo = actx.createOscillator(), depth = actx.createGain();
-      lfo.frequency.value = 5.5; depth.gain.value = v.rate * 0.012;
+      lfo.frequency.value = 5.6;
+      depth.gain.setValueAtTime(0, start);
+      depth.gain.linearRampToValueAtTime(v.rate * 0.021, start + 0.3);
       lfo.connect(depth); depth.connect(v.src.playbackRate);
-      lfo.start(t + 0.12); lfo.stop(t + 2.2);
+      lfo.start(start); lfo.stop(when + ring + 0.4);
       continue;
     }
     if (target == null) continue;
@@ -1047,6 +1132,11 @@ function parseQuick(text, tuning, like) {
     let made = null;
     const lm = /^([whqes])(\.?)$/.exec(tok);
     if (lm) { d = lm[1]; dot = !!lm[2]; timed = true; continue; }
+    const ll = /^([234])w(\.?)$/i.exec(tok);
+    if (ll) {
+      if (ll[2]) return { error: `${rtok}: notes held longer than a whole note cannot be dotted.` };
+      d = 'w' + ll[1]; dot = false; timed = true; continue;
+    }
     if (tok.startsWith('[')) {
       const name = tok.slice(1, -1).trim() || 'Section';
       if (items.length && items[items.length - 1].t === 'n') items.push({ t: 'bar' });
@@ -1060,7 +1150,7 @@ function parseQuick(text, tuning, like) {
       for (const part of tok.split('+')) {
         const pm = /^(\d+):(.+)$/.exec(part);
         if (!pm) return { error: `"${rtok}" is not complete. Write string, colon, fret, like 6:3.` };
-        const s = +pm[1], t = pm[2].toLowerCase();
+        const s = +pm[1], t = pm[2].toLowerCase().replace(/v/g, '~');
         if (s < 1 || s > count) return { error: `There is no string ${s}. This tuning has strings 1 to ${count}.` };
         if (!TOKEN_RE.test(t) || tokenParts(t).some((p) => /\d/.test(p) && +p > 36)) return { error: `"${pm[2]}" is not a fret I understand, in "${rtok}".` };
         c.n[s - 1] = t;
@@ -1096,7 +1186,7 @@ function labelPc(l) {
   return rootPc(l[0].toUpperCase(), acc === '#' || acc === '♯' ? '#' : (acc === 'b' || acc === '♭') ? 'b' : '');
 }
 function normTok(raw) {
-  let t = raw.toLowerCase().replace(/[()]/g, '').replace(/\^/g, 'b').replace(/~+/g, '~');
+  let t = raw.toLowerCase().replace(/[()]/g, '').replace(/\^/g, 'b').replace(/[~v]+/g, '~');
   t = t.replace(/(\d+)s(\d+)/g, (m0, a, b) => a + (+b >= +a ? '/' : '\\') + b).replace(/s/g, '/');
   if (!TOKEN_RE.test(t)) { const m = /^(\d{1,2}|x)/.exec(t); t = m ? m[1] : ''; }
   return t;
@@ -1143,7 +1233,7 @@ function parseAscii(text) {
     const L = Math.max(...rows.map((r) => r.length));
     const used = rows.map(() => new Uint8Array(L + 4));
     const readTok = (r, i) => {
-      const m = /^\(?(?:\d{1,2}|[xX])\)?(?:[hHpPbBrRsS\/\\^]\(?\d{0,2}\)?|~+)*/.exec(r.slice(i));
+      const m = /^\(?(?:\d{1,2}|[xX])\)?(?:[hHpPbBrRsS\/\\^]\(?\d{0,2}\)?|~+|[vV]+)*/.exec(r.slice(i));
       return m ? m[0] : '';
     };
     for (let i = 0; i < L; i++) {
@@ -1276,7 +1366,7 @@ function render(scroll) {
   const sec = sectionAt(cur.i);
   $('#pos-bar').innerHTML = `<strong>Bar ${info.bar}</strong>${it.t === 'n' ? `, position ${info.pos} of ${info.count}` : ''}${sec ? ` · ${esc(sec)}` : ''}`;
   $('#pos-string').innerHTML = `String <strong>${cur.s + 1}</strong> (${esc(NAMES[pc(song.tuning[cur.s])])})`;
-  $('#pos-len').innerHTML = it.t === 'n' ? `<strong>${esc(lenSpoken(it))}</strong>${song.timed ? ` · bar ${esc(barFill(info.beats).text)}` : ''}` : '';
+  $('#pos-len').innerHTML = it.t === 'n' ? `<strong>${esc(lenSpoken(it))}</strong>${song.timed ? ` · bar ${esc(barFill(info.barObj).text)}` : ''}` : '';
   const ch = identifyChord(it);
   $('#pos-chord').innerHTML = ch ? `Chord <strong>${esc(ch.name)}</strong>` : '';
   if (scroll && (document.activeElement === editor || padActive || playing)) {
@@ -1290,7 +1380,10 @@ function asciiTab() {
   const lw = labelWidth();
   const systems = layout(78 - lw - 4);
   const out = [song.title || 'Untitled', `Tuning: ${tuningText()} (string ${n()} to 1)`];
-  if (song.timed) out.push(`Time: ${song.time}. Rhythm: W whole, H half, Q quarter, E eighth, S sixteenth, a dot means dotted.`);
+  if (song.timed) {
+    const long = song.items.some(isLong);
+    out.push(`Time: ${song.time}. Rhythm: W whole, H half, Q quarter, E eighth, S sixteenth, a dot means dotted.${long ? ' 2W, 3W and 4W hold for two, three or four whole notes.' : ''}`);
+  }
   const used = new Set();
   song.items.forEach((it) => { if (it.t === 'n') it.n.forEach((t) => tokenParts(t).forEach((p) => { if (TECH_WORDS[p]) used.add(p); if (p === 'x') used.add('x'); })); });
   if (used.size) out.push('Key: ' + [...used].map((p) => (p === 'x' ? 'x muted' : `${p} ${TECH_WORDS[p]}`)).join(', '));
@@ -1315,15 +1408,17 @@ function readableText() {
   let lineBar = null, entries = [], pos = 0;
   const flush = () => {
     if (entries.length) {
-      const fill = song.timed ? barFill(list[lineBar - 1].beats) : null;
-      out.push(`Bar ${lineBar}${fill && !fill.full ? ` (${fill.text})` : ''}: ${entries.join('. ')}.`);
+      const bar = list[lineBar];
+      const fill = song.timed ? barFill(bar) : null;
+      const note = fill && (!fill.full || fill.hold || bar.carryIn) ? ` (${fill.text})` : '';
+      out.push(`Bar ${bar.num}${note}: ${entries.join('. ')}.`);
     }
     entries = []; pos = 0;
   };
   song.items.forEach((it, i) => {
     if (it.t === 'sec') { flush(); out.push('', `Section: ${it.name}`); return; }
     if (it.t === 'bar') { flush(); return; }
-    if (map[i] + 1 !== lineBar) { flush(); lineBar = map[i] + 1; }
+    if (map[i] !== lineBar) { flush(); lineBar = map[i]; }
     pos++;
     entries.push(`${pos}: ${colSummary(it, song.timed)}`);
   });
@@ -1350,6 +1445,14 @@ const PUNCT_DOTS = { ',': ['2'], ';': ['23'], ':': ['25'], '.': ['256'], '!': ['
 const SPELL = [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0], [3, 0], [3, 1], [4, 0], [4, 1], [5, 0], [5, 1], [6, 0]];
 const upperNum = (num) => String(num).split('').map((c) => BR(LETTER_DOTS['jabcdefghi'[+c]])).join('');
 const lowerNum = (num) => String(num).split('').map((c) => BR(LOWER_DIGITS[+c])).join('');
+
+// Splits a length in beats into note values that braille can write, longest first.
+const PIECES = [['w', true, 6], ['w', false, 4], ['h', true, 3], ['h', false, 2], ['q', true, 1.5], ['q', false, 1], ['e', true, 0.75], ['e', false, 0.5], ['s', true, 0.375], ['s', false, 0.25]];
+function splitBeats(beats) {
+  const out = []; let left = beats;
+  for (const [d, dot, v] of PIECES) while (left >= v - 1e-9) { out.push([d, dot]); left -= v; }
+  return out.length ? out : [['s', false]];
+}
 
 // Uncontracted Unified English Braille for titles and headings.
 function ueb(text) {
@@ -1412,15 +1515,17 @@ function brailleMusic(withStrings) {
     if (dist <= 4) return p.oct !== prev.oct;
     return true;
   };
-  const noteText = (midi, s, d, dotCell, ctx) => {
+  const noteText = (midi, s, d, dotCell, ctx, cont) => {
     const p = spell(midi);
-    const acc = accFor(p, ctx);
+    // A note tied over from before keeps its accidental without repeating the sign.
+    const acc = cont ? ((ctx.acc[p.step + '_' + p.oct] = p.alt), '') : accFor(p, ctx);
     const mark = needMark(ctx.prev, p) ? octMark(p.oct) : '';
     ctx.prev = p;
     return acc + mark + BR(STEP_DOTS[p.step] + VALUE_DOTS[d]) + dotCell + strSign(s);
   };
   const encodeCol = (it, ctx) => {
     const d = durOf(it); const dotCell = it.dot ? BR('3') : '';
+    const tie = (count) => (it.tie ? (count > 1 ? BR('46') : BR('4')) + BR('14') : '');
     const sounding = [];
     it.n.forEach((tok, s) => {
       const parts = tokenParts(tok);
@@ -1439,13 +1544,13 @@ function brailleMusic(withStrings) {
       if (seq.length > 1) {
         const each = DUR[d].beats / seq.length;
         const sub = !it.dot && DUR_ORDER.find((k) => DUR[k].beats === each);
-        if (sub) return seq.map((f, k) => noteText(song.tuning[one.s] + f, one.s, sub, '', ctx) + (k < seq.length - 1 ? BR('14') : '')).join('');
+        if (sub) return seq.map((f, k) => noteText(song.tuning[one.s] + f, one.s, sub, '', ctx) + (k < seq.length - 1 ? BR('14') : '')).join('') + tie(1);
         flags.add('split');
       }
     }
     sounding.sort((a, b) => b.midi - a.midi);
     const top = sounding[0];
-    let txt = noteText(top.midi, top.s, d, dotCell, ctx);
+    let txt = noteText(top.midi, top.s, d, dotCell, ctx, it.cont);
     const tp = spell(top.midi);
     // Chords: the highest note is written, the others as intervals reading down from it.
     for (const nn of sounding.slice(1)) {
@@ -1454,21 +1559,39 @@ function brailleMusic(withStrings) {
       if (dist === 0) { mark = octMark(p.oct); sign = INTERVAL_DOTS[8]; }
       else if (dist % 7 === 0) { sign = INTERVAL_DOTS[8]; if (dist > 7) mark = octMark(p.oct); }
       else { sign = INTERVAL_DOTS[(dist % 7) + 1]; if (dist > 7) mark = octMark(p.oct); }
-      txt += accFor(p, ctx) + mark + BR(sign) + strSign(nn.s);
+      const acc = it.cont ? ((ctx.acc[p.step + '_' + p.oct] = p.alt), '') : accFor(p, ctx);
+      txt += acc + mark + BR(sign) + strSign(nn.s);
     }
-    return txt;
+    return txt + tie(sounding.length);
   };
 
   // Blocks: measures and section headings. Trailing empty columns are left off.
+  // A note of 2W or longer fills the rest of its bar and the bars after it as tied notes.
   let end = song.items.length;
   while (end > 0 && (isEmptyCol(song.items[end - 1]) || song.items[end - 1].t === 'bar')) end--;
-  const blocks = []; let m = [];
-  const close = () => { if (m.length) blocks.push({ type: 'm', cols: m }); m = []; };
+  const cap = timeSig().cap;
+  const blocks = []; let m = [], mpos = 0, heldOpen = false;
+  const close = () => { if (m.length) blocks.push({ type: 'm', cols: m }); m = []; mpos = 0; heldOpen = false; };
+  const heldCopy = (it) => ({ t: 'n', n: it.n.map((tok) => { const f = lastFret(tok); return tok === 'x' || f == null ? '' : String(f); }) });
+  const pieces = (it, beats, started, tieEnd) => {
+    const parts = splitBeats(beats);
+    return parts.map(([d, dot], k) => ({ ...(started || k > 0 ? heldCopy(it) : it), d, dot, cont: started || k > 0, tie: k < parts.length - 1 || tieEnd }));
+  };
   for (let i = 0; i < end; i++) {
     const it = song.items[i];
-    if (it.t === 'n') m.push(it);
-    else if (it.t === 'bar') close();
-    else { close(); blocks.push({ type: 'sec', name: it.name }); }
+    if (it.t === 'sec') { close(); blocks.push({ type: 'sec', name: it.name }); continue; }
+    if (it.t === 'bar') { if (!(heldOpen && mpos < cap - 1e-9)) close(); continue; }
+    if (heldOpen && mpos >= cap - 1e-9) close();
+    if (!isLong(it)) { m.push(it); mpos += beatsOf(it); continue; }
+    flags.add('tied');
+    let left = beatsOf(it), started = false;
+    while (left > 1e-9) {
+      if (cap - mpos <= 1e-9) close();
+      const take = Math.min(cap - mpos, left);
+      m.push(...pieces(it, take, started, left - take > 1e-9));
+      started = true; mpos += take; left -= take;
+    }
+    heldOpen = true;
   }
   close();
 
@@ -1515,6 +1638,7 @@ function brailleMusic(withStrings) {
   if (!song.timed) notes.push('Rhythm is not set for this tab, so every note is written as an eighth note.');
   if (flags.has('bend')) notes.push('Bends, releases and vibrato are not marked.');
   if (flags.has('muted')) notes.push('Muted strings are left out.');
+  if (flags.has('tied')) notes.push('Notes held past the bar line are written as tied notes.');
   if (flags.has('split')) notes.push('Some hammer-ons or slides could not be split into equal note values, so only their first note is written.');
   notes.push('Accidentals are written as sharps.');
   if (withStrings) notes.push('String numbers follow each note they apply to.');
@@ -1698,12 +1822,12 @@ function moveBar(d) {
   const { list, map } = barMap();
   const b = map[cur.i]; const bar = list[b];
   if (d > 0) {
-    for (let k = b + 1; k < list.length; k++) if (list[k].items.length) { cue('bar'); return jumpTo(list[k].items[0], `Bar ${k + 1}.`); }
+    for (let k = b + 1; k < list.length; k++) if (list[k].items.length) { cue('bar'); return jumpTo(list[k].items[0], `Bar ${list[k].num}.`); }
     cue('edge'); say('This is the last bar.');
   } else {
     const atStart = !bar || !bar.items.length || bar.items[0] === cur.i || song.items[cur.i].t !== 'n';
-    if (!atStart) return jumpTo(bar.items[0], `Start of bar ${b + 1}.`);
-    for (let k = b - 1; k >= 0; k--) if (list[k].items.length) { cue('bar'); return jumpTo(list[k].items[0], `Bar ${k + 1}.`); }
+    if (!atStart) return jumpTo(bar.items[0], `Start of bar ${bar.num}.`);
+    for (let k = b - 1; k >= 0; k--) if (list[k].items.length) { cue('bar'); return jumpTo(list[k].items[0], `Bar ${list[k].num}.`); }
     cue('edge'); say('This is the first bar.');
   }
 }
@@ -1729,21 +1853,24 @@ function typeChar(ch) {
 }
 function lengthReport(it) {
   const info = posInfo();
-  return `${lenSpoken(it)} note. Bar ${info.bar} is ${barFill(info.beats).text}.`;
+  return `${lenNote(it)}. Bar ${info.bar} is ${barFill(info.barObj).text}.`;
 }
 function changeLength(step) {
   const it = song.items[cur.i];
   if (it.t !== 'n') { cue('edge'); say('Move to a note column to change its length.'); return; }
   const k = DUR_ORDER.indexOf(durOf(it)) + step;
-  if (k < 0 || k >= DUR_ORDER.length) { cue('edge'); say(k < 0 ? 'Whole note is the longest.' : 'Sixteenth note is the shortest.'); return; }
+  if (k < 0 || k >= DUR_ORDER.length) { cue('edge'); say(k < 0 ? 'Held for 4 whole notes is the longest.' : 'Sixteenth note is the shortest.'); return; }
   pushUndo();
   it.d = DUR_ORDER[k]; song.timed = true; editing = false;
+  const undotted = it.dot && DUR[it.d].long;
+  if (undotted) it.dot = false;
   changed();
-  say(lengthReport(it));
+  say((undotted ? 'Dot removed. ' : '') + lengthReport(it));
 }
 function toggleDot() {
   const it = song.items[cur.i];
   if (it.t !== 'n') { cue('edge'); say('Move to a note column to change its length.'); return; }
+  if (isLong(it)) { cue('edge'); say('Notes held longer than a whole note cannot be dotted.'); return; }
   pushUndo();
   it.dot = !it.dot; song.timed = true; editing = false;
   changed();
@@ -1792,14 +1919,14 @@ function duplicateCol() {
 function endBar() {
   if (song.items[cur.i].t === 'bar') { say('This is already a bar line.'); return; }
   pushUndo();
-  const before = posInfo();
   const like = likeHere();
   const at = cur.i + 1;
   song.items.splice(at, 0, { t: 'bar' });
   if (at + 1 >= song.items.length || song.items[at + 1].t !== 'n') song.items.splice(at + 1, 0, emptyCol(n(), like));
   cur.i = at + 1; editing = false; changed();
   cue('bar');
-  const fill = song.timed ? ` Bar ${before.bar} is ${barFill(before.beats).text}.` : '';
+  const before = posInfo(at - 1);
+  const fill = song.timed ? ` Bar ${before.bar} is ${barFill(before.barObj).text}.` : '';
   say(`Bar line added.${fill} Now bar ${posInfo().bar}, ${itemSpoken(cur.i)}.`);
 }
 function nextColumn() {
@@ -1808,18 +1935,18 @@ function nextColumn() {
 }
 function whereAmI() {
   const info = posInfo(); const it = song.items[cur.i]; const sec = sectionAt(cur.i);
-  const fill = song.timed ? ` The bar is ${barFill(info.beats).text}.` : '';
+  const fill = song.timed ? ` The bar is ${barFill(info.barObj).text}.` : '';
   const where = `${sec ? `Section ${sec}. ` : ''}Bar ${info.bar}${it.t === 'n' ? `, position ${info.pos} of ${info.count}` : ''}.${fill}`;
   if (it.t !== 'n') { say(`${where} ${itemSpoken(cur.i)}.`); return; }
-  say(`${where} ${lenSpoken(it)} note. String ${cur.s + 1}, ${stringName(cur.s)}: ${cellSpoken(cur.s, it.n[cur.s])}. Column: ${colSummary(it)}.`);
+  say(`${where} ${lenNote(it)[0].toUpperCase() + lenNote(it).slice(1)}. String ${cur.s + 1}, ${stringName(cur.s)}: ${cellSpoken(cur.s, it.n[cur.s])}. Column: ${colSummary(it)}.`);
 }
 function readBar() {
   const { list, map } = barMap();
   const b = map[cur.i]; const bar = list[b];
-  if (!bar || !bar.items.length) { say(`Bar ${b + 1} is empty.`); return; }
+  if (!bar || !bar.items.length) { say(`Bar ${bar ? bar.num : b + 1} is empty.`); return; }
   const parts = bar.items.map((i, k) => `${k + 1}: ${colSummary(song.items[i], song.timed)}`);
-  const fill = song.timed ? `, ${barFill(bar.beats).text}` : '';
-  say(`Bar ${b + 1}, ${bar.items.length} position${bar.items.length === 1 ? '' : 's'}${fill}. ${parts.join('. ')}.`);
+  const fill = song.timed ? `, ${barFill(bar).text}` : '';
+  say(`Bar ${bar.num}, ${bar.items.length} position${bar.items.length === 1 ? '' : 's'}${fill}. ${parts.join('. ')}.`);
 }
 
 editor.addEventListener('keydown', (e) => {
@@ -1865,14 +1992,15 @@ editor.addEventListener('keydown', (e) => {
       case 'l': { const it = song.items[cur.i]; say(it.t === 'n' ? lengthReport(it) : itemSpoken(cur.i)); break; }
       case 'w': whereAmI(); break;
       case 'W': readBar(); break;
-      case 't': say(`${tuningSpoken()} Time signature ${song.time.replace('/', ' ')}.`); break;
+      case 't': say(`${tuningSpoken()} Time signature ${song.time.replace('/', ' ')}. Playback sound: ${SOUNDS[soundOf()].toLowerCase()}.`); break;
       case 'q': $('#quick').focus(); break;
       case '?':
-        say('Arrows move. Numbers type frets. x mutes. h p b r slash backslash and tilde add techniques. Left and right square brackets make the note shorter or longer, period makes it dotted. Enter goes to the next column. M ends the bar. Space plays the column, Shift Space plays from here. W says where you are, Shift W reads the bar. Q jumps to quick entry. The full list is in the Editor keys section.');
+        say('Arrows move. Numbers type frets. x mutes. h p b r slash backslash and tilde add techniques. Left and right square brackets make the note shorter or longer, period makes it dotted. V adds vibrato. Enter goes to the next column. M ends the bar. Space plays the column, Shift Space plays from here. W says where you are, Shift W reads the bar. Q jumps to quick entry. The full list is in the Editor keys section.');
         break;
       default:
         if (/^[0-9]$/.test(k) || k === 'x' || k === 'X') typeChar(k.toLowerCase());
         else if (['h', 'p', 'b', 'r', '/', '\\', '~'].includes(k)) typeChar(k);
+        else if (k === 'v') typeChar('~');
         else handled = false;
     }
   }
@@ -1978,6 +2106,12 @@ $('#title').addEventListener('input', (e) => { song.title = e.target.value; upda
 $('#bpm').addEventListener('change', (e) => {
   const v = Math.max(30, Math.min(300, Math.round(+e.target.value) || 100));
   settings.bpm = v; e.target.value = v; saveSettings();
+});
+$('#sound').addEventListener('change', (e) => {
+  pushUndo(); song.sound = e.target.value; changed();
+  say(`Playback sound: ${SOUNDS[song.sound].toLowerCase()}.`);
+  const it = song.items[cur.i];
+  if (it && it.t === 'n' && !isEmptyCol(it)) playNow((t) => playColumn(it, t, 1.2));
 });
 $('#timesig').addEventListener('change', (e) => {
   pushUndo(); song.time = e.target.value; changed();
@@ -2285,6 +2419,7 @@ function syncControls() {
   $('#title').value = song.title || '';
   $('#bpm').value = settings.bpm;
   $('#timesig').value = song.time;
+  $('#sound').value = soundOf();
   const opts = Object.entries(TUNINGS).map(([k, v]) => `<option value="${k}">${esc(v.label)}</option>`);
   if (song.tuningKey === 'custom' && song.customTuning) {
     const names = song.customTuning.slice().reverse().map((m) => NAMES[pc(m)]).join(' ');
