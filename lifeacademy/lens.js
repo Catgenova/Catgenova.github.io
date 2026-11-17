@@ -135,6 +135,8 @@
       S.order.sort((a, b) => score(b) - score(a));
       if (S.extra.video) S.order = ['video'].concat(S.order.filter(id => id !== 'video'));
     }
+    // Stage 2: Maya reposted first, so her repost always sits above Jaxon's.
+    if (S.stage === 2) { const mi = S.order.indexOf('maya'), ji = S.order.indexOf('jaxon'); if (ji >= 0 && mi > ji) { S.order.splice(mi, 1); S.order.splice(ji, 0, 'maya'); } }
     const ads = eligibleAds();
     const keep = S.adOrder.slice(0, fixedAds).filter(id => ads.includes(id));
     S.adOrder = keep.concat(ads.filter(id => !keep.includes(id)).sort((a, b) => adScore(b) - adScore(a)));
