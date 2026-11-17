@@ -581,3 +581,16 @@ body { overflow-x: hidden; }
 .pcomments .comment .ctext { font-size: 1.02rem; }
 .pcomments .comment .cmeta:empty { display: none; }
 .pc-more, .pc-empty { color: var(--ink-3); font-size: .9rem; font-weight: 700; padding: .1rem .2rem; }
+
+/* Theo's reply box under a post's comments */
+.pc-more:empty { display: none; }
+.pc-list { display: flex; flex-direction: column; gap: .5rem; }
+.pc-reply { display: flex; gap: .6rem; align-items: center; margin-top: .2rem; }
+.pc-reply input { flex: 1; min-width: 0; font: inherit; font-size: 1rem; padding: .55rem .9rem; border-radius: 2rem; border: 2px solid var(--line); background: var(--bg); color: var(--ink); }
+.pc-reply input:focus { outline: none; border-color: var(--accent); }
+.pc-reply .primary { padding: .5rem 1rem; font-size: 1rem; border-radius: 2rem; }
+.pcomments .comment.mine { outline: .15rem solid var(--accent); background: var(--accent-soft); }
+@media (max-width: 860px) {
+  body.typing #sidebar { display: none; }
+  .pc-reply input { font-size: 16px; }
+}

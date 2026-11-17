@@ -161,6 +161,14 @@ the stage 1 tags as comments. Opening a post's comments is itself a signal
 (*"OPENED COMMENTS"*). The gossip post opens inline in stages 2–3; from
 stage 4 on it opens the full thread view where Theo can reply.
 
+Under every open comments section there's a **"Reply as Theo…" box**, so
+the class can answer any post if they want to. Theo's comment appears at
+the bottom, highlighted, and the count goes up. As in stage 4, Lens counts
+every keystroke (a *TYPING* signal after 15 keys on a post) and pushes the
+posted comment to the algorithm (*COMMENT*). The replay's "what Lens
+learned" list includes these. On phones the bottom ad banner hides while
+the keyboard is open.
+
 ### Sidebar ads (live, one per post)
 
 Every post has its own invented ad (`LENS.postAds` in `data.js`): the roomba

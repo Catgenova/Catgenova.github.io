@@ -28,12 +28,14 @@
       s1: { shown: false, shownAt: 0, sent: 0, clicks: 0 },
       bell: { unread: 0, items: [] },
       clock: 0, landed: {},
+      mine: {}, inlineKeys: 0,
     };
   }
   let S = load() || fresh();
   S.s1 = S.s1 || { shown: true, shownAt: 0, sent: 0, clicks: 0 };
   S.bell = S.bell || { unread: 0, items: [] };
   S.clock = S.clock || 0; S.landed = S.landed || {};
+  S.mine = S.mine || {}; S.inlineKeys = S.inlineKeys || 0;
   let snaps = loadSnaps();
   function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); return s && s.v === 1 ? s : null; } catch (e) { return null; } }
   function loadSnaps() { try { return JSON.parse(localStorage.getItem(KEY + '-snaps')) || {}; } catch (e) { return {}; } }
@@ -242,7 +244,8 @@
       </div>
     </article>`;
   }
-  function commentCount(id) {
+  function commentCount(id) { return baseCommentCount(id) + ((S.mine && S.mine[id]) || []).length; }
+  function baseCommentCount(id) {
     if (id === 'gossip') return S.thread.count;
     const p = getItem(id);
     if (id === 'french') return grow(id, p.comments, TAU_C) + Math.max(0, S.s1.sent - 1);
@@ -633,19 +636,51 @@
       const base = list.slice(0, grow(id, getItem(id).comments, TAU_C));
       return base.concat(tags);
     }
-    return list.slice(0, Math.min(list.length, commentCount(id)));
+    return list.slice(0, Math.min(list.length, baseCommentCount(id)));
   }
   function renderComments(id, n) {
     const box = n.querySelector('.pcomments'); if (!box) return;
-    const list = commentsFor(id), total = commentCount(id);
-    const had = box.querySelectorAll('.comment').length;
-    if (box.dataset.n === String(list.length) + '/' + total && !box.hidden) return;
-    box.dataset.n = list.length + '/' + total;
-    const more = total - list.length;
-    box.innerHTML = (list.length ? list.map(([who, text], i) => commentHTML(who, text, '', false, i >= had && had > 0 ? 'arrive' : '')).join('') : '<div class="pc-empty">No comments yet.</div>')
-      + (more > 0 ? `<div class="pc-more">+ ${more.toLocaleString('en-US')} more comment${more === 1 ? '' : 's'}</div>` : '');
+    if (!box.querySelector('.pc-reply')) {
+      box.innerHTML = `<div class="pc-more"></div><div class="pc-list"></div>
+        <form class="pc-reply" data-for="${id}" autocomplete="off">${L.avatar('theo', 'sm')}<input type="text" maxlength="200" placeholder="Reply as Theo…" aria-label="Reply as Theo"><button class="primary" type="submit">Post</button></form>`;
+      box.dataset.n = '';
+    }
+    const list = commentsFor(id), mine = S.mine[id] || [], total = commentCount(id);
+    const sig = list.length + '/' + mine.length + '/' + total;
     box.hidden = false;
+    if (box.dataset.n === sig) return;
+    const had = box.querySelectorAll('.pc-list .comment').length;
+    box.dataset.n = sig;
+    const more = total - list.length - mine.length;
+    box.querySelector('.pc-more').textContent = more > 0 ? `View ${more.toLocaleString('en-US')} more comment${more === 1 ? '' : 's'}` : '';
+    const rows = list.map(([who, text]) => [who, text, false]).concat(mine.map(m => ['theo', m.text, true]));
+    box.querySelector('.pc-list').innerHTML = rows.length
+      ? rows.map(([who, text, isMine], i) => commentHTML(who, text, isMine ? 'just now' : '', isMine, i >= had && had > 0 ? 'arrive' : '')).join('')
+      : '<div class="pc-empty">No comments yet. Be the first?</div>';
   }
+  /* Theo replies under any post. Every keystroke counts, and the comment is pushed to the algorithm. */
+  document.addEventListener('input', e => {
+    const f = e.target.closest('.pc-reply'); if (!f) return;
+    const id = f.dataset.for, x = it(id);
+    S.inlineKeys++; x.keys = (x.keys || 0) + 1;
+    if (x.keys === 15) confirm('typing', id);
+    save();
+  });
+  document.addEventListener('submit', e => {
+    const f = e.target.closest('.pc-reply'); if (!f) return;
+    e.preventDefault();
+    const input = f.querySelector('input'), text = input.value.trim(), id = f.dataset.for;
+    if (!text) return;
+    (S.mine[id] = S.mine[id] || []).push({ text, stage: S.stage });
+    input.value = ''; input.blur();
+    confirm('comment', id, text.slice(0, 80));
+    const n = nodes.get(id);
+    if (n) { renderComments(id, n); const c = n.querySelector('.ccount'); if (c) c.textContent = fmtN(commentCount(id)); }
+    save(true);
+  });
+  // On phones, hide the bottom ad banner while typing so it doesn't cover the box above the keyboard.
+  document.addEventListener('focusin', e => { if (e.target.matches && e.target.matches('input, textarea')) document.body.classList.add('typing'); });
+  document.addEventListener('focusout', () => document.body.classList.remove('typing'));
   function toggleComments(id) {
     const n = nodes.get(id); if (!n) return;
     if (openComments.has(id)) { openComments.delete(id); n.querySelector('.pcomments').hidden = true; return; }
