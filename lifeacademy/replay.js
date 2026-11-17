@@ -9,7 +9,7 @@
   const minsec = (ms) => { const s = Math.round(ms / 1000); return s >= 60 ? `${Math.floor(s / 60)} min ${s % 60} s` : `${s} s`; };
   const CAT_LABEL = { teacher: "Mr. French's post", story: 'Posts about Theo & field day', other: 'Other posts', ad: 'Ads' };
   const CAT_VAR = { teacher: 'var(--series-teacher)', story: 'var(--series-story)', other: 'var(--series-other)', ad: 'var(--series-ad)' };
-  const EMO = { like: '❤️', laugh: '😂', sad: '😢', dislike: '👎', angry: '😡', notInterested: '🚫' };
+  const EMO = { like: '👍', love: '❤️', laugh: '😂', sad: '😢', dislike: '👎', angry: '😡', notInterested: '🚫' };
 
   let S, chapters = [], idx = 0, playing = null;
   const root = () => $('#replay');

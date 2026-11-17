@@ -10,8 +10,9 @@
   const fmtN = (n) => n >= 10000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : n.toLocaleString('en-US');
   const mmss = (ms) => { const s = Math.floor(ms / 1000); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
   const KEY = 'lens-lifeacademy-v1';
-  const W = { like: 1, laugh: 2, sad: 3, dislike: 4, angry: 5, notInterested: -1 };
-  const EMO = { like: '❤️', laugh: '😂', sad: '😢', dislike: '👎', angry: '😡' };
+  const W = { like: 1, love: 2, laugh: 2, sad: 3, dislike: 4, angry: 5, notInterested: -1 };
+  const EMO = { like: '👍', love: '❤️', laugh: '😂', sad: '😢', dislike: '👎', angry: '😡' };
+  const RNAME = { like: 'Like', love: 'Love', laugh: 'Haha', sad: 'Cry', dislike: 'Dislike', angry: 'Angry' };
   const POSTS = Object.fromEntries(L.posts.map(p => [p.id, p]));
   const ADS = Object.fromEntries(L.ads.map(a => [a.id, a]));
   const STAGE2_ORDER = ['french', 'cat', 'maya', 'volcano', 'tR', 'jaxon', 'band', 'tE', 'math', 'tM', 'soccer', 'gossip', 'tA', 'dragon', 'tT', 'tC', 'tH'];
@@ -83,6 +84,17 @@
 
   /* ---------------- ranking ---------------- */
   function match(topics) { let m = 0; for (const t in topics) m += (S.interest[t] || 0) * topics[t]; return m; }
+  function reactMix(id) {
+    const p = getItem(id) || {}, r = p.r || { like: 1 };
+    const m = { like: 0, love: 0, laugh: 0, sad: 0, dislike: 0, angry: 0 };
+    for (const k in r) { if (k === 'like') { m.love += Math.round(r.like * 0.45); m.like += r.like - Math.round(r.like * 0.45); } else if (m[k] != null) m[k] += r[k]; }
+    const mine = it(id).react; if (mine && m[mine] != null) m[mine] += 1000; // Theo's reaction always shows in the icons
+    return m;
+  }
+  function reactIcons(id) {
+    const m = reactMix(id);
+    return Object.keys(m).filter(k => m[k] > 0).sort((a, b) => m[b] - m[a]).slice(0, 3).map(k => EMO[k]).join('');
+  }
   function reactsOf(id) {
     const p = getItem(id), r = Object.assign({ like: 0, laugh: 0, sad: 0, dislike: 0, angry: 0 }, p.r || {});
     const mine = it(id).react; if (mine && r[mine] != null) r[mine]++;
@@ -230,14 +242,14 @@
     const p = getItem(id), who = L.people[p.who] || {};
     const repost = p.repost ? `<div class="repost-of">🔁 reposted from @${esc(L.people[getItem(p.repost).who].handle)}</div>` : '';
     const poll = p.poll ? `<div class="poll">${p.poll.map(([t, v]) => `<div><i style="width:${v}%"></i><span>${esc(t)}</span><b>${v}%</b></div>`).join('')}</div>` : '';
-    const reacts = Object.keys(EMO).map(k => `<button class="react" data-r="${k}" type="button" aria-label="${k}">${EMO[k]}<span class="w">${k} · weight +${W[k]}</span></button>`).join('');
+    const reacts = Object.keys(EMO).map(k => `<button class="react" data-r="${k}" type="button" aria-label="${RNAME[k]}" title="${RNAME[k]}">${EMO[k]}<span class="w">${RNAME[k]} · weight +${W[k]}</span></button>`).join('');
     return `<article class="item post loud-${p.loud || 0} ${p.img && p.img.video ? 'video-item' : ''}" data-id="${id}">
       ${meterHTML()}
       <div class="ph">${L.avatar(p.who)}<div class="who"><span class="name">${esc(who.name || p.who)}</span><span class="verified${verifiedOn(id) ? ' on' : ''}">✓</span><div class="meta">@${esc(who.handle || p.who)} · <span class="ptime">${esc(relTime(id))}</span></div></div></div>
       ${repost}${p.breaking ? '<div class="breaking">BREAKING</div>' : ''}
       <div class="ptext">${esc(p.text)}</div>${poll}${imgHTML(p)}
       <div class="pf">
-        <div class="counts"><span class="likes">❤️ <b>${fmtN(likeCount(id))}</b></span><button class="comments-link" type="button">💬 <b class="ccount">${fmtN(commentCount(id))}</b> <span class="cword">${commentCount(id) === 1 ? 'comment' : 'comments'}</span>${id === 'gossip' && S.stage >= 4 ? ' · View all' : ''}</button><span class="shares">🔁 <b class="scount">${fmtN(shareCount(id))}</b></span></div>
+        <div class="counts"><span class="likes"><span class="ricons">${reactIcons(id)}</span> <b>${fmtN(likeCount(id))}</b></span><button class="comments-link" type="button">💬 <b class="ccount">${fmtN(commentCount(id))}</b> <span class="cword">${commentCount(id) === 1 ? 'comment' : 'comments'}</span>${id === 'gossip' && S.stage >= 4 ? ' · View all' : ''}</button><span class="shares">🔁 <b class="scount">${fmtN(shareCount(id))}</b></span></div>
         <div class="liked-row"></div>
         <div class="pcomments" hidden></div>
         <div class="reacts">${reacts}<span class="more"><button type="button" aria-label="More">⋯</button></span></div>
@@ -603,11 +615,11 @@
     }
   }
   function emojiMix(id) {
-    const r = (getItem(id) || {}).r || { like: 1 };
-    const bag = [];
-    for (const k in r) for (let i = 0; i < Math.max(1, Math.round(r[k] / 20)); i++) bag.push(EMO[k]);
-    return bag.length ? bag : ['❤️'];
+    const m = reactMix(id), bag = [];
+    for (const k in m) for (let n = 0; n < Math.min(6, Math.round(Math.min(m[k], 200) / 20)); n++) bag.push(EMO[k]);
+    return bag.length ? bag : ['👍'];
   }
+
   const shown = new Map();
   function liveCounts(vis) {
     // Every post stays current; only the ones on screen throw emoji.
@@ -1175,7 +1187,7 @@
   const CODE = {
     1: ['The hidden meter', 'Every post carries a meter you can’t see until the mouse is over it.', () => `<span class="c">/* CSS */</span>\n.meter { opacity: <span class="n">0</span>; }\n.post:hover .meter { opacity: <span class="n">1</span>; }\n\n<span class="c">// JS: every second a post is on screen…</span>\npost.seen++;\n<span class="k">if</span> (post.seen === <span class="n">90</span>) sendSignal(<span class="s">"dwell"</span>, post);`],
     2: ['Faster every time', 'The more Lens has learned, the less proof it needs.', () => `<span class="k">const</span> threshold = <span class="n">90</span> / (<span class="n">1</span> + confirmed * <span class="n">6.5</span>);\n<span class="c">// right now: confirmed = ${S.confirmed} → ${threshold().toFixed(1)} seconds</span>\n\n.repost.gossip img { filter: sepia(.45) hue-rotate(-28deg) saturate(1.9); }\n.gossip .caption { text-transform: uppercase; }`],
-    3: ['The ranking', 'Every reaction counts as interest. Anger counts most.', () => `<span class="k">const</span> weight = { like: <span class="n">1</span>, laugh: <span class="n">2</span>, sad: <span class="n">3</span>, dislike: <span class="n">4</span>, angry: <span class="n">5</span>, notInterested: <span class="n">-1</span> };\n\n<span class="k">function</span> score(post) {\n  <span class="k">return</span> sum(post.reactions × weight) + shares × <span class="n">3</span> + comments × <span class="n">2</span>;\n}\nfeed.sort((a, b) => score(b) - score(a));`],
+    3: ['The ranking', 'Every reaction counts as interest. Anger counts most.', () => `<span class="k">const</span> weight = { like: <span class="n">1</span>, love: <span class="n">2</span>, laugh: <span class="n">2</span>, sad: <span class="n">3</span>, dislike: <span class="n">4</span>, angry: <span class="n">5</span>, notInterested: <span class="n">-1</span> };\n\n<span class="k">function</span> score(post) {\n  <span class="k">return</span> sum(post.reactions × weight) + shares × <span class="n">3</span> + comments × <span class="n">2</span>;\n}\nfeed.sort((a, b) => score(b) - score(a));`],
     4: ['Words, cut down', 'Every keystroke is saved, and replies are quoted by their loudest chunk.', () => `input.oninput = () => { keystrokes++; drafts.push(input.value); };\n<span class="c">// keystrokes so far: ${S.reply.keys}, drafts saved: ${S.reply.drafts.length}</span>\n\n<span class="k">function</span> quotePost(text) {\n  <span class="k">return</span> <span class="s">'"…'</span> + loudestChunk(text, <span class="n">4</span>) + <span class="s">'…" 👀'</span>;\n}`],
     5: ['A checkmark is one line', 'The screen draws whatever the data says.', () => `{\n  <span class="s">"author"</span>: <span class="s">"lifeacademy.gossip"</span>,\n  <span class="s">"accountCreated"</span>: <span class="s">"today"</span>,\n  <span class="s">"verified"</span>: <span class="k">true</span>,\n  <span class="s">"likesShown"</span>: <span class="n">48212</span>,\n  <span class="s">"boost"</span>: { <span class="s">"purchasedLikes"</span>: <span class="n">48200</span> }\n}`],
     6: ['The profile', 'Your feed is filtered by what you looked at.', () => `<span class="k">const</span> you = { id: <span class="s">"theo"</span>, interestInTheStory: <span class="n">${Math.round(storyShare() * 100)}%</span> };\nfeed = posts.filter(p => p.isAbout(<span class="s">"#GagaGate"</span>));\nroot.style.setProperty(<span class="s">"--accent"</span>, <span class="s">"orange"</span>);`],
@@ -1230,20 +1242,26 @@
     if (t.closest('#login-btn')) return showBriefing();
     if (t.closest('#open-btn')) { if (!busy) { busy = true; try { await startLens(); } finally { busy = false; } } return; }
     const react = t.closest('.react');
-    if (react && S.stage >= 3 && S.stage <= 7) {
+    if (react && S.stage >= 1 && S.stage <= 7 && react.closest('#feed .item, #thread-post .item')) {
       const id = react.closest('.item').dataset.id;
       const k = react.dataset.r;
-      if (it(id).react === k) return;
+      if (it(id).react === k) { it(id).react = null; refreshNode(id); save(); return; }   // take it back
       it(id).react = k;
       const rb = react.getBoundingClientRect(); burst(rb.left + rb.width / 2, rb.top, [EMO[k]], 10);
       confirm('react', id, k);
-      if (S.stage === 3 && !S.more3) { S.more3 = true; }
-      setTimeout(() => {
-        rerank('all');
-        renderFeed({ flip: true, arrive: true });
-        refreshNode(id);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 1100);
+      refreshNode(id);
+      if (S.stage >= 3) {
+        // From stage 3 the algorithm visibly jumps: whatever Theo reacted to moves to the top.
+        if (S.stage === 3 && !S.more3) { S.more3 = true; }
+        setTimeout(() => {
+          rerank('all');
+          renderFeed({ flip: true, arrive: true });
+          refreshNode(id);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 1100);
+      } else if (S.stage === 2) {
+        setTimeout(() => { rerank('below'); renderFeed({ flip: true, arrive: true }); }, 900);
+      }
       return;
     }
     const moreBtn = t.closest('.more > button');

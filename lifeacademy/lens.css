@@ -115,12 +115,13 @@ body.L5 .counts .likes { font-size: 1.25rem; color: var(--ink); }
 .liked-by .stack .avatar { width: 1.7rem; height: 1.7rem; border: 2px solid #fff; margin-left: -.5rem; }
 .liked-by .stack .avatar:first-child { margin-left: 0; }
 .reacts { display: none; gap: .4rem; flex-wrap: wrap; align-items: center; }
-body.L3 .reacts { display: flex; animation: slidein .6s ease both; }
+body.L1 .reacts { display: flex; }
 .react { position: relative; border: 1px solid var(--line); background: var(--bg); border-radius: 2rem; padding: .25rem .7rem; font-size: 1.25rem; line-height: 1.2; }
 .react:hover { background: var(--accent-soft); }
 .react.chosen { background: var(--accent); border-color: var(--accent); }
 .react .w { display: none; position: absolute; left: 50%; bottom: 115%; transform: translateX(-50%); background: var(--meter-bg); color: #fff; font: 800 .9rem/1 ui-monospace, Menlo, Consolas, monospace; padding: .35rem .5rem; border-radius: .4rem; white-space: nowrap; }
-.react:hover .w { display: block; }
+/* the hidden weights only show from stage 3, when the algorithm is the lesson */
+body.L3 .react:hover .w { display: block; }
 .more { margin-left: auto; position: relative; }
 .more > button { border: 0; background: none; font-size: 1.3rem; padding: .1rem .5rem; color: var(--ink-3); }
 .more .menu { position: absolute; right: 0; bottom: 120%; background: var(--surface); border: 1px solid var(--line); border-radius: .6rem; box-shadow: var(--shadow); padding: .3rem; z-index: 5; white-space: nowrap; }
@@ -594,3 +595,6 @@ body { overflow-x: hidden; }
   body.typing #sidebar { display: none; }
   .pc-reply input { font-size: 16px; }
 }
+
+/* reaction icons beside the count, Facebook-style */
+.likes .ricons { letter-spacing: -.25em; margin-right: .25em; }

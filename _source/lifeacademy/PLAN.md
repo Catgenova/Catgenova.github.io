@@ -522,12 +522,17 @@ points at them: *"React to show how you feel! 💬"*
 **Theo's goal:** *"That gossip post isn't true. I want Lens to know I don't
 like it."*
 
-**Looks like:** the same feed, now with reaction bars on every post
-(❤️ 😂 😢 😡 👎). The ⋯ menu on each post also has a *"Not interested"*
-option, small and grey. The Backyard Gaga Pit Kit ad appears.
+**Looks like:** the same feed. Every post has had a reaction bar since
+stage 1: 👍 Like, ❤️ Love, 😂 Haha, 😢 Cry, 👎 Dislike, 😡 Angry, and the
+count shows each post's top three reaction icons. Theo can react to anything
+from the first minute (tap the same reaction again to take it back), and
+every reaction is a signal. What changes in stage 3: the hidden weights
+become visible on hover, and a reaction now visibly jumps that post to the
+top of the feed. The ⋯ menu on each post also has a *"Not interested"*
+option, small and grey.
 
 **The meter:** hovering over a reaction button shows its hidden weight
-(❤️ +1, 😂 +2, 😢 +3, 👎 +4, 😡 +5). Clicking **any** reaction fills the bar
+(👍 +1, ❤️ +2, 😂 +2, 😢 +3, 👎 +4, 😡 +5). Clicking **any** reaction fills the bar
 **in one click**:
 
 ```
