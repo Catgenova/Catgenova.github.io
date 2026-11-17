@@ -125,6 +125,14 @@ without copying any real platform's branding or layout.
 
 ### The signal meter (the core mechanic)
 
+> **Never shown during play.** The meter is hidden for the whole game: no
+> overlay, no *PUSHED TO ALGORITHM* flash, no sound. Lens still times every
+> post, pause, tap and keystroke and pushes signals exactly as described
+> below; the class only sees it in Lens Replay, whose second screen reveals
+> the meter (*"Every post had this on it. You never saw it."*) with the
+> session's real signal counts. Descriptions of the meter elsewhere in this
+> plan describe what Lens does behind the scenes.
+
 Every post (and every ad) has a **hidden meter**, an overlay that appears
 when the mouse is over it, or, from stage 2, when the feed pauses on it:
 

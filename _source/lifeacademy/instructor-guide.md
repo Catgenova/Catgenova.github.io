@@ -2,8 +2,8 @@
 
 You run the laptop. The class decides what Theo does; you only click what
 they tell you. **`Shift` + `→` moves to the next stage whenever you're
-ready.** If the stage's meter hasn't confirmed yet, it confirms first, so the
-story still makes sense.
+ready.** Lens tracks everything silently; nothing on screen shows it until the
+replay.
 
 ## Before class
 
@@ -21,19 +21,20 @@ story still makes sense.
 
 - **Do:** let the class steer the scrolling through ten goofy posts. They can
   react, open comments and reply as Theo if they want.
-- **Watch for:** hovering over a post reveals its hidden meter. Don't point
-  it out. Ask: *"Is anything on this page doing more than showing posts?"*
+- **Nothing shows it, but Lens is timing every post** the class looks at.
+  Ask: *"Is anything on this page doing more than showing posts?"* They won't
+  find anything. The replay answers it.
 - **At 60 s:** Mr. French's post lands with a "New post" pill, and tag
   notifications start every ~9 s. Clicking one jumps to the post.
-- **Advance** once his post says ✓ PUSHED TO ALGORITHM (about 90 s after it
-  appears).
+- **Advance** about 90 s after his post appears. Lens records it silently,
+  and advancing early still records it.
 
 ## Stage 2: "Let's see what else is on here" (~6 min)
 
 - **Do:** scroll the new posts. Stop where the class wants to stop.
-- **Watch for:** Maya's repost, then Jaxon's, each one louder. The meter on
-  the post you stop on fills in about 12 s. Sidebar ads change to match.
-  Posts already seen turn grey.
+- **Watch for:** Maya's repost, then Jaxon's, each one louder. Lens silently
+  counts every pause (about 12 s on a post is enough). Sidebar ads change to
+  match. Posts already seen turn grey.
 - **Ask:** *"Why did we stop on that one?"* and *"What's missing from this
   photo compared to Mr. French's?"* (Theo laughing.)
 - **Advance.**
@@ -92,6 +93,10 @@ story still makes sense.
 - When it says *"Before you go…"*, click **Open my replay**.
 
 ## Lens Replay (~12 min)
+
+- The second screen is the first time the class sees the hidden meter:
+  *"Every post had this on it. You never saw it."*, with how many signals
+  their choices sent.
 
 - **`→` / `←`** move through chapters. On a stage chart, **`Space`** (or ▶)
   replays that stage at 10× speed.

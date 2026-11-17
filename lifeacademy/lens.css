@@ -628,3 +628,13 @@ body { overflow-x: hidden; }
 .item.seen .ph .meta::after { content: " · Seen ✓"; color: var(--ink-3); font-weight: 700; }
 
 
+
+/* The meter is hidden for the whole game. Lens is still tracking; the replay shows what it was doing. */
+.item > .meter, .composer .meter, .modal-meter, body.L7 .item > .meter { display: none !important; }
+.item.flash { outline: none !important; }
+.item.just > .meter.ok .m-ok { display: none; }
+/* the replay's reveal of the meter */
+.rp-meterdemo { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; margin: 1.2rem 0; }
+.rp-meterdemo .meter { position: static; opacity: 1; transform: none; width: 26rem; max-width: 100%; font-size: 1.05rem; pointer-events: none; }
+.rp-meterdemo .meter .m-ok { display: block; }
+.rp-meterdemo .meter::before { display: none; }

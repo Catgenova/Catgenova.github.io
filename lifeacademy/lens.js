@@ -463,6 +463,8 @@
   const flashUntil = new Map();
   let hoverId = null, lastScroll = 0, lastTl = 0, threadOpen = false;
 
+  // The meter is never shown while the class plays: Lens tracks and pushes silently. The replay reveals it.
+  const SHOW_METERS = false;
   function threshold() { return Math.max(3, 90 / (1 + 6.5 * S.confirmed)); }
   L.threshold = threshold;
 
@@ -495,7 +497,7 @@
     S.stageConfirmed[S.stage] = true;
     if (type !== 'auto') S.signals.push({ stage: S.stage, t: rec().active, type, id, detail: detail || null, share: storyShare() });
     else S.s7.autoCount++;
-    if (!opts.quiet) {
+    if (!opts.quiet && SHOW_METERS) {
       const [a, b] = signalText(type, id, detail);
       flashUntil.set(id, Date.now() + 4200);
       it(id).msg = a + (b ? ' — ' + b : '');
@@ -910,12 +912,8 @@
     rec().early = true;
     if (S.stage === 1) { if (!S.s1.shown) { showFrench(); await wait(1200); } it('french').done = 1; }
     const type = { 1: 'dwell', 2: 'pause', 3: 'pause', 4: 'thread', 5: 'glance', 6: 'pause' }[S.stage];
-    const n = nodes.get(key);
-    if (n && !threadOpen) n.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    await wait(600);
     if (S.stage === 2 || S.stage === 3) it(key).pause = Math.max(it(key).pause, 2000);
     confirm(type, key);
-    await wait(1600);
   }
 
   async function advance() {

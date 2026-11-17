@@ -20,7 +20,7 @@
 
   function build() {
     S = L.getState();
-    chapters = [{ k: 'intro' }, { k: 'start' }, { k: 'reveal', s: 1 }];
+    chapters = [{ k: 'intro' }, { k: 'meter' }, { k: 'start' }, { k: 'reveal', s: 1 }];
     for (let s = 2; s <= 7; s++) {
       if (!S.rec[s]) continue;
       chapters.push({ k: 'stage', s });
@@ -120,6 +120,20 @@
       case 'intro': {
         const total = [1, 2, 3, 4, 5, 6, 7].reduce((a, s) => a + (S.rec[s] ? S.rec[s].active : 0), 0);
         html = `<div class="rp-hero"><div class="rp-logo">Your Lens Replay ✨</div><p>${minsec(total)} as Theo.<br>Here’s everything Lens noticed, and what it did with it.</p><small>Press → to go through it.</small></div>`;
+        break;
+      }
+      case 'meter': {
+        const counts = {};
+        S.signals.forEach(x => { counts[x.type] = (counts[x.type] || 0) + 1; });
+        const total = S.signals.length + (S.s7 ? S.s7.autoCount : 0);
+        const names = { dwell: ['time you looked long enough', 'times you looked long enough'], pause: ['time you stopped scrolling', 'times you stopped scrolling'], react: ['reaction', 'reactions'], creact: ['reaction to a comment', 'reactions to comments'], open: ['comment section opened', 'comment sections opened'], typing: ['time you typed', 'times you typed'], comment: ['comment posted', 'comments posted'], thread: ['thread opened', 'threads opened'], glance: ['time you checked the likes', 'times you checked the likes'], search: ['search', 'searches'] };
+        const rows = Object.entries(counts).filter(([k]) => names[k]).sort((a, b) => b[1] - a[1]).map(([k, n]) => `<div class="rp-tile"><b>${n}</b><span>${names[k][n === 1 ? 0 : 1]}</span></div>`).join('');
+        html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">The whole time</span><span class="rp-goal">Every post had this on it. You never saw it.</span></div>
+          <div class="rp-meterdemo"><div class="meter ok"><div class="m-top"><span class="m-ico">⏱</span><span class="m-lab">on screen</span><b class="m-time">01:30</b></div>
+            <div class="m-bar"><i style="width:100%"></i></div><div class="m-sub">sending to algorithm · <b class="m-pct">100%</b></div>
+            <div class="m-ok">✓ PUSHED TO ALGORITHM<b class="m-msg"> @theo is interested in this → show more</b></div></div>
+            <p class="rp-big" style="flex:1;min-width:16rem">Lens timed every post Theo looked at, every pause, every tap and every keystroke, and sent <b>${total}</b> signal${total === 1 ? '' : 's'} to its algorithm.</p></div>
+          <div class="rp-tiles four">${rows}</div></div>`;
         break;
       }
       case 'start': {
