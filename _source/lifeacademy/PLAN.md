@@ -1063,7 +1063,13 @@ lifeacademy/
 _source/lifeacademy/
   PLAN.md             ← this file (not published)
   photo-credits.md    ← where each avatar came from (not published)
+  stamp.py            ← cache-busting: run before committing changes to lifeacademy/
 ```
+
+**Before every commit that changes `lifeacademy/`, run `python3
+_source/lifeacademy/stamp.py`.** It stamps each CSS/JS link in `index.html`
+with a hash of the file (`lens.js?v=b2413fa6`), so phones and browsers load
+the new version instead of a cached old one.
 
 It's a standalone page with no Jekyll layout (like `fretspeak/`), so the
 site header and footer don't break the illusion, and it's marked
