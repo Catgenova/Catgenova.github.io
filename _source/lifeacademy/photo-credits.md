@@ -5,7 +5,7 @@ The student avatars in `lifeacademy/img/` are free stock photos from
 doesn't require attribution; these are listed so they can be traced or swapped.
 Everyone in the Lens story is made up; the photos only stand in for them.
 All students are teenagers except June, who is 8 in the story.
-Mr. French and Mr. Alvarez use initials instead of photos.
+Mr. French uses initials instead of a photo.
 
 | File | Character | Pexels photo |
 |---|---|---|

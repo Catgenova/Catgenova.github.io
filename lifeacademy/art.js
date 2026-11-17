@@ -134,8 +134,8 @@ LENS.cropFilters = {
   <!-- the ball -->
   <g class="ball"><circle cx="1080" cy="612" r="20" fill="#d9442b"/><path d="M1102 600 q20 -6 34 -2 M1104 616 q22 0 36 6" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/></g>
 
-  <!-- Mr. Alvarez with a drill -->
-  <g class="alvarez">
+  <!-- Mr. French with a drill, on his way to fix the wall -->
+  <g class="fixer">
     <rect x="1405" y="625" width="18" height="90" rx="8" fill="#3d3d4a" transform="rotate(8 1414 625)"/><rect x="1432" y="625" width="18" height="90" rx="8" fill="#3d3d4a" transform="rotate(-10 1441 625)"/>
     <rect x="1395" y="505" width="64" height="128" rx="18" fill="#5b7fa8"/>
     <circle cx="1427" cy="478" r="28" fill="#c98e62"/>

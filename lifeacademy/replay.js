@@ -169,7 +169,7 @@
       case 'numbers':
         html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 5</span><span class="rp-goal">Who actually liked it</span></div>
           <div class="rp-tiles four"><div class="rp-tile"><b>48,212</b><span>likes shown</span></div><div class="rp-tile"><b>48,200</b><span>bought for $19.99</span></div>
-          <div class="rp-tile hot"><b>12</b><span>real people</span></div><div class="rp-tile"><b>46</b><span>kids who actually played gaga that day</span></div></div>
+          <div class="rp-tile hot"><b>12</b><span>real people</span></div><div class="rp-tile"><b>46</b><span>kids who actually played gagaball that day</span></div></div>
           <p class="rp-big">Theo checked who liked it <b>${S.likesOpened}×</b>. Each check told Lens he cared about the numbers.</p></div>`;
         break;
       case 'feeds': {

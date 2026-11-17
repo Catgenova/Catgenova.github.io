@@ -2,7 +2,7 @@
 
 A single-page experience at **pere.games/lifeacademy/** for the Life Academy
 homeschool co-op. The page is a mock social media app called **Lens**. The
-class logs in as **Theo**, a student whose slip in the gaga pit at field day
+class logs in as **Theo**, a student whose slip in the gagaball pit at field day
 is the talk of Life Academy, and scrolls his feed. Every time Theo looks,
 pauses, reacts, replies or tries to look away, a hidden meter shows the app
 turning that into a signal for its algorithm, and the meter fills faster at
@@ -59,10 +59,10 @@ Two things rise together through the table:
 The class doesn't hear the names in the last column until the replay. During
 play, they just feel each one.
 
-### The world: the gaga pit incident
+### The world: the gagaball pit incident
 
 All content comes from one event, so every stage reframes **the same
-facts**. The event is a gaga ball mishap at **Life Academy's own field
+facts**. The event is a gagaball mishap at **Life Academy's own field
 day**: the students' own co-op, and something they'll have opinions about.
 
 The people in the story are invented. Keep it that way even though the
@@ -74,18 +74,18 @@ about how mean people can be.
 **What actually happened.** The class is told this at login, so they know
 the truth from the start. Watching the feed bend it is the point.
 
-- It drizzled until 11 a.m., so the gaga pit was muddy.
-- 46 kids played gaga over the day.
+- It drizzled until 11 a.m., so the gagaball pit was muddy.
+- 46 kids played gagaball over the day.
 - In the 1:30 championship game, **Theo** (13) dove for the ball, slipped in
   the mud, and slid into the pit wall. One wall panel popped loose and fell
   over.
 - Everyone froze, then laughed, Theo hardest. He had a scraped elbow and got
   a band-aid.
-- **Mr. Alvarez**, a parent, screwed the panel back on in ten minutes.
+- **Mr. French** brought his drill and screwed the panel back on in ten minutes.
 - It was an accident. The game was tied, and nobody was to blame.
 - The championship was replayed, and **June**, age 8, won it.
 
-By stage 7 the feed has turned it into *"GAGA PIT COLLAPSES — KID HURT IN
+By stage 7 the feed has turned it into *"GAGABALL PIT COLLAPSES — KID HURT IN
 LIFE ACADEMY CHAOS 😱🔥 48.2K"*.
 
 ### The cast (Lens accounts)
@@ -99,7 +99,6 @@ LIFE ACADEMY CHAOS 😱🔥 48.2K"*.
 | **@lifeacademy.gossip** | A gossip account made today | The worst repost, the quote-post, and the bought likes |
 | **@ella.r**, **@noah_b**, **@kai.plays** | Classmates | Commenters in the stage 4 thread |
 | **@june.plays.gaga** | June, 8 | Rematch winner; her post is the one that gets buried |
-| **@alvarez.fixes** | Mr. Alvarez | "Wall's back up!" |
 | **@sam** | A classmate | Barely heard about it. Their feed is mostly video games. |
 
 ### The art: one photo, many crops
@@ -110,7 +109,7 @@ in it:
 - Theo sprawled in the mud by the fallen panel, **laughing, with a thumbs
   up**.
 - The ball in mid-air, and kids around the pit laughing.
-- Mr. Alvarez walking over with a drill.
+- Mr. French walking over with a drill.
 - In the background, a chalkboard sign: *"CAUTION: MUD — pit opens at 11"*,
   and the bracket board: *"CHAMPIONSHIP REMATCH — 2:15"*.
 
@@ -202,9 +201,9 @@ so as Theo's attention moves, the ads move with it. All brands are invented.
 | 🎮 *Pixel Quest — Season 4 is live* | games | Stage 2, before Lens knows much |
 | 👟 *Fleet Sneakers — 30% off* | sports | Stage 2 |
 | 📐 *MathBuddy — homework help in seconds* | school | Stage 2 |
-| 🏐 *ProGaga Ball — official size* | gaga | Rises in stage 2–3 |
-| 🛡️ *FlexGuard elbow & knee pads* | gaga, injury | After the "KID HURT" reposts |
-| 🪵 *Backyard Gaga Pit Kit* | gaga | Stage 3 onward |
+| 🏐 *ProGaga Ball — official size* | gagaball | Rises in stage 2–3 |
+| 🛡️ *FlexGuard elbow & knee pads* | gagaball, injury | After the "KID HURT" reposts |
+| 🪵 *Backyard Gaga Pit Kit* | gagaball | Stage 3 onward |
 | 👀 *Lens Premium: see who's talking about you* | drama, self | After Theo replies (stage 4) |
 | 🚀 *Post Boost: 10,000 likes for $19.99* | drama | Stage 5, the same service the gossip account used |
 | 🧘 *Unwind — feel calm in 5 minutes* | stress | Stage 7, while the app does everything it can to stress him |
@@ -383,8 +382,8 @@ show**, and **the key** that moves on to the next stage.
 card:
 
 > *You are **Theo**. You're 13. Yesterday at Life Academy field day you
-> slipped in the mud during the gaga championship and knocked a wall panel
-> over. Everyone laughed, and so did you. Mr. Alvarez fixed the wall, there
+> slipped in the mud during the gagaball championship and knocked a wall panel
+> over. Everyone laughed, and so did you. Mr. French fixed the wall, there
 > was a rematch, and June won. It was a good day.*
 >
 > *This morning, you open Lens.*
@@ -404,7 +403,7 @@ back, Theo" card and **Mr. French's post** at the top:
 
 > **@mrfrench** · Life Academy
 > *Theo's championship-winning dive 🏆 (he didn't win… the wall did 😂).
-> Wall fixed in 10 minutes thanks to Mr. Alvarez, rematch at 2:15. Best
+> Wall fixed in 10 minutes thanks to Mr. French, rematch at 2:15. Best
 > field day yet! #LifeAcademyFieldDay*
 > *[the full, wide photo]* ❤️ 23
 
@@ -485,16 +484,16 @@ photo**, each one more exaggerated than the last:
 
 | Repost | Crop | Filter | Caption |
 |---|---|---|---|
-| **@maya.k** | a bit tighter; Theo still laughing | brighter | *"theo vs the gaga wall 😂"* |
+| **@maya.k** | a bit tighter; Theo still laughing | brighter | *"theo vs the gagaball wall 😂"* |
 | **@jaxon_** | the laughing and thumbs up cut off | high contrast | *"THEO DESTROYED THE PIT 💀"* |
-| **@lifeacademy.gossip** | just the fallen panel and Theo's muddy sneakers | red tint, grain | *"GAGA PIT COLLAPSES — KID HURT IN LIFE ACADEMY CHAOS 😱 are they banning gaga??"* (huge caps, BREAKING banner) |
+| **@lifeacademy.gossip** | just the fallen panel and Theo's muddy sneakers | red tint, grain | *"GAGABALL PIT COLLAPSES — KID HURT IN LIFE ACADEMY CHAOS 😱 are they banning gagaball??"* (huge caps, BREAKING banner) |
 
 **The meter:** now it also shows when the feed **pauses** on a post (no
 scrolling for a second with the post in the middle of the screen). It shows
 the same timer and a **much faster bar, about 12 seconds**. It fills
 fastest on the gossip post, because that's where people (and Theo) stop
 longest. Each confirmation **re-sorts the feed below**: the reposts drift
-up, the cat and the volcano drift down, and the gaga ads (ProGaga Ball,
+up, the cat and the volcano drift down, and the gagaball ads (ProGaga Ball,
 FlexGuard pads) start replacing the generic ones.
 
 ```
@@ -509,7 +508,7 @@ French's?"* and let them spot that the laughing is gone.
 
 **The replay will show:** how long the class paused on each post and ad;
 how the reposts climbed and the unrelated posts sank; how the ads switched
-from games and sneakers to gaga gear; and every repost's crop drawn on Mr.
+from games and sneakers to gagaball gear; and every repost's crop drawn on Mr.
 French's original photo.
 
 **Advance →** reaction buttons slide in under every post, and a tooltip
@@ -579,7 +578,7 @@ relevant*, which puts the loudest on top:
 
 1. **@maya.k:** *"ok this is actually so funny 😂 theo you good?"*
 2. **@jaxon_:** *"the wall had a family 😭"*
-3. **@ella.r:** *"wait is gaga actually banned??"*
+3. **@ella.r:** *"wait is gagaball actually banned??"*
 4. **@noah_b:** *"I heard he did it on purpose bc they were losing"*
 5. **@lifeacademy.gossip** (author): *"sources say the pit is CLOSED FOREVER
    🚨"*
@@ -606,7 +605,7 @@ the ones that quote Theo only ever use the loudest chunk of four words or
 so, so the class's words are never repeated at length:
 
 1. **@noah_b:** *"'…{loudest chunk}…' 💀 ok theo"*
-2. **@ella.r:** *"so is gaga banned or not"* (nobody reads the replies)
+2. **@ella.r:** *"so is gagaball banned or not"* (nobody reads the replies)
 3. **@jaxon_:** *"theo really typed all that 😭"*
 4. **@lifeacademy.gossip:** *"we posted Theo's response ⬆️ 👀"*, and at the
    same moment a **quote-post** appears at the top of the feed:
@@ -668,7 +667,7 @@ every real name they spot. (There are 12.) Point at the Post Boost ad:
 *"Where do you think those 48,000 likes came from?"*
 
 **The replay will show:** 48,212 likes shown, 48,200 bought, 12 real, against
-the 46 kids who actually played gaga that day; and how the like count
+the 46 kids who actually played gagaball that day; and how the like count
 itself pulled the gossip post even higher.
 
 **Advance →** a cheerful toast: *"We've updated your feed to match your
@@ -684,10 +683,10 @@ else."*
 
 **Looks like:** a feed that is **100% about Theo**. The whole app is themed
 in #GagaGate orange, the greeting says *"Your Life Academy today"*, and
-every post is the incident: reposts of reposts, polls (*"Should gaga be
-banned?"*), *"Theo did it ON PURPOSE? 👀"*. Every ad slot is gaga gear or
+every post is the incident: reposts of reposts, polls (*"Should gagaball be
+banned?"*), *"Theo did it ON PURPOSE? 👀"*. Every ad slot is gagaball gear or
 Lens Premium. When the class searches for something else (*"soccer"*,
-*"Minecraft"*, anything), the results are still about the gaga pit.
+*"Minecraft"*, anything), the results are still about the gagaball pit.
 
 **The meter:** every bar is **already full** when a post appears:
 *"✓ pre-confirmed"*. Lens doesn't need Theo to look any more. It already
@@ -707,7 +706,7 @@ the room is split so each group sees **only one**:
      her, a cake. One small mention of the wall.
    - **Group 2 sees Mr. French's feed:** lesson plans, a field trip sign-up,
      her original post with its 23 likes.
-   - **Group 3 sees Sam's feed:** video games and a dog. No gaga at all.
+   - **Group 3 sees Sam's feed:** video games and a dog. No gagaball at all.
 3. The page asks the room: ***"What's Life Academy talking about today?"***
    Each group answers from the feed it saw (June's win, school stuff,
    nothing much). Nobody says "Theo." Let that land.
@@ -809,7 +808,7 @@ records every event:
 The ranking is real too. Posts and ads are sorted from the recorded
 attention and reactions, so if the class stares at the cat for a full
 minute, the cat really does rise, and the replay shows it. The content is
-weighted so the gaga story wins under any normal play, but the replay never
+weighted so the gagaball story wins under any normal play, but the replay never
 claims anything the session didn't do.
 
 ### Chapter layout (stages 2–7)
@@ -859,7 +858,7 @@ way so the class learns to read it:
 |---|---|---|---|
 | **Where it started** (stage 1) | Seconds on Mr. French's post; the first confirmation | **Passive tracking.** *Watching is a vote. You don't have to click anything.* | Mr. French's post was kind, and had the whole story. |
 | **Stage 2** | Pause times per repost; reposts rising, unrelated posts and generic ads sinking; every repost's crop drawn on the original photo | **Exaggeration.** *Each share crops tighter, filters harder and shouts louder. The version that spreads furthest has the least of what happened.* | Theo was laughing. It was a scraped elbow. |
-| **Stage 3** | The reaction chosen; the gossip post to #1; June's post to the bottom; gaga ads following | **The algorithm.** *Every reaction is a vote for more, and anger counts most. It can't tell "I love this" from "I hate this."* | There was a rematch, and June won it. |
+| **Stage 3** | The reaction chosen; the gossip post to #1; June's post to the bottom; gagaball ads following | **The algorithm.** *Every reaction is a vote for more, and anger counts most. It can't tell "I love this" from "I hate this."* | There was a rematch, and June won it. |
 | **Stage 4** | Theo's full reply vs. the quoted chunk; saved drafts including deleted words; the six comments that followed; Maya's comment sorted last; Lens Premium rising | **Context collapse.** *Your words can be cut to the loudest few and passed on. Defending yourself counts as engagement.* | It was an accident. Nobody was to blame. |
 | **Stage 5** | 48,212 shown, 48,200 bought, 12 real, vs. 46 kids who played; the Post Boost ad | **Fake popularity.** *Numbers feel like votes. The crowd can be bought, and the voters can be bots.* | 46 kids played gaga. 12 real people liked that post. |
 | **Stage 6** | Theo's feed and ads at login vs. now; the three other feeds | **The filter bubble.** *Your feed is a mirror of what you've looked at. A small story can feel like the whole world.* | Most people at Life Academy weren't talking about it. |
@@ -875,14 +874,14 @@ way so the class learns to read it:
    ```
    @theo · what Lens learned
    ✓ dwell    90s on @mrfrench's post
-   ✓ pause    ×9 on reposts (longest: 14s on "GAGA PIT COLLAPSES")
+   ✓ pause    ×9 on reposts (longest: 14s on "GAGABALL PIT COLLAPSES")
    ✓ react    😡 on @lifeacademy.gossip
    ✓ typing   63 keystrokes, 4 drafts saved (incl. 1 deleted)
    ✓ comment  1 reply → quoted, 6 replies
    ✓ glance   checked who liked it ×4
    ✓ search   "soccer" → shown #GagaGate
    ✓ stay     tried to leave ×5, stayed 4m 12s
-   interests: #GagaGate 98% · sells well to: gaga gear, Lens Premium, Post Boost
+   interests: #GagaGate 98% · sells well to: gagaball gear, Lens Premium, Post Boost
    ```
 
 3. One line, alone on the screen: ***"Lens can't tell the difference between
@@ -925,8 +924,8 @@ way so the class learns to read it:
 | Stage | Feed looks like | Ads | The meter |
 |---|---|---|---|
 | 1 | Calm; one kind post | none | hidden; 90s on hover |
-| 2 | Busy; unrelated posts + louder reposts | generic, turning gaga | pauses; ~12s |
-| 3 | + reaction bars; re-sorting | gaga gear | one click |
+| 2 | Busy; unrelated posts + louder reposts | generic, turning gagaball | pauses; ~12s |
+| 3 | + reaction bars; re-sorting | gagaball gear | one click |
 | 4 | + comment thread, quote-post | + Lens Premium | every keystroke |
 | 5 | + counters, checkmarks, trending | + Post Boost | 2s glance |
 | 6 | All #GagaGate; orange theme; search hijacked | every slot targeted | pre-filled |
@@ -1026,7 +1025,7 @@ the laptop remembers where the class left off, recording included.
 - **Keep Theo safe.** Make sure no student shares Theo's name or has had a
   similar incident recently. If anyone in the room seems to take the story
   personally, lean on the true version: Theo laughed, and it was a good day.
-- **Gaga is personal.** Some students will have strong feelings about gaga
+- **Gagaball is personal.** Some students will have strong feelings about gagaball
   calls and "who's really out." Let that energy into the stage 4 reply and
   the stage 6 discussion; it's exactly what the algorithm feeds on.
 - **For the curious.** If students want to see how it works, `C` opens the
