@@ -29,14 +29,14 @@
       s1: { shown: false, shownAt: 0, sent: 0, clicks: 0 },
       bell: { unread: 0, items: [] },
       clock: 0, landed: {},
-      mine: {}, inlineKeys: 0,
+      mine: {}, inlineKeys: 0, creact: {},
     };
   }
   let S = load() || fresh();
   S.s1 = S.s1 || { shown: true, shownAt: 0, sent: 0, clicks: 0 };
   S.bell = S.bell || { unread: 0, items: [] };
   S.clock = S.clock || 0; S.landed = S.landed || {};
-  S.mine = S.mine || {}; S.inlineKeys = S.inlineKeys || 0;
+  S.mine = S.mine || {}; S.inlineKeys = S.inlineKeys || 0; S.creact = S.creact || {};
   let snaps = loadSnaps();
   function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); return s && s.v === 1 ? s : null; } catch (e) { return null; } }
   function loadSnaps() { try { return JSON.parse(localStorage.getItem(KEY + '-snaps')) || {}; } catch (e) { return {}; } }
@@ -201,11 +201,13 @@
   /* Reactions and comments come fast right after a post lands, then slow down: target × (1 − e^(−age/τ)).
      A post that lands during the session starts at zero. Older posts already have most of theirs. */
   const TAU_R = 22000, TAU_C = 34000;
-  function isOld(id) { const p = getItem(id); return !p || (p.stage === 1 && id !== 'french') || /^Yesterday/.test(p.time || ''); }
+  function isOld(id) { const p = getItem(id); return !p || (!p.live && ((p.stage === 1 && id !== 'french') || /^Yesterday/.test(p.time || ''))); }
   function landedAt(id) {
     if (S.landed[id] == null) {
       const p = getItem(id) || {};
-      S.landed[id] = S.clock - (isOld(id) ? Math.min(150000, 45000 + Math.max(0, 1435 - (p.min || 0)) * 2000) : 0);
+      // Reposts of Mr. French's photo were posted a little after him: a fraction of the time since his post.
+      const ago = typeof p.live === 'number' && S.landed.french != null ? Math.max(10000, (S.clock - S.landed.french) * p.live) : 0;
+      S.landed[id] = S.clock - (isOld(id) ? Math.min(150000, 45000 + Math.max(0, 1435 - (p.min || 0)) * 2000) : ago);
     }
     return S.landed[id];
   }
@@ -214,7 +216,7 @@
     const p = getItem(id);
     if (isOld(id)) return p.time;
     const m = Math.floor((S.clock - landedAt(id)) / 60000);
-    return m < 1 ? 'Just now' : m + 'm';
+    return m < 1 ? 'Just now' : m < 60 ? m + 'm' : Math.floor(m / 60) + 'h';
   }
   function likeCount(id) {
     const p = getItem(id);
@@ -251,8 +253,8 @@
       <div class="pf">
         <div class="counts"><span class="likes"><span class="ricons">${reactIcons(id)}</span> <b>${fmtN(likeCount(id))}</b></span><button class="comments-link" type="button">💬 <b class="ccount">${fmtN(commentCount(id))}</b> <span class="cword">${commentCount(id) === 1 ? 'comment' : 'comments'}</span>${id === 'gossip' && S.stage >= 4 ? ' · View all' : ''}</button><span class="shares">🔁 <b class="scount">${fmtN(shareCount(id))}</b></span></div>
         <div class="liked-row"></div>
-        <div class="pcomments" hidden></div>
         <div class="reacts">${reacts}<span class="more"><button type="button" aria-label="More">⋯</button></span></div>
+        <div class="pcomments" hidden></div>
       </div>
     </article>`;
   }
@@ -468,6 +470,7 @@
       case 'pause': return [`signal: PAUSE ${Math.round(it(id).pause / 1000)}s`, `@theo engages with ${p.loud ? 'dramatic ' : ''}${TOPIC_LABEL(p)} → show more like this`];
       case 'react': return [`signal: REACT ${EMO[detail] || '🚫'} (${W[detail] > 0 ? '+' : ''}${W[detail]})`, W[detail] > 0 ? `@theo is very interested in this → moving to top` : '@theo might be a little less interested'];
       case 'thread': return ['signal: OPENED THREAD', '@theo wants to see the comments → boost the thread'];
+      case 'creact': return [`signal: REACT TO COMMENT ${EMO[detail] || ''} (+${W[detail]})`, '@theo cares about the conversation here → show more like this'];
       case 'open': return ['signal: OPENED COMMENTS', '@theo wants to know what people said → show more like this'];
       case 'typing': return [`signal: TYPING ${S.reply.keys} keys`, 'draft saved · @theo cares a lot about this'];
       case 'comment': return ['signal: COMMENT', '@theo joined the conversation → show it to more people'];
@@ -481,7 +484,7 @@
   function confirm(type, id, detail, opts) {
     opts = opts || {};
     const p = getItem(id);
-    const amt = { open: .15, dwell: .35, pause: .25, react: Math.max(0, W[detail] || 0) * .09, thread: .3, typing: .3, comment: .45, glance: .25, search: .2, auto: .015, early: .2 }[type] || .1;
+    const amt = { creact: Math.max(0, W[detail] || 0) * .05, open: .15, dwell: .35, pause: .25, react: Math.max(0, W[detail] || 0) * .09, thread: .3, typing: .3, comment: .45, glance: .25, search: .2, auto: .015, early: .2 }[type] || .1;
     if (p && p.topics) for (const t in p.topics) S.interest[t] = (S.interest[t] || 0) + amt * p.topics[t];
     if (type === 'react' && detail === 'notInterested' && p) for (const t in p.topics) S.interest[t] = Math.max(0, S.interest[t] - .03 * p.topics[t]);
     S.confirmed++;
@@ -640,20 +643,33 @@
 
   /* ---------------- a post's comments, expanded in place ---------------- */
   const openComments = new Set();
-  function commentsFor(id) {
-    let list = L.postComments[id] || (/^rc\d/.test(id) ? L.postComments.rc : []);
+  function writtenComments(id) {
+    const list = L.postComments[id] || (/^rc\d/.test(id) ? L.postComments.rc : []);
     if (id === 'french') {
       // the stage 1 tags arrive as comments on Mr. French's post
       const tags = L.s1Tags.slice(1, Math.max(1, S.s1.sent));
-      const base = list.slice(0, grow(id, getItem(id).comments, TAU_C));
-      return base.concat(tags);
+      return list.slice(0, grow(id, getItem(id).comments, TAU_C)).concat(tags);
     }
     return list.slice(0, Math.min(list.length, baseCommentCount(id)));
+  }
+  function extraComment(id, i) {
+    const p = getItem(id) || {}, pool = L.morePool;
+    const kind = p.cat === 'teacher' ? 'teacher' : (p.topics && (p.topics.gaga || p.topics.theo)) ? 'story' : 'other';
+    const hsh = hashStr(id + ':' + i), texts = pool[kind];
+    return [pool.who[hsh % pool.who.length], texts[(hsh >> 5) % texts.length]];
+  }
+  function commentsFor(id) {
+    const base = writtenComments(id);
+    const room = Math.max(0, baseCommentCount(id) - base.length);
+    const extra = Math.min(room, (S.moreShown && S.moreShown[id]) || 0);
+    const out = base.slice();
+    for (let i = 0; i < extra; i++) out.push(extraComment(id, i));
+    return out;
   }
   function renderComments(id, n) {
     const box = n.querySelector('.pcomments'); if (!box) return;
     if (!box.querySelector('.pc-reply')) {
-      box.innerHTML = `<div class="pc-more"></div><div class="pc-list"></div>
+      box.innerHTML = `<button class="pc-more" type="button" data-more="${id}"></button><div class="pc-list"></div>
         <form class="pc-reply" data-for="${id}" autocomplete="off">${L.avatar('theo', 'sm')}<input type="text" maxlength="200" placeholder="Reply as Theo…" aria-label="Reply as Theo"><button class="primary" type="submit">Post</button></form>`;
       box.dataset.n = '';
     }
@@ -664,10 +680,12 @@
     const had = box.querySelectorAll('.pc-list .comment').length;
     box.dataset.n = sig;
     const more = total - list.length - mine.length;
-    box.querySelector('.pc-more').textContent = more > 0 ? `View ${more.toLocaleString('en-US')} more comment${more === 1 ? '' : 's'}` : '';
+    const mb = box.querySelector('.pc-more');
+    mb.textContent = more > 0 ? `View ${more.toLocaleString('en-US')} more comment${more === 1 ? '' : 's'}` : '';
+    mb.hidden = more <= 0;
     const rows = list.map(([who, text]) => [who, text, false]).concat(mine.map(m => ['theo', m.text, true]));
     box.querySelector('.pc-list').innerHTML = rows.length
-      ? rows.map(([who, text, isMine], i) => commentHTML(who, text, isMine ? 'just now' : '', isMine, i >= had && had > 0 ? 'arrive' : '')).join('')
+      ? rows.map(([who, text, isMine], i) => commentHTML(who, text, isMine ? 'just now' : '', isMine, i >= had && had > 0 ? 'arrive' : '', id)).join('')
       : '<div class="pc-empty">No comments yet. Be the first?</div>';
   }
   /* Theo replies under any post. Every keystroke counts, and the comment is pushed to the algorithm. */
@@ -915,9 +933,47 @@
   async function startLens() { S.t0 = Date.now(); await enterStage(1); }
 
   /* ---------------- stage 4: the thread ---------------- */
-  function commentHTML(who, text, meta, mine, cls) {
+  function commentHTML(who, text, meta, mine, cls, pid) {
     const p = L.people[who] || {};
-    return `<div class="comment ${mine ? 'mine' : ''} ${cls || ''}">${L.avatar(who, 'sm')}<div class="cbody"><div class="cname">${esc(p.name || who)} <small>@${esc(p.handle || who)}</small></div><div class="ctext">${esc(text)}</div><div class="cmeta">${meta || ''}</div></div></div>`;
+    const ck = (pid || 'x') + '|' + who + '|' + text;
+    return `<div class="comment ${mine ? 'mine' : ''} ${cls || ''}" data-ck="${esc(ck)}">${L.avatar(who, 'sm')}<div class="cbody"><div class="cname">${esc(p.name || who)} <small>@${esc(p.handle || who)}</small></div><div class="ctext">${esc(text)}</div>
+      <div class="cfoot">${cfootHTML(ck)}${meta ? `<span class="cmeta">${meta}</span>` : ''}</div></div></div>`;
+  }
+  /* Comment reactions: each comment has a few reactions of its own (made up from its text), plus Theo's. */
+  function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function commentMix(ck) {
+    const h = hashStr(ck), loud = /[A-Z]{4}|💀|😂|😭|!!/.test(ck);
+    const m = { like: h % 5, love: (h >> 3) % 3, laugh: loud ? 2 + (h >> 5) % 6 : (h >> 5) % 2, sad: 0, dislike: 0, angry: /banned|pay|purpose|CLOSED/.test(ck) ? 1 + (h >> 7) % 3 : 0 };
+    const mine = S.creact[ck]; if (mine) m[mine] += 1;
+    return m;
+  }
+  function cfootHTML(ck) {
+    const m = commentMix(ck), mine = S.creact[ck];
+    const total = Object.values(m).reduce((a, b) => a + b, 0);
+    const icons = Object.keys(m).filter(k => m[k] > 0).sort((a, b) => (k => k === mine ? 99 : m[k])(b) - (k => k === mine ? 99 : m[k])(a)).slice(0, 3).map(k => EMO[k]).join('');
+    return `<button class="cr-btn${mine ? ' on' : ''}" type="button">${mine ? EMO[mine] + ' ' + RNAME[mine] : '👍 Like'}</button>${total ? `<span class="cr-count"><span class="ricons">${icons}</span> ${total}</span>` : ''}`;
+  }
+  function closePicker() { const p = $('#cpicker'); if (p) p.remove(); }
+  function openPicker(btn) {
+    closePicker();
+    const c = btn.closest('.comment'), ck = c.dataset.ck;
+    const pk = h(`<div id="cpicker" role="menu">${Object.keys(EMO).map(k => `<button type="button" data-cr="${k}" title="${RNAME[k]}" class="${S.creact[ck] === k ? 'on' : ''}">${EMO[k]}</button>`).join('')}</div>`);
+    pk.dataset.ck = ck;
+    document.body.append(pk);
+    const b = btn.getBoundingClientRect();
+    pk.style.left = Math.max(8, Math.min(innerWidth - pk.offsetWidth - 8, b.left + scrollX)) + 'px';
+    pk.style.top = (b.top + scrollY - pk.offsetHeight - 6) + 'px';
+  }
+  function reactToComment(ck, k, fromEl) {
+    const pid = ck.split('|')[0];
+    if (S.creact[ck] === k) delete S.creact[ck];      // take it back
+    else {
+      S.creact[ck] = k;
+      if (fromEl) { const r = fromEl.getBoundingClientRect(); burst(r.left + r.width / 2, r.top, [EMO[k]], 6); }
+      if (S.stage >= 1 && S.stage <= 7 && getItem(pid)) confirm('creact', pid, k);
+    }
+    document.querySelectorAll('.comment').forEach(c => { if (c.dataset.ck === ck) c.querySelector('.cfoot').innerHTML = cfootHTML(ck) + (c.querySelector('.cmeta') ? c.querySelector('.cmeta').outerHTML : ''); });
+    save();
   }
   const STRONG = ['not', 'no', 'never', 'liar', 'lying', 'lie', 'fake', 'stop', 'dumb', 'stupid', 'hate', 'wrong', 'mad', 'fault', 'didn\'t', "wasn't", 'shut', 'lol', 'ok', 'whatever', 'true', 'false', 'everyone', 'nobody'];
   function wordScore(w) { const c = w.replace(/[^\w']/g, '').toLowerCase(); return (STRONG.includes(c) ? 6 : 0) + (/!/.test(w) ? 3 : 0) + (/^@/.test(w) ? 4 : 0) + (w.length > 2 && w === w.toUpperCase() && /[A-Z]/.test(w) ? 3 : 0) + 0.2; }
@@ -943,6 +999,7 @@
   function closeThread() { threadOpen = false; $('#thread').hidden = true; }
 
   function renderThread() {
+    closePicker();
     const th = $('#thread');
     const before = L.commentsBefore.map(([w, t]) => [w, t, commentScore(t)]).sort((a, b) => b[2] - a[2]);
     const after = L.commentsAfter.slice(0, S.reply.after).map(([w, t]) => [w, t.replace('{chunk}', S.reply.chunk), commentScore(t)]);
@@ -954,8 +1011,8 @@
       <button class="back" type="button" data-back>← Back to feed</button>
       <div id="thread-post"></div>
       <div class="sortline"><span>💬 <b class="tcount">${S.thread.count}</b> comments</span><span>Sorted by: Most relevant ▾</span></div>
-      ${before.map(([w, t]) => commentHTML(w, t, `${Math.round(commentScore(t))} relevance`)).join('')}
-      ${r.posted ? `<div class="comment-mine-wrap">${commentHTML('theo', r.text, mineReacts, true)}<div class="replies">${after.map(([w, t]) => commentHTML(w, t, 'reply', false)).join('')}</div></div>` : ''}
+      ${before.map(([w, t]) => commentHTML(w, t, `${Math.round(commentScore(t))} relevance`, false, '', 'gossip')).join('')}
+      ${r.posted ? `<div class="comment-mine-wrap">${commentHTML('theo', r.text, mineReacts, true, '', 'gossip')}<div class="replies">${after.map(([w, t]) => commentHTML(w, t, '', false, '', 'gossip')).join('')}</div></div>` : ''}
       <div class="composer ${r.posted ? 'posted' : ''}">
         <div class="crow">${L.avatar('theo', 'sm')}<textarea id="replybox" placeholder="Reply as Theo…" aria-label="Reply as Theo">${r.posted ? '' : esc(r.prev)}</textarea></div>
         <div class="cfoot"><button class="primary" type="button" data-post>Post reply</button></div>
@@ -1241,6 +1298,19 @@
     const t = e.target;
     if (t.closest('#login-btn')) return showBriefing();
     if (t.closest('#open-btn')) { if (!busy) { busy = true; try { await startLens(); } finally { busy = false; } } return; }
+    const moreC = t.closest('[data-more]');
+    if (moreC) {
+      const id = moreC.dataset.more;
+      S.moreShown = S.moreShown || {};
+      S.moreShown[id] = (S.moreShown[id] || 0) + 5;
+      const n = nodes.get(id); if (n) renderComments(id, n);
+      save(); return;
+    }
+    const crb = t.closest('.cr-btn');
+    if (crb) { if ($('#cpicker') && $('#cpicker').dataset.ck === crb.closest('.comment').dataset.ck) closePicker(); else openPicker(crb); return; }
+    const pick = t.closest('#cpicker [data-cr]');
+    if (pick) { const ck = $('#cpicker').dataset.ck; closePicker(); reactToComment(ck, pick.dataset.cr, pick); return; }
+    if ($('#cpicker')) closePicker();
     const react = t.closest('.react');
     if (react && S.stage >= 1 && S.stage <= 7 && react.closest('#feed .item, #thread-post .item')) {
       const id = react.closest('.item').dataset.id;

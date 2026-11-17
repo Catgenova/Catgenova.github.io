@@ -208,6 +208,8 @@
       case 'learned': {
         const sig = S.signals, count = (t) => sig.filter(x => x.type === t).length;
         const reacts = sig.filter(x => x.type === 'react').map(x => `${EMO[x.detail] || ''} on ${shortOf(x.id)}`);
+        const creacts = sig.filter(x => x.type === 'creact').length;
+        if (creacts) reacts.push(`${creacts} on comments`);
         let longest = null;
         Object.entries(S.it).forEach(([id, x]) => { if (x.pause && (!longest || x.pause > longest[1])) longest = [id, x.pause]; });
         const dwell = sig.find(x => x.type === 'dwell' && x.id === 'french');

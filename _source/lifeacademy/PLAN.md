@@ -168,6 +168,21 @@ posted comment to the algorithm (*COMMENT*). The replay's "what Lens
 learned" list includes these. On phones the bottom ad banner hides while
 the keyboard is open.
 
+### Comment reactions, more comments, and live timing
+
+- **Every comment can be reacted to**: a small *👍 Like* button opens the
+  same six reactions. Theo's choice shows on the button (tap again to take
+  it back), each comment shows its own count and top icons, and Lens counts
+  it as a signal toward that post (*REACT TO COMMENT*, half the weight of a
+  post reaction).
+- **"View N more comments"** loads five more at a time, written from pools
+  that fit the post (kind ones for Mr. French's, gagaball chatter for the
+  story posts, everyday ones for the rest).
+- **Timing**: Mr. French posts live in stage 1, so the reposts of his photo
+  (Maya's, Jaxon's, the gossip account's) and every later story post are
+  stamped *Just now* / *Xm*, a little after his; only the field-day posts
+  from yesterday and the unrelated evening posts say *Yesterday*.
+
 ### Sidebar ads (live, one per post)
 
 Every post has its own invented ad (`LENS.postAds` in `data.js`): the roomba

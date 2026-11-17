@@ -75,13 +75,13 @@ LENS.posts = [
   { id: 'cat', who: 'lily', time: 'Yesterday · 6:02 PM', min: 602, stage: 2, cat: 'other', short: 'Cat falls off couch',
     topics: { pets: 1 }, text: 'he has done this every day for 3 years and has never once stuck the landing',
     img: { card: 'cat' }, r: { like: 31, laugh: 22 }, shares: 4, comments: 6, big: 212 },
-  { id: 'maya', who: 'maya', time: 'Yesterday · 5:20 PM', min: 560, stage: 2, cat: 'story', short: "Maya's repost",
+  { id: 'maya', who: 'maya', time: 'Today', live: 0.65, min: 560, stage: 2, cat: 'story', short: "Maya's repost",
     topics: { gaga: 1, theo: 0.6 }, text: 'theo vs the gagaball wall 😂', repost: 'french',
     img: { photo: 'maya' }, r: { like: 44, laugh: 30 }, shares: 9, comments: 8, big: 1288 },
   { id: 'volcano', who: 'dev', time: 'Yesterday · 7:15 PM', min: 675, stage: 2, cat: 'other', short: 'Science fair volcano',
     topics: { science: 1 }, text: 'Science fair project is DONE. 3 tries. 1 kitchen ceiling. 🌋',
     img: { card: 'volcano' }, r: { like: 26, laugh: 12 }, shares: 2, comments: 5, big: 96 },
-  { id: 'jaxon', who: 'jaxon', time: 'Yesterday · 6:41 PM', min: 641, stage: 2, cat: 'story', short: "Jaxon's repost",
+  { id: 'jaxon', who: 'jaxon', time: 'Today', live: 0.4, min: 641, stage: 2, cat: 'story', short: "Jaxon's repost",
     topics: { gaga: 1, theo: 1, drama: 0.5 }, text: 'THEO DESTROYED THE PIT 💀', repost: 'maya', loud: 1,
     img: { photo: 'jaxon' }, r: { like: 40, laugh: 88, angry: 6 }, shares: 22, comments: 14, big: 3904 },
   { id: 'band', who: 'nora', time: 'Yesterday · 7:40 PM', min: 700, stage: 2, cat: 'other', short: 'Orchestra concert',
@@ -96,7 +96,7 @@ LENS.posts = [
     topics: { gaga: 0.6, sports: 0.3 }, text: "Everyone's in the pit, gagaball is open!", r: { like: 15 }, shares: 0, comments: 1, big: 44 },
   { id: 'tM', who: 'noah', time: 'Yesterday · 1:31 PM', min: 331, stage: 2, cat: 'story', short: 'MUD DIVE (1:31)', truth: 1,
     topics: { gaga: 1, drama: 0.3 }, text: 'MUD DIVE 💥 the wall came DOWN', r: { like: 18, laugh: 50 }, shares: 5, comments: 7, big: 980 },
-  { id: 'gossip', who: 'gossip', time: 'Yesterday · 8:55 PM', min: 775, stage: 2, cat: 'story', short: 'Gossip: PIT COLLAPSES', loud: 2,
+  { id: 'gossip', who: 'gossip', time: 'Today', live: 0.2, min: 775, stage: 2, cat: 'story', short: 'Gossip: PIT COLLAPSES', loud: 2,
     topics: { gaga: 1, theo: 1, drama: 1 }, repost: 'jaxon', verified: 'stage5', breaking: 1,
     text: 'GAGABALL PIT COLLAPSES — KID HURT IN LIFE ACADEMY CHAOS 😱 are they banning gagaball??',
     img: { photo: 'gossip' }, r: { like: 60, laugh: 210, sad: 30, angry: 140 }, shares: 95, comments: 12, big: 48212 },
@@ -117,25 +117,25 @@ LENS.posts = [
     img: { card: 'trophy' }, r: { like: 25 }, shares: 0, comments: 4, big: 25 },
 
   // Stage 3: "more like this" after Theo reacts.
-  { id: 'kaiBan', who: 'kai', time: 'Today · 7:12 AM', min: 1392, stage: 3, cat: 'story', short: 'gagaball BANNED??',
+  { id: 'kaiBan', who: 'kai', time: 'Today', live: true, min: 1392, stage: 3, cat: 'story', short: 'gagaball BANNED??',
     topics: { gaga: 1, drama: 1, theo: 0.4 }, text: 'gagaball BANNED at Life Academy?? 😭 thanks theo', r: { like: 30, laugh: 41, angry: 60 }, shares: 33, comments: 21, big: 9120 },
-  { id: 'gossip2', who: 'gossip', time: 'Today · 7:30 AM', min: 1410, stage: 3, cat: 'story', short: 'Gossip: the moment it fell', loud: 2,
+  { id: 'gossip2', who: 'gossip', time: 'Today', live: true, min: 1410, stage: 3, cat: 'story', short: 'Gossip: the moment it fell', loud: 2,
     topics: { gaga: 1, drama: 1, theo: 1 }, text: 'EXCLUSIVE: the exact moment the wall fell 👀 #GagaGate',
     img: { photo: 'gossip2' }, r: { like: 44, laugh: 120, angry: 90 }, shares: 61, comments: 30, big: 21480 },
-  { id: 'noahPay', who: 'noah', time: 'Today · 7:41 AM', min: 1421, stage: 3, cat: 'story', short: 'Theo should pay',
+  { id: 'noahPay', who: 'noah', time: 'Today', live: true, min: 1421, stage: 3, cat: 'story', short: 'Theo should pay',
     topics: { gaga: 1, drama: 1, theo: 1 }, text: 'theo needs to pay for that wall fr 💸', r: { like: 22, laugh: 35, angry: 28 }, shares: 12, comments: 18, big: 6044 },
 
   // Stage 6: the bubble.
-  { id: 'poll', who: 'gossip', time: 'Today · 8:02 AM', min: 1442, stage: 6, cat: 'story', short: 'Poll: ban gagaball?', loud: 1,
+  { id: 'poll', who: 'gossip', time: 'Today', live: true, min: 1442, stage: 6, cat: 'story', short: 'Poll: ban gagaball?', loud: 1,
     topics: { gaga: 1, drama: 1, theo: 0.5 }, text: 'POLL: Should gagaball be banned at Life Academy? 🗳️', poll: [['Yes, it’s dangerous', 61], ['No', 39]],
     r: { like: 80, angry: 70 }, shares: 40, comments: 55, big: 12030 },
-  { id: 'purpose', who: 'gossip', time: 'Today · 8:10 AM', min: 1450, stage: 6, cat: 'story', short: 'Did Theo do it ON PURPOSE?', loud: 2,
+  { id: 'purpose', who: 'gossip', time: 'Today', live: true, min: 1450, stage: 6, cat: 'story', short: 'Did Theo do it ON PURPOSE?', loud: 2,
     topics: { gaga: 1, drama: 1, theo: 1 }, text: 'Theo did it ON PURPOSE? His team was losing 👀 (sources say)', r: { like: 50, laugh: 60, angry: 110 }, shares: 70, comments: 64, big: 17660 },
-  { id: 'jaxon2', who: 'jaxon', time: 'Today · 8:14 AM', min: 1454, stage: 6, cat: 'story', short: "Jaxon: still funny",
+  { id: 'jaxon2', who: 'jaxon', time: 'Today', live: true, min: 1454, stage: 6, cat: 'story', short: "Jaxon: still funny",
     topics: { gaga: 1, theo: 1 }, text: 'this is still the funniest thing ever 💀 #GagaGate', img: { photo: 'gossip' }, r: { like: 30, laugh: 99 }, shares: 20, comments: 9, big: 7310 },
-  { id: 'ella2', who: 'ella', time: 'Today · 8:20 AM', min: 1460, stage: 6, cat: 'story', short: "Ella: can't stop thinking",
+  { id: 'ella2', who: 'ella', time: 'Today', live: true, min: 1460, stage: 6, cat: 'story', short: "Ella: can't stop thinking",
     topics: { gaga: 1, theo: 0.5 }, text: "can't stop thinking about the gagaball wall 😭", r: { like: 40, laugh: 20 }, shares: 2, comments: 6, big: 2210 },
-  { id: 'kai2', who: 'kai', time: 'Today · 8:25 AM', min: 1465, stage: 6, cat: 'story', short: 'Kai: where are you Theo',
+  { id: 'kai2', who: 'kai', time: 'Today', live: true, min: 1465, stage: 6, cat: 'story', short: 'Kai: where are you Theo',
     topics: { gaga: 1, theo: 1, drama: 0.5 }, text: '#GagaGate day 2. Theo where are you 👀', r: { like: 25, laugh: 31 }, shares: 8, comments: 22, big: 4405 },
 ];
 
@@ -351,4 +351,12 @@ LENS.postComments = {
   kai2:     [['noah', "he's hiding 👀"], ['jaxon', 'theo log on']],
   video:    [['jaxon', 'watched it 40 times'], ['noah', 'again again'], ['kai', '💀']],
   rc:       [['noah', '👀'], ['kai', 'still going'], ['jaxon', 'lmaooo'], ['ella', 'can we stop']],
+};
+
+/* "View more comments": extra comments, made up from these pools, five at a time. */
+LENS.morePool = {
+  teacher: ['great day!', 'thanks Mr. French!', 'best field day ever', 'the rematch was so good', 'LOL the drawing ✏️', 'GO JUNE 🏆', 'Mr. French with the drill 🔧', 'can we do this every month', 'my legs still hurt from the relay', 'the mud was everywhere 😂', 'who won the tug of war?', 'love this'],
+  story: ['😂😂😂', 'the wall 💀', 'is theo ok?', 'lol theo', 'rip the pit', 'who was there?', 'I saw it happen', '#GagaGate', 'not the wall 😭', 'replay pls', 'he was laughing tho', 'this is all anyone is talking about', 'wait what happened', 'someone explain', 'gagaball season is over 😭', 'ok but the dive was kind of impressive', '💀💀', 'theo 😭'],
+  other: ['lol', 'this is so funny', '😂😂', 'same', 'no way', 'love this', 'omg', 'fr', 'this made my day', 'W', 'iconic', 'hahaha', 'real', 'underrated post', 'I need this', 'stop 😭', 'this is me', 'okay this is art'],
+  who: ['maya', 'jaxon', 'ella', 'noah', 'kai', 'sam', 'lily', 'rosie', 'dev', 'zara', 'nora', 'ben', 'toby', 'lulu', 'quinn', 'marcus', 'ivy', 'benji'],
 };
