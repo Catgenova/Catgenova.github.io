@@ -62,16 +62,15 @@ There are three sequences in the table, and they rise together:
 
 All content comes from one event, so every layer reframes **the same
 facts**. The ending can then put "what the feed said" next to "what
-happened." The event is a gaga ball mishap at a homeschool co-op's field
-day: close to the students' own lives, and something they'll have opinions
-about.
+happened." The event is a gaga ball mishap at **Life Academy's own field
+day**: the students' own co-op, and something they'll have opinions about.
 
-The co-op is fictional (**Cedar Creek Co-op**) and so are the people. If
-you'd rather set it at Life Academy itself, that works too. Either way, keep
-the names invented, and keep the kid at the center of it a good sport in
-the true version, so no real student ends up as the joke.
+The people in the story are invented. Keep it that way even though the
+co-op is real: use names that don't belong to any current student, and
+keep the kid at the center of it a good sport in the true version, so no
+real student ends up as the joke.
 
-**Field day at Cedar Creek Co-op: what actually happened.** These are the
+**Field day at Life Academy: what actually happened.** These are the
 "field notes" students see first and last.
 
 - It drizzled until 11 a.m., so the gaga pit was muddy.
@@ -407,7 +406,7 @@ edited, and we compare them with our whole ordinary day."*
 
 **Transition → 3:** the filter **goes back on**. Then the caption under the
 photo starts to *retype itself*, one letter at a time, getting louder as it
-goes: *"Gaga pit destroyed"* → *"Chaos at co-op field day!"* →
+goes: *"Gaga pit destroyed"* → *"Chaos at Life Academy field day!"* →
 *"GAGA PIT COLLAPSES"*. The font gets heavier and bigger with each rewrite
 until it fills the card.
 
@@ -541,7 +540,7 @@ on the crash post.
 
 **Looks like:** numbers everywhere. Big like counts, follower counts, blue
 checkmarks, stacked avatar faces with *"Liked by jess_k and 48,211 others"*,
-*"#1 in Cedar Creek"*, *"🔥 Trending"*. Numbers get the visual weight that
+*"#1 at Life Academy"*, *"🔥 Trending"*. Numbers get the visual weight that
 content used to have.
 
 **Code concept:** data and variables. A post is just an object, and the
@@ -602,7 +601,7 @@ at the top. The **whole theme color** changes to match the top interest
 (alarm red, gossip purple, angry orange). The feed now **only** shows that
 topic, each post more extreme than the last:
 
-- **Safety bubble:** *"Gaga pits are DANGEROUS."* *"Kid HURT at co-op."*
+- **Safety bubble:** *"Gaga pits are DANGEROUS."* *"Kid HURT at Life Academy."*
   *"Should co-ops ban gaga?"* (It was a scraped elbow.)
 - **Drama bubble:** *"Did Theo do it ON PURPOSE? His team was losing 👀"*
   (The game was tied.)
@@ -1059,10 +1058,10 @@ Print this table and the presenter keys from section 2 for the session.
 
 ## 9. Open questions
 
-- **Real or fictional?** The plan uses a made-up co-op (Cedar Creek) and
-  made-up names. If the story is based on something that really happened at
-  Life Academy, the names should still be changed, and the kid at the
-  center should stay a good sport in the true version.
+- **Names.** The story is set at Life Academy, with invented people (Theo,
+  June, Mr. Alvarez, Jordan). Check that none of them shares a name with a
+  current student or parent, and swap any that do. If the story is based on
+  something that really happened, keep the names changed anyway.
 - **Class size.** Affects the stage 6 groups (three groups works from about
   6 students up).
 - **The room:** projector resolution, and whether there are speakers for
