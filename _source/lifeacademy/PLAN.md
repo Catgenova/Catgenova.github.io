@@ -1,11 +1,15 @@
 # Life Academy: "Lens" puzzle plan
 
 A single-page puzzle at **pere.games/lifeacademy/** for the Life Academy
-homeschool co-op. Students think they are solving seven web-design and coding
-puzzles. Each one adds a layer to the page, so step by step it turns from a
-plain document into a slick social media feed. At the end the layers are
-peeled back one at a time, and each one is shown to be a real way social media
-changes what you see and how you see it.
+homeschool co-op. The page is a mock social media app called **Lens**. The
+class logs in as **Theo**, a student whose slip in the gaga pit at field day
+is the talk of Life Academy, and scrolls his feed. Every time Theo looks,
+pauses, reacts, replies or tries to look away, a hidden meter shows the app
+turning that into a signal for its algorithm, and the meter fills faster
+each time. The site changes stage by stage as the algorithm learns. The
+class thinks it is solving seven web-design and coding puzzles. At the end,
+the layers are peeled back one at a time, and each one is shown to be a
+real way social media changes what you see and how you see it.
 
 > This file lives in `_source/`, which Jekyll doesn't publish, so students
 > can't find the answers on the site. Keep it out of `lifeacademy/`.
@@ -17,100 +21,135 @@ changes what you see and how you see it.
 - **Only the teacher touches the laptop**, which is projected for the whole
   class. Students have no screens. The class solves every puzzle
   **together, out loud**: they read the projected screen, argue, and tell
-  the teacher exactly what to click and change. The teacher is the class's
-  hands.
-
-That shapes the whole design. Section 2 has the rules for designing for one
-projected screen, every stage has an **In the room** note on how the class
-takes part, and stage 6 splits the room into groups instead of relying on
-personal screens.
+  the teacher exactly what to click, scroll and type. The teacher is the
+  class's hands.
+- **The class is Theo.** The app is logged in as him, and every choice the
+  class makes is Theo's choice. Theo is 13, the same age as the class.
 
 ---
 
 ## 1. The big idea
 
-### The hidden structure: the life of a post
+### The hidden structure: Theo's feedback loop
 
-The seven steps follow one post from a real moment to your screen. That's why
-they come in this order, and it's what students see when the ending lays them
-side by side:
+Each stage, Theo does the next thing a real person would do, and each time
+the algorithm needs less from him to be sure he wants more:
 
-| # | A post is... | Code / design layer (what students think it is) | What it really is (the reveal) |
-|---|---|---|---|
-| 0 | *(the real moment)* | **Markup**: plain HTML structure | Reality, with no layers |
-| 1 | **taken** | **The Box**: cropping, `overflow`, `object-position` | **Framing**: what's left out of the shot |
-| 2 | **edited** | **The Style**: CSS `filter`, color and mood | **Filters and the highlight reel** |
-| 3 | **captioned** | **The Type**: content vs. presentation, typography | **Sensational headlines, clickbait, outrage** |
-| 4 | **ranked** | **The Logic**: a JavaScript sort function | **The algorithm** |
-| 5 | **judged** | **The Data**: JSON, variables, booleans | **Fake popularity / social proof** (likes, bots, badges) |
-| 6 | **targeted** | **The State**: tracking events, conditionals, CSS variables | **Filter bubbles and echo chambers** |
-| 7 | **used to keep you** | **The Timers**: `setInterval`, infinite scroll, animation | **Attention engineering** (endless feeds, notifications, streaks, dark patterns) |
-| ★ | *(peeled back)* | **The Layers**: a design-tool layer stack | **Context**: the thing every layer took away |
+| # | Theo... | Hidden meter shows | Bar fills in | Code / design layer (what students think it is) | What it really is (the reveal) |
+|---|---|---|---|---|---|
+| 1 | **reads** a teacher's joke post | ⏱ time on screen | 90 seconds | **The Watcher**: hidden elements, `:hover`, timers | **Passive tracking**: watching is a vote |
+| 2 | **scrolls**, and pauses on reposts | ⏸ pause time | about 20 seconds | **The Box & Style**: crop, `filter`, typography | **Exaggeration**: the story gets cropped, filtered and louder each time it's shared |
+| 3 | **reacts** to show he doesn't like it | reaction weights | one click | **The Logic**: a JavaScript sort function | **The algorithm**: every reaction is fuel, angry ones most |
+| 4 | **replies** to set the record straight | ⌨ keystrokes, saved drafts | every keystroke | **The Text**: strings, slicing, scoring | **Context collapse**: his words, cut down to the loudest part |
+| 5 | **checks** who actually believes it | 👁 glance time | 2 seconds | **The Data**: JSON, variables, booleans | **Fake popularity**: likes, bots, badges |
+| 6 | **searches** for something else | bars already full | already full | **The State**: a profile object, conditionals, CSS variables | **Filter bubble**: a small story feels like the whole world |
+| 7 | **tries to log off** | bars filling by themselves | no input needed | **The Timers**: `setInterval`, infinite scroll | **Attention engineering**: endless feeds, notifications, dark patterns |
+| ★ | *(peeled back)* | Lens's full file on Theo | | **The Layers**: a design-tool layer stack | **Context**: the thing every layer took away |
 
-There are three sequences in the table, and they rise together:
+Three things rise together through the table:
 
-- **Code:** HTML → CSS → CSS text → JS functions → JS data → JS state → JS
-  timing. This is the order you'd learn the web in.
-- **Manipulation:** what they *show* you (1–3), then what they *choose* for
-  you (4–5), then what they *do to* you (6–7). It goes from the post, to the
-  feed, to the person watching.
-- **Difficulty and interaction:** whole-room puzzles first, then one that
-  splits the room into groups who each see a different feed (6), then one
-  where the goal flips from engaging with the page to *leaving* it (7).
+- **Theo's actions** go from passive (looking) to active (reacting,
+  replying) to trying to escape (searching, logging off). Each one is a
+  sensible response to the stage before, and each one makes things worse.
+  The finale says it plainly: *the algorithm can't tell the difference
+  between interested and upset.*
+- **The meter speeds up**, from 90 seconds down to no input at all. That
+  acceleration *is* the feedback loop, and the class sees it happen.
+- **The code** goes HTML/CSS → CSS → JS functions → JS strings → JS data →
+  JS state → JS timing, which is roughly the order you'd learn the web in.
 
 ### The world: the gaga pit incident
 
 All content comes from one event, so every layer reframes **the same
-facts**. The ending can then put "what the feed said" next to "what
-happened." The event is a gaga ball mishap at **Life Academy's own field
+facts**. The event is a gaga ball mishap at **Life Academy's own field
 day**: the students' own co-op, and something they'll have opinions about.
 
 The people in the story are invented. Keep it that way even though the
-co-op is real: use names that don't belong to any current student, and
-keep the kid at the center of it a good sport in the true version, so no
-real student ends up as the joke.
+co-op is real: use names that don't belong to any current student, parent
+or teacher. Theo is a good sport in the true version, and the posts about
+him stay teasing rather than cruel. The lesson is about the machine, not
+about how mean people can be.
 
-**Field day at Life Academy: what actually happened.** These are the
-"field notes" students see first and last.
+**What actually happened.** This is what the class is told at login, so
+they know the truth from the start. Watching the feed bend it is the point.
 
 - It drizzled until 11 a.m., so the gaga pit was muddy.
 - 46 kids played gaga over the day.
-- In the 1:30 championship game, **Theo** (12) dove for the ball, slipped in
+- In the 1:30 championship game, **Theo** (13) dove for the ball, slipped in
   the mud, and slid into the pit wall. One wall panel popped loose and fell
   over.
 - Everyone froze, then laughed, Theo hardest. He had a scraped elbow and got
   a band-aid.
-- **Mr. Alvarez** screwed the panel back on in ten minutes.
+- **Mr. Alvarez**, a parent, screwed the panel back on in ten minutes.
 - It was an accident. The game was tied, and nobody was to blame.
 - The championship was replayed, and **June**, age 8, won it.
 
-That's a funny, ordinary field day. By stage 7 the feed has turned it into
-*"GAGA PIT COLLAPSES — KID HURT IN CO-OP CHAOS 😱🔥 48.2K"*.
+By stage 7 the feed has turned it into *"GAGA PIT COLLAPSES — KID HURT IN
+LIFE ACADEMY CHAOS 😱🔥 48.2K"*.
 
-### The art: one panorama, many crops
+### The cast (Lens accounts)
 
-All the pictures are one wide inline-SVG illustration of **the whole day in
-one scene**, morning on the left to afternoon on the right:
+| Account | Who | Role in the feed |
+|---|---|---|
+| **@theo** | Theo, 13 | The class. Logged in. |
+| **@mrspark** | Mrs. Park, a Life Academy teacher | Posts the original joke post: affectionate, with all the context |
+| **@maya.k** | A classmate | First repost: a little tighter, still friendly |
+| **@jaxon_** | A classmate | Second repost: the laugh cropped out, the caption louder |
+| **@lifeacademy.gossip** | A gossip account made today | The worst repost, the quote-posts, and the bought likes |
+| **@june.plays.gaga** | June, 8 | Rematch winner; her post is the one that gets buried |
+| **@alvarez.fixes** | Mr. Alvarez | "Wall's back up!" |
+| **@sam** | A classmate | Barely heard about it. Their feed is mostly video games. |
 
-- **Left:** grey drizzle, puddles, and a chalkboard sign by the gate:
-  *"CAUTION: MUD — pit opens at 11"*.
-- **Center:** the octagonal gaga pit with one panel fallen outward, Theo
-  sprawled in the mud giving a thumbs up, the ball in mid-air, kids around
-  the pit laughing, and Mr. Alvarez walking over carrying a drill.
-- **Right:** sunshine, the bracket board (*"CHAMPIONSHIP REMATCH — 2:15"*),
-  and June holding the trophy.
+### The art: one photo, many crops
 
-Every "photo" on the site is a crop of that one SVG (a different `viewBox`,
-or one image positioned inside a clipped box). This keeps the page in a single
-file, and it sets up the strongest image of the ending: zoom out to the full
-panorama with every post's crop outlined. *Twelve posts, one day.*
+Mrs. Park's photo is one wide inline-SVG illustration with all the context
+in it:
+
+- Theo sprawled in the mud by the fallen panel, **laughing, with a thumbs
+  up**.
+- The ball in mid-air, and kids around the pit laughing.
+- Mr. Alvarez walking over with a drill.
+- In the background, a chalkboard sign: *"CAUTION: MUD — pit opens at 11"*,
+  and the bracket board: *"CHAMPIONSHIP REMATCH — 2:15"*.
+
+Every repost is a crop of that same SVG (a different `viewBox`) with
+heavier filters and a louder caption. Each crop cuts out a little more of the
+context, and the laughing goes first. This keeps the page in a single file
+and sets up the finale: zoom out to the full photo with every repost's crop
+outlined on it.
 
 ### The fictional app: **Lens**
 
-The feed students build up to is a made-up app called **Lens**. Its logo (an
-eye in a rounded square) puts itself together one piece per stage. Don't
-imitate any real platform's branding. Lens should feel familiar without being
-a copy of any one app.
+A made-up app with an eye-in-a-rounded-square logo. It should feel familiar
+without copying any real platform's branding or layout.
+
+### The signal meter (the core mechanic)
+
+Every post has a **hidden meter**, an overlay that appears when the mouse
+is over the post (or, from stage 2, when the feed pauses on it):
+
+```
+⏱ on screen 00:47          sending to algorithm ▓▓▓▓▓▓▓░░░░░ 52%
+```
+
+When the bar fills, it flashes a confirmation:
+
+```
+✓ PUSHED TO ALGORITHM — @theo is interested in #LifeAcademyFieldDay → show more
+```
+
+and the feed changes. The meter is the thread through the whole game:
+
+- **It's hidden.** The class has to find it in stage 1. After that they
+  know it's there, and they can't stop checking it.
+- **It gets faster.** The threshold shrinks every time a signal is
+  confirmed (the formula is in the code panel in stage 2). The class sees
+  the algorithm get more confident.
+- **It changes shape** with each stage's signal: a timer, a pause counter,
+  reaction weights, a keystroke counter, a glance timer, a pre-filled bar,
+  and finally bars that fill with nobody touching anything.
+- **It feeds one file.** Every confirmation is written to a signal log about
+  Theo, which stays hidden until the finale.
 
 ---
 
@@ -122,28 +161,28 @@ The page is a **presentation**, not an app students hold. Everything has to
 read from the back of the room on a washed-out classroom projector.
 
 - **Size.** Designed for a 16:9 screen at 1280×720 and 1920×1080. Body text
-  at least 28px, code at least 24px, headlines much bigger. Nothing that
-  matters is smaller than what a student in the back row can read. No phone
-  layout is needed.
+  at least 28px, code at least 24px, headlines much bigger. The feed column
+  is wide, not phone-narrow. No phone layout is needed.
+- **A big cursor.** The class has to follow the teacher's mouse, because
+  hovering reveals the meters, so the page uses an extra-large, high-contrast
+  cursor.
 - **Contrast and color.** Projectors wash out pale colors and dark greys.
   Every color pair that has to be read gets strong contrast, and color
-  differences that matter (filter stage, bubble themes) are exaggerated so
-  they survive the projector. The only low-contrast elements are the ones
-  that are low-contrast *on purpose* (stage 7), and those are tuned on the
-  real projector (see testing).
+  differences that matter are exaggerated so they survive the projector.
+  The only low-contrast elements are the ones that are low-contrast *on
+  purpose* (stage 7), and those are tuned on the real projector.
 - **Split screen, not a drawer.** The code panel opens as half the screen
-  (page on the left, code on the right) so the class can see the code and
+  (feed on the left, code on the right) so the class can see the code and
   its effect at the same time.
-- **One thing at a time.** Hints, notes found and discussion questions
-  appear big and centered, one at a time.
+- **One thing at a time.** Hints, locks and discussion questions appear big
+  and centered, one at a time.
 - **Nothing private on screen.** The audience sees everything the laptop
-  shows, so answers and teacher controls are never displayed (see presenter
-  controls below).
-- **Sound** goes through the room's speakers if there are any. It's off
-  until stage 7 and can be muted with one key.
+  shows, so answers and teacher controls are never displayed.
+- **Sound** goes through the room's speakers if there are any: a soft tick
+  when a meter confirms, and notifications in stage 7. Mute with one key.
 - **Works offline.** The page is one file. Save a copy to the laptop before
-  class (File → Save Page As) in case the room's Wi-Fi fails, and run it
-  full screen (F11).
+  class (File → Save Page As) in case the Wi-Fi fails, and run it full
+  screen (F11).
 
 ### Presenter controls
 
@@ -154,6 +193,7 @@ with nothing on screen**, like presentation software:
 |---|---|
 | `C` | Open or close the code panel |
 | `H` | Show the next hint |
+| `L` | Open the stage's lock (answer box), once the meter has confirmed |
 | `N` | Skip the current transition animation |
 | `B` | Blank the screen (to pause or talk) |
 | `M` | Mute or unmute sound |
@@ -161,343 +201,328 @@ with nothing on screen**, like presentation software:
 | `Shift` + `→` / `←` | Jump to the next or previous stage (rehearsal, or if the class gets stuck) |
 | `Shift` + `R` | Start over (behind a confirmation, so it can't happen by accident) |
 
-The answers are only in the printed answer key (`answers.md`, section 8),
-never on screen. To rehearse on the laptop before class, use the same keys
-with the projector disconnected.
+The answers are only in the printed answer key (section 8), never on
+screen. To rehearse, use the same keys with the projector disconnected.
+
+### Each stage's shape
+
+Every stage runs the same four beats. This is what turns a scrolling
+role-play into a puzzle:
+
+1. **Theo's goal.** A short card in Theo's voice says what he wants to do
+   next (*"I just want to read it."* / *"That's not what happened. I'm
+   saying something."*).
+2. **Play.** The class tells the teacher how to scroll, pause, react or
+   type. The hidden meters fill as they go.
+3. **Confirm.** A meter fills, the algorithm confirms, and the feed starts
+   to change.
+4. **Lock.** The page asks a question whose answer is in the meter or the
+   code behind it. Solving it earns a letter and a "note from Theo" (what
+   really happened), and the next stage rolls in.
 
 ### Layers, not pages
 
-Each stage is a **layer** that is added on top of the earlier ones and never
-removed until the ending. In code, every layer is one object:
+Each stage is a **layer** added on top of the earlier ones and never removed
+until the ending. In code, every layer is one object:
 
 ```js
 const layers = [
-  { id: 'frame',    cssClass: 'L1', enable() {...}, disable() {...}, panel: renderBoxPanel },
-  { id: 'filter',   cssClass: 'L2', ... },
-  // ... through 'hook' (L7)
+  { id: 'watcher',  cssClass: 'L1', enable() {...}, disable() {...}, panel: renderWatcherPanel },
+  { id: 'reposts',  cssClass: 'L2', ... },
+  // ... through 'hooks' (L7)
 ];
 ```
 
-- CSS for a layer is scoped to its body class (`body.L2 .photo { filter: ... }`),
-  so by stage 5 the body reads `class="L1 L2 L3 L4 L5"`.
-- Any JS behavior (sorting, tracking, timers) starts in `enable()` and is
-  cleaned up in `disable()`.
+- CSS for a layer is scoped to its body class, so by stage 5 the body reads
+  `class="L1 L2 L3 L4 L5"`.
+- Any JS behavior (meters, sorting, tracking, timers) starts in `enable()`
+  and is cleaned up in `disable()`.
 - The ending runs `disable()` on each layer in reverse order. **The reveal
-  really does remove the code**, and students watch it happen. The lesson is
-  in the architecture.
+  really does remove the code**, and the class watches it happen.
 
 ### "Under the Hood": the code panel
 
-A split-screen panel called **Under the Hood** (opened with `C`) gains one
-tab per stage. Each tab shows code **a different way**. That covers "each
-step shows code and design differently." It replaces real browser DevTools,
-whose text is far too small to read on a projector: every tab uses big type
-and shows only the few lines that matter for the puzzle.
+A split-screen panel (opened with `C`) gains one tab per stage. Each tab
+shows code **a different way**, which is the "each step shows code and
+design differently" half of the puzzle. It replaces real browser DevTools,
+whose text is far too small to read on a projector.
 
 | Stage | Tab | How the code is shown |
 |---|---|---|
-| 0 | Markup | The page's HTML with tags drawn in (`<h1>…</h1>`), comments and `alt` text visible |
-| 1 | Box | A visual box-model and crop overlay you can drag, plus the CSS it writes |
-| 2 | Style | A property list with sliders, like DevTools' Styles pane, that edits live CSS |
-| 3 | Type | A split view: source text on the left, rendered text on the right, and checkboxes to toggle CSS rules |
-| 4 | Logic | A readable JS function with editable numbers and a dropdown |
+| 1 | Watcher | The post's HTML with the hidden meter element highlighted, the CSS that hides it, and the timer JS |
+| 2 | Box & Style | The original photo with every repost's crop drawn on it, and each repost's filter and caption side by side |
+| 3 | Logic | The `score()` function with the reaction weights, and a `sortBy` dropdown |
+| 4 | Text | A live keystroke log, the saved drafts, and the function that turns a reply into a quote |
 | 5 | Data | A collapsible JSON tree of each post's real data |
-| 6 | State | The live `you = {...}` profile object and a streaming console log of tracked events |
+| 6 | State | The live `you = {...}` profile object and a `viewingAs` switch |
 | 7 | Timers | A "task manager" of everything running on its own, each with a Stop button |
-| ★ | Layers | A 3D, design-tool-style stack of all seven layers |
+| ★ | Layers | A 3D, design-tool-style stack of all seven layers, and the signal log |
 
 All shown code is **generated from the live values**, so it's always true.
 Syntax highlighting is a small hand-written tokenizer (no libraries). Each
-tab starts with a comment like `// layer 3 of 7`. It's a quiet hint that the
-layers add up to something.
+tab starts with a comment like `// layer 3 of 7`.
 
 ### The tray: letters and notes
 
 A tray along the bottom collects two things per stage:
 
 1. **A letter tile.** The seven letters are the final answer.
-2. **A "note found in the source":** one plain fact from the field notes
-   (e.g. *"It drizzled until 11; the pit was muddy."*), shown after the
-   solve as a bit of leftover debug text. Students won't think much of them
-   at the time. At the end, these notes turn out to be the truth each layer
-   was hiding, and together they rebuild the field notes.
+2. **A "note from Theo"**: one plain fact about what really happened
+   (e.g. *"Mr. Alvarez fixed the wall in ten minutes."*). At the end, these
+   notes turn out to be the truth each layer was hiding.
 
-### The motif that repeats: solving doesn't switch it off
+### Two motifs that repeat
 
-After every solve, the true version shows for a moment (the full photo, the
-unfiltered colors, the real order). **Then the site quietly puts the layer
-back and adds the next one.** Knowing a trick doesn't undo it. Students feel
-this five or six times before the ending names it, and the ending is the
-first time anything is actually taken away.
+- **The meter gets faster.** Every stage, the class notices the bar fill
+  more quickly. They feel the algorithm getting surer of itself before
+  anyone explains it.
+- **Solving doesn't switch it off.** Knowing what the meter does doesn't
+  stop it. The layer stays on, and the next one is added. The finale is the
+  first time anything is taken away.
 
 ### Checking answers, saving progress, and hints
 
-- Answers are case-insensitive and ignore spaces and a leading "a" or
-  "the". They're checked against SHA-256 hashes (`crypto.subtle`), so
+- Answers are case-insensitive and ignore spaces, punctuation and a leading
+  "a" or "the". A few locks accept more than one wording (listed in the
+  answer key). They're checked against SHA-256 hashes (`crypto.subtle`), so
   **View Source won't give them away**. The site is public, so a student
   could open it at home before class.
-- Progress (stage, letters, notes, the class name, the time spent) is saved
-  in the laptop's `localStorage`, so a refresh, a crashed browser or a
-  second class session picks up where the class left off.
+- Progress (stage, letters, notes, signal log, time spent) is saved in the
+  laptop's `localStorage`, so a refresh, a crashed browser or a second
+  session picks up where the class left off.
 - **Three hints per stage**: a nudge, a pointer, and nearly the answer. They
-  appear only when the teacher presses `H`, so the teacher reads the room
-  and decides. To make hints a choice for the class, the page gives the
-  class **3 hint tokens for the whole game**, shown in the corner. After a
-  stage has run 5 minutes, a hint is free.
+  appear only when the teacher presses `H`. The class has **3 hint tokens
+  for the whole game**, shown in the corner, and a hint is free after a
+  stage has run 5 minutes.
 
 ### Privacy (part of the lesson)
 
 The page sends **nothing** anywhere. No analytics, no server, no fonts loaded
-after stage 0. The tracking in stage 6 is real but stays in the browser, and
-the ending says so: *"Everything this page learned about this room stayed
-on this laptop. Real apps send it to their servers."* No student data is
-collected at all: the only name the page asks for is a name for the class.
+from elsewhere. The tracking is real, but it stays in the browser, and the
+ending says so: *"Everything Lens learned about 'Theo' stayed on this laptop.
+Real apps send it to their servers."* No student data is collected; the
+only account is Theo's.
 
 ---
 
 ## 3. The stages
 
-Each stage below covers: **what it looks like**, **the code concept**, **the
-puzzle and its answer**, **in the room** (how the class takes part), **what
-it adds to the reveal**, and **the transition into the next stage**.
+Each stage covers: **Theo's goal**, **what it looks like**, **the meter**,
+**the code concept**, **the lock** (puzzle and answer), **in the room**, its
+**role in the reveal**, and the **transition** into the next stage.
 
-Every stage follows the same rhythm in class: **look → predict → instruct →
-reveal.** The class reads the screen, someone predicts what's going on, the
-class tells the teacher exactly what to change, and the room sees if they
-were right. Because only the teacher touches the laptop, students have to
-say precisely what they want ("set `saturate` to 1"), which makes them read
-the code closely and use its words. Predicting out loud first is what keeps
-the whole room involved.
+In class, every stage follows the same rhythm: **look → predict → instruct
+→ reveal.** Because only the teacher touches the laptop, students have to
+say precisely what they want ("hover over Mrs. Park's post", "set `angry`
+to 0"), which makes them read the screen and the code closely. Predicting
+out loud first keeps the whole room involved.
 
 ---
 
-### Stage 0 — Markup (the starting point)
+### Login (before stage 1)
 
-**Looks like:** 1995. No CSS at all: Times New Roman, blue underlined links,
-a broken image icon. Title: *Life Academy Web Lab*. Below it are the
-**field notes** of the field day, as a plain `<h1>`, `<p>` and `<ul>`. It is
-honest and a little boring, and that's the point. Under the notes is a
-short intro: *"Seven locks. Each one teaches a trick web designers use.
-Solve them all."* The intro mentions a web lab and nothing else.
+**Looks like:** the Lens login screen, with the username already filled in:
+**@theo**. The teacher clicks *Log in*. Before the feed loads, a briefing
+card:
 
-**Code concept:** HTML is the content and structure, and everything later is
-a layer on top. The `alt` attribute, comments and semantic tags.
+> *You are **Theo**. You're 13. Yesterday at Life Academy field day you
+> slipped in the mud during the gaga championship and knocked a wall panel
+> over. Everyone laughed, and so did you. Mr. Alvarez fixed the wall, there
+> was a rematch, and June won. It was a good day.*
+>
+> *This morning, you open Lens.*
 
-**Puzzle:** "This page is missing a picture. Ask the page what *should* be
-there." The image is broken on purpose, and browsers show `alt` text in its
-place: *"photo: the whole field day, from the muddy gate to the bracket
-board. Key: LOOK."* Turning on the **Markup** tab shows the tags and the same
-key in an HTML comment, `<!-- key: LOOK -->`, for students who miss the alt
-text. Stage 0 is the tutorial: it teaches that a page holds more than it
-shows.
+Below the briefing, the only framing the class gets: *"Seven layers. Each
+one is a trick web designers use. Find them all."*
 
-- **Answer:** `LOOK`
-- **Before starting:** the page asks *"What should we call you?"* and the
-  class picks a name for itself (a team name, or just "Life Academy").
-  Stages 6 and 7 use it.
-- **No letter tile.** This is the prologue, and the seven letters come from
-  the seven layers.
-
-**In the room:** this stage teaches how the game works. Ask a student to
-read the broken image's text aloud. Then ask *"Is there anything on this
-page we can't see?"* before opening the Markup tab. The first time the code
-panel opens, explain the split (page on the left, the code that makes it on
-the right) and the one rule: *"I'm your hands. I'll only do what you tell
-me."*
-
-**Role in the reveal:** this is where the ending comes back to. The final
-screen is this exact page.
-
-**Transition → 1:** the first stylesheet "loads": a soft background fades
-in, the font changes, and the field notes **slide down and out of view**
-(they're still in the page, pushed far below), so all that's left is one
-centered photo frame. The broken image becomes a picture. From here on, the
-truth is technically still there; you just can't see it.
+**In the room:** read the briefing aloud. Explain the one rule: *"You're
+Theo. I'm your hands. I'll only do what you tell me."*
 
 ---
 
-### Stage 1 — The Box (framing)
+### Stage 1 — The Watcher (passive tracking)
 
-**Looks like:** a clean, minimal gallery. One square photo card with rounded
-corners and a shadow. The crop is tight on the fallen wall panel, Theo's
-muddy sneakers sticking out beside it, and the ball flying past. Caption:
-*"Gaga pit DESTROYED 😱"*.
+**Theo's goal:** *"Mrs. Park posted about yesterday. I just want to read
+it."*
 
-**Code concept:** the box model and cropping: `width`/`height`,
-`overflow: hidden`, `object-position`, `transform: scale()`, plus composition
-as a design choice. The **Box** tab shows the frame as a draggable rectangle
-over a dimmed "ghost" of the full image, and live CSS:
+**Looks like:** a calm, clean Lens feed with very little in it: a "Welcome
+back, Theo" card and **Mrs. Park's post** at the top:
 
-```css
-.photo     { width: 320px; height: 320px; overflow: hidden; }
-.photo img { transform: scale(3.2); object-position: 52% 60%; }
+> **@mrspark** · Life Academy
+> *Theo's championship-winning dive 🏆 (he didn't win… the wall did 😂).
+> Wall fixed in 10 minutes thanks to Mr. Alvarez, rematch at 2:15. Best
+> field day yet! #LifeAcademyFieldDay*
+> *[the full, wide photo]* ❤️ 23
+
+It's a joke, it's kind, and it has all the context. It's the truest thing
+the class will see all game.
+
+**The meter:** invisible until the mouse goes over the post. Then a
+translucent overlay appears with a **timer counting how long the post has
+been on screen** (since the feed loaded, not since the hover) and a
+progress bar labeled *sending to algorithm*. It fills slowly, over **90
+seconds**. When it's full:
+
+```
+✓ PUSHED TO ALGORITHM — signal: DWELL 01:30
+  @theo is interested in #LifeAcademyFieldDay → show more
 ```
 
-**Puzzle:** "The caption says destroyed. Someone is already on their way to
-the pit. What are they carrying?" There's nobody else in the crop. The class
-has the teacher zoom out (lower `scale`, or drag the frame) and finds more of
-the scene: kids laughing around the pit, Theo grinning with a thumbs up, and,
-walking over from the edge of the picture, Mr. Alvarez with a **drill**.
+**Code concept:** a page holds more than it shows. Hidden elements, the
+`:hover` selector, and a timer. The **Watcher** tab:
 
-- **Answer:** `DRILL`
+```html
+<article class="post">
+  …
+  <div class="meter">⏱ <span>00:47</span> <progress max="90" value="47"></progress></div>
+</article>
+```
+```css
+.meter            { opacity: 0; }
+.post:hover .meter { opacity: 1; }
+```
+```js
+const DWELL_THRESHOLD = 90; // seconds
+setInterval(() => {
+  for (const post of postsOnScreen()) {
+    post.seen++;
+    if (post.seen === DWELL_THRESHOLD) sendSignal("dwell", post);
+  }
+}, 1000);
+```
+
+**The lock:** the page opens with a prompt: *"Theo is only reading. Is
+anything on this page doing more than that?"* The class has to get the
+teacher to move the mouse over the post to find the meter. Once it
+confirms: *"Theo never clicked anything. How many seconds of looking did it
+take for Lens to decide he wanted more?"*
+
+- **Answer:** `90`
 - **Letter:** **T**
-- **Note found:** *"Mr. Alvarez screwed the panel back on in ten minutes."*
+- **Note from Theo:** *"Mrs. Park's post was a joke, and a nice one. She
+  put in that the wall got fixed."*
 
-**In the room:** before touching anything, ask *"What happened here?"* and
-let a few students tell the story the crop tells. Then the class directs
-you (*"zoom out more!", "go left!"*). Whoever spots what he's carrying first
-calls it out. Afterwards, ask whether the story changed once they saw the
-whole picture.
+**In the room:** before anyone finds the meter, ask *"How would you feel
+seeing this post if you were Theo?"* (Most will say it's fine, even funny.)
+Then let the hunt for the hidden thing start. When the meter appears, the
+room usually goes quiet. Let the bar fill while they watch.
 
-**Role in the reveal:** **Framing.** *"Every photo is a choice of what to
-leave out. A post shows one square of a whole day, and what's outside the
-square doesn't exist for whoever's looking."*
+**Role in the reveal:** **Passive tracking.** *"Watching is a vote. You
+don't have to like, share or comment. Apps measure how long you look, and
+looking counts as wanting more."*
 
-**Transition → 2:** after the solve, the frame **snaps back to the tight
-crop by itself** (the first time the motif shows up). Then the colors start
-to *warm up*. Over about 3 seconds saturation creeps up, a golden tint
-spreads, and the background turns into a peachy gradient.
+**Transition → 2:** under the confirmation, a small spinner: *"Finding more
+posts for you…"* New posts start loading below Mrs. Park's, one after
+another.
 
 ---
 
-### Stage 2 — The Style (filters and the highlight reel)
+### Stage 2 — The Box & Style (exaggeration as it spreads)
 
-**Looks like:** a "lifestyle" aesthetic, everything glowing: warm gradient
-background, rounded font, soft vignette, glossy shadows. A second photo
-appears: the field by the gate in the morning, which looks golden-hour
-beautiful. Caption: *"Perfect field day ☀️✨ #blessed"*. That's the drizzly,
-muddy morning, filtered.
+**Theo's goal:** *"OK, enough of that. Let's see what else is on here."*
 
-**Code concept:** the CSS `filter` property, how color and light set mood,
-and **identity values** (the number for each filter that changes nothing).
-The **Style** tab:
+**Looks like:** a busier feed, with **mostly unrelated posts**: a cat
+falling off a couch, someone's science-fair volcano, a band concert, a meme
+about math homework. Scattered between them are classmates **reposting Mrs.
+Park's photo**, each one more exaggerated than the last:
 
-```css
-.photo img {
-  filter: brightness(1.35) saturate(2.2) contrast(1.15)
-          hue-rotate(-28deg) sepia(0.3) blur(1.5px);
-}
+| Repost | Crop | Filter | Caption |
+|---|---|---|---|
+| **@maya.k** | a bit tighter; Theo still laughing | brighter | *"theo vs the gaga wall 😂"* |
+| **@jaxon_** | the laughing and thumbs up cut off | high contrast | *"THEO DESTROYED THE PIT 💀"* |
+| **@lifeacademy.gossip** | just the fallen panel and Theo's muddy sneakers | red tint, grain | *"GAGA PIT COLLAPSES — KID HURT IN LIFE ACADEMY CHAOS 😱 are they banning gaga??"* (huge caps, BREAKING banner) |
+
+**The meter:** now it also shows when the feed **pauses** on a post (no
+scrolling for a second with the post in the middle of the screen). It shows
+the same timer and a **much faster bar, about 20 seconds**. It fills
+fastest on the gossip post, because that's where people (and Theo) stop
+longest. On confirmation:
+
+```
+✓ PUSHED TO ALGORITHM — signal: PAUSE ×3 (longest: @lifeacademy.gossip, 14s)
+  @theo engages most with: dramatic posts about @theo → show more like this
 ```
 
-Each value has a slider, and the CSS text updates as it moves.
+**Code concept:** cropping, filters and typography: the box model,
+`overflow: hidden`, `viewBox`, CSS `filter`, and `text-transform`. The
+**Box & Style** tab draws every repost's crop as a rectangle on Mrs. Park's
+original, so the class can see each one shrink, with each repost's CSS next
+to it:
 
-**Puzzle:** "There's a sign by the gate, but it's too 'pretty' to read.
-What's it warning about? Every filter has a number that does nothing. Find
-them all." The class works out each neutral value: `brightness(1)`,
-`saturate(1)`, `contrast(1)`, `hue-rotate(0deg)`, `sepia(0)`, `blur(0)`.
-Only with **all six** neutral do the grey sky and puddles show, along with a
-chalkboard sign: *"CAUTION: MUD — pit opens at 11"*. The blur and brightness
-wash it out until then, and partial fixes only make it a little clearer,
-which nudges the class on.
+```css
+.repost.jaxon  img { object-position: 38% 70%; transform: scale(2.5); filter: contrast(1.4); }
+.repost.gossip img { object-position: 30% 80%; transform: scale(4);   filter: sepia(.5) hue-rotate(-30deg); }
+.repost.gossip .caption { text-transform: uppercase; font-size: 64px; color: #e00; }
+```
 
-- **Answer:** `MUD`
-- **Letter:** **E**
-- **Note found:** *"It drizzled until 11 a.m., so the gaga pit was muddy."*
-
-**In the room:** six filters, six volunteers. Each student "owns" one filter,
-works out its neutral number (with help from the room), and calls it out to
-you. The sign only appears when the last one is right, so everyone is
-waiting on everyone. Before they start, take a quick show of hands: *"Would
-you want to be at this field day?"* Ask again after the sign shows.
-
-**Role in the reveal:** **Filters and the highlight reel.** *"Perfect isn't
-real. That golden morning was a muddy one. People post their best moments,
-edited, and we compare them with our whole ordinary day."*
-
-**Transition → 3:** the filter **goes back on**. Then the caption under the
-photo starts to *retype itself*, one letter at a time, getting louder as it
-goes: *"Gaga pit destroyed"* → *"Chaos at Life Academy field day!"* →
-*"GAGA PIT COLLAPSES"*. The font gets heavier and bigger with each rewrite
-until it fills the card.
-
----
-
-### Stage 3 — The Type (sensational headlines and outrage)
-
-**Looks like:** a tabloid. A red **BREAKING** banner, a giant condensed bold
-headline in ALL CAPS (*"GAGA PIT COLLAPSES — KID HURT IN CO-OP CHAOS"*),
-yellow highlighter on key words, emoji, `!!!`, and a scrolling news ticker
-along the top: *"PIT IN RUINS • PARENTS DEMAND ANSWERS • IS YOUR CO-OP
-NEXT? •"*.
-
-**Code concept:** **content vs. presentation.** What's in the HTML isn't
-always what you see. Typography sets the tone (size, weight, color, case).
-And word choice is code: headlines come from a template. The **Type** tab
-has two views:
-
-- **Split view:** the source text on the left, the rendered text on the
-  right, and a list of active CSS rules with checkboxes, like DevTools:
-  `☑ text-transform: uppercase`, `☑ font-weight: 900`, `☑ color: #e00`.
-- **Word dial:** the headline template
-  `` `${subject} ${verb} ${object}${punct}` `` with one slider from *Calm*
-  to *Outrage* that swaps words from a table:
-  *a player → kid → KID*, *slipped into → crashed into → DESTROYED*,
-  *a wall panel → the pit wall → THE GAGA PIT*, *. → ! → !!! 😱*.
-  Students see that the facts don't change, only the words.
-
-**Puzzle:** "Things aren't always as loud as they look. Read what's actually
-written." The headline and ticker are uppercased by CSS. In the **source**,
-the text uses ordinary case except for a few odd capital letters. Unticking
-`text-transform: uppercase` (or reading the left side of the split view)
-shows them, and in order they spell **LAUGHED**:
-
-> *kid **L**ands h**A**rd, pit wall in r**U**ins, **G**aga game **H**alted,
-> par**E**nts in **D**isbelief*
-
-- **Answer:** `LAUGHED`
-- **Letter:** **X**
-- **Note found:** *"Everyone laughed, Theo hardest. He had a scraped elbow
-  and got a band-aid."*
-- **Bonus:** turn the word dial all the way to Calm and the headline reads
-  *"A player slipped into a wall panel."*
-
-**In the room:** before anyone opens the code, a show of hands: *"Is this
-headline really written in all capital letters?"* Then untick
-`text-transform` and let the class read the odd capitals aloud together, one
-letter at a time. Let the room tell you where to set the word dial: *"Make
-it calmer. Now as angry as it'll go."* Ask which version they'd click on.
-
-**Role in the reveal:** **Sensationalism and clickbait.** *"The same fact,
-said louder, gets more clicks, and anger spreads fastest of all. The words
-are a choice, and someone wrote the code that makes it."*
-
-**Transition → 4:** CSS goes back to uppercase. The single big tabloid card
-**shrinks and slides up**, and more cards come in under it one after another.
-A header bar appears with the first full **Lens** logo. The headline is now
-just one post in a feed: the feed is born.
-
----
-
-### Stage 4 — The Logic (the algorithm)
-
-**Looks like:** the first real social feed. A narrow center column, post
-cards with avatars, usernames, timestamps and action icons, and a top bar.
-Every card keeps all three earlier layers (cropped, filtered, loud
-headline), so the layers are building on each other. Seven posts from field
-day, with the crash post on top and June's win at the very bottom.
-
-**Code concept:** layout and components (one card template filled from data,
-with flexbox), plus **functions and sorting**. The **Logic** tab shows:
+It also shows why the bar is faster:
 
 ```js
+const threshold = DWELL_THRESHOLD / (1 + confirmedSignals * 3.5);   // 90 → 20
+```
+
+**The lock:** *"Every repost cut something out of Mrs. Park's photo, and it
+was always the same thing first. What was Theo doing that nobody else
+showed?"*
+
+- **Answer:** `LAUGHING` (also accepts `LAUGHED`, `SMILING`, `THUMBS UP`)
+- **Letter:** **E**
+- **Note from Theo:** *"I was laughing. I got a band-aid for a scraped
+  elbow, that's it."*
+
+**In the room:** let the class decide where to stop scrolling, then ask
+*"Why did we stop on that one?"* (They'll always stop on the post about
+Theo. So would he.) For the lock, have the teacher flick between the
+original and each repost while the class says what's gone each time.
+
+**Role in the reveal:** **Exaggeration.** *"Each time a story is shared, it
+gets cropped tighter, filtered harder and captioned louder. The version that
+spreads furthest is usually the one with the least of what happened."*
+
+**Transition → 3:** reaction buttons slide in under every post, and a
+tooltip points at them: *"React to show how you feel! 💬"*
+
+---
+
+### Stage 3 — The Logic (the algorithm)
+
+**Theo's goal:** *"That gossip post isn't true. I want Lens to know I don't
+like it."*
+
+**Looks like:** the same feed, now with reaction bars on every post
+(❤️ 😂 😢 😡 👎). The ⋯ menu on each post also has a *"Not interested"*
+option, small and grey.
+
+**The meter:** hovering over a reaction button shows its hidden **weight**.
+Clicking **any** reaction fills the bar **in one click**:
+
+```
+✓ PUSHED TO ALGORITHM — signal: REACT 😡 (+5)
+  @theo is very interested in @lifeacademy.gossip → moving to top
+```
+
+and the feed **re-sorts** with a smooth animation: the gossip post jumps to
+the top, three more like it appear just under it, and Mrs. Park's post
+slides down.
+
+**Code concept:** functions, weights and sorting. The **Logic** tab:
+
+```js
+const weight = { like: 1, laugh: 2, sad: 3, dislike: 4, angry: 5, notInterested: -1 };
+
 function score(post) {
-  return post.shares   * 3
-       + post.comments * 2
-       + post.angry    * 5   // 😡 reactions count the most
-       - post.ageHours * 1;
+  let s = 0;
+  for (const r in post.reactions) s += post.reactions[r] * weight[r];
+  return s + post.shares * 3 + post.comments * 2 - post.ageHours;
 }
 
 let sortBy = "engagement";   // "engagement" | "newest" | "oldest"
 feed.sort((a, b) => score(b) - score(a));
 ```
 
-The class can have the teacher change each weight and the `sortBy`
-dropdown. The feed re-sorts with a smooth FLIP animation, so everyone sees
-the posts move.
-
-**Puzzle:** "The algorithm decides what comes first. What *happened* first?"
-Sorted **oldest first**, the first letters of the seven posts spell
-**REMATCH**:
+**The lock:** *"Lens decides what goes first. Tell it to sort by what
+happened first."* Sorted **oldest first**, the first letters of the first
+seven posts tagged #LifeAcademyFieldDay spell **REMATCH**:
 
 | Time | Post |
 |---|---|
@@ -505,240 +530,318 @@ Sorted **oldest first**, the first letters of the seven posts spell
 | 11:02 | **E**veryone's in the pit, gaga is open! |
 | 1:31 | **M**UD DIVE 💥 the wall came DOWN |
 | 1:33 | **A**ll good, Theo's laughing. Just a scrape 🩹 |
-| 1:42 | **T**he wall's back up! Thanks, Mr. Alvarez 🔧 |
+| 1:42 | **T**he wall's back up! (@alvarez.fixes) 🔧 |
 | 2:15 | **C**hampionship replay starting now |
-| 2:40 | **H**uge upset: June (8) wins the championship 🏆 |
+| 2:40 | **H**uge upset: June (8) wins the championship 🏆 (@june.plays.gaga) |
 
-Engagement order scrambles them, so June's post (zero 😡) sinks to the
-bottom and the crash rises to the top.
+In engagement order, June's post (zero 😡) sinks to the very bottom.
 
 - **Answer:** `REMATCH`
-- **Letter:** **T**
-- **Note found:** *"The championship was replayed after the wall was
-  fixed."*
+- **Letter:** **X**
+- **Note from Theo:** *"There was a rematch. June won. Nobody's posting
+  about that."*
 
-**In the room:** have a code reader read the `score()` function aloud, one
-line at a time. Ask: *"Which post do you think should be first?"* Then
-*"Which post will be first if we sort by time?"* Take guesses before you
-change the dropdown, so the room sees whether they predicted the re-sort. A
-good challenge for 13-year-olds: *"Tell me one number to change so June's
-post comes to the top."* (Setting `angry` to 0 nearly does it.)
+**In the room:** before clicking, take a vote on which reaction Theo should
+use to show he doesn't like the post. Ask the room to predict what will
+happen. Whatever they choose, it boosts the post, and 😡 boosts it most.
+Have a student read `score()` aloud. A challenge for the room: *"Is there
+ANY button that tells Lens 'less of this'?"* (Only *Not interested*, worth
+−1 against 😡's +5, hidden in the ⋯ menu.)
 
-**Role in the reveal:** **The algorithm.** *"Nobody sees everything. A
-formula, not a person and not the truth, decides what comes first, and it
-rewards whatever makes people react, especially anger."*
+**Role in the reveal:** **The algorithm.** *"Every reaction is a vote for
+more, and anger counts most. A formula, not a person, decides what comes
+first, and it can't tell the difference between 'I love this' and 'I hate
+this'."*
 
-**Transition → 5:** the feed **re-sorts by engagement** on its own (the
-motif). Then little counters appear under every post and start ticking up,
-slowly at first and then like a slot machine: ❤️ 12 → 340 → 4,100 →
-**48.2K**. Verified checkmarks pop in. A 🔥 *Trending: #GagaGate* tag lands
-on the crash post.
+**Transition → 4:** a reply box opens under the gossip post with Theo's
+avatar beside it: *"Say something, Theo 💬"*
 
 ---
 
-### Stage 5 — The Data (fake popularity and social proof)
+### Stage 4 — The Text (context collapse)
 
-**Looks like:** numbers everywhere. Big like counts, follower counts, blue
-checkmarks, stacked avatar faces with *"Liked by jess_k and 48,211 others"*,
-*"#1 at Life Academy"*, *"🔥 Trending"*. Numbers get the visual weight that
-content used to have.
+**Theo's goal:** *"That's not what happened. I'm going to set the record
+straight."*
+
+**Looks like:** the gossip post at the top with its comment thread open.
+Replies are piling up (teasing, never cruel: *"the wall had a family 😭"*,
+*"bro just admit it"*, *"wait is gaga actually banned??"*).
+
+**The meter:** it's attached to the **reply box**, and it fills **with
+every keystroke**:
+
+```
+⌨ 41 keystrokes · draft saved · sending to algorithm ▓▓▓▓▓▓▓▓░░
+```
+
+Deleting doesn't make the count go down, and every version of the draft is
+saved, including the words the class typed and took back.
+
+**Play:** the class dictates Theo's reply and the teacher types it. (The
+teacher is the filter. If the class is stuck or getting silly, the page
+offers three ready-made replies: *"It was the mud lol, the wall's fixed"*,
+*"Stop, it wasn't a big deal"*, *"Whoever runs this account is lying."*)
+When Theo posts it, within seconds **@lifeacademy.gossip quote-posts it**,
+cut down to its most charged few words:
+
+> **@lifeacademy.gossip:** *Theo responds 👀: "…the wall's fixed…"* 🙄
+> *(or "…lying…", or "…it wasn't a big deal…": the most dramatic chunk of
+> whatever the class wrote)*
+
+and the reply count on the gossip post jumps.
+
+**Code concept:** strings. Events on an input, splitting and slicing text,
+and scoring it. The **Text** tab shows the keystroke log and saved drafts,
+and:
+
+```js
+input.addEventListener("input", () => { keystrokes++; drafts.push(input.value); sendSignal("typing"); });
+
+function commentScore(text) {
+  return text.length * 0.5
+       + count(text, "!") * 3
+       + mentions(text)   * 4
+       + strongWords(text) * 6;
+}
+
+function quotePost(text) {
+  const words = text.split(" ");
+  return '"…' + loudestChunk(words, 4).join(" ") + '…" 👀';
+}
+```
+
+**The lock:** *"Theo wants to reply again and fix it. Use `commentScore()`.
+What reply won't feed the algorithm?"* The class can test ideas: the
+teacher types them into a test box that shows their score. Even *"ok"* and
+*"please stop"* score above zero. Only an empty reply scores 0.
+
+- **Answer:** `NOTHING` (also accepts `NONE`, `NO REPLY`, `DON'T REPLY`,
+  `SILENCE`, `EMPTY`)
+- **Letter:** **T**
+- **Note from Theo:** *"It was an accident. The game was tied. Nobody was
+  to blame."*
+
+**In the room:** this is the stage where the class feels most like Theo.
+Let them argue about what he should say. After the quote-post appears, ask
+*"Is that what Theo said?"* Point out the saved drafts: *"Lens read the
+reply you deleted."*
+
+**Role in the reveal:** **Context collapse.** *"Once your words are online,
+anyone can cut them down to the loudest few and pass them on. And arguing
+back counts as engagement, so replying to defend yourself pushes the story
+further."*
+
+**Transition → 5:** numbers appear under every post and start ticking up,
+slowly and then like a slot machine: ❤️ 12 → 340 → 4,100 → **48.2K**.
+Checkmarks pop in. A banner slides down: *🔥 Trending at Life Academy:
+#GagaGate*.
+
+---
+
+### Stage 5 — The Data (fake popularity)
+
+**Theo's goal:** *"48,000 people?? There aren't that many people at Life
+Academy. Who actually liked this?"*
+
+**Looks like:** numbers everywhere. Big like counts, a blue checkmark on
+@lifeacademy.gossip, stacked avatar faces with *"Liked by maya.k and 48,211
+others"*, *"#1 at Life Academy"*, *"🔥 Trending"*.
+
+**The meter:** it now appears on the **like count**. Just opening the
+*"Liked by"* list fills the bar in **about 2 seconds**:
+
+```
+✓ PUSHED TO ALGORITHM — signal: GLANCE (checked likes, 2.1s)
+  @theo cares how many people saw this → show him the numbers
+```
 
 **Code concept:** data and variables. A post is just an object, and the
-interface draws whatever the data says. A **checkmark is just a `true`**.
-The **Data** tab shows a collapsible JSON tree for each post:
+screen draws whatever the data says. A **checkmark is just a `true`**. The
+**Data** tab:
 
 ```json
 {
-  "id": 3,
-  "author": "coopdrama_daily",
+  "id": 41,
+  "author": "lifeacademy.gossip",
   "accountCreated": "today",
   "verified": true,
   "likesShown": 48212,
-  "likedBy": ["bot_8812", "bot_8813", "june.plays.gaga", "bot_8814", "..."],
+  "likedBy": ["bot_8812", "bot_8813", "maya.k", "bot_8814", "..."],
   "boost": { "purchasedLikes": 48200, "price": "$19.99" }
 }
 ```
 
-Flipping `verified` to `false` makes the checkmark disappear, and the panel
+Flipping `verified` to `false` makes the checkmark vanish, and the panel
 shows the one CSS class that drew it.
 
-**Puzzle:** "48,212 people liked this. Really? How many *real* people liked
-the trending post?" There are two ways to get there, both through the data:
-subtract `purchasedLikes` from `likesShown`, or open `likedBy`, page through
-it, and count the accounts that aren't `bot_` (the panel has a filter box
-that makes this practical).
+**The lock:** *"How many real people liked the gossip post?"* Two ways to
+get there: subtract `purchasedLikes` from `likesShown`, or page through
+`likedBy` and count the accounts that aren't `bot_` (the panel has a filter
+box).
 
 - **Answer:** `12`
 - **Letter:** **C**
-- **Note found:** *"46 kids played gaga that day."* (Only 12 real people
-  liked the crash post: fewer than the kids who were actually there,
-  playing.)
+- **Note from Theo:** *"46 kids played gaga that day. 12 real people liked
+  that post."*
 
 **In the room:** first, a show of hands: *"Who'd believe a post with 48,000
 likes?"* Then page through `likedBy` slowly while the class counts real
-accounts out loud together. Someone usually spots the `purchasedLikes`
-shortcut partway through: let them tell you how to check the count with it.
-Then ask the room which value to change to make the checkmark go away.
+accounts aloud. Someone usually spots the `purchasedLikes` shortcut partway
+through. Ask the room which value to change to make the checkmark go away.
 
-**Role in the reveal:** **Fake popularity.** *"Numbers feel like votes, so we
-follow the crowd. But the crowd can be bought, the voters can be bots, and a
-badge is one line of data."*
+**Role in the reveal:** **Fake popularity.** *"Numbers feel like votes, so
+we believe the crowd. But the crowd can be bought, the voters can be bots,
+and a badge is one line of data. For Theo, the number made it feel like the
+whole world had seen it."*
 
-**Transition → 6:** a friendly modal slides up: *"Make Lens yours, {class
-name}! Pick what you like:"* with chips (🛡️ Safety, 😤 Drama, 🔨 Blame,
-🏆 Results). Before anyone can pick, the chips **select themselves**, and the
-modal says: *"Actually, we already know. 😉"* The page has been quietly
-logging which posts the mouse hovered over, and for how long, since stage 4.
-The mouse went wherever the class sent it, so it's a log of the **whole
-class's** attention, and it now shows that log.
+**Transition → 6:** a cheerful toast: *"We've updated your feed to match
+your interests ✨"*. The theme color shifts to #GagaGate orange, and the
+unrelated posts (the cat, the volcano, the band) **fade out one by one**.
 
 ---
 
-### Stage 6 — The State (filter bubbles and echo chambers)
+### Stage 6 — The State (the filter bubble)
 
-**Looks like:** a feed made for one person. *"Good afternoon, {class name}"*
-at the top. The **whole theme color** changes to match the top interest
-(alarm red, gossip purple, angry orange). The feed now **only** shows that
-topic, each post more extreme than the last:
+**Theo's goal:** *"I'm done with this. I'm going to look up something
+else."*
 
-- **Safety bubble:** *"Gaga pits are DANGEROUS."* *"Kid HURT at Life Academy."*
-  *"Should co-ops ban gaga?"* (It was a scraped elbow.)
-- **Drama bubble:** *"Did Theo do it ON PURPOSE? His team was losing 👀"*
-  (The game was tied.)
-- **Blame bubble:** *"Who built this pit?? Parents asleep on the job."*
-  (It was mud and an accident.)
+**Looks like:** a feed that is **100% about Theo**. The whole app is themed
+in #GagaGate orange, the greeting says *"Your Life Academy today"*, and
+every post is the incident: reposts of reposts, polls (*"Should gaga be
+banned?"*), *"Theo did it ON PURPOSE? 👀"*. When the class searches for
+something else (*"soccer"*, *"Minecraft"*, anything), the results are still
+about the gaga pit.
 
-The 🏆 Results topic, where June's win lives, never becomes anyone's bubble.
+**The meter:** every bar is **already full** when a post appears:
+*"✓ pre-confirmed"*. Lens doesn't need Theo to look any more. It already
+knows.
 
-**Code concept:** **state**, **events**, **conditionals**, and theming with
-**CSS custom properties**. The **State** tab has:
+**Code concept:** state, conditionals, and theming with CSS custom
+properties. The **State** tab:
 
-- the profile, updated live:
-  `const you = { name: "Life Academy", seconds: { safety: 41.2, drama: 6.8, blame: 3.1, results: 0.4 } }`
-- the rules that use it:
-  ```js
-  const top = topInterest(you);                 // "safety"
-  feed = posts.filter(p => p.topic === top);
-  root.style.setProperty('--accent', topicColor[top]);
-  ```
-- a **console log** that keeps scrolling as the mouse moves:
-  `hover post#3 · 1.8s`, `scroll · paused on post#5`, `tap ❤️ post#3`.
-  It's unsettling on purpose, and on a big screen in front of everyone it's
-  even more so.
+```js
+const you = { id: "theo", interests: { gagaGate: 0.98, minecraft: 0.01, soccer: 0.01 } };
 
-**Puzzle (the room splits up):** with one screen, the class can't each have
-their own feed, so the room is split into **three groups**, and each group
-is shown a feed that only it sees.
+let viewingAs = "theo";   // "june" | "mrspark" | "sam"
+feed = posts.filter(p => profile(viewingAs).interests[p.topic] > 0.5);
+root.style.setProperty("--accent", topicColor[topInterest(viewingAs)]);
+```
 
-1. The page says the room isn't one person, and asks the teacher to split
-   the class into **Group 1, Group 2 and Group 3** (sides of the room work
-   well). Group 1 gets the bubble the tracker picked for the class; Groups 2
-   and 3 get the other two.
+**The lock (the room splits up):** *"It feels like the whole of Life Academy
+is talking about Theo. Is it?"* The `viewingAs` switch shows other people's
+feeds, but the room is split so each group sees **only one**:
+
+1. The teacher splits the class into **Group 1, Group 2 and Group 3** (sides
+   of the room work well).
 2. The page calls one group at a time: *"Group 1, look at the screen.
-   Everyone else, turn around."* (or *"close your eyes"*). It shows that
-   group's feed, themed and filtered, for **20 seconds** with a big
-   countdown, then blanks. The teacher presses `G` for the next group.
-3. Each group's pinned post holds one piece of the answer, labeled *1/3*,
-   *2/3* or *3/3*. Safety shows **TO**, Drama shows **GE**, Blame shows
-   **THER**. *"You only saw your feed. You'll need the others."*
-4. The page then asks the room: ***"What happened at field day?"*** Each
-   group answers from its own feed (a dangerous pit, a kid who cheated,
-   careless parents) before anyone mentions the fragments. Let them
-   disagree for a minute. This is the most important moment of the lesson,
-   and it only works because the groups really didn't see each other's
-   feeds.
-5. The groups put their fragments together and the class tells the teacher
-   the word.
+   Everyone else, turn around."* It shows one feed for **20 seconds** with a
+   big countdown, then blanks. The teacher presses `G` for the next group.
+   - **Group 1 sees June's feed:** her trophy, her friends congratulating
+     her, a cake. One small mention of the wall.
+   - **Group 2 sees Mrs. Park's feed:** lesson plans, a field trip sign-up,
+     her original post with its 23 likes.
+   - **Group 3 sees Sam's feed:** video games and a dog. No gaga at all.
+3. Each feed's pinned post holds one piece of the answer, labeled *1/3*,
+   *2/3* or *3/3*: **TO**, **GE**, **THER**.
+4. The page asks the room: ***"What's Life Academy talking about today?"***
+   Each group answers from the feed it saw (June's win, school stuff,
+   nothing much) before anyone mentions the fragments. Nobody says "Theo."
+   Let that land.
+5. The groups put their fragments together and tell the teacher the word.
 
 - **Answer:** `TOGETHER`
 - **Letter:** **O**
-- **Note found:** *"It was an accident. The game was tied, and nobody was
-  to blame."*
+- **Note from Theo:** *"Most people at Life Academy weren't even talking
+  about it. It only looked that way from my feed."*
 
 **In the room:** the 20 seconds is short on purpose: groups remember a
-feeling, not details, just like scrolling. Make sure groups that are turned
-around can't see the screen reflected in a window. When the room argues
-about what happened, ask each group *"How sure are you?"* before they
-compare. They'll usually be very sure.
+feeling, not details, just like scrolling. Check that groups that are turned
+around can't see the screen reflected in a window. Afterwards, ask: *"If you
+were Theo, and your feed looked like this, what would you think everyone
+thought of you?"*
 
-**Role in the reveal:** **Filter bubbles.** *"Your feed isn't the world.
-It's a mirror. Two people can scroll the same app and live in different
-realities. The way out is talking to someone whose feed doesn't look like
-yours."* (The puzzle made the groups do exactly that: they sat in the same
-room, looked at the same screen, and still came away with three different
-stories.)
+**Role in the reveal:** **The filter bubble.** *"Your feed isn't the world.
+It's a mirror of what you've looked at. Theo looked at the story about
+himself (anyone would), so his feed became nothing but that story, and a
+small, funny moment felt like the whole school was against him."*
 
-**Transition → 7:** a soft *ding*. A red badge 🔴 **1** appears on a bell
-icon. Then **3**. A 🔥 *"Day 1 streak!"* flame appears in the header. The feed
-starts loading more posts at the bottom by itself, with a shimmer
-placeholder.
+**Transition → 7:** a soft *ding*. A red badge 🔴 **1** appears on the bell.
+Then **3**. Then **9**. A banner: *"People are talking about you right now."*
 
 ---
 
 ### Stage 7 — The Timers (attention engineering)
 
-**Looks like:** everything at once. Notifications slide in every few seconds
-(*"Jordan reacted to your post!"*; the class has no posts), red badges keep
-rising, a "video" of the crash autoplays **on a loop** (an animated SVG of
-the panel falling, over and over, while the rematch is never shown), the
-streak counter ticks up, *"14 people are viewing this"*, and the feed
-**never ends**: it reshuffles and recycles posts with new headlines forever.
-A pull-to-refresh with a slot-machine spin gives a random reward.
+**Theo's goal:** *"I'm logging off."*
 
-**Code concept:** **time and motion.** Timers (`setInterval`,
-`setTimeout`), `IntersectionObserver` for infinite scroll, CSS `@keyframes`
-animation, and how interaction design (where buttons go, how big they are,
-what color) steers behavior. The **Timers** tab is a task manager listing
-everything running without anyone doing anything:
+**Looks like:** everything at once. Notifications slide in every few seconds
+(*"You were mentioned 14 times"*, *"@jaxon_ tagged you in a post"*,
+*"New poll about you!"*). Badges keep rising. A "video" of the crash
+autoplays **on a loop** (an animated SVG of the panel falling, over and
+over, while the rematch is never shown). A streak counter ticks up. *"31
+people are viewing posts about you"*. The feed **never ends**: it reshuffles
+and recycles posts with new captions forever.
+
+**The meter:** now **every** bar on every post fills and confirms **by
+itself**, over and over, including on posts nobody is looking at:
+*"✓ ✓ ✓ PUSHED TO ALGORITHM"*. Lens doesn't need Theo to do anything at all.
+
+**Code concept:** time and motion. Timers (`setInterval`, `setTimeout`),
+`IntersectionObserver` for infinite scroll, CSS `@keyframes`, and how
+interaction design (where buttons go, how big they are, what color) steers
+behavior. The **Timers** tab lists everything running with nobody touching
+anything:
 
 ```
 ● loadMoreWhenNearBottom()   IntersectionObserver   [Stop]
 ● sendNotification()         every 9s               [Stop]
-● autoplayVideo()            on scroll              [Stop]
+● autoplayCrashVideo()       on scroll              [Stop]
 ● growStreak()               every 15s              [Stop]
 ● fakeViewerCount()          every 4s               [Stop]
 ```
 
-**Puzzle (the goal flips):** "Every feed has a bottom. This one hid it.
-**Find the end.**" There's nothing to type. The class has to get every hook
-switched off, and each Stop button fights back with a real **dark pattern**:
+**The lock (the goal flips):** *"Find the way out."* There's nothing to
+type. The class has to get every hook switched off and reach the log-off,
+and each Stop button fights back with a real **dark pattern**, aimed right
+at someone who's being talked about:
 
-- **Confirmshaming:** *"Leave? Everyone in {class name} will miss you 😢"*. A
-  huge bright **Stay ❤️** button, and a tiny grey *"no, I don't care about my
-  friends"* link.
+- **Confirmshaming:** *"Log off? People are talking about you RIGHT NOW
+  😬"*. A huge bright **Stay and see ❤️** button, and a tiny grey *"log off
+  and miss it"* link.
 - **Roach motel:** the notification switch offers *"Pause for 1 hour"*
   (which turns itself back on after 20 seconds). The real *Turn off* is two
   menus deep.
 - **Loss aversion:** stopping the streak warns *"You'll lose your 🔥 4-day
   streak forever!"* (It's been about four minutes.)
 - **Moving target:** the Stop button for infinite scroll is low-contrast,
-  and a newly loaded post pushes it down the page every time. On a projector
-  it's *just* findable: a student may need to walk up to the screen and
-  point, which is fine and fun. Tune it on the real projector before class.
+  and each newly loaded post pushes it down the page. On a projector it's
+  *just* findable: a student may need to walk up to the screen and point,
+  which is fine and fun. Tune it on the real projector before class.
 
-When all five are stopped, the page goes **quiet**. The infinite feed runs
-out, and below the last post is something the class hasn't seen all game:
-*"You're all caught up."* Under that sits the last letter.
+When all five are stopped, the page goes **quiet**. The feed runs out,
+and below the last post is something the class hasn't seen all game:
+*"You're all caught up."* Then the *Log off* button, plain and normal-sized.
 
-- **Answer:** (the action: reach the bottom)
+- **Answer:** (the action: log off)
 - **Letter:** **N**
-- **Note found:** *"June, age 8, won the rematch. Theo played in it too."*
-- It also shows, flatly: **"Time on Lens: 41 min 12 s."** (The real total
-  time the class spent on the puzzle.)
+- **Note from Theo:** *"It was a good field day. It still was."*
+- It also shows, flatly: **"Time on Lens: 41 min 12 s."** (The real time
+  the class spent as Theo.)
 
-**In the room:** this is the loudest stage, with sound on through the
-speakers. Hold firmly to the rule that you only click what the class tells
-you. Every dark-pattern dialog becomes a quick class decision: *"Stay or
-leave?"* Watch how the big bright button pulls at a room of 13-year-olds
-even when they know it's a trick. That's worth naming in the discussion.
+**In the room:** the loudest stage, with sound on through the speakers. Hold
+firmly to the rule that you only click what the class tells you. Every
+dialog becomes a quick class decision: *"Stay or log off?"* Watch how *"people
+are talking about you right now"* pulls at a room of 13-year-olds even when
+they know it's a trick. Name that in the discussion.
 
 **Role in the reveal:** **Attention engineering.** *"Endless feeds,
-notifications, streaks and random rewards are made, on purpose, to make
-leaving hard. The hardest thing to find in an app is the end."*
+notifications, streaks and random rewards are designed to make leaving
+hard, and they work hardest on someone who's worried about what people are
+saying. The hardest thing to find in an app is the way out."*
 
-**Transition → finale:** after *You're all caught up* there's a pause of a
-few seconds and nothing moves for the first time since stage 4. Then the
-tray rises up into the middle of the screen with its seven letters.
+**Transition → finale:** after *Log off*, the screen goes still, and nothing
+moves for the first time since stage 2. Then the tray rises into the middle
+of the screen with its seven letters.
 
 ---
 
@@ -753,55 +856,72 @@ The letters come in stage order: **T E X T C O N**. It reads almost like
 > everything else. Put them in order: it's what every layer took away."*
 
 The class calls out the order and the teacher drags the tiles (or types) to
-make **CONTEXT**. The way they solve it (putting things back in the right
-order) is a callback to stage 4.
+make **CONTEXT**. Putting things back in the right order is a callback to
+stage 3.
 
 ### The reveal, beat by beat
 
-1. **Freeze.** Every timer stops. Sound off. The screen dims.
+1. **Theo's file.** First, Lens shows what it learned, the signal log that
+   every meter has been writing to all game, built from what the class
+   actually did:
+
+   ```
+   @theo · what Lens learned today
+   ✓ dwell    90s on @mrspark's post
+   ✓ pause    ×9 on reposts (longest: 14s on "GAGA PIT COLLAPSES")
+   ✓ react    😡 on @lifeacademy.gossip
+   ✓ typing   63 keystrokes, 4 drafts saved (incl. 1 deleted)
+   ✓ comment  1 reply → quoted 3 times
+   ✓ glance   checked who liked it ×4
+   ✓ search   "soccer" → shown #GagaGate
+   ✓ stay     tried to leave ×5, stayed 4m 12s
+   conclusion: @theo LOVES #GagaGate (98%)
+   ```
+
+   Then one line, alone on screen: ***"Lens can't tell the difference
+   between interested and upset."***
 2. **Explode the stack.** The interface tilts into 3D (CSS `perspective` and
    `rotateX`) and **comes apart into seven translucent layers**, like the
-   layers panel in a design app. Each is labeled with its code name: *Box,
-   Style, Type, Logic, Data, State, Timers.* The plain field notes from
-   stage 0 sit at the bottom, still there under everything.
-3. **Flip the labels.** One at a time each label flips like a card, and the
-   back gives its real name, a one-line explanation, and the note found at
-   that stage:
+   layers panel in a design app. Each is labeled with its code name:
+   *Watcher, Box & Style, Logic, Text, Data, State, Timers.* At the bottom,
+   still there under everything: Mrs. Park's original post.
+3. **Flip the labels.** One at a time each label flips like a card, showing
+   its real name, a one-line explanation, and the note from Theo it hid:
 
    | Code name | What it really was | What it hid |
    |---|---|---|
-   | Box | **Framing** | The wall was fixed in ten minutes |
-   | Style | **Filters and the highlight reel** | It was a muddy, drizzly morning |
-   | Type | **Sensational headlines** | A scraped elbow, and everyone laughed |
-   | Logic | **The algorithm** | The championship was replayed |
+   | Watcher | **Passive tracking** | Mrs. Park's post was kind, and had the whole story |
+   | Box & Style | **Exaggeration** | Theo was laughing |
+   | Logic | **The algorithm** | There was a rematch, and June won |
+   | Text | **Context collapse** | It was an accident; nobody was to blame |
    | Data | **Fake popularity** | 12 real likes; 46 kids actually played |
-   | State | **Filter bubbles** | It was an accident; nobody was to blame |
-   | Timers | **Attention engineering** | June won the rematch, while the crash played on a loop |
+   | State | **The filter bubble** | Most people weren't talking about it |
+   | Timers | **Attention engineering** | It was a good day |
 
 4. **Peel them off.** The layers come off **one by one, from the top**
-   (Timers first, Box last), each time with a real `disable()`. Before each
-   one, the teacher asks the room *"What did this layer do to the story?"*
-   and a student answers before the card flips: a quick recall check of the
-   whole lesson. The feed calms down, loses its numbers, un-sorts, quiets
-   down, cools back to normal color, and widens its crop... until the page
-   is **exactly the stage 0 field notes**, with Times New Roman and blue
-   links. Caption: *"This is what actually happened. It's less exciting.
-   It's true."*
-5. **The panorama.** The broken image from stage 0 finally loads: the
-   **whole field day**, with outlines showing where every post in the game
-   was cropped from. *"Twelve posts. One day. Every one was a real photo."*
-6. **The name.** The Lens logo comes back by itself: *"Every app is a lens.
-   Now you know what a lens is made of."*
-7. **Close.** A short message (*"This page learned things about this room
-   and sent none of them anywhere. Real apps send them to their servers."*),
-   time spent, and the discussion questions (section 6), one per screen.
-   Optionally, the teacher then opens the browser's real DevTools (`F12`)
-   to show what the Under the Hood panel was imitating: *"This is the real
-   thing, and every website has it."*
+   (Timers first, Watcher last), each time with a real `disable()`. Before
+   each one, the teacher asks the room *"What did this layer do to Theo's
+   day?"* and a student answers before the card flips. The feed calms down:
+   notifications stop, the theme goes back to normal, the numbers vanish,
+   the quote-posts disappear, the reactions go, the reposts fade, the meters
+   switch off. What's left is **one post: Mrs. Park's**, with its full photo
+   and 23 likes.
+5. **The photo.** Zoom out to Mrs. Park's full photo with every repost's crop
+   outlined on it. *"Every repost was a real photo. Just less of it."*
+6. **Under the app.** The last thing to go is Lens itself. The styling drops
+   away and the post becomes plain HTML (Times New Roman, blue links), with
+   the true story underneath as a simple list. *"Under every app, it's just
+   text and pictures. Somebody decides how you see them."*
+7. **Close.** *"Everything Lens learned about 'Theo' stayed on this laptop.
+   Real apps send it to their servers."* Then the time spent and the
+   discussion questions (section 6), one per screen. Optionally, the
+   teacher opens the browser's real DevTools (`F12`) to show what the Under
+   the Hood panel was imitating: *"This is the real thing, and every website
+   has it."*
 
-After peeling, the teacher can switch any **single** layer back on, to show
-one manipulation by itself on the honest page. That's useful for discussion
-("Just the algorithm, nothing else. Is that bad?").
+After peeling, the teacher can switch any **single** layer back on to show
+one manipulation by itself on Mrs. Park's honest post. That's useful for
+discussion ("Just the meter, nothing else. Is that bad?").
 
 ---
 
@@ -810,96 +930,99 @@ one manipulation by itself on the honest page. That's useful for discussion
 ### Rules every transition follows
 
 1. **Additive.** A transition adds a layer and never takes one away until the
-   finale. The page keeps getting more "app-like."
-2. **The truth flashes, then the layer comes back.** Every solve shows the
-   real version for 1–2 seconds before the layer goes back on (motif in §2).
-3. **The next layer starts out of the last one.** Each transition grows out
-   of what's on screen: the crop warms into a filter, the caption rewrites
-   into a headline, the headline card multiplies into a feed, the feed gets
-   numbers, the numbers lead to the personalization modal, the
-   personalization triggers notifications. No hard cuts.
-4. **Calm to loud.** Motion and sound start at zero (stage 0 has no
-   animation at all) and peak at stage 7. That makes the stillness in the
-   finale hit harder.
-5. **About 3–5 seconds**, skippable with `N`, and `prefers-reduced-motion`
-   gets cross-fades instead. Transitions are a moment for the room to react,
-   so don't rush them.
+   finale. The feed keeps getting busier, louder and more about Theo.
+2. **The algorithm moves first.** Every transition starts the moment a
+   meter confirms, not when the class says so. The site changes *because*
+   of what Theo did, and the class should feel that cause and effect each
+   time.
+3. **The next layer grows out of the last one.** The confirmation becomes
+   "finding more posts", the reposts get reaction buttons, the reaction
+   opens a reply box, the reply gets quoted and counted, the counts trigger
+   "updating your feed", and the bubble triggers notifications. No hard
+   cuts.
+4. **Calm to loud.** Motion and sound start near zero in stage 1 and peak in
+   stage 7, so the stillness after logging off hits harder.
+5. **About 3–5 seconds**, skippable with `N`. `prefers-reduced-motion` gets
+   cross-fades instead. Transitions are a moment for the room to react, so
+   don't rush them.
 
 ### What carries forward
 
-| Stage | Layers on screen | New in look and feel | Motion / sound |
+| Stage | Feed looks like | The meter | Motion / sound |
 |---|---|---|---|
-| 0 | none | none | none |
-| 1 | Box | First CSS: card, shadow, centered | fade |
-| 2 | Box, Style | Warm gradient, glow, rounded font | slow color drift |
-| 3 | + Type | Tabloid type, BREAKING banner, ticker | ticker scroll, retype effect |
-| 4 | + Logic | Feed layout, avatars, header, Lens logo | FLIP re-sort |
-| 5 | + Data | Counters, badges, avatar stacks | counters rolling up |
-| 6 | + State | Personal theme color, greeting, filtered feed | live log, theme shift |
-| 7 | + Timers | Notifications, badges, looping video, endless feed | everything; *ding* |
-| ★ | all → none | 3D layer stack → plain HTML | everything stops; one card flip at a time |
+| 1 | Calm; one kind post | hidden; 90s on hover | none until it confirms |
+| 2 | Busy; unrelated posts + louder reposts | pauses; ~20s | posts loading in |
+| 3 | + reaction bars; re-sorting | one click | FLIP re-sort |
+| 4 | + comment threads, quote-posts | every keystroke | replies popping in |
+| 5 | + counters, checkmarks, trending | 2s glance | counters rolling up |
+| 6 | All #GagaGate; orange theme; search hijacked | pre-filled | posts fading out, theme shift |
+| 7 | Notifications, looping video, endless feed | fills itself | everything; *ding* |
+| ★ | Signal log → 3D layer stack → Mrs. Park's post → plain HTML | switched off | everything stops; one card flip at a time |
 
 ### Why this order and not another
 
-- **Framing goes first** because it's the most concrete (you can see the
-  crop) and the easiest puzzle, so it builds confidence and teaches students
-  to look past what they're shown.
-- **Filters come before headlines** because both change *how* something
-  looks before anything changes *what* is shown, and image comes before text
-  in the life of a post.
-- **The algorithm is in the middle (4)** because the feed has to exist
-  first: framing, filters and headlines describe one post, and the algorithm
-  is the first thing that works on many posts. It's also the hinge where the
-  code moves from CSS to JavaScript.
-- **Likes come after ranking** because the numbers feed the ranking: the
-  class has just seen `score()`, so faked likes now mean more.
-- **The bubble (6) needs data from earlier stages.** Tracking starts in
-  stage 4, so by stage 6 the page really knows something. Putting the bubble
-  earlier would mean faking it.
-- **Attention is last** because it's what everything else is for: framing,
-  filters, outrage, ranking, popularity and personalization all exist to
-  keep you scrolling. It's also the only stage where winning means *leaving*,
-  which is the most important habit for students to take home. And after
-  the group split in stage 6, the room is together again for the loudest,
-  most chaotic stage, which sets up the sudden quiet of the finale.
+- **Each stage is the next thing a real person would do.** Read the post;
+  scroll on; stop on the posts about you; react to the worst one; reply to
+  defend yourself; check who believes it; look for something else; log off.
+  None of it is foolish, and every step makes things worse. That's the
+  lesson, and it only works in this order.
+- **Passive comes before active.** Starting with looking (stage 1) shows the
+  most surprising thing first: you don't have to click anything to be
+  tracked. It also teaches the meter, which the rest of the game depends on.
+- **Exaggeration (2) comes before the algorithm (3)** because the louder
+  versions have to exist before the algorithm can reward them, and image
+  and caption come before ranking in the life of a post.
+- **Replying (4) comes after reacting (3)** because it's the bigger
+  escalation: Theo goes from a button to his own words, and the meter goes
+  from one click to every keystroke.
+- **The numbers (5) come after the quote-posts** because the quote-posts are
+  what go "viral", and the counts make that feel real.
+- **The bubble (6) needs everything before it.** By then Lens really has
+  learned what Theo looks at, so his feed narrowing to one story is earned,
+  not faked.
+- **Attention is last** because it's what every other layer is for. It's
+  also the only stage where winning means *leaving*, the most important
+  habit for students to take home. After the group split in stage 6, the
+  room comes back together for the loudest stage, which sets up the sudden
+  quiet of the finale.
 
 ---
 
 ## 6. Running it with the co-op
 
-The whole class (13-year-olds) solves the puzzle together on one projected
-laptop. The teacher is the only one who touches it; students do the
-thinking and give the instructions.
+The whole class (13-year-olds) plays Theo together on one projected laptop.
+The teacher is the only one who touches it; students do the thinking and
+give the instructions.
 
 ### Before class
 
 - **Room check:** connect the laptop to the projector in the actual room a
-  day ahead if you can. Check that the back row can read the code panel,
-  that the bubble colors in stage 6 look different, and that the hidden
-  Stop button in stage 7 is hard but possible to find. Check the speakers.
+  day ahead if you can. Check that the back row can read the meters and the
+  code panel, that the big cursor is easy to follow, that the stage 6 theme
+  shift is obvious, and that the hidden Stop button in stage 7 is hard but
+  possible to find. Check the speakers.
 - **Save an offline copy** of the page to the laptop, in case the Wi-Fi
   fails.
 - **Rehearse** with the projector disconnected, using `Shift` + `→` to jump
   between stages. Print the answer key and the presenter keys (section 8).
-- On the day: full screen (`F11`), notifications on the laptop turned off
-  (real ones would be confusing during stage 7!), and the page left at
-  stage 0 before students arrive.
+- On the day: full screen (`F11`), the laptop's own notifications turned off
+  (real ones would be confusing in stage 7!), and the page left at the
+  login screen before students arrive.
 
 ### Roles
 
-- **Teacher (the only one at the laptop):** the class's hands. Clicks and
-  types only what the class tells them to, runs the presenter keys, decides
-  when to give hints, keeps the look → predict → instruct → reveal rhythm
-  going, and calls on students.
+- **Teacher (the only one at the laptop):** the class's hands. Clicks,
+  scrolls and types only what the class tells them to; filters what gets
+  typed as Theo's reply; runs the presenter keys; decides when to give
+  hints; keeps the look → predict → instruct → reveal rhythm going.
 - **Code reader:** a student volunteer each stage who reads the code panel
-  out loud for the room. Use a new one each stage, so seven students get a
-  turn.
-- **Spotters and counters:** the "first to spot it" and count-aloud moments
-  built into stages 1, 3, 5 and 7, plus the six filter volunteers in
-  stage 2.
-- **Everyone:** predicts, argues and tells the teacher what to do. Students
-  have to give exact instructions ("change `angry` to 0"), so they learn to
-  use the code's own words.
+  aloud. Use a new one each stage, so seven students get a turn.
+- **Spotters and counters:** "first to spot it" moments in stages 1, 2 and
+  7, the vote on Theo's reaction in stage 3, the reply-writing in stage 4,
+  and counting aloud in stage 5.
+- **Everyone:** predicts, argues and tells the teacher what Theo does next.
+  Students have to give exact instructions ("hover over the gossip post",
+  "change `angry` to 0"), so they learn to use the code's own words.
 - **Stage 6 groups:** three groups. Decide ahead of time how to split the
   room (by where they sit is easiest).
 
@@ -907,50 +1030,49 @@ thinking and give the instructions.
 
 | Stage | Minutes | Note |
 |---|---|---|
-| 0 Markup | 4 | Explain how the game works and the "I'm your hands" rule |
-| 1 Box | 6 | |
-| 2 Style | 7 | Six filter volunteers |
-| 3 Type | 7 | |
-| 4 Logic | 8 | Prediction before re-sorting |
-| 5 Data | 7 | Counting aloud |
-| 6 State | 10 | Group split; let the argument run |
-| 7 Timers | 8 | Loud; the room decides every click |
+| Login | 3 | Briefing; "you're Theo, I'm your hands" |
+| 1 Watcher | 6 | Let the 90-second bar fill while they watch |
+| 2 Box & Style | 8 | |
+| 3 Logic | 8 | Vote on the reaction before clicking |
+| 4 Text | 9 | Writing Theo's reply takes time; let it |
+| 5 Data | 6 | Counting aloud |
+| 6 State | 10 | Group split; let the "nobody said Theo" moment land |
+| 7 Timers | 7 | Loud; the room decides every click |
 | Finale | 8 | Recall question before each layer comes off |
 
-If time is short, give hints early in stages 2 and 5, which are the easiest
-to speed up without losing the point. Don't shorten stage 6 or the finale.
-If the session has to stop partway, the laptop remembers where the class
-left off.
+If time is short, give hints early in stages 2 and 5. Don't shorten stage 6
+or the finale. If the session has to stop partway, the laptop remembers
+where the class left off.
 
 ### Tips
 
-- **Don't spoil the theme.** Introduce it as a "web design lab." Let the
-  ending land.
+- **Don't spoil the theme.** Introduce it as a "web design lab" where the
+  class plays a character. Let the ending land.
+- **Keep Theo safe.** Make sure no student shares Theo's name or has had a
+  similar incident recently. If anyone in the room seems to take the story
+  personally, lean on the true version: Theo laughed, and it was a good day.
 - **Pitched for 13.** The puzzles assume no coding experience but treat
-  students as able to read real code. Stretch challenges for the room: get
-  June's post to the top by changing one number (stage 4); work out what
-  `score()` rewards; find the hidden message in the real DevTools (`F12`)
-  at the end.
-- **Spread the turns.** Seven code-reader turns, six filter volunteers and
-  the spotting moments give most of a co-op class a turn to speak.
+  students as able to read real code. Stretch challenges for the room: find
+  the *Not interested* weight (stage 3); write a reply with the lowest
+  possible score that still says something (stage 4); find the hidden
+  message in the real DevTools (`F12`) at the end.
 - **Gaga is personal.** Some students will have strong feelings about gaga
-  calls and "who's really out." Let that energy into stage 6's argument;
-  it's exactly what the bubbles feed on.
+  calls and "who's really out." Let that energy into the stage 4 reply and
+  the stage 6 argument; it's exactly what the algorithm feeds on.
 
 ### Discussion questions (shown one per screen at the end, and printable)
 
 Use think-pair-share: a minute for students to think, a minute to talk with
 the person next to them, then a few share with the room.
 
-1. Which layer surprised you most? Which one have you noticed in a real app?
-2. Is cropping or filtering a photo *lying*? Where's the line?
-3. Write the most boring true headline for the gaga story, then the most
-   clickable one. Which would you click?
-4. If you designed the `score()` function, what would you reward?
-5. Has something small ever turned into a much bigger story once people
-   started talking (or posting) about it? What got lost along the way?
-6. Who in your life sees a different feed than you? How could you find out
-   what they're seeing?
+1. How did it feel to be Theo? When did it stop being funny?
+2. Theo never did anything wrong on Lens. Which of his choices made things
+   worse? What could he have done instead?
+3. Is cropping or filtering a photo *lying*? Where's the line?
+4. Was Mrs. Park's post OK? What about @maya.k's? Where did it go wrong?
+5. If you designed the `score()` function, what would you reward?
+6. Has something small ever turned into a much bigger story once people
+   started posting about it? What got lost along the way?
 7. Stage 7 made leaving hard. What tricks do apps you use rely on? What
    helps you stop?
 8. Is a social app with *none* of these layers possible? Would people use it?
@@ -958,11 +1080,11 @@ the person next to them, then a few share with the room.
 ### Follow-on activity
 
 "**Add a layer.**" On paper, in small groups, students design an eighth
-layer that manipulates the field notes, or an "honest layer" that *helps*
-people see context. They sketch what it would look like and write a few
-lines of pretend code for it, in the style of the Under the Hood panel.
-Then they present it to the class. A good one could be built into the page
-for next time.
+layer: another way an app could learn from Theo and push the story further,
+or an "honest layer" that *helps* someone like Theo (a "this is about you —
+want a break?" prompt, a "show me the original post" button). They sketch
+it and write a few lines of pretend code in the style of the Under the Hood
+panel, then present it.
 
 ---
 
@@ -972,101 +1094,110 @@ for next time.
 
 ```
 lifeacademy/
-  index.html          ← the whole puzzle: HTML, CSS, JS and the panorama SVG inline
-  icon.svg            ← Lens-style favicon
+  index.html          ← the whole puzzle: HTML, CSS, JS and the photo SVG inline
+  icon.svg            ← Lens favicon
 _source/lifeacademy/
   PLAN.md             ← this file (not published)
   answers.md          ← printable answer key and presenter keys (not published)
 ```
 
-It's a standalone page with no Jekyll layout (like `fretspeak/`), so the site
-header and footer don't break the illusion. Add
+It's a standalone page with no Jekyll layout (like `fretspeak/`), so the
+site header and footer don't break the illusion. Add
 `<meta name="robots" content="noindex">` so search results don't show the
 ending. It can be linked from the home page's Apps section later.
 
 ### Inside index.html
 
-1. **Markup:** the stage 0 field notes as real semantic HTML (always in the
-   document), the stage shell (photo card, feed container, tray, Under the
-   Hood panel), and the panorama `<svg>` in a `<template>`, cloned for each
-   crop.
-2. **CSS:** base styles (none at stage 0!), then one block per layer scoped
-   to `body.L1`…`body.L7`, then the finale's 3D stack. Colors as custom
-   properties so stage 6 can re-theme everything with one variable.
+1. **Markup:** the Lens shell (top bar, feed column, notification bell,
+   search), the post template, the tray, the Under the Hood panel, and the
+   photo `<svg>` in a `<template>`, cloned for each crop. Mrs. Park's post
+   and the true story are real semantic HTML underneath everything, so the
+   finale can strip down to them.
+2. **CSS:** base Lens styles, then one block per layer scoped to
+   `body.L1`…`body.L7`, then the finale's 3D stack. Colors as custom
+   properties so stage 6 can re-theme everything with one variable. The big
+   cursor.
 3. **JS:**
-   - `data`: the posts (text, time, topic, crop box, counts, likedBy, bubble
-     fragment), the field notes, the notes found per stage, and the hints.
+   - `data`: posts (author, time, topic, tag, crop, filter, caption,
+     reactions, likedBy, bubble fragment), the cast's other feeds, notes,
+     hints.
+   - `meter`: the signal meter: on-screen timers, pause detection, the
+     shrinking threshold, confirmations, and the signal log.
    - `layers[]`: `enable`/`disable`/`panel` for each layer.
-   - `engine`: stage state machine, answer checks (SHA-256), save/load in
+   - `engine`: stage state machine, Theo's goal cards, locks with SHA-256
+     answer checks (several accepted answers per lock), save/load in
      `localStorage`, hints and hint tokens, presenter keys.
    - `panel`: the Under the Hood split screen and its tabs, with the small
      syntax highlighter.
-   - `tracker` (starts at stage 4): hover and scroll timing in memory only.
+   - `reply`: the stage 4 reply box, keystroke log, drafts, `commentScore`,
+     the quote-post generator, and the three fallback replies.
    - `groups`: the stage 6 sequence (call a group, 20-second countdown,
      blank, next group).
-   - `finale`: the CONTEXT tile puzzle, the layer stack, peel-back, and the
-     panorama.
+   - `finale`: signal log, CONTEXT tile puzzle, layer stack, peel-back,
+     the crop overlay and the plain-HTML ending.
 
 ### Milestones
 
-1. **Skeleton:** stage engine, layer system, tray, split-screen panel,
-   save/load, presenter keys. Every stage as a placeholder with a "solve"
-   button. Projected-size type from day one.
-2. **Art:** the field-day panorama SVG (muddy gate, gaga pit, fallen panel,
-   Theo, Mr. Alvarez, bracket board, June) and the crop definitions for
-   every post.
-3. **Stages 0–3** (the CSS stages), each with its panel and puzzle.
-4. **Stages 4–7** (the JS stages), each with its panel and puzzle.
-5. **Finale:** CONTEXT lock, 3D layer stack, peel-back, panorama.
-6. **Polish:** transitions, reduced motion, keyboard pass, legibility at
-   1280×720, hint text.
-7. **Testing:** an automated Playwright run-through of every stage at
-   1280×720 and 1920×1080. Then a **rehearsal on the real projector**, ideally
-   with two or three people watching from the back of the room calling out
-   instructions the way the class will. Adjust text sizes, colors and the
-   stage 7 hidden button from what they can and can't see.
+1. **Skeleton:** Lens shell, stage engine, layer system, tray, split-screen
+   panel, save/load, presenter keys. Every stage as a placeholder with a
+   "solve" button. Projected-size type and the big cursor from day one.
+2. **The meter:** timers, pause detection, the shrinking threshold,
+   confirmations and the signal log. It's the core of the game, so build
+   and tune it early.
+3. **Art:** Mrs. Park's photo SVG and the crop for every repost.
+4. **Stages 1–3**, each with its goal card, meter, panel and lock.
+5. **Stages 4–7**, the same.
+6. **Finale:** signal log, CONTEXT lock, 3D layer stack, peel-back, plain-
+   HTML ending.
+7. **Polish:** transitions, reduced motion, keyboard pass, legibility at
+   1280×720, hint text, and a read-through of every post for tone (teasing,
+   never cruel).
+8. **Testing:** an automated Playwright run-through of every stage at
+   1280×720 and 1920×1080. Then a **rehearsal on the real projector**,
+   ideally with two or three people at the back of the room calling out
+   instructions the way the class will. Adjust text sizes, colors, meter
+   speeds and the stage 7 hidden button from what they can and can't see.
 
 ### Accessibility
 
-For a projected class, accessibility mostly means **legibility for the
-whole room**: big type, strong contrast, and nothing important shown only
-by color (the stage 6 bubbles also differ by icon and title). Seat any
-students with low vision near the screen, and have the code reader say
-everything that matters out loud. Everything works by keyboard. The two
-places that *deliberately* break good design (the low-contrast Stop button
-and the confirmshaming link in stage 7) are named as bad design in the
-finale. With `prefers-reduced-motion`, motion is replaced by cross-fades,
-but the stage 7 notifications still arrive (as quiet badges).
+For a projected class, accessibility mostly means **legibility for the whole
+room**: big type, strong contrast, a big cursor, and nothing important shown
+only by color. Seat any students with low vision near the screen, and have
+the code reader say everything that matters out loud. Everything works by
+keyboard. The two places that *deliberately* break good design (the
+low-contrast Stop button and the confirmshaming link in stage 7) are named
+as bad design in the finale. With `prefers-reduced-motion`, motion is
+replaced by cross-fades, but the stage 7 notifications still arrive (as
+quiet badges).
 
 ---
 
 ## 8. Answer key (facilitator only)
 
-| Stage | Answer | Letter | Note found |
-|---|---|---|---|
-| 0 | LOOK | none | none |
-| 1 | DRILL | T | Mr. Alvarez fixed the panel in ten minutes |
-| 2 | MUD | E | It drizzled until 11; the pit was muddy |
-| 3 | LAUGHED | X | A scraped elbow; everyone laughed, Theo hardest |
-| 4 | REMATCH | T | The championship was replayed |
-| 5 | 12 | C | 46 kids played gaga that day |
-| 6 | TOGETHER | O | It was an accident; the game was tied; nobody to blame |
-| 7 | *(stop all five hooks)* | N | June (8) won the rematch; Theo played in it |
-| ★ | CONTEXT | none | The whole panorama |
+| Stage | Lock | Answer (also accepted) | Letter | Note from Theo |
+|---|---|---|---|---|
+| 1 | Seconds of looking before Lens decided | 90 | T | Mrs. Park's post was kind and had the whole story |
+| 2 | What every repost cut out first | LAUGHING (laughed, smiling, thumbs up) | E | Theo was laughing; just a scraped elbow |
+| 3 | Sort oldest first; first letters | REMATCH | X | There was a rematch, and June won |
+| 4 | The reply that scores 0 | NOTHING (none, no reply, don't reply, silence, empty) | T | It was an accident; nobody was to blame |
+| 5 | Real likes on the gossip post | 12 | C | 46 kids played; 12 real likes |
+| 6 | Three feeds' fragments | TOGETHER | O | Most people weren't talking about it |
+| 7 | *(stop all five hooks and log off)* | | N | It was a good day |
+| ★ | Unscramble TEXTCON | CONTEXT | | |
 
 Print this table and the presenter keys from section 2 for the session.
 
 ## 9. Open questions
 
-- **Names.** The story is set at Life Academy, with invented people (Theo,
-  June, Mr. Alvarez, Jordan). Check that none of them shares a name with a
-  current student or parent, and swap any that do. If the story is based on
-  something that really happened, keep the names changed anyway.
+- **Mrs. Park:** keep an invented teacher for the first post, or make it you
+  (with a made-up name or your own)? Posting the "joke" as the class's own
+  teacher could make stage 1 land harder.
+- **Names.** Check that Theo, June, Maya, Jaxon, Sam, Mrs. Park and Mr.
+  Alvarez don't belong to anyone at Life Academy, and swap any that do.
+- **Theo's reply (stage 4):** free text typed by you as the class dictates
+  (the plan's default), or only the three ready-made replies?
 - **Class size.** Affects the stage 6 groups (three groups works from about
   6 students up).
-- **The room:** projector resolution, and whether there are speakers for
-  stage 7's sound.
-- **One session or several?** Progress saving works either way.
+- **The room:** projector resolution, and whether there are speakers.
 - **The app's name:** "Lens" or something else.
-- **Sound:** on by default in stage 7 (the plan's default, muted with `M`),
-  or off?
+- **Sound:** on by default (the plan's default, muted with `M`), or off?
