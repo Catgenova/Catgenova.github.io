@@ -1,0 +1,828 @@
+# Life Academy: "Lens" puzzle plan
+
+A single-page puzzle at **pere.games/lifeacademy/** for the Life Academy
+homeschool co-op. Students think they are solving seven web-design and coding
+puzzles. Each one adds a layer to the page, so step by step it turns from a
+plain document into a slick social media feed. At the end the layers are
+peeled back one at a time, and each one is shown to be a real way social media
+changes what you see and how you see it.
+
+> This file lives in `_source/`, which Jekyll doesn't publish, so students
+> can't find the answers on the site. Keep it out of `lifeacademy/`.
+
+---
+
+## 1. The big idea
+
+### The hidden structure: the life of a post
+
+The seven steps follow one post from a real moment to your screen. That's why
+they come in this order, and it's what students see when the ending lays them
+side by side:
+
+| # | A post is... | Code / design layer (what students think it is) | What it really is (the reveal) |
+|---|---|---|---|
+| 0 | *(the real moment)* | **Markup**: plain HTML structure | Reality, with no layers |
+| 1 | **taken** | **The Box**: cropping, `overflow`, `object-position` | **Framing**: what's left out of the shot |
+| 2 | **edited** | **The Style**: CSS `filter`, color and mood | **Filters and the highlight reel** |
+| 3 | **captioned** | **The Type**: content vs. presentation, typography | **Sensational headlines, clickbait, outrage** |
+| 4 | **ranked** | **The Logic**: a JavaScript sort function | **The algorithm** |
+| 5 | **judged** | **The Data**: JSON, variables, booleans | **Fake popularity / social proof** (likes, bots, badges) |
+| 6 | **targeted** | **The State**: tracking events, conditionals, CSS variables | **Filter bubbles and echo chambers** |
+| 7 | **used to keep you** | **The Timers**: `setInterval`, infinite scroll, animation | **Attention engineering** (endless feeds, notifications, streaks, dark patterns) |
+| ★ | *(peeled back)* | **The Layers**: a design-tool layer stack | **Context**: the thing every layer took away |
+
+There are three sequences in the table, and they rise together:
+
+- **Code:** HTML → CSS → CSS text → JS functions → JS data → JS state → JS
+  timing. This is the order you'd learn the web in.
+- **Manipulation:** what they *show* you (1–3), then what they *choose* for
+  you (4–5), then what they *do to* you (6–7). It goes from the post, to the
+  feed, to the student.
+- **Difficulty and interaction:** solo puzzles first, then a puzzle that
+  needs a classmate (6), then one where the goal flips from engaging with the
+  page to *leaving* it (7).
+
+### The world: one day, one fair
+
+All content comes from one fictional event so every layer reframes **the same
+facts**. The ending can then put "what the feed said" next to "what
+happened."
+
+**The Maple Hollow Fall Fair: what actually happened.** These are the
+"field notes" students see first and last.
+
+- It rained from 8 a.m. until about 1 p.m. Then the sun came out.
+- 412 people came. 31 volunteers ran it.
+- A goat named **Biscuit** slipped out of his pen at 10:15, walked onto the
+  pie table, and ate most of one blueberry pie. Everyone laughed. His owner
+  had him back in five minutes. Nobody was hurt.
+- Mrs. Okafor's apple pie won the pie contest (9 entries).
+- The Ferris wheel was closed for one hour for a routine safety check.
+- Priya, age 9, won the art contest.
+- The fair raised **$3,200 for the library roof**.
+
+That is a pleasant, ordinary day. By stage 7 the feed has turned it into
+*"GOAT DESTROYS PIE CONTEST — FAIR IN CHAOS 😱🔥 48.2K"*.
+
+### The art: one panorama, many crops
+
+All the pictures are one wide inline-SVG illustration of the whole fair:
+gate, rain clouds on the left fading to sun on the right, pie table, Biscuit,
+his pen with a name sign, the crowd laughing, the Ferris wheel with a "Safety
+check — back at 2:00" sign, the art tent, and a big banner reading "LIBRARY
+ROOF FUND — $3,200 RAISED!".
+
+Every "photo" on the site is a crop of that one SVG (a different `viewBox`,
+or one image positioned inside a clipped box). This keeps the page in a single
+file, and it sets up the strongest image of the ending: zoom out to the full
+panorama with every post's crop outlined. *Twelve posts, one day.*
+
+### The fictional app: **Lens**
+
+The feed students build up to is a made-up app called **Lens**. Its logo (an
+eye in a rounded square) puts itself together one piece per stage. Don't
+imitate any real platform's branding. Lens should feel familiar without being
+a copy of any one app.
+
+---
+
+## 2. How the page works (applies to every stage)
+
+### Layers, not pages
+
+Each stage is a **layer** that is added on top of the earlier ones and never
+removed until the ending. In code, every layer is one object:
+
+```js
+const layers = [
+  { id: 'frame',    cssClass: 'L1', enable() {...}, disable() {...}, panel: renderBoxPanel },
+  { id: 'filter',   cssClass: 'L2', ... },
+  // ... through 'hook' (L7)
+];
+```
+
+- CSS for a layer is scoped to its body class (`body.L2 .photo { filter: ... }`),
+  so by stage 5 the body reads `class="L1 L2 L3 L4 L5"`.
+- Any JS behavior (sorting, tracking, timers) starts in `enable()` and is
+  cleaned up in `disable()`.
+- The ending runs `disable()` on each layer in reverse order. **The reveal
+  really does remove the code**, and students watch it happen. The lesson is
+  in the architecture.
+
+### "Under the Hood": the code panel
+
+A drawer on the right (a bottom sheet on phones) called **Under the Hood**
+gains one tab per stage. Each tab shows code **a different way**. That
+covers "each step shows code and design differently," and it means no
+puzzle needs real browser DevTools, which matters on iPads and locked-down
+Chromebooks.
+
+| Stage | Tab | How the code is shown |
+|---|---|---|
+| 0 | Markup | The page's HTML with tags drawn in (`<h1>…</h1>`), comments and `alt` text visible |
+| 1 | Box | A visual box-model and crop overlay you can drag, plus the CSS it writes |
+| 2 | Style | A property list with sliders, like DevTools' Styles pane, that edits live CSS |
+| 3 | Type | A split view: source text on the left, rendered text on the right, and checkboxes to toggle CSS rules |
+| 4 | Logic | A readable JS function with editable numbers and a dropdown |
+| 5 | Data | A collapsible JSON tree of each post's real data |
+| 6 | State | The live `you = {...}` profile object and a streaming console log of tracked events |
+| 7 | Timers | A "task manager" of everything running on its own, each with a Stop button |
+| ★ | Layers | A 3D, design-tool-style stack of all seven layers |
+
+All shown code is **generated from the live values**, so it's always true.
+Syntax highlighting is a small hand-written tokenizer (no libraries). Each
+tab starts with a comment like `// layer 3 of 7`. It's a quiet hint that the
+layers add up to something.
+
+### The tray: letters and notes
+
+A tray along the bottom collects two things per stage:
+
+1. **A letter tile.** The seven letters are the final answer.
+2. **A "note found in the source":** one plain fact from the field notes
+   (e.g. *"It rained until 1 p.m."*), shown after the solve as a bit of
+   leftover debug text. Students won't think much of them at the time. At
+   the end, these notes turn out to be the truth each layer was hiding, and
+   together they rebuild the field notes.
+
+### The motif that repeats: solving doesn't switch it off
+
+After every solve, the true version shows for a moment (the full photo, the
+unfiltered colors, the real order). **Then the site quietly puts the layer
+back and adds the next one.** Knowing a trick doesn't undo it. Students feel
+this five or six times before the ending names it, and the ending is the
+first time anything is actually taken away.
+
+### Checking answers, saving progress, and hints
+
+- Answers are case-insensitive and ignore spaces. They're checked against
+  SHA-256 hashes (`crypto.subtle`), so **View Source won't give them away**
+  (though poking around the source is a skill we're celebrating, and a few
+  stages reward it on purpose).
+- Progress (stage, letters, notes, the student's chosen nickname, the time
+  spent) is saved in `localStorage`, so a refresh or a second session picks
+  up where they left off. A "Start over" link sits in the footer.
+- **Three hints per stage**: a nudge, a pointer, and nearly the answer. Each
+  one unlocks after 2, 4 and 6 minutes on the stage, or straight away for a
+  "hint token" (3 tokens per student, to make hints a choice).
+- **Teacher mode:** `?teacher` plus a passphrase (checked by hash) shows a
+  stage-jump menu, so a facilitator can demo a stage, help a stuck group, or
+  skip to the reveal at the end of class.
+
+### Privacy (part of the lesson)
+
+The page sends **nothing** anywhere. No analytics, no server, no fonts loaded
+after stage 0. The tracking in stage 6 is real but stays in the browser, and
+the ending says so: *"Everything this page learned about you stayed on your
+device. Real apps send it to their servers."* The nickname is only stored
+locally. Ask students for a nickname, not their full name.
+
+---
+
+## 3. The stages
+
+Each stage below covers: **what it looks like**, **the code concept**, **the
+puzzle and its answer**, **what it adds to the reveal**, and **the transition
+into the next stage**.
+
+---
+
+### Stage 0 — Markup (the starting point)
+
+**Looks like:** 1995. No CSS at all: Times New Roman, blue underlined links,
+a broken image icon. Title: *Life Academy Web Lab*. Below it are the
+**field notes** of the fair, as a plain `<h1>`, `<p>` and `<ul>`. It is
+honest and a little boring, and that's the point. Under the notes is a
+short intro: *"Seven locks. Each one teaches a trick web designers use.
+Solve them all."* The intro mentions a web lab and nothing else.
+
+**Code concept:** HTML is the content and structure, and everything later is
+a layer on top. The `alt` attribute, comments and semantic tags.
+
+**Puzzle:** "This page is missing a picture. Ask the page what *should* be
+there." The image is broken on purpose, and browsers show `alt` text in its
+place: *"photo: the whole fair, from the gate to the library banner.
+Key: LOOK."* Turning on the **Markup** tab shows the tags and the same key in
+an HTML comment, `<!-- key: LOOK -->`, for students who miss the alt text.
+Stage 0 is the tutorial: it teaches that a page holds more than it shows.
+
+- **Answer:** `LOOK`
+- **Before starting:** the page asks for a nickname ("What should we call
+  you?"). Stages 6 and 7 use it.
+- **No letter tile.** This is the prologue, and the seven letters come from
+  the seven layers.
+
+**Role in the reveal:** this is where the ending comes back to. The final
+screen is this exact page.
+
+**Transition → 1:** the first stylesheet "loads": a soft background fades
+in, the font changes, and the field notes **slide down and out of view**
+(they're still in the page, pushed far below), so all that's left is one
+centered photo frame. The broken image becomes a picture. From here on, the
+truth is technically still there; you just can't see it.
+
+---
+
+### Stage 1 — The Box (framing)
+
+**Looks like:** a clean, minimal gallery. One square photo card with rounded
+corners and a shadow. The crop is tight on Biscuit standing on a ruined pie
+table, mouth full of blueberry. Caption: *"Total chaos at the fair today 😱"*.
+
+**Code concept:** the box model and cropping: `width`/`height`,
+`overflow: hidden`, `object-position`, `transform: scale()`, plus composition
+as a design choice. The **Box** tab shows the frame as a draggable rectangle
+over a dimmed "ghost" of the full image, and live CSS:
+
+```css
+.photo     { width: 320px; height: 320px; overflow: hidden; }
+.photo img { transform: scale(3.2); object-position: 71% 44%; }
+```
+
+**Puzzle:** "The caption says chaos. The frame says chaos. What's the
+goat's name?" There's no name in the crop. Students zoom out (lower `scale`,
+or drag the frame) and find more of the scene: laughing people around the
+table, the owner jogging over, and at the far edge, his pen with a painted
+sign: **BISCUIT**.
+
+- **Answer:** `BISCUIT`
+- **Letter:** **T**
+- **Note found:** *"Biscuit was back in his pen in five minutes."*
+
+**Role in the reveal:** **Framing.** *"Every photo is a choice of what to
+leave out. A post shows one square of a whole day, and what's outside the
+square doesn't exist for whoever's looking."*
+
+**Transition → 2:** after the solve, the frame **snaps back to the tight
+crop by itself** (the first time the motif shows up). Then the colors start
+to *warm up*. Over about 3 seconds saturation creeps up, a golden tint
+spreads, and the background turns into a peachy gradient.
+
+---
+
+### Stage 2 — The Style (filters and the highlight reel)
+
+**Looks like:** a "lifestyle" aesthetic, everything glowing: warm gradient
+background, rounded font, soft vignette, glossy shadows. A second photo
+appears: the fair gate in the morning, which looks golden-hour beautiful.
+Caption: *"Perfect day at the fair ☀️✨ #blessed"*. That's the rainy
+morning, filtered.
+
+**Code concept:** the CSS `filter` property, how color and light set mood,
+and **identity values** (the number for each filter that changes nothing).
+The **Style** tab:
+
+```css
+.photo img {
+  filter: brightness(1.35) saturate(2.2) contrast(1.15)
+          hue-rotate(-28deg) sepia(0.3) blur(1.5px);
+}
+```
+
+Each value has a slider, and the CSS text updates as it moves.
+
+**Puzzle:** "There's a sign by the gate, but it's too 'pretty' to read.
+Every filter has a number that does nothing. Find them all." Students set
+each filter back to neutral: `brightness(1)`, `saturate(1)`,
+`contrast(1)`, `hue-rotate(0deg)`, `sepia(0)`, `blur(0)`. Only with
+**all six** neutral do the grey sky and puddles show, along with a dripping
+chalkboard sign: *"Forecast: RAIN until 1pm. Bring boots!"*. The blur and
+brightness wash it out until then, and partial fixes only make it a little
+clearer, which nudges students on.
+
+- **Answer:** `RAIN`
+- **Letter:** **E**
+- **Note found:** *"It rained from 8 a.m. until about 1 p.m."*
+
+**Role in the reveal:** **Filters and the highlight reel.** *"Perfect isn't
+real. That golden morning was a rainy one. People post their best moments,
+edited, and we compare them with our whole ordinary day."*
+
+**Transition → 3:** the filter **goes back on**. Then the caption under the
+photo starts to *retype itself*, one letter at a time, getting louder as it
+goes: *"Total chaos at the fair today"* → *"Chaos at the fair!"* →
+*"GOAT DESTROYS PIE CONTEST"*. The font gets heavier and bigger with each
+rewrite until it fills the card.
+
+---
+
+### Stage 3 — The Type (sensational headlines and outrage)
+
+**Looks like:** a tabloid. A red **BREAKING** banner, a giant condensed
+bold headline in ALL CAPS, yellow highlighter on key words, emoji, `!!!`,
+and a scrolling news ticker along the top: *"PIE CONTEST IN RUINS • FAIR
+OFFICIALS SILENT • IS YOUR TOWN NEXT? •"*.
+
+**Code concept:** **content vs. presentation.** What's in the HTML isn't
+always what you see. Typography sets the tone (size, weight, color, case).
+And word choice is code: headlines come from a template. The **Type** tab
+has two views:
+
+- **Split view:** the source text on the left, the rendered text on the
+  right, and a list of active CSS rules with checkboxes, like DevTools:
+  `☑ text-transform: uppercase`, `☑ font-weight: 900`, `☑ color: #e00`.
+- **Word dial:** the headline template
+  `` `${shock} ${subject} ${verb} ${object}${punct}` `` with one slider
+  from *Calm* to *Outrage* that swaps words from a table:
+  *visited → stormed → DESTROYS*, *a pie → the pies → PIE CONTEST*,
+  *. → ! → !!! 😱*. Students see that the facts don't change, only the words.
+
+**Puzzle:** "Things aren't always as loud as they look. Read what's actually
+written." The headline and ticker are uppercased by CSS. In the **source**,
+the text uses ordinary case except for a few odd capital letters. Unticking
+`text-transform: uppercase` (or reading the left side of the split view)
+shows them, and in order they spell **LAUGHED**. For example: *"goat
+Loose At fair, crowd Unsure. pie table Ground zero..."* (exact wording to be
+written during the build so the capitals read naturally in order).
+
+- **Answer:** `LAUGHED`
+- **Letter:** **X**
+- **Note found:** *"Nobody was hurt. People laughed about it all afternoon."*
+- **Bonus:** turn the word dial all the way to Calm and the headline reads
+  *"A goat visited the pie table."*
+
+**Role in the reveal:** **Sensationalism and clickbait.** *"The same fact,
+said louder, gets more clicks, and anger spreads fastest of all. The words
+are a choice, and someone wrote the code that makes it."*
+
+**Transition → 4:** CSS goes back to uppercase. The single big tabloid card
+**shrinks and slides up**, and more cards come in under it one after another.
+A header bar appears with the first full **Lens** logo. The headline is now
+just one post in a feed: the feed is born.
+
+---
+
+### Stage 4 — The Logic (the algorithm)
+
+**Looks like:** the first real social feed. A narrow center column, post
+cards with avatars, usernames, timestamps and action icons, and a top bar.
+Every card keeps all three earlier layers (cropped, filtered, loud
+headline), so the layers are building on each other. Seven posts from the
+fair, with the goat post on top and the library post at the very bottom.
+
+**Code concept:** layout and components (one card template filled from data,
+with flexbox), plus **functions and sorting**. The **Logic** tab shows:
+
+```js
+function score(post) {
+  return post.shares   * 3
+       + post.comments * 2
+       + post.angry    * 5   // 😡 reactions count the most
+       - post.ageHours * 1;
+}
+
+let sortBy = "engagement";   // "engagement" | "newest" | "oldest"
+feed.sort((a, b) => score(b) - score(a));
+```
+
+Students can change each weight and the `sortBy` dropdown. The feed
+re-sorts with a smooth FLIP animation, so they can see posts moving.
+
+**Puzzle:** "The algorithm decides what comes first. What *happened* first?"
+Sorted **oldest first**, the first letters of the seven posts spell
+**LIBRARY**:
+
+| Time | Post |
+|---|---|
+| 8:02 | **L**ine's already at the gate, in the rain! |
+| 8:40 | **I**t's pouring, bring boots 🌧️ |
+| 10:15 | **B**ISCUIT IS LOOSE 🐐 |
+| 10:21 | **R**eturned! Biscuit's back in his pen |
+| 1:05 | **A**nd just like that, the sun's out |
+| 2:30 | **R**esults: Mrs. Okafor's apple pie wins 🥧 |
+| 4:45 | **Y**ou did it, Maple Hollow: $3,200 for the library roof 📚 |
+
+Engagement order scrambles them, so the library post (zero 😡) sinks to the
+bottom. A sharp student might set the `angry` weight to 0 and watch the feed
+calm down: worth pointing out in discussion.
+
+- **Answer:** `LIBRARY`
+- **Letter:** **T**
+- **Note found:** *"The fair raised $3,200 for the library roof."*
+
+**Role in the reveal:** **The algorithm.** *"Nobody sees everything. A
+formula, not a person and not the truth, decides what comes first, and it
+rewards whatever makes people react, especially anger."*
+
+**Transition → 5:** the feed **re-sorts by engagement** on its own (the
+motif). Then little counters appear under every post and start ticking up,
+slowly at first and then like a slot machine: ❤️ 12 → 340 → 4,100 →
+**48.2K**. Verified checkmarks pop in. A 🔥 *Trending* tag lands on the goat.
+
+---
+
+### Stage 5 — The Data (fake popularity and social proof)
+
+**Looks like:** numbers everywhere. Big like counts, follower counts, blue
+checkmarks, stacked avatar faces with *"Liked by jess_k and 48,211 others"*,
+*"#1 in Maple Hollow"*, *"🔥 Trending"*. Numbers get the visual weight that
+content used to have.
+
+**Code concept:** data and variables. A post is just an object, and the
+interface draws whatever the data says. A **checkmark is just a `true`**.
+The **Data** tab shows a collapsible JSON tree for each post:
+
+```json
+{
+  "id": 3,
+  "author": "fairgoat_official",
+  "accountCreated": "today",
+  "verified": true,
+  "likesShown": 48212,
+  "likedBy": ["bot_8812", "bot_8813", "priya.draws", "bot_8814", "..."],
+  "boost": { "purchasedLikes": 48200, "price": "$19.99" }
+}
+```
+
+Flipping `verified` to `false` makes the checkmark disappear, and the panel
+shows the one CSS class that drew it.
+
+**Puzzle:** "48,212 people liked this. Really? How many *real* people liked
+the trending post?" There are two ways to get there, both through the data:
+subtract `purchasedLikes` from `likesShown`, or open `likedBy`, page through
+it, and count the accounts that aren't `bot_` (the panel has a filter box
+that makes this practical).
+
+- **Answer:** `12`
+- **Letter:** **C**
+- **Note found:** *"412 people came to the fair."* (More people came to the
+  fair than "liked" the goat for real, by a long way.)
+
+**Role in the reveal:** **Fake popularity.** *"Numbers feel like votes, so we
+follow the crowd. But the crowd can be bought, the voters can be bots, and a
+badge is one line of data."*
+
+**Transition → 6:** a friendly modal slides up: *"Make Lens yours, {name}!
+Pick what you like:"* with chips (🐐 Animals, 🎡 Rides, 🥧 Food, 📚 Town news).
+Before the student can pick, the chips **select themselves**, and the modal
+says: *"Actually, we already know. 😉"* The page has been quietly logging
+which posts the student hovered over and for how long since stage 4, and it
+now shows that log.
+
+---
+
+### Stage 6 — The State (filter bubbles and echo chambers)
+
+**Looks like:** a feed made for one person. *"Good afternoon, {name}"* at the
+top. The **whole theme color** changes to match their top interest (goat
+green, Ferris-wheel blue, pie orange). The feed now **only** shows that topic,
+each post more extreme than the last:
+
+- **Animals bubble:** *"Biscuit is a menace."* *"Ban goats from fairs?"*
+- **Rides bubble:** *"Ferris wheel SHUT DOWN. What are they hiding?"*
+  (it was a routine one-hour check)
+- **Food bubble:** *"Pie contest RIGGED?"*
+
+**Code concept:** **state**, **events**, **conditionals**, and theming with
+**CSS custom properties**. The **State** tab has:
+
+- the profile, updated live:
+  `const you = { name: "Maya", seconds: { animals: 41.2, rides: 3.1, food: 6.8, town: 0.4 } }`
+- the rules that use it:
+  ```js
+  const top = topInterest(you);                 // "animals"
+  feed = posts.filter(p => p.topic === top);
+  root.style.setProperty('--accent', topicColor[top]);
+  ```
+- a **console log** that keeps scrolling while the student moves around:
+  `hover post#3 · 1.8s`, `scroll · paused on post#5`, `tap ❤️ post#3`.
+  It's unsettling on purpose.
+
+**Puzzle (the cooperative one):** each bubble's pinned post holds one piece
+of the answer, labeled *1/3*, *2/3* or *3/3*. Animals shows **TO**, Rides
+shows **GE**, Food shows **THER**. *"This is your feed. Your friend's feed
+is different. You'll need both."*
+
+- **In class:** students compare screens with classmates in other bubbles.
+  The puzzle is solved by talking to someone who sees a different feed.
+- **Working alone:** edit `you.seconds` in the State tab (or click
+  *"Pretend to be someone else"*) to switch bubbles and see each piece.
+- **Making sure the class gets a mix:** the bubble comes from real hover
+  time, but students who lingered about equally get a bubble chosen from a
+  hash of their nickname, so a room of students won't all land in the goat
+  bubble. Teacher mode can also give each student a set bubble.
+
+- **Answer:** `TOGETHER`
+- **Letter:** **O**
+- **Note found:** *"The Ferris wheel closed for one hour for a routine
+  safety check."*
+
+**Role in the reveal:** **Filter bubbles.** *"Your feed isn't the world.
+It's a mirror. Two people can scroll the same app and live in different
+realities. The way out is talking to someone whose feed doesn't look like
+yours."* (The puzzle made them do that.)
+
+**Transition → 7:** a soft *ding*. A red badge 🔴 **1** appears on a bell
+icon. Then **3**. A 🔥 *"Day 1 streak!"* flame appears in the header. The feed
+starts loading more posts at the bottom by itself, with a shimmer
+placeholder.
+
+---
+
+### Stage 7 — The Timers (attention engineering)
+
+**Looks like:** everything at once. Notifications slide in every few seconds
+(*"Jordan reacted to your post!"*; the student has no posts),
+red badges keep rising, a looping "video" of Biscuit autoplays (an animated
+SVG), the streak counter ticks up, *"14 people are viewing this"*, and the
+feed **never ends**: it reshuffles and recycles posts with new headlines
+forever. A pull-to-refresh with a slot-machine spin gives a random reward.
+
+**Code concept:** **time and motion.** Timers (`setInterval`,
+`setTimeout`), `IntersectionObserver` for infinite scroll, CSS `@keyframes`
+animation, and how interaction design (where buttons go, how big they are,
+what color) steers behavior. The **Timers** tab is a task manager listing
+everything running without the student doing anything:
+
+```
+● loadMoreWhenNearBottom()   IntersectionObserver   [Stop]
+● sendNotification()         every 9s               [Stop]
+● autoplayVideo()            on scroll              [Stop]
+● growStreak()               every 15s              [Stop]
+● fakeViewerCount()          every 4s               [Stop]
+```
+
+**Puzzle (the goal flips):** "Every feed has a bottom. This one hid it.
+**Find the end.**" There's nothing to type. The student has to switch off
+every hook, and each Stop button fights back with a real **dark pattern**:
+
+- **Confirmshaming:** *"Leave? Your friends will miss you 😢"*. A huge bright
+  **Stay ❤️** button, and a tiny grey *"no, I don't care about my friends"*
+  link.
+- **Roach motel:** the notification switch offers *"Pause for 1 hour"*
+  (which turns itself back on after 20 seconds). The real *Turn off* is two
+  menus deep.
+- **Loss aversion:** stopping the streak warns *"You'll lose your 🔥 4-day
+  streak forever!"* (It's been about four minutes.)
+- **Moving target:** the Stop button for infinite scroll is low-contrast,
+  and a newly loaded post pushes it down the page every time.
+
+When all five are stopped, the page goes **quiet**. The infinite feed runs
+out, and below the last post is something students haven't seen all game:
+*"You're all caught up."* Under that sits the last letter.
+
+- **Answer:** (the action: reach the bottom)
+- **Letter:** **N**
+- **Note found:** *"Priya, age 9, won the art contest. Mrs. Okafor's apple
+  pie won the pie contest."*
+- It also shows, flatly: **"Time on Lens: 41 min 12 s."** (The real total
+  time spent on the puzzle.)
+
+**Role in the reveal:** **Attention engineering.** *"Endless feeds,
+notifications, streaks and random rewards are made, on purpose, to make
+leaving hard. The hardest thing to find in an app is the end."*
+
+**Transition → finale:** after *You're all caught up* there's a pause of a
+few seconds and nothing moves for the first time since stage 4. Then the
+tray rises up into the middle of the screen with its seven letters.
+
+---
+
+## 4. The finale: peeling back the layers
+
+### The final lock: CONTEXT
+
+The letters come in stage order: **T E X T C O N**. It reads almost like
+"text con," which is a nice accident. The prompt:
+
+> *"Seven letters. Something scrambled them, the way it scrambled
+> everything else. Put them in order: it's what every layer took away."*
+
+Students drag the tiles (or type) to make **CONTEXT**. The way they solve it
+(putting things back in the right order) is a callback to stage 4.
+
+### The reveal, beat by beat
+
+1. **Freeze.** Every timer stops. Sound off. The screen dims.
+2. **Explode the stack.** The interface tilts into 3D (CSS `perspective` and
+   `rotateX`) and **comes apart into seven translucent layers**, like the
+   layers panel in a design app. Each is labeled with its code name: *Box,
+   Style, Type, Logic, Data, State, Timers.* The plain field notes from
+   stage 0 sit at the bottom, still there under everything.
+3. **Flip the labels.** One at a time each label flips like a card, and the
+   back gives its real name, a one-line explanation, and the note found at
+   that stage:
+
+   | Code name | What it really was | What it hid |
+   |---|---|---|
+   | Box | **Framing** | Biscuit was back in five minutes |
+   | Style | **Filters and the highlight reel** | It rained until 1 p.m. |
+   | Type | **Sensational headlines** | Nobody was hurt |
+   | Logic | **The algorithm** | $3,200 for the library roof |
+   | Data | **Fake popularity** | 12 real likes; 412 real people |
+   | State | **Filter bubbles** | The Ferris wheel check was routine |
+   | Timers | **Attention engineering** | Priya's win and the pie winner, buried under an endless feed |
+
+4. **Peel them off.** The student turns the layers off **one by one, from
+   the top** (Timers first, Box last), each time with a real `disable()`.
+   The feed calms down, loses its numbers, un-sorts, quiets down, warms back
+   to normal color, and widens its crop... until the page is **exactly the
+   stage 0 field notes**, with Times New Roman and blue links.
+   Caption: *"This is what actually happened. It's less exciting. It's
+   true."*
+5. **The panorama.** The broken image from stage 0 finally loads: the
+   **whole fair**, with outlines showing where every post in the game was
+   cropped from. *"Twelve posts. One day. Every one was a real photo."*
+6. **The name.** The Lens logo comes back by itself: *"Every app is a lens.
+   Now you know what a lens is made of."*
+7. **Close.** A short message (*"This page learned things about you and
+   sent none of them anywhere. Real apps send them to their servers."*),
+   time spent, and a **"Talk about it"** card with discussion questions
+   (section 6). Buttons: *Replay with a different bubble*, *See the code*.
+
+Before peeling, students can also switch any **single** layer back on, to
+see one manipulation by itself on the honest page. That's useful for class
+discussion ("Just the algorithm, nothing else. Is that bad?").
+
+---
+
+## 5. Transitions: rules and order
+
+### Rules every transition follows
+
+1. **Additive.** A transition adds a layer and never takes one away until the
+   finale. The page keeps getting more "app-like."
+2. **The truth flashes, then the layer comes back.** Every solve shows the
+   real version for 1–2 seconds before the layer goes back on (motif in §2).
+3. **The next layer starts out of the last one.** Each transition grows out
+   of what's on screen: the crop warms into a filter, the caption rewrites
+   into a headline, the headline card multiplies into a feed, the feed gets
+   numbers, the numbers lead to the personalization modal, the
+   personalization triggers notifications. No hard cuts.
+4. **Calm to loud.** Motion and sound start at zero (stage 0 has no
+   animation at all) and peak at stage 7. That makes the stillness in the
+   finale hit harder.
+5. **About 3–5 seconds**, skippable, and `prefers-reduced-motion` gets
+   cross-fades instead.
+
+### What carries forward
+
+| Stage | Layers on screen | New in look and feel | Motion / sound |
+|---|---|---|---|
+| 0 | none | none | none |
+| 1 | Box | First CSS: card, shadow, centered | fade |
+| 2 | Box, Style | Warm gradient, glow, rounded font | slow color drift |
+| 3 | + Type | Tabloid type, BREAKING banner, ticker | ticker scroll, retype effect |
+| 4 | + Logic | Feed layout, avatars, header, Lens logo | FLIP re-sort |
+| 5 | + Data | Counters, badges, avatar stacks | counters rolling up |
+| 6 | + State | Personal theme color, greeting, filtered feed | live log, theme shift |
+| 7 | + Timers | Notifications, badges, autoplay, endless feed | everything; optional *ding* |
+| ★ | all → none | 3D layer stack → plain HTML | everything stops; one card flip at a time |
+
+### Why this order and not another
+
+- **Framing goes first** because it's the most concrete (you can see the
+  crop) and the easiest puzzle, so it builds confidence and teaches students
+  to look past what they're shown.
+- **Filters come before headlines** because both change *how* something
+  looks before anything changes *what* is shown, and image comes before text
+  in the life of a post.
+- **The algorithm is in the middle (4)** because the feed has to exist
+  first: framing, filters and headlines describe one post, and the algorithm
+  is the first thing that works on many posts. It's also the hinge where the
+  code moves from CSS to JavaScript.
+- **Likes come after ranking** because the numbers feed the ranking: the
+  student has just seen `score()`, so faked likes now mean more.
+- **The bubble (6) needs data from earlier stages.** Tracking starts in
+  stage 4, so by stage 6 the page really knows something. Putting the bubble
+  earlier would mean faking it.
+- **Attention is last** because it's what everything else is for: framing,
+  filters, outrage, ranking, popularity and personalization all exist to
+  keep you scrolling. It's also the only stage where winning means *leaving*,
+  which is the most important habit for students to take home.
+
+---
+
+## 6. Running it with the co-op
+
+- **Time:** about 45–70 minutes for the puzzle, plus 15–20 for discussion.
+  Fast solvers will be done in 30. Stage 6 needs a moment where the room
+  talks to each other.
+- **Groups:** pairs at one device work best (one drives, one reads the
+  code). Make sure **at least two different bubbles** exist in the room for
+  stage 6. Teacher mode can assign them.
+- **Devices:** works on Chromebooks, iPads, laptops and phones. No DevTools
+  needed. Desktop browsers get a small bonus: a `console.log` greeting
+  (*"Hello, inspector 👋"*) and one extra secret in the real DevTools Elements
+  panel for students who look.
+- **Don't spoil the theme.** Introduce it as a "web design lab." Let the
+  ending land.
+- **Ages:** the hints let younger students finish. Older students can go
+  further with the bonus challenges (set the algorithm's `angry` weight to
+  0; find the hidden DevTools secret; work out what the `score()` function
+  rewards).
+
+### Discussion questions (shown on the final screen and printable)
+
+1. Which layer surprised you most? Which one have you noticed in a real app?
+2. Is cropping or filtering a photo *lying*? Where's the line?
+3. Write the most boring true headline for the goat story, then the most
+   clickable one. Which would you click?
+4. If you designed the `score()` function, what would you reward?
+5. Who in your life sees a different feed than you? How could you find out
+   what they're seeing?
+6. Stage 7 made leaving hard. What tricks do apps you use rely on? What
+   helps you stop?
+7. Is a social app with *none* of these layers possible? Would people use it?
+
+### Follow-on activity
+
+"**Add a layer.**" Using the code they saw in the Under the Hood panel,
+students design (on paper, or in code for older ones) an eighth layer that
+manipulates the field notes, or an "honest layer" that *helps* people see
+context. Then they present it.
+
+---
+
+## 7. Build plan
+
+### Files
+
+```
+lifeacademy/
+  index.html          ← the whole puzzle: HTML, CSS, JS and the panorama SVG inline
+  icon.svg            ← Lens-style favicon
+_source/lifeacademy/
+  PLAN.md             ← this file (not published)
+  answers.md          ← printable facilitator answer key (not published)
+```
+
+It's a standalone page with no Jekyll layout (like `fretspeak/`), so the site
+header and footer don't break the illusion. Add
+`<meta name="robots" content="noindex">` so search results don't show the
+ending. It can be linked from the home page's Apps section later.
+
+### Inside index.html
+
+1. **Markup:** the stage 0 field notes as real semantic HTML (always in the
+   document), the stage shell (photo card, feed container, tray, Under the
+   Hood drawer), and the panorama `<svg>` in a `<template>`, cloned for each
+   crop.
+2. **CSS:** base styles (none at stage 0!), then one block per layer scoped
+   to `body.L1`…`body.L7`, then the finale's 3D stack. Colors as custom
+   properties so stage 6 can re-theme everything with one variable.
+3. **JS:**
+   - `data`: the posts (text, time, topic, crop box, counts, likedBy, bubble
+     fragment), the field notes, the notes found per stage, and the hints.
+   - `layers[]`: `enable`/`disable`/`panel` for each layer.
+   - `engine`: stage state machine, answer checks (SHA-256), save/load in
+     `localStorage`, hint timers, teacher mode.
+   - `panel`: the Under the Hood drawer and its tabs, with the small
+     syntax highlighter.
+   - `tracker` (starts at stage 4): hover and scroll timing in memory only.
+   - `finale`: the CONTEXT tile puzzle, the layer stack, peel-back, and the
+     panorama.
+
+### Milestones
+
+1. **Skeleton:** stage engine, layer system, tray, drawer, save/load,
+   teacher mode. Every stage as a placeholder with a "solve" button.
+2. **Art:** the panorama SVG and the crop definitions for every post.
+3. **Stages 0–3** (the CSS stages), each with its panel and puzzle.
+4. **Stages 4–7** (the JS stages), each with its panel and puzzle.
+5. **Finale:** CONTEXT lock, 3D layer stack, peel-back, panorama.
+6. **Polish:** transitions, reduced motion, keyboard and screen-reader
+   pass, phone layout, hint text.
+7. **Testing:** an automated Playwright run-through of every stage on desktop
+   and phone sizes, then a **real playtest with 2–3 students** of different
+   ages before the co-op session. Adjust hint timings from what you see.
+
+### Accessibility
+
+Everything works by keyboard, sliders have labels and live values, and the
+Under the Hood drawer is a proper dialog with focus handling. The two places
+that *deliberately* break good design (the low-contrast Stop button and the
+confirmshaming link in stage 7) are named as bad design in the finale, and
+a screen reader still announces them correctly, so the puzzle stays fair.
+With `prefers-reduced-motion`, motion is replaced by cross-fades, but the
+stage 7 notifications still arrive (as quiet badges).
+
+---
+
+## 8. Answer key (facilitator only)
+
+| Stage | Answer | Letter | Note found |
+|---|---|---|---|
+| 0 | LOOK | none | none |
+| 1 | BISCUIT | T | Biscuit back in 5 minutes |
+| 2 | RAIN | E | Rained until 1 p.m. |
+| 3 | LAUGHED | X | Nobody was hurt |
+| 4 | LIBRARY | T | $3,200 for the library roof |
+| 5 | 12 | C | 412 people came |
+| 6 | TOGETHER | O | Ferris wheel: routine one-hour check |
+| 7 | *(stop all five hooks)* | N | Priya and Mrs. Okafor won |
+| ★ | CONTEXT | none | The whole panorama |
+
+## 9. Open questions
+
+- **Students' ages.** The plan assumes about 10–15. For younger groups,
+  stage 3's capitals and stage 5's counting can be simplified; for older
+  ones, the bonus challenges can become required.
+- **Devices** the co-op will use (decides how much to rely on the phone
+  bottom-sheet layout).
+- **One session or several?** Progress saving works either way.
+- **The fair and the goat:** happy with this world, or should it be built
+  around something closer to the co-op (a co-op field day, a play)?
+- **The app's name:** "Lens" or something else.
+- **Sound:** on by default in stage 7, or off with an opt-in?
