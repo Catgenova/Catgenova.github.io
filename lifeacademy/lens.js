@@ -403,7 +403,6 @@
     if (S.stage >= 5) b.append(h('<div class="banner trend">🔥 Trending at Life Academy: #GagaGate</div>'));
     if (S.stage === 6) {
       b.prepend(h('<div class="banner hello">Your Life Academy today ✨</div>'));
-      b.append(h('<button type="button" class="banner peek" data-peek="1">👀 See what your friends are seeing</button>'));
     }
     if (S.stage === 7) {
       b.append(h('<div class="banner talk">People are talking about you right now.</div>'));
@@ -534,7 +533,7 @@
     r.active += dt;
     const top = 58, vh = innerHeight, cy = top + (vh - top) / 2;
     const vis = []; let ctr = null, best = 1e9;
-    const blocked = !$('#goalcard').hidden || !$('#groups').hidden || $('#modal-root').children.length > 0;
+    const blocked = !$('#goalcard').hidden || $('#modal-root').children.length > 0;
     if (!threadOpen) {
       nodes.forEach((n, id) => {
         if (!n.isConnected) return;
@@ -1136,25 +1135,6 @@
     $('#searchbox').blur();
   }
 
-  /* Stage 6: Lens offers a peek at friends' feeds. All three side by side, for the whole room at once. */
-  const FRIEND_FEEDS = ['june', 'french', 'sam'];
-  function toggleFriendFeeds() {
-    if (S.stage !== 6) return;
-    const g = $('#groups');
-    if (!g.hidden) { g.hidden = true; return; }
-    S.peeked = (S.peeked || 0) + 1;
-    const cols = FRIEND_FEEDS.map(k => {
-      const f = L.otherFeeds[k];
-      const posts = f.posts.map(([who, text, pic]) => `<div class="g-post">${L.avatar(who, 'sm')}<div style="flex:1;min-width:0"><b>${esc(L.people[who].name)}</b><div class="t">${esc(text)}</div>${pic === 'photo' ? `<div class="mini-photo">${L.sceneSVG('full')}</div>` : pic ? L.cardHTML(pic) : ''}</div></div>`).join('');
-      return `<div class="g-feed"><div class="g-head">${L.avatar(f.who)}<span>${esc(f.label)}</span></div>${posts}</div>`;
-    }).join('');
-    g.innerHTML = `<div class="ff"><div class="ff-top"><b>👀 What your friends are seeing right now</b><button type="button" class="ff-x" aria-label="Close">×</button></div>
-      <div class="ff-q">What's Life Academy talking about today?</div>
-      <div class="ff-cols">${cols}</div></div>`;
-    g.hidden = false;
-    save();
-  }
-
   /* ---------------- stage 7: the hooks ---------------- */
   let hookTimers = [], observer = null;
   function startHooks() {
@@ -1275,7 +1255,6 @@
   feedEl.addEventListener('mouseover', e => { if (touchMode) return; const n = e.target.closest('.item'); hoverId = n ? n.dataset.id : null; });
   // Phones and tablets have no hover: tapping a post is how you reveal its meter.
   feedEl.addEventListener('pointerdown', e => { touchMode = e.pointerType !== 'mouse'; if (touchMode) { const n = e.target.closest('.item'); hoverId = n ? n.dataset.id : null; } });
-  $('#groups').addEventListener('click', e => { if (e.target.closest('.ff-x') || e.target === $('#groups')) toggleFriendFeeds(); });
 
   /* Touch screens have no keyboard, so the presenter keys live in a small menu in the top bar. */
   const touchOnly = matchMedia('(hover: none), (pointer: coarse)');
@@ -1289,7 +1268,6 @@
     const d = h(`<div class="dropdown presenter-menu">
       <button type="button" data-p="next">⏭ Next stage</button>
       <button type="button" data-p="back">⏮ Back a stage</button>
-      ${S.stage === 6 ? '<button type="button" data-p="group">👀 Friends\' feeds</button>' : ''}
       <button type="button" data-p="skip">⏩ Skip animation</button>
       <button type="button" data-p="mute">${S.muted ? '🔊 Sound on' : '🔇 Sound off'}</button>
       <button type="button" data-p="reset">↺ Start over</button></div>`);
@@ -1297,7 +1275,7 @@
     d.addEventListener('click', ev => {
       const b = ev.target.closest('[data-p]'); if (!b) return;
       d.remove();
-      ({ next: advance, back, group: toggleFriendFeeds, skip: () => { skipping = true; $('#goalcard').hidden = true; },
+      ({ next: advance, back, skip: () => { skipping = true; $('#goalcard').hidden = true; },
         mute: () => { S.muted = !S.muted; save(); },
         reset: () => { if (window.confirm('Start over? This clears everything Lens recorded.')) { localStorage.removeItem(KEY); localStorage.removeItem(KEY + '-snaps'); location.reload(); } } })[b.dataset.p]();
     });
@@ -1308,7 +1286,6 @@
     const t = e.target;
     if (t.closest('#login-btn')) return showBriefing();
     if (t.closest('#open-btn')) { if (!busy) { busy = true; try { await startLens(); } finally { busy = false; } } return; }
-    if (t.closest('[data-peek]')) return toggleFriendFeeds();
     const moreC = t.closest('[data-more]');
     if (moreC) {
       const id = moreC.dataset.more;
@@ -1405,7 +1382,6 @@
     if (k === 'm') { S.muted = !S.muted; toast(S.muted ? 'Sound off' : 'Sound on', S.muted ? '🔇' : '🔊', 1500); save(); return; }
     if (k === 'n') { skipping = true; $('#goalcard').hidden = true; return; }
     if (k === 'c') { toggleCode(); return; }
-    if (k === 'g') { toggleFriendFeeds(); return; }
     if (k === 'escape') { closeModal(); $('#code').hidden = true; $('.dropdown') && $('.dropdown').remove(); return; }
     if (S.stage === 8 && L.Replay) {
       if (e.key === 'ArrowRight') { e.preventDefault(); L.Replay.next(); }

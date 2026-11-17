@@ -309,9 +309,8 @@ the mobile layout):
   sits as a slim strip across the top of the post. A tapped post stops
   counting once it scrolls away.
 - **A ⏭ presenter button** appears in the top bar on touch screens (never
-  on a laptop with a mouse): Next stage, Back a stage, Friends' feeds (stage 6),
+  on a laptop with a mouse): Next stage, Back a stage,
   Skip animation, Sound on/off, Start over.
-- **Stage 6 friends' feeds:** in the ⏭ menu, or the button in the feed.
 - **Replay:** ‹ ▶ › buttons at the bottom (on every screen size), and swipe
   left or right on touch screens. Charts switch to a narrower layout.
 
@@ -327,7 +326,6 @@ nothing on screen:
 | `N` | Skip the current transition animation |
 | `B` | Blank the screen (to pause or talk) |
 | `M` | Mute or unmute sound |
-| `G` | Stage 6: open or close the friends' feeds |
 | `→` / `←` | In the replay: next or previous chapter |
 | `Space` | In the replay: play or pause the feed replay |
 | `C` | Optional: open the "Under the Hood" code panel (see below) |
@@ -728,24 +726,9 @@ Lens Premium. When the class searches for something else (*"soccer"*,
 *"✓ pre-confirmed"*. Lens doesn't need Theo to look any more. It already
 knows.
 
-**What are friends seeing?** *"It feels like the whole of Life Academy is
-talking about Theo. Is it?"* The stage 6 feed has a button, **"👀 See what
-your friends are seeing"** (the teacher can also press `G`, or use the ⏭
-menu on a phone). It opens three feeds **side by side, for the whole room at
-once**:
-
-- **June's feed:** her trophy, her friends congratulating her, a cake. One
-  small mention of the wall.
-- **Mr. French's feed:** lesson plans, a field trip sign-up, his original
-  post with its 23 likes.
-- **Sam's feed:** video games and a dog. No gagaball at all.
-
-Under them, one question: ***"What's Life Academy talking about today?"***
-Nobody's feed says "Theo." Let that land, then close it.
-
-**In the room:** ask the class to find the gagaball posts in the three feeds
-before anyone answers. Then: *"If you were Theo, and your feed looked like
-this, what would you think everyone thought of you?"*
+**In the room:** let the class search for anything they like and watch
+every search come back as #GagaGate. Then ask: *"If you were Theo, and your
+feed looked like this, what would you think everyone thought of you?"*
 
 **The replay will show:** Theo's feed and ads at the start of the game next
 to his feed now (one topic, every slot), and the three other feeds side by
@@ -1036,7 +1019,7 @@ give the instructions.
 | 3 Reactions | 6 | Vote before clicking |
 | 4 Thread | 10 | Read the thread, write Theo's reply, watch the comments come in |
 | 5 Numbers | 5 | Spot the real names |
-| 6 Bubble | 8 | Friends' feeds side by side; let the "nobody said Theo" moment land |
+| 6 Bubble | 6 | Search for anything; every result is #GagaGate |
 | 7 Notifications | 7 | Loud; the room decides every click |
 | Replay | 12 | About 90 seconds a chapter, then the last screens |
 
@@ -1141,13 +1124,11 @@ linked from the home page.
      confirmations and the signal log.
    - `layers[]`: `enable`/`disable` for each stage.
    - `keys`: the presenter keybinds (advance, back, skip, blank, mute,
-     friends' feeds, replay), ignored while the reply box has focus, and the
+     replay), ignored while the reply box has focus, and the
      "confirm first" beat at the start of each transition.
    - `thread`: the stage 4 thread view, reply box, keystroke log, drafts,
      the loudest-chunk quote, and the timed comments that arrive after
      Theo's.
-   - `friend feeds`: the stage 6 side-by-side view of June's, Mr. French's
-     and Sam's feeds.
    - `hooks`: stage 7's notifications, looping video, endless feed and the
      dark-pattern dialogs.
    - `replay`: the chapters built from the session record: attention bar
@@ -1202,13 +1183,12 @@ but the stage 7 notifications still arrive (as quiet badges).
 | Stage 3 | Vote on the reaction first. Look for *Not interested*. **Advance.** |
 | Stage 4 | Open the thread, read it aloud, agree on Theo's reply, type it exactly. "Is that what Theo said?" **Advance.** |
 | Stage 5 | Show of hands on 48K. Count real names in *Liked by*. **Advance.** |
-| Stage 6 | Search for something else. Open the friends' feeds (`G`). "What's Life Academy talking about?" **Advance.** |
+| Stage 6 | Search for something else. "What's Life Academy talking about?" **Advance.** |
 | Stage 7 | The class decides every click. Find *Log off* (or turn ⏪). |
 | Replay | `→` through chapters, `Space` to play each. A student reads "What this really is." `Shift` + `→` at the end switches everything off. |
 | After | Discussion questions, one per screen. |
 
-Keys: `Shift` + `→` advance · `N` skip animation · `B` blank · `M` mute · `G` friends'
-feeds · `→`/`←` replay chapters · `Space` play replay · `C` code (optional)
+Keys: `Shift` + `→` advance · `N` skip animation · `B` blank · `M` mute · `→`/`←` replay chapters · `Space` play replay · `C` code (optional)
 · `Shift` + `←` step back · `Shift` + `R` start over.
 
 ## 9. Open questions

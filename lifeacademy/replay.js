@@ -179,7 +179,7 @@
         html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 6</span><span class="rp-goal">Theo’s feed, before and after</span></div>
           ${legend(['teacher', 'story', 'other', 'ad'])}
           <div class="rp-grid"><section><h3>When Theo started scrolling</h3><div class="pb">${col(start)}</div></section><section><h3>By stage 6</h3><div class="pb">${col(end)}</div></section></div>
-          <p class="rp-big">${S.searches.length ? `Theo searched for <b>${S.searches.map(q => '“' + esc(q) + '”').join(', ')}</b> and got #GagaGate.` : 'Lens hid everything that wasn’t #GagaGate.'} Meanwhile June’s, Mr. French’s and Sam’s feeds were barely about it.</p></div>`;
+          <p class="rp-big">${S.searches.length ? `Theo searched for <b>${S.searches.map(q => '“' + esc(q) + '”').join(', ')}</b> and got #GagaGate.` : 'Lens hid everything that wasn’t #GagaGate.'} Most of Life Academy wasn’t even talking about it.</p></div>`;
         break;
       }
       case 'exit': {

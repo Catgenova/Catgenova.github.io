@@ -196,28 +196,6 @@ LENS.commentsAfter = [
 LENS.realLikers = ['maya', 'jaxon', 'ella', 'noah', 'kai', 'lily', 'dev', 'zara', 'nora', 'ben', 'rosie', 'ava'];
 LENS.realLikerSlots = [3, 11, 19, 27, 38, 52, 64, 77, 91, 104, 120, 139];
 
-/* Stage 6: what three other people's feeds look like. */
-LENS.otherFeeds = {
-  june: { label: "June's feed", who: 'june', posts: [
-    ['june', 'I WON 🏆🏆 the gagaball championship!!', 'trophy'],
-    ['nora', 'congrats June!!! 🎉 youngest champion ever'],
-    ['rosie', "June's cake was the best part of field day 🎂", 'cake'],
-    ['maya', 'lol the gagaball wall'],
-  ] },
-  french: { label: "Mr. French's feed", who: 'french', posts: [
-    ['french', 'Lesson plan for Thursday: persuasive writing ✏️', 'lesson'],
-    ['french', 'Field trip sign-up closes Friday 🚌'],
-    ['french', "Theo's championship-winning dive 🏆 (he didn't win… the wall did 😂) … #LifeAcademyFieldDay", 'photo'],
-    ['dev', 'Science fair project is DONE. 🌋', 'volcano'],
-  ] },
-  sam: { label: "Sam's feed", who: 'sam', posts: [
-    ['sam', 'new speedrun personal best 🎮 4:31', 'game'],
-    ['sam', 'my dog when I say the word "walk"', 'dog'],
-    ['ben', 'first goal of the season ⚽', 'soccer'],
-    ['dev', 'Pixel Quest season 4 is actually so good'],
-  ] },
-};
-
 /* Stage 7: notifications that keep coming. */
 LENS.notifications = [
   'You were mentioned 14 times',
