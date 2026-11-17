@@ -10,6 +10,20 @@ changes what you see and how you see it.
 > This file lives in `_source/`, which Jekyll doesn't publish, so students
 > can't find the answers on the site. Keep it out of `lifeacademy/`.
 
+### The setting: one laptop, one projector, one room
+
+- **Students are 13.** The puzzles, wording and hints are pitched at that
+  age: real code, no baby steps, but nothing that needs prior coding.
+- **Only the teacher has a device: a laptop, projected for the whole
+  class.** Students have no screens. The class solves every puzzle
+  **together, out loud**. They read the projected screen, argue, call out
+  answers, and the teacher (or a student volunteer) drives the laptop.
+
+That changes the design throughout. Section 2 has the rules for designing
+for one projected screen, every stage has an **In the room** note on how
+the class takes part, and stage 6 is built around splitting the room into
+groups instead of comparing personal screens.
+
 ---
 
 ## 1. The big idea
@@ -38,10 +52,10 @@ There are three sequences in the table, and they rise together:
   timing. This is the order you'd learn the web in.
 - **Manipulation:** what they *show* you (1–3), then what they *choose* for
   you (4–5), then what they *do to* you (6–7). It goes from the post, to the
-  feed, to the student.
-- **Difficulty and interaction:** solo puzzles first, then a puzzle that
-  needs a classmate (6), then one where the goal flips from engaging with the
-  page to *leaving* it (7).
+  feed, to the person watching.
+- **Difficulty and interaction:** whole-room puzzles first, then one that
+  splits the room into groups who each see a different feed (6), then one
+  where the goal flips from engaging with the page to *leaving* it (7).
 
 ### The world: one day, one fair
 
@@ -89,6 +103,55 @@ a copy of any one app.
 
 ## 2. How the page works (applies to every stage)
 
+### Designing for one projected screen
+
+The page is a **presentation**, not an app students hold. Everything has to
+read from the back of the room on a washed-out classroom projector.
+
+- **Size.** Designed for a 16:9 screen at 1280×720 and 1920×1080. Body text
+  at least 28px, code at least 24px, headlines much bigger. Nothing that
+  matters is smaller than what a student in the back row can read. No phone
+  layout is needed.
+- **Contrast and color.** Projectors wash out pale colors and dark greys.
+  Every color pair that has to be read gets strong contrast, and color
+  differences that matter (filter stage, bubble themes) are exaggerated so
+  they survive the projector. The only low-contrast elements are the ones
+  that are low-contrast *on purpose* (stage 7), and those are tuned on the
+  real projector (see testing).
+- **Split screen, not a drawer.** The code panel opens as half the screen
+  (page on the left, code on the right) so the class can see the code and
+  its effect at the same time.
+- **One thing at a time.** Hints, notes found and discussion questions
+  appear big and centered, one at a time.
+- **Nothing private on screen.** The audience sees everything the laptop
+  shows, so answers and teacher controls are never displayed (see presenter
+  controls below).
+- **Sound** goes through the room's speakers if there are any. It's off
+  until stage 7 and can be muted with one key.
+- **Works offline.** The page is one file. Save a copy to the laptop before
+  class (File → Save Page As) in case the room's Wi-Fi fails, and run it
+  full screen (F11).
+
+### Presenter controls
+
+The teacher is the only operator, so the controls are **keyboard shortcuts
+with nothing on screen**, like presentation software:
+
+| Key | Does |
+|---|---|
+| `C` | Open or close the code panel |
+| `H` | Show the next hint |
+| `N` | Skip the current transition animation |
+| `B` | Blank the screen (to pause or talk) |
+| `M` | Mute or unmute sound |
+| `G` | Stage 6: show the next group's feed |
+| `Shift` + `→` / `←` | Jump to the next or previous stage (rehearsal, or if the class gets stuck) |
+| `Shift` + `R` | Start over (behind a confirmation, so it can't happen by accident) |
+
+The answers are only in the printed answer key (`answers.md`, section 8),
+never on screen. To rehearse on the laptop before class, use the same keys
+with the projector disconnected.
+
 ### Layers, not pages
 
 Each stage is a **layer** that is added on top of the earlier ones and never
@@ -112,11 +175,11 @@ const layers = [
 
 ### "Under the Hood": the code panel
 
-A drawer on the right (a bottom sheet on phones) called **Under the Hood**
-gains one tab per stage. Each tab shows code **a different way**. That
-covers "each step shows code and design differently," and it means no
-puzzle needs real browser DevTools, which matters on iPads and locked-down
-Chromebooks.
+A split-screen panel called **Under the Hood** (opened with `C`) gains one
+tab per stage. Each tab shows code **a different way**. That covers "each
+step shows code and design differently." It replaces real browser DevTools,
+whose text is far too small to read on a projector: every tab uses big type
+and shows only the few lines that matter for the puzzle.
 
 | Stage | Tab | How the code is shown |
 |---|---|---|
@@ -157,34 +220,38 @@ first time anything is actually taken away.
 ### Checking answers, saving progress, and hints
 
 - Answers are case-insensitive and ignore spaces. They're checked against
-  SHA-256 hashes (`crypto.subtle`), so **View Source won't give them away**
-  (though poking around the source is a skill we're celebrating, and a few
-  stages reward it on purpose).
-- Progress (stage, letters, notes, the student's chosen nickname, the time
-  spent) is saved in `localStorage`, so a refresh or a second session picks
-  up where they left off. A "Start over" link sits in the footer.
-- **Three hints per stage**: a nudge, a pointer, and nearly the answer. Each
-  one unlocks after 2, 4 and 6 minutes on the stage, or straight away for a
-  "hint token" (3 tokens per student, to make hints a choice).
-- **Teacher mode:** `?teacher` plus a passphrase (checked by hash) shows a
-  stage-jump menu, so a facilitator can demo a stage, help a stuck group, or
-  skip to the reveal at the end of class.
+  SHA-256 hashes (`crypto.subtle`), so **View Source won't give them away**.
+  The site is public, so a student could open it at home before class.
+- Progress (stage, letters, notes, the class name, the time spent) is saved
+  in the laptop's `localStorage`, so a refresh, a crashed browser or a
+  second class session picks up where the class left off.
+- **Three hints per stage**: a nudge, a pointer, and nearly the answer. They
+  appear only when the teacher presses `H`, so the teacher reads the room
+  and decides. To make hints a choice for the class, the page gives the
+  class **3 hint tokens for the whole game**, shown in the corner. After a
+  stage has run 5 minutes, a hint is free.
 
 ### Privacy (part of the lesson)
 
 The page sends **nothing** anywhere. No analytics, no server, no fonts loaded
 after stage 0. The tracking in stage 6 is real but stays in the browser, and
-the ending says so: *"Everything this page learned about you stayed on your
-device. Real apps send it to their servers."* The nickname is only stored
-locally. Ask students for a nickname, not their full name.
+the ending says so: *"Everything this page learned about this room stayed
+on this laptop. Real apps send it to their servers."* No student data is
+collected at all: the only name the page asks for is a name for the class.
 
 ---
 
 ## 3. The stages
 
 Each stage below covers: **what it looks like**, **the code concept**, **the
-puzzle and its answer**, **what it adds to the reveal**, and **the transition
-into the next stage**.
+puzzle and its answer**, **in the room** (how the class takes part), **what
+it adds to the reveal**, and **the transition into the next stage**.
+
+Every stage follows the same rhythm in class: **look → predict → try →
+reveal.** The class reads the screen, someone predicts what's going on, the
+driver tries it, and the room sees if they were right. Predicting out loud
+first is what keeps a whole room involved when only one person touches the
+laptop.
 
 ---
 
@@ -208,10 +275,17 @@ an HTML comment, `<!-- key: LOOK -->`, for students who miss the alt text.
 Stage 0 is the tutorial: it teaches that a page holds more than it shows.
 
 - **Answer:** `LOOK`
-- **Before starting:** the page asks for a nickname ("What should we call
-  you?"). Stages 6 and 7 use it.
+- **Before starting:** the page asks *"What should we call you?"* and the
+  class picks a name for itself (a team name, or just "Life Academy").
+  Stages 6 and 7 use it.
 - **No letter tile.** This is the prologue, and the seven letters come from
   the seven layers.
+
+**In the room:** the teacher drives this one to show how the game works.
+Ask a student to read the broken image's text aloud. Then ask *"Is there
+anything on this page we can't see?"* before opening the Markup tab. The
+first time the code panel opens, explain the split: page on the left, the
+code that makes it on the right.
 
 **Role in the reveal:** this is where the ending comes back to. The final
 screen is this exact page.
@@ -249,6 +323,12 @@ sign: **BISCUIT**.
 - **Answer:** `BISCUIT`
 - **Letter:** **T**
 - **Note found:** *"Biscuit was back in his pen in five minutes."*
+
+**In the room:** before touching anything, ask *"What happened here?"* and
+let a few students tell the story the crop tells. Then a student volunteer
+takes the laptop and the class directs them (*"zoom out more!", "go
+left!"*). Whoever spots the name first calls it out. Afterwards, ask
+whether the story changed once they saw the whole picture.
 
 **Role in the reveal:** **Framing.** *"Every photo is a choice of what to
 leave out. A post shows one square of a whole day, and what's outside the
@@ -294,6 +374,13 @@ clearer, which nudges students on.
 - **Answer:** `RAIN`
 - **Letter:** **E**
 - **Note found:** *"It rained from 8 a.m. until about 1 p.m."*
+
+**In the room:** six filters, six volunteers. Each student "owns" one
+filter, works out its neutral number (with help from the room), and calls
+it out to the driver. The sign only appears when the last one is right, so
+everyone is waiting on everyone. Before they start, take a quick show of
+hands: *"Would you want to be at this fair?"* Ask again after the sign
+shows.
 
 **Role in the reveal:** **Filters and the highlight reel.** *"Perfect isn't
 real. That golden morning was a rainy one. People post their best moments,
@@ -341,6 +428,12 @@ written during the build so the capitals read naturally in order).
 - **Note found:** *"Nobody was hurt. People laughed about it all afternoon."*
 - **Bonus:** turn the word dial all the way to Calm and the headline reads
   *"A goat visited the pie table."*
+
+**In the room:** before anyone opens the code, a show of hands: *"Is this
+headline really written in all capital letters?"* Then untick
+`text-transform` and let the class read the odd capitals aloud together,
+one letter at a time. Hand the word dial to a student and let the room tell
+them where to set it: *"Make it calmer. Now as angry as it'll go."*
 
 **Role in the reveal:** **Sensationalism and clickbait.** *"The same fact,
 said louder, gets more clicks, and anger spreads fastest of all. The words
@@ -401,6 +494,13 @@ calm down: worth pointing out in discussion.
 - **Letter:** **T**
 - **Note found:** *"The fair raised $3,200 for the library roof."*
 
+**In the room:** read the `score()` function aloud together, one line at a
+time. Ask: *"Which post do you think should be first?"* Then *"Which post
+will be first if we sort by time?"* Take guesses before the driver changes
+the dropdown, so the room sees whether they predicted the re-sort. A good
+challenge for 13-year-olds: *"Change one number so the library post comes
+to the top."* (Setting `angry` to 0 nearly does it.)
+
 **Role in the reveal:** **The algorithm.** *"Nobody sees everything. A
 formula, not a person and not the truth, decides what comes first, and it
 rewards whatever makes people react, especially anger."*
@@ -449,23 +549,30 @@ that makes this practical).
 - **Note found:** *"412 people came to the fair."* (More people came to the
   fair than "liked" the goat for real, by a long way.)
 
+**In the room:** first, a show of hands: *"Who'd believe a post with 48,000
+likes?"* Then the driver pages through `likedBy` slowly while the class
+counts real accounts out loud together. Someone usually spots the
+`purchasedLikes` shortcut partway through: let them check the count with
+it. Let a student flip `verified` to `false` and watch the checkmark go.
+
 **Role in the reveal:** **Fake popularity.** *"Numbers feel like votes, so we
 follow the crowd. But the crowd can be bought, the voters can be bots, and a
 badge is one line of data."*
 
-**Transition → 6:** a friendly modal slides up: *"Make Lens yours, {name}!
-Pick what you like:"* with chips (🐐 Animals, 🎡 Rides, 🥧 Food, 📚 Town news).
-Before the student can pick, the chips **select themselves**, and the modal
-says: *"Actually, we already know. 😉"* The page has been quietly logging
-which posts the student hovered over and for how long since stage 4, and it
-now shows that log.
+**Transition → 6:** a friendly modal slides up: *"Make Lens yours, {class
+name}! Pick what you like:"* with chips (🐐 Animals, 🎡 Rides, 🥧 Food, 📚 Town
+news). Before anyone can pick, the chips **select themselves**, and the
+modal says: *"Actually, we already know. 😉"* The page has been quietly
+logging which posts the mouse hovered over, and for how long, since stage 4.
+Every driver's mouse counted, so it's a log of the **whole class's**
+attention, and it now shows that log.
 
 ---
 
 ### Stage 6 — The State (filter bubbles and echo chambers)
 
-**Looks like:** a feed made for one person. *"Good afternoon, {name}"* at the
-top. The **whole theme color** changes to match their top interest (goat
+**Looks like:** a feed made for one person. *"Good afternoon, {class name}"*
+at the top. The **whole theme color** changes to match their top interest (goat
 green, Ferris-wheel blue, pie orange). The feed now **only** shows that topic,
 each post more extreme than the last:
 
@@ -478,40 +585,58 @@ each post more extreme than the last:
 **CSS custom properties**. The **State** tab has:
 
 - the profile, updated live:
-  `const you = { name: "Maya", seconds: { animals: 41.2, rides: 3.1, food: 6.8, town: 0.4 } }`
+  `const you = { name: "Life Academy", seconds: { animals: 41.2, rides: 3.1, food: 6.8, town: 0.4 } }`
 - the rules that use it:
   ```js
   const top = topInterest(you);                 // "animals"
   feed = posts.filter(p => p.topic === top);
   root.style.setProperty('--accent', topicColor[top]);
   ```
-- a **console log** that keeps scrolling while the student moves around:
+- a **console log** that keeps scrolling while the driver moves the mouse:
   `hover post#3 · 1.8s`, `scroll · paused on post#5`, `tap ❤️ post#3`.
-  It's unsettling on purpose.
+  It's unsettling on purpose, and on a big screen in front of everyone it's
+  even more so.
 
-**Puzzle (the cooperative one):** each bubble's pinned post holds one piece
-of the answer, labeled *1/3*, *2/3* or *3/3*. Animals shows **TO**, Rides
-shows **GE**, Food shows **THER**. *"This is your feed. Your friend's feed
-is different. You'll need both."*
+**Puzzle (the room splits up):** with one screen, the class can't each have
+their own feed, so the room is split into **three groups**, and each group
+is shown a feed that only it sees.
 
-- **In class:** students compare screens with classmates in other bubbles.
-  The puzzle is solved by talking to someone who sees a different feed.
-- **Working alone:** edit `you.seconds` in the State tab (or click
-  *"Pretend to be someone else"*) to switch bubbles and see each piece.
-- **Making sure the class gets a mix:** the bubble comes from real hover
-  time, but students who lingered about equally get a bubble chosen from a
-  hash of their nickname, so a room of students won't all land in the goat
-  bubble. Teacher mode can also give each student a set bubble.
+1. The page says the room isn't one person, and asks the teacher to split
+   the class into **Group 1, Group 2 and Group 3** (sides of the room work
+   well). Group 1 gets the bubble the tracker picked for the class; Groups 2
+   and 3 get the other two.
+2. The page calls one group at a time: *"Group 1, look at the screen.
+   Everyone else, turn around."* (or *"close your eyes"*). It shows that
+   group's feed, themed and filtered, for **20 seconds** with a big
+   countdown, then blanks. The teacher presses `G` for the next group.
+3. Each group's pinned post holds one piece of the answer, labeled *1/3*,
+   *2/3* or *3/3*. Animals shows **TO**, Rides shows **GE**, Food shows
+   **THER**. *"You only saw your feed. You'll need the others."*
+4. The page then asks the room: ***"What happened at the fair?"*** Each
+   group answers from its own feed (a goat menace, an unsafe ride, a rigged
+   contest) before anyone mentions the fragments. Let them disagree for a
+   minute. This is the most important moment of the lesson, and it only
+   works because the groups really didn't see each other's feeds.
+5. The groups put their fragments together and the class enters the word.
 
 - **Answer:** `TOGETHER`
 - **Letter:** **O**
 - **Note found:** *"The Ferris wheel closed for one hour for a routine
   safety check."*
 
+**In the room:** the 20 seconds is short on purpose: groups remember a
+feeling, not details, just like scrolling. Make sure groups that are turned
+around can't see the screen reflected in a window. Each group's driver
+should be someone from that group. When the room argues about what happened,
+ask each group *"How sure are you?"* before they compare. They'll usually be
+very sure.
+
 **Role in the reveal:** **Filter bubbles.** *"Your feed isn't the world.
 It's a mirror. Two people can scroll the same app and live in different
 realities. The way out is talking to someone whose feed doesn't look like
-yours."* (The puzzle made them do that.)
+yours."* (The puzzle made the groups do exactly that: they sat in the same
+room, looked at the same screen, and still came away with three different
+stories.)
 
 **Transition → 7:** a soft *ding*. A red badge 🔴 **1** appears on a bell
 icon. Then **3**. A 🔥 *"Day 1 streak!"* flame appears in the header. The feed
@@ -523,7 +648,7 @@ placeholder.
 ### Stage 7 — The Timers (attention engineering)
 
 **Looks like:** everything at once. Notifications slide in every few seconds
-(*"Jordan reacted to your post!"*; the student has no posts),
+(*"Jordan reacted to your post!"*; the class has no posts),
 red badges keep rising, a looping "video" of Biscuit autoplays (an animated
 SVG), the streak counter ticks up, *"14 people are viewing this"*, and the
 feed **never ends**: it reshuffles and recycles posts with new headlines
@@ -533,7 +658,7 @@ forever. A pull-to-refresh with a slot-machine spin gives a random reward.
 `setTimeout`), `IntersectionObserver` for infinite scroll, CSS `@keyframes`
 animation, and how interaction design (where buttons go, how big they are,
 what color) steers behavior. The **Timers** tab is a task manager listing
-everything running without the student doing anything:
+everything running without anyone doing anything:
 
 ```
 ● loadMoreWhenNearBottom()   IntersectionObserver   [Stop]
@@ -544,19 +669,22 @@ everything running without the student doing anything:
 ```
 
 **Puzzle (the goal flips):** "Every feed has a bottom. This one hid it.
-**Find the end.**" There's nothing to type. The student has to switch off
+**Find the end.**" There's nothing to type. The class has to switch off
 every hook, and each Stop button fights back with a real **dark pattern**:
 
-- **Confirmshaming:** *"Leave? Your friends will miss you 😢"*. A huge bright
-  **Stay ❤️** button, and a tiny grey *"no, I don't care about my friends"*
-  link.
+- **Confirmshaming:** *"Leave? Everyone in {class name} will miss you 😢"*. A
+  huge bright **Stay ❤️** button, and a tiny grey *"no, I don't care about my
+  friends"* link.
 - **Roach motel:** the notification switch offers *"Pause for 1 hour"*
   (which turns itself back on after 20 seconds). The real *Turn off* is two
   menus deep.
 - **Loss aversion:** stopping the streak warns *"You'll lose your 🔥 4-day
   streak forever!"* (It's been about four minutes.)
 - **Moving target:** the Stop button for infinite scroll is low-contrast,
-  and a newly loaded post pushes it down the page every time.
+  and a newly loaded post pushes it down the page every time. On a
+  projector it's *just* findable: someone may need to walk up to the screen
+  to spot it, which is fine and fun. Tune it on the real projector before
+  class.
 
 When all five are stopped, the page goes **quiet**. The infinite feed runs
 out, and below the last post is something students haven't seen all game:
@@ -567,7 +695,14 @@ out, and below the last post is something students haven't seen all game:
 - **Note found:** *"Priya, age 9, won the art contest. Mrs. Okafor's apple
   pie won the pie contest."*
 - It also shows, flatly: **"Time on Lens: 41 min 12 s."** (The real total
-  time spent on the puzzle.)
+  time the class spent on the puzzle.)
+
+**In the room:** this is the loudest stage, with sound on through the
+speakers. Give the job to the room: the driver may only click what the class
+tells them to. Every dark-pattern dialog becomes a quick class decision:
+*"Stay or leave?"* Watch how the big bright button pulls at a room of
+13-year-olds even when they know it's a trick. That's worth naming in the
+discussion.
 
 **Role in the reveal:** **Attention engineering.** *"Endless feeds,
 notifications, streaks and random rewards are made, on purpose, to make
@@ -589,8 +724,9 @@ The letters come in stage order: **T E X T C O N**. It reads almost like
 > *"Seven letters. Something scrambled them, the way it scrambled
 > everything else. Put them in order: it's what every layer took away."*
 
-Students drag the tiles (or type) to make **CONTEXT**. The way they solve it
-(putting things back in the right order) is a callback to stage 4.
+The class calls out the order and the driver drags the tiles (or types) to
+make **CONTEXT**. The way they solve it (putting things back in the right
+order) is a callback to stage 4.
 
 ### The reveal, beat by beat
 
@@ -614,8 +750,11 @@ Students drag the tiles (or type) to make **CONTEXT**. The way they solve it
    | State | **Filter bubbles** | The Ferris wheel check was routine |
    | Timers | **Attention engineering** | Priya's win and the pie winner, buried under an endless feed |
 
-4. **Peel them off.** The student turns the layers off **one by one, from
-   the top** (Timers first, Box last), each time with a real `disable()`.
+4. **Peel them off.** The layers come off **one by one, from the top**
+   (Timers first, Box last), each time with a real `disable()`. Before each
+   one, the teacher asks the room *"What did this layer do to the fair?"* and
+   a student answers before the card flips: a quick recall check of the
+   whole lesson.
    The feed calms down, loses its numbers, un-sorts, quiets down, warms back
    to normal color, and widens its crop... until the page is **exactly the
    stage 0 field notes**, with Times New Roman and blue links.
@@ -626,13 +765,15 @@ Students drag the tiles (or type) to make **CONTEXT**. The way they solve it
    cropped from. *"Twelve posts. One day. Every one was a real photo."*
 6. **The name.** The Lens logo comes back by itself: *"Every app is a lens.
    Now you know what a lens is made of."*
-7. **Close.** A short message (*"This page learned things about you and
-   sent none of them anywhere. Real apps send them to their servers."*),
-   time spent, and a **"Talk about it"** card with discussion questions
-   (section 6). Buttons: *Replay with a different bubble*, *See the code*.
+7. **Close.** A short message (*"This page learned things about this room
+   and sent none of them anywhere. Real apps send them to their servers."*),
+   time spent, and the discussion questions (section 6), one per screen.
+   Optionally, the teacher then opens the browser's real DevTools (`F12`)
+   to show what the Under the Hood panel was imitating: *"This is the real
+   thing, and every website has it."*
 
-Before peeling, students can also switch any **single** layer back on, to
-see one manipulation by itself on the honest page. That's useful for class
+After peeling, the teacher can switch any **single** layer back on, to
+show one manipulation by itself on the honest page. That's useful for
 discussion ("Just the algorithm, nothing else. Is that bad?").
 
 ---
@@ -653,8 +794,9 @@ discussion ("Just the algorithm, nothing else. Is that bad?").
 4. **Calm to loud.** Motion and sound start at zero (stage 0 has no
    animation at all) and peak at stage 7. That makes the stillness in the
    finale hit harder.
-5. **About 3–5 seconds**, skippable, and `prefers-reduced-motion` gets
-   cross-fades instead.
+5. **About 3–5 seconds**, skippable with `N`, and `prefers-reduced-motion`
+   gets cross-fades instead. Transitions are a moment for the room to react,
+   so don't rush them.
 
 ### What carries forward
 
@@ -683,37 +825,87 @@ discussion ("Just the algorithm, nothing else. Is that bad?").
   is the first thing that works on many posts. It's also the hinge where the
   code moves from CSS to JavaScript.
 - **Likes come after ranking** because the numbers feed the ranking: the
-  student has just seen `score()`, so faked likes now mean more.
+  class has just seen `score()`, so faked likes now mean more.
 - **The bubble (6) needs data from earlier stages.** Tracking starts in
   stage 4, so by stage 6 the page really knows something. Putting the bubble
   earlier would mean faking it.
 - **Attention is last** because it's what everything else is for: framing,
   filters, outrage, ranking, popularity and personalization all exist to
   keep you scrolling. It's also the only stage where winning means *leaving*,
-  which is the most important habit for students to take home.
+  which is the most important habit for students to take home. And after
+  the group split in stage 6, the room is together again for the loudest,
+  most chaotic stage, which sets up the sudden quiet of the finale.
 
 ---
 
 ## 6. Running it with the co-op
 
-- **Time:** about 45–70 minutes for the puzzle, plus 15–20 for discussion.
-  Fast solvers will be done in 30. Stage 6 needs a moment where the room
-  talks to each other.
-- **Groups:** pairs at one device work best (one drives, one reads the
-  code). Make sure **at least two different bubbles** exist in the room for
-  stage 6. Teacher mode can assign them.
-- **Devices:** works on Chromebooks, iPads, laptops and phones. No DevTools
-  needed. Desktop browsers get a small bonus: a `console.log` greeting
-  (*"Hello, inspector 👋"*) and one extra secret in the real DevTools Elements
-  panel for students who look.
+The whole class (13-year-olds) solves the puzzle together on one projected
+laptop. The teacher runs the session; students do the thinking.
+
+### Before class
+
+- **Room check:** connect the laptop to the projector in the actual room a
+  day ahead if you can. Check that the back row can read the code panel,
+  that the bubble colors in stage 6 look different, and that the hidden
+  Stop button in stage 7 is hard but possible to find. Check the speakers.
+- **Save an offline copy** of the page to the laptop, in case the Wi-Fi
+  fails.
+- **Rehearse** with the projector disconnected, using `Shift` + `→` to jump
+  between stages. Print the answer key and the presenter keys (section 8).
+- On the day: full screen (`F11`), notifications on the laptop turned off
+  (real ones would be confusing during stage 7!), and the page left at
+  stage 0 before students arrive.
+
+### Roles
+
+- **Teacher:** runs the keys, decides when to give hints, keeps the
+  look → predict → try → reveal rhythm going, and calls on students.
+- **Driver:** a student volunteer at the laptop. **Use a new driver each
+  stage**, so seven students get a turn. The driver only clicks what the
+  class tells them to.
+- **Code reader:** a second volunteer each stage who reads the code panel
+  out loud for the room.
+- **Everyone else:** predicts, spots, counts and argues. Shows of hands and
+  "first to spot it" moments are built into every stage.
+- **Stage 6 groups:** three groups. Decide ahead of time how to split the
+  room (by where they sit is easiest).
+
+### Pacing (about 65 minutes, plus 20 for discussion)
+
+| Stage | Minutes | Note |
+|---|---|---|
+| 0 Markup | 4 | Teacher drives; explain how the game works |
+| 1 Box | 6 | |
+| 2 Style | 7 | Six filter volunteers |
+| 3 Type | 7 | |
+| 4 Logic | 8 | Prediction before re-sorting |
+| 5 Data | 7 | Counting aloud |
+| 6 State | 10 | Group split; let the argument run |
+| 7 Timers | 8 | Loud; the room decides every click |
+| Finale | 8 | Recall question before each layer comes off |
+
+If time is short, give hints early in stages 2 and 5, which are the easiest
+to speed up without losing the point. Don't shorten stage 6 or the finale.
+If the session has to stop partway, the laptop remembers where the class
+left off.
+
+### Tips
+
 - **Don't spoil the theme.** Introduce it as a "web design lab." Let the
   ending land.
-- **Ages:** the hints let younger students finish. Older students can go
-  further with the bonus challenges (set the algorithm's `angry` weight to
-  0; find the hidden DevTools secret; work out what the `score()` function
-  rewards).
+- **Pitched for 13.** The puzzles assume no coding experience but treat
+  students as able to read real code. Stretch challenges for the room: get
+  the library post to the top by changing one number (stage 4); work out
+  what `score()` rewards; find the hidden message in the real DevTools
+  (`F12`) at the end.
+- **Spread the turns.** Seven driver slots, seven code-reader slots and six
+  filter volunteers is enough for most of a co-op class to have a turn.
 
-### Discussion questions (shown on the final screen and printable)
+### Discussion questions (shown one per screen at the end, and printable)
+
+Use think-pair-share: a minute for students to think, a minute to talk with
+the person next to them, then a few share with the room.
 
 1. Which layer surprised you most? Which one have you noticed in a real app?
 2. Is cropping or filtering a photo *lying*? Where's the line?
@@ -728,10 +920,12 @@ discussion ("Just the algorithm, nothing else. Is that bad?").
 
 ### Follow-on activity
 
-"**Add a layer.**" Using the code they saw in the Under the Hood panel,
-students design (on paper, or in code for older ones) an eighth layer that
-manipulates the field notes, or an "honest layer" that *helps* people see
-context. Then they present it.
+"**Add a layer.**" On paper, in small groups, students design an eighth
+layer that manipulates the field notes, or an "honest layer" that *helps*
+people see context. They sketch what it would look like and write a few
+lines of pretend code for it, in the style of the Under the Hood panel.
+Then they present it to the class. A good one could be built into the page
+for next time.
 
 ---
 
@@ -745,7 +939,7 @@ lifeacademy/
   icon.svg            ← Lens-style favicon
 _source/lifeacademy/
   PLAN.md             ← this file (not published)
-  answers.md          ← printable facilitator answer key (not published)
+  answers.md          ← printable answer key and presenter keys (not published)
 ```
 
 It's a standalone page with no Jekyll layout (like `fretspeak/`), so the site
@@ -757,7 +951,7 @@ ending. It can be linked from the home page's Apps section later.
 
 1. **Markup:** the stage 0 field notes as real semantic HTML (always in the
    document), the stage shell (photo card, feed container, tray, Under the
-   Hood drawer), and the panorama `<svg>` in a `<template>`, cloned for each
+   Hood panel), and the panorama `<svg>` in a `<template>`, cloned for each
    crop.
 2. **CSS:** base styles (none at stage 0!), then one block per layer scoped
    to `body.L1`…`body.L7`, then the finale's 3D stack. Colors as custom
@@ -767,36 +961,43 @@ ending. It can be linked from the home page's Apps section later.
      fragment), the field notes, the notes found per stage, and the hints.
    - `layers[]`: `enable`/`disable`/`panel` for each layer.
    - `engine`: stage state machine, answer checks (SHA-256), save/load in
-     `localStorage`, hint timers, teacher mode.
-   - `panel`: the Under the Hood drawer and its tabs, with the small
+     `localStorage`, hints and hint tokens, presenter keys.
+   - `panel`: the Under the Hood split screen and its tabs, with the small
      syntax highlighter.
    - `tracker` (starts at stage 4): hover and scroll timing in memory only.
+   - `groups`: the stage 6 sequence (call a group, 20-second countdown,
+     blank, next group).
    - `finale`: the CONTEXT tile puzzle, the layer stack, peel-back, and the
      panorama.
 
 ### Milestones
 
-1. **Skeleton:** stage engine, layer system, tray, drawer, save/load,
-   teacher mode. Every stage as a placeholder with a "solve" button.
+1. **Skeleton:** stage engine, layer system, tray, split-screen panel,
+   save/load, presenter keys. Every stage as a placeholder with a "solve"
+   button. Projected-size type from day one.
 2. **Art:** the panorama SVG and the crop definitions for every post.
 3. **Stages 0–3** (the CSS stages), each with its panel and puzzle.
 4. **Stages 4–7** (the JS stages), each with its panel and puzzle.
 5. **Finale:** CONTEXT lock, 3D layer stack, peel-back, panorama.
-6. **Polish:** transitions, reduced motion, keyboard and screen-reader
-   pass, phone layout, hint text.
-7. **Testing:** an automated Playwright run-through of every stage on desktop
-   and phone sizes, then a **real playtest with 2–3 students** of different
-   ages before the co-op session. Adjust hint timings from what you see.
+6. **Polish:** transitions, reduced motion, keyboard pass, legibility at
+   1280×720, hint text.
+7. **Testing:** an automated Playwright run-through of every stage at
+   1280×720 and 1920×1080. Then a **rehearsal on the real projector**, ideally
+   with two or three people watching from the back of the room calling out
+   answers the way the class will. Adjust text sizes, colors and the stage
+   7 hidden button from what they can and can't see.
 
 ### Accessibility
 
-Everything works by keyboard, sliders have labels and live values, and the
-Under the Hood drawer is a proper dialog with focus handling. The two places
-that *deliberately* break good design (the low-contrast Stop button and the
-confirmshaming link in stage 7) are named as bad design in the finale, and
-a screen reader still announces them correctly, so the puzzle stays fair.
-With `prefers-reduced-motion`, motion is replaced by cross-fades, but the
-stage 7 notifications still arrive (as quiet badges).
+For a projected class, accessibility mostly means **legibility for the
+whole room**: big type, strong contrast, and nothing important shown only
+by color (the stage 6 bubbles also differ by icon and title). Seat any
+students with low vision near the screen, and have the code reader say
+everything that matters out loud. Everything works by keyboard. The two
+places that *deliberately* break good design (the low-contrast Stop button
+and the confirmshaming link in stage 7) are named as bad design in the
+finale. With `prefers-reduced-motion`, motion is replaced by cross-fades,
+but the stage 7 notifications still arrive (as quiet badges).
 
 ---
 
@@ -814,15 +1015,19 @@ stage 7 notifications still arrive (as quiet badges).
 | 7 | *(stop all five hooks)* | N | Priya and Mrs. Okafor won |
 | ★ | CONTEXT | none | The whole panorama |
 
+Print this table and the presenter keys from section 2 for the session.
+
 ## 9. Open questions
 
-- **Students' ages.** The plan assumes about 10–15. For younger groups,
-  stage 3's capitals and stage 5's counting can be simplified; for older
-  ones, the bonus challenges can become required.
-- **Devices** the co-op will use (decides how much to rely on the phone
-  bottom-sheet layout).
+- **Class size.** Affects the stage 6 groups (three groups works from about
+  6 students up) and how many students get a driving turn.
+- **The room:** projector resolution, and whether there are speakers for
+  stage 7's sound.
+- **Who drives:** student volunteers at the laptop (the plan's default), or
+  the teacher drives everything while the class directs.
 - **One session or several?** Progress saving works either way.
 - **The fair and the goat:** happy with this world, or should it be built
   around something closer to the co-op (a co-op field day, a play)?
 - **The app's name:** "Lens" or something else.
-- **Sound:** on by default in stage 7, or off with an opt-in?
+- **Sound:** on by default in stage 7 (the plan's default, muted with `M`),
+  or off?
