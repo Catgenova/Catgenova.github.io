@@ -638,3 +638,7 @@ body { overflow-x: hidden; }
 .rp-meterdemo .meter { position: static; opacity: 1; transform: none; width: 26rem; max-width: 100%; font-size: 1.05rem; pointer-events: none; }
 .rp-meterdemo .meter .m-ok { display: block; }
 .rp-meterdemo .meter::before { display: none; }
+
+/* replies under Theo's inline comments */
+.pcomments .replies { margin-left: 2.6rem; display: flex; flex-direction: column; gap: .4rem; }
+.pcomments .replies .comment { background: var(--surface); border: 1px solid var(--line); }

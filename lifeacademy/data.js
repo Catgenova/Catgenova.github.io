@@ -331,6 +331,13 @@ LENS.postComments = {
   rc:       [['noah', '👀'], ['kai', 'still going'], ['jaxon', 'lmaooo'], ['ella', 'can we stop']],
 };
 
+/* Replies that come in under Theo's own comments, one by one after he posts. */
+LENS.theoReplies = {
+  teacher: ['haha theo 😂', 'legend', 'best field day ever', 'the drawing tho ✏️', 'you were laughing so hard', 'rematch was fun'],
+  story:   ['lol theo', 'he responded 😂', 'theo is here 👀', 'ok theo', 'nobody asked 😭', 'wait so what happened', 'the wall had a family', 'he typed that fast'],
+  other:   ['lol', 'same', '😂😂', 'real', 'hahaha', 'facts', 'theo 😂', 'W'],
+};
+
 /* "View more comments": extra comments, made up from these pools, five at a time. */
 LENS.morePool = {
   teacher: ['great day!', 'thanks Mr. French!', 'best field day ever', 'the rematch was so good', 'LOL the drawing ✏️', 'GO JUNE 🏆', 'Mr. French with the drill 🔧', 'can we do this every month', 'my legs still hurt from the relay', 'the mud was everywhere 😂', 'who won the tug of war?', 'love this'],

@@ -30,14 +30,14 @@
       s1: { shown: false, shownAt: 0, sent: 0, clicks: 0 },
       bell: { unread: 0, items: [] },
       clock: 0, landed: {},
-      mine: {}, inlineKeys: 0, creact: {},
+      mine: {}, inlineKeys: 0, creact: {}, cposted: {}, rnotified: {},
     };
   }
   let S = load() || fresh();
   S.s1 = S.s1 || { shown: true, shownAt: 0, sent: 0, clicks: 0 };
   S.bell = S.bell || { unread: 0, items: [] };
   S.clock = S.clock || 0; S.landed = S.landed || {};
-  S.mine = S.mine || {}; S.inlineKeys = S.inlineKeys || 0; S.creact = S.creact || {};
+  S.mine = S.mine || {}; S.inlineKeys = S.inlineKeys || 0; S.creact = S.creact || {}; S.cposted = S.cposted || {}; S.rnotified = S.rnotified || {};
   let snaps = loadSnaps();
   function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); return s && s.v === 1 ? s : null; } catch (e) { return null; } }
   function loadSnaps() { try { return JSON.parse(localStorage.getItem(KEY + '-snaps')) || {}; } catch (e) { return {}; } }
@@ -259,7 +259,22 @@
       </div>
     </article>`;
   }
-  function commentCount(id) { return baseCommentCount(id) + ((S.mine && S.mine[id]) || []).length; }
+  function commentCount(id) {
+    const mine = (S.mine && S.mine[id]) || [];
+    return baseCommentCount(id) + mine.length + mine.reduce((a, m) => a + theoReplies(id, m).length, 0);
+  }
+  const REPLY_AT = [6000, 15000, 28000, 47000, 70000];
+  function theoReplies(id, m) {
+    const ck = id + '|theo|' + m.text, at = S.cposted[ck];
+    if (at == null) return [];
+    const p = getItem(id) || {}, kind = p.cat === 'teacher' ? 'teacher' : (p.topics && (p.topics.gaga || p.topics.theo)) ? 'story' : 'other';
+    const h = hashStr(ck), n = 2 + h % 3, age = S.clock - at, out = [];
+    for (let i = 0; i < n && REPLY_AT[i] <= age; i++) {
+      const hh = hashStr(ck + '#' + i), pool = L.theoReplies[kind];
+      out.push([L.morePool.who[hh % L.morePool.who.length], pool[(hh >>> 5) % pool.length]]);
+    }
+    return out;
+  }
   function baseCommentCount(id) {
     if (id === 'gossip') return S.stage <= 3 ? grow(id, 12, TAU_C) : S.thread.count;
     const p = getItem(id);
@@ -631,8 +646,42 @@
     return bag.length ? bag : ['👍'];
   }
 
+  const shownC = new Map();
+  function liveTheoComments() {
+    document.querySelectorAll('.comment.mine').forEach(c => {
+      const ck = c.dataset.ck; if (S.cposted[ck] == null) return;
+      const m = commentMix(ck), total = Object.values(m).reduce((x, y) => x + y, 0), prev = shownC.has(ck) ? shownC.get(ck) : total;
+      if (total !== prev) {
+        const meta = c.querySelector('.cmeta');
+        c.querySelector('.cfoot').innerHTML = cfootHTML(ck) + (meta ? meta.outerHTML : '');
+        const cnt = c.querySelector('.cr-count');
+        if (total > prev && cnt && c.getBoundingClientRect().top < innerHeight) {
+          const r = cnt.getBoundingClientRect(), bag = [];
+          for (const k in m) if (m[k] > 0) bag.push(EMO[k]);
+          burst(r.left + 8, r.top, bag.length ? bag : ['👍'], Math.min(3, total - prev));
+        }
+      }
+      shownC.set(ck, total);
+    });
+    // a notification for each new reply to one of Theo's comments
+    if (S.stage >= 1 && S.stage <= 6) {
+      Object.keys(S.mine || {}).forEach(id => (S.mine[id] || []).forEach(m => {
+        const ck = id + '|theo|' + m.text, rs = theoReplies(id, m), done = S.rnotified[ck] || 0;
+        if (rs.length > done) {
+          S.rnotified[ck] = rs.length;
+          const who = L.people[rs[rs.length - 1][0]];
+          const line = `@${who.handle} replied to your comment`;
+          S.bell.items.unshift({ text: line, goto: id }); S.bell.unread++; bodyClasses();
+          toast(line, '💬', 4500, id); beep('ding');
+          const n = nodes.get(id);
+          if (n) { const cc = n.querySelector('.ccount'); if (cc) cc.textContent = fmtN(commentCount(id)); if (openComments.has(id)) renderComments(id, n); }
+        }
+      }));
+    }
+  }
   const shown = new Map();
   function liveCounts(vis) {
+    liveTheoComments();
     // Every post stays current; only the ones on screen throw emoji.
     const onScreen = new Set(vis);
     nodes.forEach((n, id) => {
@@ -682,19 +731,26 @@
       box.dataset.n = '';
     }
     const list = commentsFor(id), mine = S.mine[id] || [], total = commentCount(id);
-    const sig = list.length + '/' + mine.length + '/' + total;
+    const replies = mine.map(m => theoReplies(id, m));
+    const sig = list.length + '/' + mine.length + '/' + total + '/' + replies.map(r => r.length).join(',');
     box.hidden = false;
     if (box.dataset.n === sig) return;
     const had = box.querySelectorAll('.pc-list .comment').length;
     box.dataset.n = sig;
-    const more = total - list.length - mine.length;
+    const more = total - list.length - mine.length - replies.reduce((a, r) => a + r.length, 0);
     const mb = box.querySelector('.pc-more');
     mb.textContent = more > 0 ? `View ${more.toLocaleString('en-US')} more comment${more === 1 ? '' : 's'}` : '';
     mb.hidden = more <= 0;
-    const rows = list.map(([who, text]) => [who, text, false]).concat(mine.map(m => ['theo', m.text, true]));
-    box.querySelector('.pc-list').innerHTML = rows.length
-      ? rows.map(([who, text, isMine], i) => commentHTML(who, text, isMine ? 'just now' : '', isMine, i >= had && had > 0 ? 'arrive' : '', id)).join('')
-      : '<div class="pc-empty">No comments yet. Be the first?</div>';
+    const prevReplies = Number(box.dataset.replies || 0);
+    const rows = list.map(([who, text], i) => commentHTML(who, text, '', false, i >= had && had > 0 ? 'arrive' : '', id));
+    let replyIndex = 0;
+    mine.forEach((m, mi) => {
+      const rs = replies[mi];
+      rows.push(commentHTML('theo', m.text, 'just now', true, '', id)
+        + (rs.length ? `<div class="replies">${rs.map(([who, text]) => commentHTML(who, text, 'reply', false, replyIndex++ >= prevReplies ? 'arrive' : '', id)).join('')}</div>` : ''));
+    });
+    box.dataset.replies = replies.reduce((a, r) => a + r.length, 0);
+    box.querySelector('.pc-list').innerHTML = rows.length ? rows.join('') : '<div class="pc-empty">No comments yet. Be the first?</div>';
   }
   /* Theo replies under any post. Every keystroke counts, and the comment is pushed to the algorithm. */
   document.addEventListener('input', e => {
@@ -710,6 +766,7 @@
     const input = f.querySelector('input'), text = input.value.trim(), id = f.dataset.for;
     if (!text) return;
     (S.mine[id] = S.mine[id] || []).push({ text, stage: S.stage });
+    S.cposted[id + '|theo|' + text] = S.clock;
     input.value = ''; input.blur();
     confirm('comment', id, text.slice(0, 80));
     const n = nodes.get(id);
@@ -955,6 +1012,15 @@
   function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
   function commentMix(ck) {
     const h = hashStr(ck), loud = /[A-Z]{4}|💀|😂|😭|!!/.test(ck);
+    if (S.cposted[ck] != null) {
+      // Theo's own comment: nothing at first, then reactions come in fast and slow down.
+      const f = 1 - Math.exp(-Math.max(0, S.clock - S.cposted[ck]) / 15000);
+      const gossip = ck.startsWith('gossip|');
+      const target = gossip ? { like: 3, love: 0, laugh: 40, sad: 0, dislike: 2, angry: 12 } : { like: 2 + h % 6, love: (h >>> 3) % 4, laugh: 1 + (h >>> 5) % 5, sad: 0, dislike: 0, angry: 0 };
+      const m = {}; for (const k in target) m[k] = Math.floor(target[k] * f);
+      const mine = S.creact[ck]; if (mine) m[mine] += 1;
+      return m;
+    }
     const m = { like: h % 5, love: (h >>> 3) % 3, laugh: loud ? 2 + (h >>> 5) % 6 : (h >>> 5) % 2, sad: 0, dislike: 0, angry: /banned|pay|purpose|CLOSED/.test(ck) ? 1 + (h >>> 7) % 3 : 0 };
     const mine = S.creact[ck]; if (mine) m[mine] += 1;
     return m;
@@ -1018,7 +1084,7 @@
     // Most relevant first, so Maya's calm comment sinks to the bottom.
     after.sort((a, b) => (a[0] === 'maya') - (b[0] === 'maya') || b[2] - a[2]);
     const r = S.reply;
-    const mineReacts = S.reply.after > 0 ? `😂 ${Math.min(40, S.reply.after * 7)} · 😡 ${Math.min(12, S.reply.after * 2)} · ${S.reply.after} replies` : 'just now';
+    const mineReacts = S.reply.after > 0 ? `${S.reply.after} repl${S.reply.after === 1 ? 'y' : 'ies'}` : 'just now';
     th.innerHTML = `<div class="inner">
       <button class="back" type="button" data-back>← Back to feed</button>
       <div id="thread-post"></div>
@@ -1063,6 +1129,7 @@
     const text = ($('#replybox') || {}).value || '';
     if (!text.trim() || r.posted) return;
     r.text = text.trim(); r.posted = true; r.chunk = loudestChunk(r.text, 4);
+    S.cposted['gossip|theo|' + r.text] = S.clock;
     if (!r.drafts.includes(r.text)) r.drafts.push(r.text);
     confirm('comment', 'gossip', r.text.slice(0, 80));
     S.thread.count += 1;
