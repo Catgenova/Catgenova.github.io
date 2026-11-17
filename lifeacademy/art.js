@@ -113,11 +113,10 @@ LENS.cropFilters = {
     <path d="M1045 734 q10 4 28 -2 M1045 754 q10 4 28 -2" stroke="#7a5636" stroke-width="5" fill="none"/>
     <path d="M815 718 L835 650" stroke="#2fa3a0" stroke-width="24" stroke-linecap="round"/>
     <g class="thumbsup">
-      <!-- a clear thumbs-up: a wide fist with curled fingers facing us, and a short, thick thumb leaning off its side -->
-      <rect x="818" y="630" width="38" height="30" rx="9" fill="#e3ab84" stroke="#b5835f" stroke-width="2"/>
-      <path d="M836 638 h16 M836 646 h16 M836 654 h14" stroke="#b5835f" stroke-width="3" stroke-linecap="round"/>
-      <path d="M820 634 C 812 618, 814 604, 824 600 C 832 597, 836 606, 833 616 L 830 634 Z" fill="#e3ab84" stroke="#b5835f" stroke-width="2" stroke-linejoin="round"/>
-      <path d="M820 606 q4 -4 9 -2" stroke="#c9917a" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- a small thumbs-up: a big fist with curled fingers, and only a short, stubby thumb tip leaning off its top corner -->
+      <rect x="816" y="626" width="42" height="34" rx="11" fill="#e3ab84" stroke="#b5835f" stroke-width="2"/>
+      <path d="M836 636 h17 M836 644 h17 M836 652 h15" stroke="#b5835f" stroke-width="3" stroke-linecap="round"/>
+      <path d="M818 632 C 813 624, 814 615, 820 613 C 826 611, 830 617, 829 626 Z" fill="#e3ab84" stroke="#b5835f" stroke-width="2" stroke-linejoin="round"/>
     </g>
     <circle cx="768" cy="728" r="30" fill="#e3ab84"/>
     <path d="M740 716 Q748 688 778 694 Q800 700 798 718 Q780 705 760 712 Z" fill="#6b3e1f"/>
