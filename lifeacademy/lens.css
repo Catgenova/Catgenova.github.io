@@ -574,3 +574,10 @@ body { overflow-x: hidden; }
 .item > .meter.ok .m-ok { display: none; }
 .item.just > .meter.ok .m-ok { display: block; }
 .modal .x { z-index: 5; background: var(--surface); border-radius: 50%; width: 2.4rem; height: 2.4rem; line-height: 1; }
+
+/* a post's comments, expanded in place */
+.pcomments { display: flex; flex-direction: column; gap: .5rem; padding-top: .7rem; margin-top: .2rem; border-top: 1px solid var(--line); }
+.pcomments .comment { box-shadow: none; background: var(--bg); padding: .55rem .75rem; }
+.pcomments .comment .ctext { font-size: 1.02rem; }
+.pcomments .comment .cmeta:empty { display: none; }
+.pc-more, .pc-empty { color: var(--ink-3); font-size: .9rem; font-weight: 700; padding: .1rem .2rem; }

@@ -150,6 +150,17 @@ and the feed re-sorts. The meter is the thread through the whole thing:
   bars that fill with nobody touching anything.
 - **It records everything** for the replay (section 4).
 
+### Comments on every post
+
+Tapping or clicking a post's comment count opens its comments right inside
+the post (tap again to close). Every post has three to five comments
+written for it (`LENS.postComments`), shown one by one as the post's
+comment count grows, so a brand-new post's comments fill in live, with a
+*"+ N more comments"* line for the rest. Mr. French's post also collects
+the stage 1 tags as comments. Opening a post's comments is itself a signal
+(*"OPENED COMMENTS"*). The gossip post opens inline in stages 2–3; from
+stage 4 on it opens the full thread view where Theo can reply.
+
 ### Sidebar ads (live, one per post)
 
 Every post has its own invented ad (`LENS.postAds` in `data.js`): the roomba

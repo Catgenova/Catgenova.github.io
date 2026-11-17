@@ -237,6 +237,7 @@
       <div class="pf">
         <div class="counts"><span class="likes">❤️ <b>${fmtN(likeCount(id))}</b></span><button class="comments-link" type="button">💬 <b class="ccount">${fmtN(commentCount(id))}</b> <span class="cword">${commentCount(id) === 1 ? 'comment' : 'comments'}</span>${id === 'gossip' && S.stage >= 4 ? ' · View all' : ''}</button><span class="shares">🔁 <b class="scount">${fmtN(shareCount(id))}</b></span></div>
         <div class="liked-row"></div>
+        <div class="pcomments" hidden></div>
         <div class="reacts">${reacts}<span class="more"><button type="button" aria-label="More">⋯</button></span></div>
       </div>
     </article>`;
@@ -276,6 +277,7 @@
     }
     if (it(id).react) { const b = n.querySelector(`.react[data-r="${it(id).react}"]`); if (b) b.classList.add('chosen'); }
     if (S.stage === 6) n.classList.add('pre');
+    if (openComments.has(id)) renderComments(id, n);
     if (id === 'video' && !S.s7.autoplay) n.classList.add('paused');
   }
 
@@ -451,6 +453,7 @@
       case 'pause': return [`signal: PAUSE ${Math.round(it(id).pause / 1000)}s`, `@theo engages with ${p.loud ? 'dramatic ' : ''}${TOPIC_LABEL(p)} → show more like this`];
       case 'react': return [`signal: REACT ${EMO[detail] || '🚫'} (${W[detail] > 0 ? '+' : ''}${W[detail]})`, W[detail] > 0 ? `@theo is very interested in this → moving to top` : '@theo might be a little less interested'];
       case 'thread': return ['signal: OPENED THREAD', '@theo wants to see the comments → boost the thread'];
+      case 'open': return ['signal: OPENED COMMENTS', '@theo wants to know what people said → show more like this'];
       case 'typing': return [`signal: TYPING ${S.reply.keys} keys`, 'draft saved · @theo cares a lot about this'];
       case 'comment': return ['signal: COMMENT', '@theo joined the conversation → show it to more people'];
       case 'glance': return ['signal: GLANCE (checked likes)', '@theo cares how many people saw this → show him the numbers'];
@@ -463,7 +466,7 @@
   function confirm(type, id, detail, opts) {
     opts = opts || {};
     const p = getItem(id);
-    const amt = { dwell: .35, pause: .25, react: Math.max(0, W[detail] || 0) * .09, thread: .3, typing: .3, comment: .45, glance: .25, search: .2, auto: .015, early: .2 }[type] || .1;
+    const amt = { open: .15, dwell: .35, pause: .25, react: Math.max(0, W[detail] || 0) * .09, thread: .3, typing: .3, comment: .45, glance: .25, search: .2, auto: .015, early: .2 }[type] || .1;
     if (p && p.topics) for (const t in p.topics) S.interest[t] = (S.interest[t] || 0) + amt * p.topics[t];
     if (type === 'react' && detail === 'notInterested' && p) for (const t in p.topics) S.interest[t] = Math.max(0, S.interest[t] - .03 * p.topics[t]);
     S.confirmed++;
@@ -612,11 +615,43 @@
       const b = n.querySelector('.likes b'); if (b) b.textContent = fmtN(likes);
       const cc = commentCount(id), c = n.querySelector('.ccount'); if (c) c.textContent = fmtN(cc);
       const cw = n.querySelector('.cword'); if (cw) cw.textContent = cc === 1 ? 'comment' : 'comments';
+      if (openComments.has(id)) renderComments(id, n);
       const s = n.querySelector('.scount'); if (s) s.textContent = fmtN(shareCount(id));
       const t = n.querySelector('.ptime'); if (t) t.textContent = relTime(id);
       if (likes > prev && b && onScreen.has(id)) { const r = b.getBoundingClientRect(); burst(r.left + 10, r.top, emojiMix(id), Math.min(3, likes - prev)); }
       shown.set(id, likes);
     });
+  }
+
+  /* ---------------- a post's comments, expanded in place ---------------- */
+  const openComments = new Set();
+  function commentsFor(id) {
+    let list = L.postComments[id] || (/^rc\d/.test(id) ? L.postComments.rc : []);
+    if (id === 'french') {
+      // the stage 1 tags arrive as comments on Mr. French's post
+      const tags = L.s1Tags.slice(1, Math.max(1, S.s1.sent));
+      const base = list.slice(0, grow(id, getItem(id).comments, TAU_C));
+      return base.concat(tags);
+    }
+    return list.slice(0, Math.min(list.length, commentCount(id)));
+  }
+  function renderComments(id, n) {
+    const box = n.querySelector('.pcomments'); if (!box) return;
+    const list = commentsFor(id), total = commentCount(id);
+    const had = box.querySelectorAll('.comment').length;
+    if (box.dataset.n === String(list.length) + '/' + total && !box.hidden) return;
+    box.dataset.n = list.length + '/' + total;
+    const more = total - list.length;
+    box.innerHTML = (list.length ? list.map(([who, text], i) => commentHTML(who, text, '', false, i >= had && had > 0 ? 'arrive' : '')).join('') : '<div class="pc-empty">No comments yet.</div>')
+      + (more > 0 ? `<div class="pc-more">+ ${more.toLocaleString('en-US')} more comment${more === 1 ? '' : 's'}</div>` : '');
+    box.hidden = false;
+  }
+  function toggleComments(id) {
+    const n = nodes.get(id); if (!n) return;
+    if (openComments.has(id)) { openComments.delete(id); n.querySelector('.pcomments').hidden = true; return; }
+    openComments.add(id);
+    renderComments(id, n);
+    if (S.stage >= 1 && S.stage <= 7 && !it(id).opened) { it(id).opened = 1; confirm('open', id); }
   }
 
   /* ---------------- stage 1: the post arrives, the tags start ---------------- */
@@ -850,7 +885,7 @@
   L.loudestChunk = loudestChunk; L.commentScore = commentScore;
 
   function openThread() {
-    if (S.stage !== 4) return;
+    if (S.stage < 4 || S.stage > 7) return;
     threadOpen = true;
     $('.bubble-tip') && $$('.bubble-tip').forEach(t => t.remove());
     if (!S.thread.opened) { S.thread.opened = 1; setTimeout(() => confirm('thread', 'gossip'), 500); }
@@ -1189,7 +1224,12 @@
       t.closest('.menu').remove();
       return;
     }
-    if (t.closest('.comments-link') && t.closest('.item') && t.closest('.item').dataset.id === 'gossip' && S.stage === 4 && !threadOpen) return openThread();
+    const cl = t.closest('.comments-link');
+    if (cl && t.closest('#feed .item')) {
+      const id = t.closest('.item').dataset.id;
+      if (id === 'gossip' && S.stage >= 4 && S.stage <= 7 && !threadOpen) return openThread();
+      return toggleComments(id);
+    }
     if (t.closest('[data-back]')) return closeThread();
     if (t.closest('[data-post]')) return postReply();
     if ((t.closest('[data-likers]') || t.closest('.likes.clickable')) && S.stage >= 5) return openLikers();
