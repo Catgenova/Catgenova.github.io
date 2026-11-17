@@ -40,7 +40,7 @@ the algorithm needs less from him to be sure he wants more:
 | # | Theo... | Hidden meter shows | Bar fills in | What it really is (revealed in the replay) |
 |---|---|---|---|---|
 | 1 | **reads** a teacher's joke post | ⏱ time on screen | 90 seconds | **Passive tracking**: watching is a vote |
-| 2 | **scrolls**, and pauses on reposts | ⏸ pause time | about 20 seconds | **Exaggeration**: the story gets cropped, filtered and louder each time it's shared |
+| 2 | **scrolls**, and pauses on reposts | ⏸ pause time | about 12 seconds | **Exaggeration**: the story gets cropped, filtered and louder each time it's shared |
 | 3 | **reacts** to show he doesn't like it | reaction weight | one click | **The algorithm**: every reaction is fuel, angry ones most |
 | 4 | **replies** to set the record straight | ⌨ keystrokes, saved drafts | every keystroke | **Context collapse**: his words, cut down to the loudest part |
 | 5 | **checks** who actually believes it | 👁 glance time | 2 seconds | **Fake popularity**: likes, bots, badges |
@@ -93,7 +93,7 @@ LIFE ACADEMY CHAOS 😱🔥 48.2K"*.
 | Account | Who | Role in the feed |
 |---|---|---|
 | **@theo** | Theo, 13 | The class. Logged in. |
-| **@mrspark** | Mrs. Park, a Life Academy teacher | Posts the original joke post: affectionate, with all the context |
+| **@mrfrench** | Mr. French, a Life Academy teacher | Posts the original joke post: affectionate, with all the context |
 | **@maya.k** | A classmate | First repost: a little tighter, still friendly. Later, the one kind comment. |
 | **@jaxon_** | A classmate | Second repost: the laugh cropped out, the caption louder |
 | **@lifeacademy.gossip** | A gossip account made today | The worst repost, the quote-post, and the bought likes |
@@ -104,7 +104,7 @@ LIFE ACADEMY CHAOS 😱🔥 48.2K"*.
 
 ### The art: one photo, many crops
 
-Mrs. Park's photo is one wide inline-SVG illustration with all the context
+Mr. French's photo is one wide inline-SVG illustration with all the context
 in it:
 
 - Theo sprawled in the mud by the fallen panel, **laughing, with a thumbs
@@ -338,13 +338,13 @@ design lab where they play a character. Don't mention algorithms yet.
 
 ### Stage 1 — The joke post (passive tracking)
 
-**Theo's goal:** *"Mrs. Park posted about yesterday. I just want to read
+**Theo's goal:** *"Mr. French posted about yesterday. I just want to read
 it."*
 
 **Looks like:** a calm, clean Lens feed with very little in it: a "Welcome
-back, Theo" card and **Mrs. Park's post** at the top:
+back, Theo" card and **Mr. French's post** at the top:
 
-> **@mrspark** · Life Academy
+> **@mrfrench** · Life Academy
 > *Theo's championship-winning dive 🏆 (he didn't win… the wall did 😂).
 > Wall fixed in 10 minutes thanks to Mr. Alvarez, rematch at 2:15. Best
 > field day yet! #LifeAcademyFieldDay*
@@ -374,7 +374,7 @@ the room usually goes quiet. Let the bar fill while they watch.
 was enough for Lens's first conclusion.
 
 **Advance →** a spinner under the confirmation: *"Finding more posts for
-you…"* New posts start loading below Mrs. Park's, one after another.
+you…"* New posts start loading below Mr. French's, one after another.
 
 ---
 
@@ -385,7 +385,7 @@ you…"* New posts start loading below Mrs. Park's, one after another.
 **Looks like:** a busier feed, with **mostly unrelated posts**: a cat
 falling off a couch, someone's science-fair volcano, a band concert, a meme
 about math homework. The first **ads** appear (Pixel Quest, Fleet Sneakers,
-MathBuddy). Scattered between them are classmates **reposting Mrs. Park's
+MathBuddy). Scattered between them are classmates **reposting Mr. French's
 photo**, each one more exaggerated than the last:
 
 | Repost | Crop | Filter | Caption |
@@ -396,7 +396,7 @@ photo**, each one more exaggerated than the last:
 
 **The meter:** now it also shows when the feed **pauses** on a post (no
 scrolling for a second with the post in the middle of the screen). It shows
-the same timer and a **much faster bar, about 20 seconds**. It fills
+the same timer and a **much faster bar, about 12 seconds**. It fills
 fastest on the gossip post, because that's where people (and Theo) stop
 longest. Each confirmation **re-sorts the feed below**: the reposts drift
 up, the cat and the volcano drift down, and the gaga ads (ProGaga Ball,
@@ -409,13 +409,13 @@ FlexGuard pads) start replacing the generic ones.
 
 **In the room:** let the class decide where to stop scrolling, then ask
 *"Why did we stop on that one?"* (They'll always stop on the post about
-Theo. So would he.) Ask *"What's different about this photo from Mrs.
-Park's?"* and let them spot that the laughing is gone.
+Theo. So would he.) Ask *"What's different about this photo from Mr.
+French's?"* and let them spot that the laughing is gone.
 
 **The replay will show:** how long the class paused on each post and ad;
 how the reposts climbed and the unrelated posts sank; how the ads switched
-from games and sneakers to gaga gear; and every repost's crop drawn on Mrs.
-Park's original photo.
+from games and sneakers to gaga gear; and every repost's crop drawn on Mr.
+French's original photo.
 
 **Advance →** reaction buttons slide in under every post, and a tooltip
 points at them: *"React to show how you feel! 💬"*
@@ -441,7 +441,7 @@ option, small and grey. The Backyard Gaga Pit Kit ad appears.
 ```
 
 and the feed **re-sorts** with a smooth animation: the gossip post jumps to
-the top, three more like it appear under it, Mrs. Park's post slides down,
+the top, three more like it appear under it, Mr. French's post slides down,
 and **June's "Huge upset: June (8) wins the championship 🏆" post sinks to
 the bottom** (nobody's angry about it, so it scores nothing).
 
@@ -605,7 +605,7 @@ the room is split so each group sees **only one**:
    next group.
    - **Group 1 sees June's feed:** her trophy, her friends congratulating
      her, a cake. One small mention of the wall.
-   - **Group 2 sees Mrs. Park's feed:** lesson plans, a field trip sign-up,
+   - **Group 2 sees Mr. French's feed:** lesson plans, a field trip sign-up,
      her original post with its 23 likes.
    - **Group 3 sees Sam's feed:** video games and a dog. No gaga at all.
 3. The page asks the room: ***"What's Life Academy talking about today?"***
@@ -723,7 +723,7 @@ way so the class learns to read it:
 ├──────────────────────────────┬───────────────────────────────────────┤
 │ WHERE YOU LOOKED             │ WHAT LENS DID WITH IT                 │
 │ gossip post    ████████ 41s  │  before          after                │
-│ jaxon_ repost  █████ 22s     │  #1 Mrs. Park ─┐ ┌─ #1 gossip post ▲  │
+│ jaxon_ repost  █████ 22s     │  #1 Mr. French ─┐ ┌─ #1 gossip post ▲  │
 │ Pit Kit ad     ███ 9s   AD   │  #2 June     ─┼─┘  #2 Pit Kit ad  ▲  │
 │ cat video      █ 3s          │  #3 Pixel ad ─┘ …  #14 June       ▼  │
 │ June's post    ▏ 0.4s        │                                       │
@@ -739,8 +739,8 @@ way so the class learns to read it:
   their own color.
 - **What Lens did with it:** the feed order before and after the stage, side
   by side, with lines connecting each item. Risers are highlighted, fallers
-  greyed, with the key items labeled big (the gossip post, June's post, Mrs.
-  Park's post, the top ad).
+  greyed, with the key items labeled big (the gossip post, June's post, Mr.
+  French's post, the top ad).
 - **▶ replay:** `Space` plays the stage back as a fast-forward of the feed
   at 10× speed, with a rectangle showing where the screen was and each
   meter filling as it did in class.
@@ -757,7 +757,7 @@ way so the class learns to read it:
 
 | Chapter | Highlights pulled from the session | What this really is | What was true |
 |---|---|---|---|
-| **Where it started** (stage 1) | Seconds on Mrs. Park's post; the first confirmation | **Passive tracking.** *Watching is a vote. You don't have to click anything.* | Mrs. Park's post was kind, and had the whole story. |
+| **Where it started** (stage 1) | Seconds on Mr. French's post; the first confirmation | **Passive tracking.** *Watching is a vote. You don't have to click anything.* | Mr. French's post was kind, and had the whole story. |
 | **Stage 2** | Pause times per repost; reposts rising, unrelated posts and generic ads sinking; every repost's crop drawn on the original photo | **Exaggeration.** *Each share crops tighter, filters harder and shouts louder. The version that spreads furthest has the least of what happened.* | Theo was laughing. It was a scraped elbow. |
 | **Stage 3** | The reaction chosen; the gossip post to #1; June's post to the bottom; gaga ads following | **The algorithm.** *Every reaction is a vote for more, and anger counts most. It can't tell "I love this" from "I hate this."* | There was a rematch, and June won it. |
 | **Stage 4** | Theo's full reply vs. the quoted chunk; saved drafts including deleted words; the six comments that followed; Maya's comment sorted last; Lens Premium rising | **Context collapse.** *Your words can be cut to the loudest few and passed on. Defending yourself counts as engagement.* | It was an accident. Nobody was to blame. |
@@ -774,7 +774,7 @@ way so the class learns to read it:
 
    ```
    @theo · what Lens learned
-   ✓ dwell    90s on @mrspark's post
+   ✓ dwell    90s on @mrfrench's post
    ✓ pause    ×9 on reposts (longest: 14s on "GAGA PIT COLLAPSES")
    ✓ react    😡 on @lifeacademy.gossip
    ✓ typing   63 keystrokes, 4 drafts saved (incl. 1 deleted)
@@ -790,7 +790,7 @@ way so the class learns to read it:
 4. **Switch it all off.** The teacher presses `Shift` + `→` one last time. Every layer comes
    off at once: the notifications stop, the orange drains away, the
    numbers, comments, reactions, reposts and ads vanish, and the meters go
-   dark. What's left is **one post: Mrs. Park's**, with its full photo and
+   dark. What's left is **one post: Mr. French's**, with its full photo and
    23 likes. *"This is what actually happened."*
 5. **Close.** *"Everything Lens recorded about 'Theo' stayed on this laptop.
    Real apps send it to their servers."* Then the discussion questions
@@ -825,7 +825,7 @@ way so the class learns to read it:
 | Stage | Feed looks like | Ads | The meter |
 |---|---|---|---|
 | 1 | Calm; one kind post | none | hidden; 90s on hover |
-| 2 | Busy; unrelated posts + louder reposts | generic, turning gaga | pauses; ~20s |
+| 2 | Busy; unrelated posts + louder reposts | generic, turning gaga | pauses; ~12s |
 | 3 | + reaction bars; re-sorting | gaga gear | one click |
 | 4 | + comment thread, quote-post | + Lens Premium | every keystroke |
 | 5 | + counters, checkmarks, trending | + Post Boost | 2s glance |
@@ -943,7 +943,7 @@ the person next to them, then a few share with the room.
    worse? What could he have done instead?
 3. Which number in the replay surprised you most?
 4. Is cropping or filtering a photo *lying*? Where's the line?
-5. Was Mrs. Park's post OK? What about @maya.k's? Where did it go wrong?
+5. Was Mr. French's post OK? What about @maya.k's? Where did it go wrong?
 6. The ads changed as Theo's feed changed. Who was Lens really working for?
 7. If you designed Lens's algorithm, what would you reward?
 8. Stage 7 made leaving hard. What tricks do apps you use rely on? What
@@ -961,28 +961,35 @@ it to the class.
 
 ## 7. Build plan
 
-### Files
+### Files (as built)
 
 ```
 lifeacademy/
-  index.html          ← the whole thing: HTML, CSS, JS and the photo SVG inline
+  index.html          ← the page shell: Lens top bar, feed, login, overlays
+  lens.css            ← all styles; everything scales with screen width (rem = 1.42vw)
+  data.js             ← people, posts, ads, comments, other feeds, goals, replay text
+  art.js              ← Mr. French's photo (one SVG, cropped for every repost), picture cards, avatars
+  lens.js             ← engine: state, recorder, ranker, meters, stages, presenter keys
+  replay.js           ← Lens Replay chapters and charts
+  img/*.webp          ← 14 student avatars (Pexels stock photos)
   icon.svg            ← Lens favicon
 _source/lifeacademy/
   PLAN.md             ← this file (not published)
-  cheatsheet.md       ← printable presenter keys and stage notes (not published)
+  photo-credits.md    ← where each avatar came from (not published)
 ```
 
 It's a standalone page with no Jekyll layout (like `fretspeak/`), so the
-site header and footer don't break the illusion. Add
-`<meta name="robots" content="noindex">` so search results don't show the
-ending. It can be linked from the home page's Apps section later.
+site header and footer don't break the illusion, and it's marked
+`noindex`. To keep an offline copy, save it with the browser's "Save Page
+As → Webpage, Complete", which keeps the images and scripts. It isn't
+linked from the home page.
 
-### Inside index.html
+### Inside the code
 
 1. **Markup:** the Lens shell (top bar, feed column, sidebar, notification
    bell, search), the post and ad templates, the replay
    screens, and the photo `<svg>` in a `<template>`, cloned for each crop.
-   Mrs. Park's post is real semantic HTML underneath everything, so the end
+   Mr. French's post is real semantic HTML underneath everything, so the end
    of the replay can strip down to it.
 2. **CSS:** base Lens styles, then one block per layer scoped to
    `body.L1`…`body.L7`, then the replay. Colors as custom properties so
@@ -1023,7 +1030,7 @@ ending. It can be linked from the home page's Apps section later.
 2. **Recorder and ranker:** the session record and real re-sorting. Build
    these early, because the meters and the replay both depend on them.
 3. **The meter:** overlays, the shrinking threshold, confirmations.
-4. **Art:** Mrs. Park's photo SVG, the crop for every repost, and the ads.
+4. **Art:** Mr. French's photo SVG, the crop for every repost, and the ads.
 5. **Stages 1–3.**
 6. **Stages 4–7.**
 7. **Lens Replay:** chapters, charts, playback, totals, and the ending.
@@ -1074,12 +1081,6 @@ group · `→`/`←` replay chapters · `Space` play replay · `C` code (optiona
 
 ## 9. Open questions
 
-- **Mrs. Park:** keep an invented teacher for the first post, or make it you
-  (with a made-up name or your own)? Posting the "joke" as the class's own
-  teacher could make stage 1 land harder.
-- **Names.** Check that Theo, June, Maya, Jaxon, Ella, Noah, Kai, Sam, Mrs.
-  Park and Mr. Alvarez don't belong to anyone at Life Academy, and swap any
-  that do.
 - **The "earned from your attention" number** in the replay: keep it (it's
   made up, but makes the ads concrete), or leave money out?
 - **Class size.** Affects the stage 6 groups (three groups works from about

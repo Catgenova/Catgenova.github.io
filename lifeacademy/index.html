@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Lens</title>
+<meta name="description" content="A Life Academy web design lab.">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="lens.css">
+</head>
+<body class="stage-0">
+
+<header id="topbar" aria-label="Lens">
+  <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="9" fill="currentColor"/><path d="M6 16c3-5 6.5-7.5 10-7.5S23 11 26 16c-3 5-6.5 7.5-10 7.5S9 21 6 16z" fill="#fff"/><circle cx="16" cy="16" r="4.2" fill="currentColor"/></svg></span>Lens</div>
+  <form id="search" autocomplete="off" onsubmit="return false"><input id="searchbox" type="search" placeholder="Search Lens" aria-label="Search Lens"></form>
+  <div class="top-right">
+    <span id="streak" hidden>🔥 <b>4</b>-day streak</span>
+    <button id="bell" type="button" aria-label="Notifications">🔔<span id="badge" hidden>0</span></button>
+    <button id="me" type="button" aria-label="Your account"><img class="avatar" src="img/theo.webp" alt=""><span>Theo</span></button>
+  </div>
+</header>
+
+<div id="layout">
+  <main id="feedcol">
+    <div id="goalpill" hidden></div>
+    <div id="banners"></div>
+    <div id="feed" aria-live="off"></div>
+    <div id="sentinel"></div>
+    <div id="feedfoot"></div>
+  </main>
+  <aside id="sidebar"></aside>
+</div>
+
+<section id="thread" hidden aria-label="Comments"></section>
+
+<section id="login" class="screen">
+  <div class="login-card">
+    <div class="login-logo"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="9" fill="currentColor"/><path d="M6 16c3-5 6.5-7.5 10-7.5S23 11 26 16c-3 5-6.5 7.5-10 7.5S9 21 6 16z" fill="#fff"/><circle cx="16" cy="16" r="4.2" fill="currentColor"/></svg>Lens</div>
+    <div id="login-form">
+      <h1>Log in to Lens</h1>
+      <label>Username<input value="@theo" readonly></label>
+      <label>Password<input value="••••••••••" readonly></label>
+      <button id="login-btn" class="primary" type="button">Log in</button>
+      <p class="lab-note">Life Academy Web Lab · Seven layers. Find them all.</p>
+    </div>
+    <div id="briefing" hidden>
+      <img class="avatar huge" src="img/theo.webp" alt="">
+      <p>You are <b>Theo</b>. You're 13.</p>
+      <p>Yesterday at Life Academy field day you slipped in the mud during the gaga championship and knocked a wall panel over. Everyone laughed, and so did you. Mr. Alvarez fixed the wall, there was a rematch, and June won. It was a good day.</p>
+      <p class="morning">This morning, you open Lens.</p>
+      <button id="open-btn" class="primary" type="button">Open Lens</button>
+    </div>
+  </div>
+</section>
+
+<div id="goalcard" hidden></div>
+<div id="modal-root"></div>
+<div id="toasts" aria-live="polite"></div>
+<section id="groups" class="screen" hidden></section>
+<section id="loggedout" class="screen" hidden></section>
+<section id="replay" class="screen" hidden></section>
+<aside id="code" hidden></aside>
+<div id="blank" hidden></div>
+
+<script src="data.js"></script>
+<script src="art.js"></script>
+<script src="lens.js"></script>
+<script src="replay.js"></script>
+</body>
+</html>
