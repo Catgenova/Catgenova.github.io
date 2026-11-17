@@ -268,11 +268,15 @@
     const ck = id + '|theo|' + m.text, at = S.cposted[ck];
     if (at == null) return [];
     const p = getItem(id) || {}, kind = p.cat === 'teacher' ? 'teacher' : (p.topics && (p.topics.gaga || p.topics.theo)) ? 'story' : 'other';
+    // Replies that answer what Theo wrote come first, then the rest of the pool, all different.
+    const texts = [];
+    const hit = L.theoKeywordReplies.find(([re]) => re.test(m.text));
+    if (hit) { const k = seededOrder(hit[1].length, hashStr(ck + ':k')); texts.push(hit[1][k[0]]); }
+    const pool = L.theoReplies[kind], order = seededOrder(pool.length, hashStr(ck + ':r'));
+    order.forEach(i => { if (!texts.includes(pool[i])) texts.push(pool[i]); });
+    const who = seededOrder(L.morePool.who.length, hashStr(ck + ':w'));
     const h = hashStr(ck), n = 2 + h % 3, age = S.clock - at, out = [];
-    for (let i = 0; i < n && REPLY_AT[i] <= age; i++) {
-      const hh = hashStr(ck + '#' + i), pool = L.theoReplies[kind];
-      out.push([L.morePool.who[hh % L.morePool.who.length], pool[(hh >>> 5) % pool.length]]);
-    }
+    for (let i = 0; i < n && REPLY_AT[i] <= age; i++) out.push([L.morePool.who[who[i]], texts[i]]);
     return out;
   }
   function baseCommentCount(id) {
@@ -709,18 +713,34 @@
     }
     return list.slice(0, Math.min(list.length, baseCommentCount(id)));
   }
+  // A shuffled order seeded by a key: the same post or comment always gets the same picks, and none repeat.
+  function seededOrder(n, seed) {
+    const a = Array.from({ length: n }, (_, i) => i);
+    let x = seed >>> 0 || 1;
+    for (let i = n - 1; i > 0; i--) {
+      x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0;
+      const j = x % (i + 1); const t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
   function extraComment(id, i) {
     const p = getItem(id) || {}, pool = L.morePool;
     const kind = p.cat === 'teacher' ? 'teacher' : (p.topics && (p.topics.gaga || p.topics.theo)) ? 'story' : 'other';
-    const hsh = hashStr(id + ':' + i), texts = pool[kind];
-    return [pool.who[hsh % pool.who.length], texts[(hsh >>> 5) % texts.length]];
+    const texts = pool[kind];
+    const order = seededOrder(texts.length, hashStr(id + ':texts')), whoOrder = seededOrder(pool.who.length, hashStr(id + ':who'));
+    return [pool.who[whoOrder[i % pool.who.length]], texts[order[i % texts.length]]];
   }
   function commentsFor(id) {
     const base = writtenComments(id);
     const room = Math.max(0, baseCommentCount(id) - base.length);
     const extra = Math.min(room, (S.moreShown && S.moreShown[id]) || 0);
-    const out = base.slice();
-    for (let i = 0; i < extra; i++) out.push(extraComment(id, i));
+    // extra comments never repeat each other or the written ones
+    const out = base.slice(), seen = new Set(base.map(c => c[1]));
+    for (let i = 0, added = 0; added < extra && i < extra + 60; i++) {
+      const c = extraComment(id, i);
+      if (seen.has(c[1])) continue;
+      seen.add(c[1]); out.push(c); added++;
+    }
     return out;
   }
   function renderComments(id, n) {
