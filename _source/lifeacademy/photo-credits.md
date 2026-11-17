@@ -23,3 +23,9 @@ Mr. French and Mr. Alvarez use initials instead of photos.
 | zara.webp | Zara | https://www.pexels.com/photo/smiling-girl-in-glasses-outdoors-15595245/ |
 | nora.webp | Nora | https://www.pexels.com/photo/a-young-teenager-smiling-16160800/ |
 | ben.webp | Ben | https://www.pexels.com/photo/smiling-asian-guy-looking-at-camera-in-nature-in-sunlight-7501576/ |
+| toby.webp | Toby (random kid) | https://www.pexels.com/photo/boy-wearing-pullover-hoodie-452557/ |
+| lulu.webp | Lulu (random kid) | https://www.pexels.com/photo/photo-of-girl-smiling-3094489/ |
+| marcus.webp | Marcus (random kid) | https://www.pexels.com/photo/boy-in-black-hoodie-4100430/ (cottonbro studio) |
+| ivy.webp | Ivy (random kid) | https://www.pexels.com/photo/girl-touching-her-face-2339508/ |
+| benji.webp | Benji (random kid) | https://www.pexels.com/photo/a-boy-talking-on-the-phone-and-smiling-17796494/ |
+| quinn.webp | Quinn (random kid) | https://www.pexels.com/photo/smiling-teenage-girl-in-white-t-shirt-and-beige-shorts-10484692/ |

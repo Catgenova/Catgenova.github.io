@@ -353,6 +353,27 @@ back, Theo" card and **Mr. French's post** at the top:
 It's a joke, it's kind, and it has all the context. It's the truest thing
 the class will see all game. No ads yet.
 
+Around it is an ordinary, goofy morning feed: **one post above Mr. French's
+and nine below**, from random kids at other schools and a few classmates.
+
+| Where | Who | Post |
+|---|---|---|
+| above | Toby (random) | my mom said no pets so I named the roomba Steve 🤖 he's thriving |
+| below | Kai | day 3 of trying to land a kickflip. the driveway is winning 🛹 |
+| below | Lulu (random) | drew my dog as a medieval knight. he has no idea he's been knighted ⚔️ |
+| below | Quinn (random) | who decided 7am was a real time |
+| below | Lily | made pancakes shaped like everyone in my family. dad is a circle 🥞 |
+| below | Marcus (random) | accidentally walked into my sister's zumba class and was too scared to leave… |
+| below | Dev | science fact: you can't sneeze with your eyes open. I have tested this 14 times today… |
+| below | Ivy (random) | my cat just pushed my water glass off the table while looking me directly in the eyes… |
+| below | Benji (random) | grandma signs every text. even "ok". "Ok. Love, Grandma" 💌 |
+| below | Nora | practiced violin for 2 hours. the neighbor's dog howled for 2 hours… |
+
+Every post carries its own hidden on-screen timer, so whatever the class
+lingers on is counted. Stage 1 always ends with Mr. French's post being
+pushed. When stage 2 starts, its new posts load right under Mr. French's,
+and these goofy posts get pushed further down the feed.
+
 **The meter:** invisible until the mouse goes over the post. Then a
 translucent overlay appears with a **timer counting how long the post has
 been on screen** (since the feed loaded, not since the hover) and a

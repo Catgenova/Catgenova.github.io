@@ -22,6 +22,13 @@ LENS.people = {
   nora:    { name: 'Nora',          handle: 'nora.plays',         img: 'nora' },
   ben:     { name: 'Ben',           handle: 'ben.kicks',          img: 'ben' },
   ava:     { name: 'Ava P.',        handle: 'ava.p',              initials: 'AP', color: '#8a5cc2' },
+  // Random kids from other schools: they only show up in the everyday feed.
+  toby:    { name: 'Toby',          handle: 'tobyyy',             img: 'toby' },
+  lulu:    { name: 'Lulu',          handle: 'lulu.draws',         img: 'lulu' },
+  quinn:   { name: 'Quinn',         handle: 'sleepy.quinn',       img: 'quinn' },
+  marcus:  { name: 'Marcus',        handle: 'marcus.moves',       img: 'marcus' },
+  ivy:     { name: 'Ivy',           handle: 'ivy.r',              img: 'ivy' },
+  benji:   { name: 'Benji',         handle: 'benji.b',            img: 'benji' },
 };
 
 /* Topics drive the ranking. Interest starts spread out; signals move it. */
@@ -30,10 +37,40 @@ LENS.startInterest = { gaga: 0.15, theo: 0, drama: 0, school: 0.3, pets: 0.25, s
 /* cat: 'teacher' | 'story' | 'other' (ads are 'ad'). Used for colors in the replay. */
 /* img: { photo: 'full'|'maya'|'jaxon'|'gossip' } or { card: key } */
 LENS.posts = [
+  // Stage 1: an ordinary, goofy morning feed. pos 'above' sits over Mr. French's post; the rest go below it.
+  { id: 's1toby', who: 'toby', time: 'Today · 7:48 AM', min: 1428, stage: 1, pos: 'above', cat: 'other', short: 'Roomba named Steve',
+    topics: { pets: 0.5, memes: 1 }, text: "my mom said no pets so I named the roomba Steve 🤖 he's thriving",
+    img: { card: 'roomba' }, r: { like: 64, laugh: 81 }, shares: 12, comments: 19, big: 2140 },
   { id: 'french', who: 'french', time: 'Yesterday · 4:10 PM', min: 490, stage: 1, cat: 'teacher', short: "Mr. French's post",
     topics: { gaga: 1, school: 0.5 },
     text: "Theo's championship-winning dive 🏆 (he didn't win… the wall did 😂). Wall fixed in 10 minutes thanks to Mr. Alvarez, rematch at 2:15. Best field day yet! #LifeAcademyFieldDay",
     img: { photo: 'full' }, r: { like: 19, laugh: 4 }, shares: 0, comments: 3, big: 23 },
+
+  { id: 's1kai', who: 'kai', time: 'Today · 7:31 AM', min: 1411, stage: 1, cat: 'other', short: 'Kickflip, day 3',
+    topics: { sports: 1 }, text: 'day 3 of trying to land a kickflip. the driveway is winning 🛹',
+    img: { card: 'skate' }, r: { like: 22, laugh: 30 }, shares: 1, comments: 7, big: 410 },
+  { id: 's1lulu', who: 'lulu', time: 'Today · 7:20 AM', min: 1400, stage: 1, cat: 'other', short: 'Dog as a knight',
+    topics: { art: 1, pets: 0.5 }, text: "drew my dog as a medieval knight. he has no idea he's been knighted ⚔️",
+    img: { card: 'knight' }, r: { like: 58, laugh: 21 }, shares: 6, comments: 12, big: 1320 },
+  { id: 's1quinn', who: 'quinn', time: 'Today · 7:02 AM', min: 1382, stage: 1, cat: 'other', short: 'Who decided 7am',
+    topics: { school: 0.5, memes: 1 }, text: 'who decided 7am was a real time', r: { like: 90, laugh: 44 }, shares: 15, comments: 23, big: 3060 },
+  { id: 's1lily', who: 'lily', time: 'Today · 6:55 AM', min: 1375, stage: 1, cat: 'other', short: 'Family pancakes',
+    topics: { memes: 0.6 }, text: 'made pancakes shaped like everyone in my family. dad is a circle 🥞',
+    img: { card: 'pancakes' }, r: { like: 40, laugh: 52 }, shares: 3, comments: 9, big: 870 },
+  { id: 's1marcus', who: 'marcus', time: 'Today · 6:40 AM', min: 1360, stage: 1, cat: 'other', short: "Sister's zumba class",
+    topics: { sports: 0.4, memes: 1 }, text: "accidentally walked into my sister's zumba class and was too scared to leave. 45 minutes. I have never been so tired 💀",
+    r: { like: 33, laugh: 77 }, shares: 9, comments: 14, big: 1904 },
+  { id: 's1dev', who: 'dev', time: 'Today · 6:31 AM', min: 1351, stage: 1, cat: 'other', short: 'Sneeze experiment',
+    topics: { science: 1, memes: 0.4 }, text: "science fact: you can't sneeze with your eyes open. I have tested this 14 times today. my mom is concerned",
+    r: { like: 27, laugh: 38 }, shares: 2, comments: 11, big: 655 },
+  { id: 's1ivy', who: 'ivy', time: 'Today · 6:20 AM', min: 1340, stage: 1, cat: 'other', short: 'Cat vs. water glass',
+    topics: { pets: 1 }, text: 'my cat just pushed my water glass off the table while looking me directly in the eyes. no remorse 🐈',
+    r: { like: 71, laugh: 49 }, shares: 8, comments: 16, big: 2470 },
+  { id: 's1benji', who: 'benji', time: 'Yesterday · 9:44 PM', min: 824, stage: 1, cat: 'other', short: 'Grandma signs her texts',
+    topics: { memes: 1 }, text: 'grandma signs every text. even "ok". "Ok. Love, Grandma" 💌', r: { like: 88, laugh: 35 }, shares: 11, comments: 20, big: 2990 },
+  { id: 's1nora', who: 'nora', time: 'Yesterday · 9:10 PM', min: 790, stage: 1, cat: 'other', short: 'Violin + howling dog',
+    topics: { music: 1, pets: 0.3 }, text: "practiced violin for 2 hours. the neighbor's dog howled for 2 hours. we're basically a band now 🎻🐕",
+    r: { like: 45, laugh: 39 }, shares: 4, comments: 10, big: 1010 },
 
   // Stage 2: unrelated posts, the true timeline, and the reposts that get louder.
   { id: 'cat', who: 'lily', time: 'Yesterday · 6:02 PM', min: 602, stage: 2, cat: 'other', short: 'Cat falls off couch',

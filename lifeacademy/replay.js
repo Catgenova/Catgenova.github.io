@@ -122,7 +122,7 @@
         break;
       }
       case 'start': {
-        const dwell = S.signals.find(x => x.type === 'dwell');
+        const dwell = S.signals.find(x => x.type === 'dwell' && x.id === 'french');
         const sec = dwell ? secs(dwell.t) : secs((S.it.french || {}).screen || 0);
         html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 1</span><span class="rp-goal">“${esc(g(1))}”</span></div>
           <div class="rp-tiles"><div class="rp-tile"><b>${sec}s</b><span>looking at Mr. French’s post before Lens decided Theo wanted more</span></div>
@@ -208,7 +208,7 @@
         const reacts = sig.filter(x => x.type === 'react').map(x => `${EMO[x.detail] || ''} on ${shortOf(x.id)}`);
         let longest = null;
         Object.entries(S.it).forEach(([id, x]) => { if (x.pause && (!longest || x.pause > longest[1])) longest = [id, x.pause]; });
-        const dwell = sig.find(x => x.type === 'dwell');
+        const dwell = sig.find(x => x.type === 'dwell' && x.id === 'french');
         const ads = L.ads.map(a => [a, a.bid * (0.2 + Object.entries(a.topics).reduce((m, [t, w]) => m + (S.interest[t] || 0) * w, 0))]).sort((a, b) => b[1] - a[1]).slice(0, 3).map(x => x[0].brand);
         const deleted = S.reply.drafts.filter(d => d !== S.reply.text).length;
         const rows = [

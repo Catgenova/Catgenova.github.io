@@ -154,6 +154,10 @@ LENS.cropFilters = {
     lesson:  ['#eef3fb', '#cfdcf2', '<span style="font-size:3.6em">📝</span><b style="font-size:1.4em;color:#234">Persuasive writing</b>'],
     game:    ['#14142a', '#3a2a8c', '<span style="font-size:3.8em">🎮</span><b style="font-size:1.8em;color:#9cf">PB 4:31</b>'],
     dog:     ['#cfe8f7', '#8cc3e6', '<span style="font-size:4.4em">🐕</span><span style="font-size:2em">💨</span>'],
+    roomba:  ['#e8eef3', '#c5d3de', '<span style="font-size:4.2em">🤖</span><b style="font-size:1.6em;color:#234">“Steve”</b><span style="font-size:2.2em">🧹✨</span>'],
+    skate:   ['#cfd6dc', '#8d99a3', '<span style="font-size:4em">🛹</span><span style="font-size:3em">💥</span><span style="font-size:2.4em">🤕</span>'],
+    knight:  ['#f5ecd7', '#e2cc98', '<span style="font-size:4.2em">🐕</span><span style="font-size:3em">⚔️🛡️</span><span style="font-size:2.2em">👑</span>'],
+    pancakes:['#fff1d6', '#f6c97a', '<span style="font-size:4.2em">🥞</span><span style="font-size:2.4em">👨‍👩‍👧‍👦</span><span style="font-size:2.6em">⭕</span>'],
   };
   LENS.cardHTML = function (key) {
     const c = cards[key];

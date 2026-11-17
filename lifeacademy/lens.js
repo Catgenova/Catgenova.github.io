@@ -454,13 +454,13 @@
 
     // Meters
     if (S.stage === 1) {
-      const n = nodes.get('french');
-      if (n) {
-        const x = it('french'), prog = x.screen / 90000;
+      // Every post counts its own time on screen; 90 seconds of being looked at is a vote.
+      nodes.forEach((n, id) => {
+        const x = it(id), prog = x.screen / 90000;
         setMeter(n, '⏱', 'on screen', mmss(x.screen), prog, x.done);
-        if (prog >= 1 && !x.done) { x.done = 1; confirm('dwell', 'french'); }
-        meterShow(n, 'french', hoverId === 'french');
-      }
+        if (prog >= 1 && !x.done) { x.done = 1; confirm('dwell', id); }
+        meterShow(n, id, hoverId === id);
+      });
     } else if (S.stage >= 2 && S.stage <= 6) {
       const T = threshold() * 1000;
       nodes.forEach((n, id) => {
@@ -493,8 +493,17 @@
 
   /* ---------------- stage setups ---------------- */
   const stageSetup = {
-    1() { S.order = ['french']; it('french'); },
-    2() { STAGE2_ORDER.forEach(id => { if (!S.order.includes(id)) S.order.push(id); }); S.adOrder = []; rerankAdsOnly(); },
+    1() {
+      const s1 = L.posts.filter(p => p.stage === 1 && p.id !== 'french');
+      S.order = s1.filter(p => p.pos === 'above').map(p => p.id).concat(['french'], s1.filter(p => p.pos !== 'above').map(p => p.id));
+    },
+    2() {
+      // New posts load right under Mr. French's; this morning's goofy posts get pushed further down.
+      const above = S.order.slice(0, S.order.indexOf('french') + 1);
+      const seen = S.order.slice(S.order.indexOf('french') + 1);
+      S.order = above.concat(STAGE2_ORDER.filter(id => id !== 'french'), seen);
+      S.adOrder = []; rerankAdsOnly();
+    },
     3() {}, 4() {}, 5() {},
     6() { L.posts.filter(p => p.stage === 6).forEach(p => { S.order.unshift(p.id); }); rerank('all'); },
     7() { S.interest.stress = (S.interest.stress || 0) + .6; S.extra.video = { id: 'video', who: 'gossip', time: 'Live · autoplay', min: 1500, stage: 7, cat: 'story', short: 'Crash video (on loop)', topics: { gaga: 1, theo: 1, drama: 1 }, text: 'THE MOMENT 💥 #GagaGate', img: { video: 1 }, r: { like: 300, laugh: 500, angry: 200 }, shares: 300, comments: 200, big: 61003, loud: 1 }; S.order = ['video'].concat(S.order.filter(id => id !== 'video')); },
@@ -613,7 +622,9 @@
 
   async function forceConfirm() {
     const key = { 1: 'french', 2: 'gossip', 3: 'gossip', 4: 'gossip', 5: 'gossip', 6: 'purpose' }[S.stage];
-    if (!key || S.stageConfirmed[S.stage]) return;
+    // Stage 1 always ends on Mr. French's post, even if another post reached 90 seconds first.
+    const done = S.stage === 1 ? S.signals.some(x => x.type === 'dwell' && x.id === 'french') : S.stageConfirmed[S.stage];
+    if (!key || done) return;
     rec().early = true;
     if (S.stage === 1) it('french').done = 1;
     const type = { 1: 'dwell', 2: 'pause', 3: 'pause', 4: 'thread', 5: 'glance', 6: 'pause' }[S.stage];
