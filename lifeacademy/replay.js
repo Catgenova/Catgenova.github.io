@@ -210,7 +210,7 @@
       set(c.querySelector('.vp-nums'), (n ? `<span>👍 ${fmt(n[0])}</span><span>💬 ${fmt(n[1])}</span><span>↗ ${fmt(n[2])}</span>` : '') + (rank ? `<span class="vp-rk">#${rank}${sc != null ? ` · score ${sc}` : ''}</span>` : ''));
       if (n) set(c.querySelector('.vp-time'), esc(n[3]));
     });
-    const bn = (X.bn || []).filter(b => !/^“/.test(b));
+    const bn = (X.bn || []).filter(b => !/^Theo:/.test(b));
     set(el.querySelector('.vp-banners'), bn.map(b => `<div class="vp-banner">${esc(trunc(b, 70))}</div>`).join(''));
     // sidebar ads, and why Lens picked them
     // (kept as elements and only their text updated, so the timers ticking don't restart the fade-in)
@@ -276,7 +276,7 @@
     if (V.stage !== stageNo || force) {
       V.stage = stageNo;
       const rv = L.reveal[stageNo];
-      el.querySelector('.vp-stage').innerHTML = `<span class="rp-st">Stage ${stageNo}</span><span class="vp-goal">“${esc(L.goals[stageNo])}”</span>`;
+      el.querySelector('.vp-stage').innerHTML = `<span class="rp-st">Stage ${stageNo}</span>`;
       const cap = el.querySelector('.vp-cap');
       cap.innerHTML = `<small>What this really is</small><b>${esc(rv.name)}</b><p>${esc(rv.line)}</p>`;
       cap.classList.remove('pop'); void cap.offsetWidth; cap.classList.add('pop');

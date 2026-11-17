@@ -1,9 +1,23 @@
 # Lens: instructor guide (Mr. French)
 
 You run the laptop. The class decides what Theo does; you only click what
-they tell you. **`Shift` + `→` moves to the next stage whenever you're
-ready.** Lens tracks everything silently; nothing on screen shows it until the
-replay.
+they tell you. **The stages move on by themselves, on a clock** (below);
+stage 7 lasts until the class logs off. Lens tracks everything silently;
+nothing on screen shows it until the replay.
+
+| Stage | Runs for | Ends at about |
+|---|---|---|
+| 1 | 45 s until Mr. French posts, then 4 min | 4:45 |
+| 2 | 6 min | 10:45 |
+| 3 | 5 min | 15:45 |
+| 4 | 3 min | 18:45 |
+| 5 | 3 min | 21:45 |
+| 6 | 3 min | 24:45 |
+| 7 | until the class logs off | |
+
+The clocks only run while the page is on screen. If the class is halfway
+through typing a reply when a stage's time is up, Lens waits for them to
+finish (up to a minute). `Shift` + `→` still moves on early if you need it.
 
 ## Before class
 
@@ -17,19 +31,18 @@ replay.
 - Click **Log in**, read the briefing aloud, click **Open Lens**.
 - Say: *"You're Theo. I'm your hands. I'll only do what you tell me."*
 
-## Stage 1: scrolling before school (~3 min)
+## Stage 1: scrolling before school (4 min 45 s)
 
 - **Do:** let the class steer the scrolling through ten goofy posts. They can
   react, open comments and reply as Theo if they want.
 - **Nothing shows it, but Lens is timing every post** the class looks at.
   Ask: *"Is anything on this page doing more than showing posts?"* They won't
   find anything. The replay answers it.
-- **At 60 s:** Mr. French's post lands with a "New post" pill, and tag
+- **At 45 s:** Mr. French's post lands with a "New post" pill, and tag
   notifications start every ~9 s. Clicking one jumps to the post.
-- **Advance** about 90 s after his post appears. Lens records it silently,
-  and advancing early still records it.
+- Stage 2 starts 4 minutes after his post appears.
 
-## Stage 2: "Let's see what else is on here" (~6 min)
+## Stage 2: the reposts (6 min)
 
 - **Do:** scroll the new posts. Stop where the class wants to stop.
 - **Watch for:** Maya's repost, then Jaxon's, each one louder. Lens silently
@@ -37,9 +50,7 @@ replay.
   match. Posts already seen turn grey.
 - **Ask:** *"Why did we stop on that one?"* and *"What's missing from this
   photo compared to Mr. French's?"* (Theo laughing.)
-- **Advance.**
-
-## Stage 3: the gossip post (~6 min)
+## Stage 3: the gossip post (5 min)
 
 - **Happens:** LA Gossip's "GAGABALL PIT COLLAPSES" post lands at the top,
   with a notification.
@@ -47,9 +58,7 @@ replay.
   click it. Hover a reaction to show its hidden weight (😡 = +5).
 - **Watch for:** any reaction jumps the post to the top. Ask: *"Is there any
   button that means 'less of this'?"* (⋯ → *Not interested*, worth −1.)
-- **Advance.**
-
-## Stage 4: setting the record straight (~10 min)
+## Stage 4: setting the record straight (3 min)
 
 - **Do:** click **"38 comments · View all"** on the gossip post. Read the
   comments aloud. Let the class agree on Theo's reply, type it exactly, and
@@ -59,27 +68,21 @@ replay.
   words included.
 - **Ask:** *"Is that what Theo said?"* and *"Why is Maya's kind comment at
   the bottom?"* Then click **← Back to feed**.
-- **Advance.**
-
-## Stage 5: the numbers (~5 min)
+## Stage 5: the numbers (3 min)
 
 - **Happens:** likes roll up to 48.2K, a checkmark appears, and the post
   starts trending.
 - **Do:** show of hands: *"Who'd believe 48,000 likes?"* Click **"Liked by…"**
   under the gossip post and count the real names aloud (there are 12; the
   rest are bots). Point out the *Post Boost* ad.
-- **Advance.**
-
-## Stage 6: the bubble (~6 min)
+## Stage 6: the bubble (3 min)
 
 - **Happens:** the feed turns orange and shows nothing but #GagaGate.
 - **Do:** let the class search for anything (soccer, Minecraft…). Every result
   comes back as #GagaGate.
 - **Ask:** *"If this were your feed, what would you think everyone thought of
   you?"*
-- **Advance.**
-
-## Stage 7: logging off (~7 min)
+## Stage 7: logging off (until they log off)
 
 - **Happens:** notifications, a looping crash video, an endless feed, a
   streak.
@@ -88,8 +91,8 @@ replay.
      going* → tiny **"turn it off"** link.
   2. Scroll to the bottom → faint **Log off** → tiny **"log off and miss
      it"** → if asked, **"lose it"** (the streak).
-- Watch which big bright button tempts them. If time runs short, press
-  `Shift` + `→`.
+- Watch which big bright button tempts them. There's no clock on this
+  stage; if time runs short, press `Shift` + `→` to log off for them.
 - When it says *"Before you go…"*, click **Open my replay**.
 
 ## Lens Replay (~12 min)
@@ -114,7 +117,7 @@ replay.
 
 | Key | Does |
 |---|---|
-| `Shift` + `→` | Next stage (in the replay: jump to the ending) |
+| `Shift` + `→` | Backup: move on early (in the replay: jump to the ending) |
 | `Space` | In the replay: pause or play the video |
 | `Shift` + `←` | Back a stage (re-runs it) |
 | `N` | Skip an animation |
@@ -124,5 +127,6 @@ replay.
 | `Esc` | Close a window or menu |
 | `Shift` + `R` | Start over (clears everything) |
 
-On a phone or tablet, the **⏭** button in the top bar has the same controls.
+On a phone or tablet, the **☰** button in the top bar has the same controls
+(except moving on early).
 A refresh keeps your place.

@@ -446,19 +446,6 @@
     $('#badge').textContent = S.bell.unread;
   }
 
-  function showGoalPill() {
-    const g = $('#goalpill');
-    if (S.stage < 1 || S.stage > 7) { g.hidden = true; return; }
-    g.innerHTML = `${L.avatar('theo')}<span><b>Theo:</b> “${esc(L.goals[S.stage])}”</span>`;
-    g.hidden = false;
-  }
-  async function showGoalCard() {
-    const c = $('#goalcard');
-    c.innerHTML = `<div class="g">${L.avatar('theo')}<div><small>Theo</small><p>“${esc(L.goals[S.stage])}”</p></div></div>`;
-    c.hidden = false;
-    await wait(3600);
-    c.hidden = true;
-  }
 
   /* ---------------- toasts & dialogs ---------------- */
   function toast(text, icon, ms, goto) {
@@ -571,11 +558,28 @@
       x.x = { i, thr: Math.round(threshold() * 10) / 10, cf: S.confirmed, share: Math.round(storyShare() * 1000) / 10,
         ads: S.adOrder.slice(0, 6).map(a => [a, Math.round(adScore(a) * 100) / 100]), side: S.sideTop || [],
         bell: S.bell.unread, keys: (S.reply.keys || 0) + (S.inlineKeys || 0),
-        bn: [...document.querySelectorAll('#banners .banner, #goalpill:not([hidden])')].map(b => b.textContent.trim()).filter(Boolean).slice(0, 4),
+        bn: [...document.querySelectorAll('#banners .banner')].map(b => b.textContent.trim()).filter(Boolean).slice(0, 4),
         s7: S.stage === 7 ? [S.s7.notifCount, S.s7.videoPlays || 0, S.s7.pulls, S.s7.loads, S.s7.autoCount, S.s7.attempts, S.s7.streak ? 1 : 0] : null,
         rk: v.filter(id => !id.startsWith('ad:') && getItem(id)).map(id => { const p = getItem(id), m = 3 * match(p.topics), e = Math.log10(1 + engagement(id)) * 0.9, sc = score(id); return [id, Math.round(m * 100) / 100, Math.round(e * 100) / 100, Math.round((sc - m - e) * 100) / 100, Math.round(sc * 100) / 100]; }) };
     }
     return x;
+  }
+
+  /* How long each stage runs. Stages move on by themselves; stage 7 lasts until the class logs off.
+     (Shift + → still moves on early, as a backup.) */
+  const FRENCH_AT = 45000;
+  const STAGE_MS = { 2: 6 * 60000, 3: 5 * 60000, 4: 3 * 60000, 5: 3 * 60000, 6: 3 * 60000 };
+  function stageOver(r) {
+    if (S.stage === 1) return S.s1.shown && r.active >= (S.s1.shownAt || FRENCH_AT) + 4 * 60000;
+    return STAGE_MS[S.stage] != null && r.active >= STAGE_MS[S.stage];
+  }
+  function midSentence(r) {
+    // Don't cut the class off mid-reply: wait up to a minute for them to finish typing.
+    const a = document.activeElement;
+    const typing = a && /^(INPUT|TEXTAREA)$/.test(a.tagName) && a.offsetParent !== null && !a.closest('#login') && a.value.trim();
+    if (!typing) { r.overtime = 0; return false; }
+    r.overtime = (r.overtime || 0) + 250;
+    return r.overtime < 60000;
   }
 
   /* The heartbeat: every 250 ms, note what's on screen and move the meters. */
@@ -585,7 +589,7 @@
     r.active += dt;
     const top = 58, vh = innerHeight, cy = top + (vh - top) / 2;
     const vis = []; let ctr = null, best = 1e9;
-    const blocked = !$('#goalcard').hidden || $('#modal-root').children.length > 0;
+    const blocked = $('#modal-root').children.length > 0;
     if (!threadOpen) {
       nodes.forEach((n, id) => {
         if (!n.isConnected) return;
@@ -612,9 +616,11 @@
 
     // Stage 1: Mr. French's post arrives at 60 s, then the tags start coming in.
     if (S.stage === 1) {
-      if (!S.s1.shown && r.active >= 60000) showFrench();
+      if (!S.s1.shown && r.active >= FRENCH_AT) showFrench();
       if (S.s1.shown && S.s1.sent < L.s1Tags.length && r.active >= S.s1.shownAt + 4000 + S.s1.sent * 9000) sendTag();
     }
+
+    if (S.stage >= 1 && S.stage <= 6 && !busy && stageOver(r) && !midSentence(r)) { advance(); return; }
 
     // Meters
     if (S.stage === 1) {
@@ -1007,11 +1013,10 @@
       save(true);
     }
     $('#login').hidden = true;
+    if (document.activeElement && document.activeElement.closest && document.activeElement.closest('#login')) document.activeElement.blur();
     bodyClasses();
     renderBanners();
-    showGoalPill();
     if (!opts.resume && n !== 1) window.scrollTo({ top: 0 });
-    if (!opts.resume) { await showGoalCard(); }
     await stageIntro[n](!opts.resume);
     recordOrder();
     save(true);
@@ -1381,7 +1386,7 @@
 
   /* Touch screens have no keyboard, so the presenter keys live in a small menu in the top bar. */
   const touchOnly = matchMedia('(hover: none), (pointer: coarse)');
-  const pbtn = h('<button id="presenter" type="button" aria-label="Presenter controls">⏭</button>');
+  const pbtn = h('<button id="presenter" type="button" aria-label="Presenter controls">☰</button>');
   $('.top-right').prepend(pbtn);
   pbtn.hidden = !touchOnly.matches;
   touchOnly.addEventListener && touchOnly.addEventListener('change', () => { pbtn.hidden = !touchOnly.matches; });
@@ -1389,7 +1394,6 @@
     e.stopPropagation();
     if ($('.dropdown')) return $('.dropdown').remove();
     const d = h(`<div class="dropdown presenter-menu">
-      <button type="button" data-p="next">⏭ Next stage</button>
       <button type="button" data-p="back">⏮ Back a stage</button>
       <button type="button" data-p="skip">⏩ Skip animation</button>
       <button type="button" data-p="mute">${S.muted ? '🔊 Sound on' : '🔇 Sound off'}</button>
@@ -1398,7 +1402,7 @@
     d.addEventListener('click', ev => {
       const b = ev.target.closest('[data-p]'); if (!b) return;
       d.remove();
-      ({ next: advance, back, skip: () => { skipping = true; $('#goalcard').hidden = true; },
+      ({ next: advance, back, skip: () => { skipping = true; },
         mute: () => { S.muted = !S.muted; save(); },
         reset: () => { if (window.confirm('Start over? This clears everything Lens recorded.')) { localStorage.removeItem(KEY); localStorage.removeItem(KEY + '-snaps'); location.reload(); } } })[b.dataset.p]();
     });
@@ -1503,7 +1507,7 @@
     const k = e.key.toLowerCase();
     if (k === 'b') { $('#blank').hidden = !$('#blank').hidden; return; }
     if (k === 'm') { S.muted = !S.muted; toast(S.muted ? 'Sound off' : 'Sound on', S.muted ? '🔇' : '🔊', 1500); save(); return; }
-    if (k === 'n') { skipping = true; $('#goalcard').hidden = true; return; }
+    if (k === 'n') { skipping = true; return; }
     if (k === 'c') { toggleCode(); return; }
     if (k === 'escape') { closeModal(); $('#code').hidden = true; $('.dropdown') && $('.dropdown').remove(); return; }
     if (S.stage === 8 && L.Replay) {
@@ -1524,5 +1528,5 @@
     $('#login').hidden = true; bodyClasses();
     window.addEventListener('load', () => L.Replay && L.Replay.open(S.replay));
   }
-  L._debug = { get S() { return S; }, get hover() { return hoverId; }, advance, rerank, renderFeed, confirm, nodes };
+  L._debug = { get S() { return S; }, get hover() { return hoverId; }, get busy() { return busy; }, advance, rerank, renderFeed, confirm, nodes };
 })();

@@ -274,40 +274,39 @@ read from the back of the room on a washed-out classroom projector.
   exaggerated so they survive the projector. The only low-contrast elements
   are the ones that are low-contrast *on purpose* (stage 7), and those are
   tuned on the real projector.
-- **One thing at a time.** Theo's goal cards and the replay's last screens
-  appear big and centered, one at a time.
+- **One thing at a time.** The replay's last screens appear big and
+  centered, one at a time.
 - **Sound** goes through the room's speakers if there are any: a soft tick
   when a meter confirms, and notifications in stage 7. Mute with one key.
 - **Works offline.** The page is one file. Save a copy to the laptop before
   class (File → Save Page As) in case the Wi-Fi fails, and run it full
   screen (F11).
 
-### The advance keybind
+### Stage timing
 
-The teacher moves the class on with one **keybind: `Shift` + `→`**. Nothing
-appears on screen, so the class never sees a "next" button. Press it and
-the next stage rolls in:
+**The stages move on by themselves, on a clock.** Nothing appears on
+screen, so the class never sees a timer or a "next" button:
 
-| Press | Opens |
-|---|---|
-| 1st | Stage 2: more posts (and the first ads) |
-| 2nd | Stage 3: reactions |
-| 3rd | Stage 4: the comment thread |
-| 4th | Stage 5: the numbers |
-| 5th | Stage 6: the bubble |
-| 6th | Stage 7: the notifications |
-| 7th | Lens Replay (stage 7 also opens it on its own when the class logs off) |
+| Stage | Runs for | Ends at about |
+|---|---|---|
+| 1 | 45 s until Mr. French posts, then 4 min | 4:45 |
+| 2 | 6 min | 10:45 |
+| 3 | 5 min | 15:45 |
+| 4 | 3 min | 18:45 |
+| 5 | 3 min | 21:45 |
+| 6 | 3 min | 24:45 |
+| 7 | until the class logs off, which opens Lens Replay | |
 
-- **Use it at will.** There's no puzzle gate. The teacher advances whenever
-  the room has had its moment, the discussion has landed, or time is short.
-- **Keeps the story coherent.** If the teacher advances before that stage's
-  meter has confirmed, the confirmation fires as the first beat of the
-  transition, so the class still sees *"✓ PUSHED TO ALGORITHM"* before the
-  feed changes. The replay notes it ("advanced before Lens was sure").
-- **Hard to press by accident.** It needs `Shift`, so arrow keys used to
-  scroll the feed never trigger it, and it does nothing while the stage 4
-  reply box is being typed in.
-- **Backwards too.** `Shift` + `←` steps back a stage for rehearsal or a
+- **The clock is the stage's active time.** It only runs while the page is
+  on screen, and a refresh keeps it.
+- **Keeps the story coherent.** If a stage's time runs out before its meter
+  has confirmed, the confirmation fires as the first beat of the
+  transition. The replay records it.
+- **Never mid-sentence.** If the class is typing (a reply, a comment, a
+  search) when the time is up, Lens waits until they stop, for up to a
+  minute.
+- **Backup keys.** `Shift` + `→` still moves on early, and `Shift` + `←`
+  steps back a stage (which restarts that stage's clock) for rehearsal or a
   do-over.
 
 ### Phones and tablets
@@ -321,9 +320,9 @@ the mobile layout):
 - **Tap instead of hover.** Tapping a post reveals its hidden meter, which
   sits as a slim strip across the top of the post. A tapped post stops
   counting once it scrolls away.
-- **A ⏭ presenter button** appears in the top bar on touch screens (never
-  on a laptop with a mouse): Next stage, Back a stage,
-  Skip animation, Sound on/off, Start over.
+- **A ☰ presenter button** appears in the top bar on touch screens (never
+  on a laptop with a mouse): Back a stage, Skip animation, Sound on/off,
+  Start over.
 - **Replay:** ‹ ▶ › buttons at the bottom (on every screen size), and swipe
   left or right on touch screens. Charts switch to a narrower layout.
 
@@ -334,7 +333,7 @@ nothing on screen:
 
 | Key | Does |
 |---|---|
-| `Shift` + `→` | **Advance** to the next stage (in the replay: the last screens and the switch-off) |
+| `Shift` + `→` | Backup: move on to the next stage early (in the replay: the last screens and the switch-off) |
 | `Shift` + `←` | Step back a stage (rehearsal or a do-over) |
 | `N` | Skip the current transition animation |
 | `B` | Blank the screen (to pause or talk) |
@@ -349,15 +348,16 @@ To rehearse, use the same keys with the projector disconnected, then
 
 ### Each stage's shape
 
-Every stage runs the same three beats:
+Every stage runs the same two beats:
 
-1. **Theo's goal.** A short card in Theo's voice says what he wants to do
-   next (*"I just want to read it."* / *"That's not what happened. I'm
-   saying something."*).
-2. **Play.** The class tells the teacher how to scroll, pause, react or
+1. **Play.** The class tells the teacher how to scroll, pause, react or
    type. The hidden meters fill as they go, confirm, and re-sort the feed
    and the ads.
-3. **Advance.** When the room is ready, the teacher presses `Shift` + `→`.
+2. **Move on.** When the stage's time is up, the next one rolls in.
+
+There is no on-screen prompt in Theo's voice; the teacher sets up each
+stage out loud. (The "Theo's goal" lines below are what Theo wants, for the
+teacher to say or not.)
 
 In class, the rhythm inside a stage is **look → predict → instruct →
 watch**: the class reads the screen, someone predicts what Lens will do,
@@ -461,7 +461,7 @@ and nine below**, from random kids at other schools and a few classmates.
 | below | Benji (random) | grandma signs every text. even "ok". "Ok. Love, Grandma" 💌 |
 | below | Nora | practiced violin for 2 hours. the neighbor's dog howled for 2 hours… |
 
-**Mr. French's post isn't there at first.** It arrives **60 seconds** into
+**Mr. French's post isn't there at first.** It arrives **45 seconds** into
 the stage, slotting in under Toby's post with a *"↑ New post from Mr.
 French"* pill. Then the notifications start, one about every 9 seconds, each
 ringing the bell, raising the red badge and bumping the post's comment count:
@@ -502,7 +502,7 @@ the room usually goes quiet. Let the bar fill while they watch.
 **The replay will show:** where it started. Ninety seconds on one kind post
 was enough for Lens's first conclusion.
 
-**Advance →** a spinner under the confirmation: *"Finding more posts for
+**When time is up →** a spinner under the confirmation: *"Finding more posts for
 you…"* New posts start loading below Mr. French's, one after another.
 
 ---
@@ -550,7 +550,7 @@ how the reposts climbed and the unrelated posts sank; how the ads switched
 from games and sneakers to gagaball gear; and every repost's crop drawn on Mr.
 French's original photo.
 
-**Advance →** reaction buttons slide in under every post, and a tooltip
+**When time is up →** reaction buttons slide in under every post, and a tooltip
 points at them: *"React to show how you feel! 💬"*
 
 ---
@@ -602,7 +602,7 @@ against 😡's +5).
 and after: the gossip post rising to #1, June's post falling to the bottom,
 and the ads following the gossip post up.
 
-**Advance →** the comment count on the gossip post starts climbing
+**When time is up →** the comment count on the gossip post starts climbing
 (💬 12 → 38), and a speech bubble pops up from it with Theo's avatar:
 *"People are commenting on this. Say something, Theo 💬"*
 
@@ -679,7 +679,7 @@ quoted; the drafts Lens saved, including deleted words; how many seconds
 the class spent in the thread; and how the thread pushed the gossip post
 and the Lens Premium ad up everyone's feed.
 
-**Advance →** numbers appear under every post and start ticking up, slowly and
+**When time is up →** numbers appear under every post and start ticking up, slowly and
 then like a slot machine: ❤️ 12 → 340 → 4,100 → **48.2K**. Checkmarks pop
 in. A banner slides down: *🔥 Trending at Life Academy: #GagaGate*.
 
@@ -717,7 +717,7 @@ every real name they spot. (There are 12.) Point at the Post Boost ad:
 the 46 kids who actually played gagaball that day; and how the like count
 itself pulled the gossip post even higher.
 
-**Advance →** a cheerful toast: *"We've updated your feed to match your
+**When time is up →** a cheerful toast: *"We've updated your feed to match your
 interests ✨"*. The theme color shifts to #GagaGate orange, and the
 unrelated posts (the cat, the volcano, the band) **fade out one by one**.
 
@@ -747,7 +747,7 @@ feed looked like this, what would you think everyone thought of you?"*
 to his feed now (one topic, every slot), and the three other feeds side by
 side.
 
-**Advance →** a soft *ding*. A red badge 🔴 **1** appears on the bell. Then
+**When time is up →** a soft *ding*. A red badge 🔴 **1** appears on the bell. Then
 **3**. Then **9**. A banner: *"People are talking about you right now."*
 
 ---
@@ -894,7 +894,7 @@ counter, *everyday posts in the feed*, goes 216 → 0.
   posts about Theo, blue Mr. French, green ads), each with its rank and
   score. When Lens re-sorts, the rows slide to their new places, so the
   class watches the everyday posts sink and the gagaball posts rise.
-- **Lens's side** (right): the stage and Theo's goal, **What this really
+- **Lens's side** (right): the stage, **What this really
   is** (the reveal, the first time the class hears the names), counters
   (everyday posts left, posts about Theo, Lens's #GagaGate guess, the
   pause needed, signals counted, keystrokes, and in stage 7 the hooks'
@@ -956,8 +956,8 @@ Pause on each stage's **What this really is** and have a student read it.
 
 ### Rules every transition follows
 
-1. **The teacher decides when.** Every stage change happens when the
-   teacher presses `Shift` + `→`, never on a timer, so the room can take as long as it needs.
+1. **The clock decides when.** Every stage runs for a set time (section
+   2), and stage 7 lasts until the class logs off.
 2. **The algorithm still goes first.** The first beat of every transition
    is a meter confirming (*"✓ PUSHED TO ALGORITHM"*), then the feed changes.
    The class sees the cause before the effect every time.
@@ -1029,8 +1029,8 @@ give the instructions.
   possible to find. Check the speakers.
 - **Save an offline copy** of the page to the laptop, in case the Wi-Fi
   fails.
-- **Rehearse** with the projector disconnected, using `Shift` + `→` to move
-  through the stages. Then **`Shift` + `R`** to clear the rehearsal, so the
+- **Rehearse** with the projector disconnected, using `Shift` + `→` to
+  skip ahead through the stages. Then **`Shift` + `R`** to clear the rehearsal, so the
   replay only shows the class's session. Print the presenter key cheat
   sheet (section 8).
 - On the day: full screen (`F11`), the laptop's own notifications turned off
@@ -1051,23 +1051,22 @@ give the instructions.
 - **Replay readers:** a different student reads each stage's "What this
   really is" line aloud.
 
-### Pacing (about 65 minutes, plus 20 for discussion)
+### Pacing (about 50 minutes, plus 20 for discussion)
 
 | Stage | Minutes | Note |
 |---|---|---|
 | Login | 3 | Briefing; "you're Theo, I'm your hands" |
-| 1 Joke post | 6 | Let the 90-second bar fill while they watch |
-| 2 Reposts | 7 | |
-| 3 Reactions | 6 | Vote before clicking |
-| 4 Thread | 10 | Read the thread, write Theo's reply, watch the comments come in |
-| 5 Numbers | 5 | Spot the real names |
-| 6 Bubble | 6 | Search for anything; every result is #GagaGate |
-| 7 Notifications | 7 | Loud; the room decides every click |
+| 1 Joke post | 4¾ | Mr. French posts at 0:45; the stage runs 4 more minutes |
+| 2 Reposts | 6 | |
+| 3 Reactions | 5 | Vote before clicking |
+| 4 Thread | 3 | Read the thread, write Theo's reply, watch the comments come in |
+| 5 Numbers | 3 | Spot the real names |
+| 6 Bubble | 3 | Search for anything; every result is #GagaGate |
+| 7 Notifications | until they log off | Loud; the room decides every click |
 | Replay | 12 | The 4× video, pausing at each stage, then the last screens |
 
-Because the teacher advances by hand, any stage can be shortened or stretched
-on the day. If time is short, move faster through stages 2 and 5; don't
-shorten stage 4, stage 6 or the replay. If the session has to stop partway,
+The stages run on their own clocks. If time is short, `Shift` + `→` moves
+on early (best in stages 2 and 5); don't cut stage 4, stage 6 or the replay. If the session has to stop partway,
 the laptop remembers where the class left off, recording included.
 
 ### Tips
@@ -1154,7 +1153,7 @@ linked from the home page.
 3. **JS:**
    - `data`: posts (author, time, topic, tags, crop, filter, caption,
      reactions, likedBy, comments), ads (topic, bid, creative), the other
-     feeds for stage 6, Theo's goal cards, the replay's "what this really
+     feeds for stage 6, the replay's "what this really
      is" and "what was true" lines.
    - `recorder`: samples every 250 ms (on screen, centered, hovered,
      scrolling or paused) and logs every event, per stage, into one session
@@ -1222,17 +1221,17 @@ but the stage 7 notifications still arrive (as quiet badges).
 |---|---|
 | Before students arrive | `Shift` + `R` (clears rehearsal), `F11`, laptop notifications off, page on the login screen |
 | Login | Read the briefing. "You're Theo. I'm your hands." |
-| Stage 1 | Ask how Theo feels. Let them find the meter. Let it fill. **Advance.** |
-| Stage 2 | "Why did we stop on that one?" "What's missing from this photo?" **Advance.** |
-| Stage 3 | Vote on the reaction first. Look for *Not interested*. **Advance.** |
-| Stage 4 | Open the thread, read it aloud, agree on Theo's reply, type it exactly. "Is that what Theo said?" **Advance.** |
-| Stage 5 | Show of hands on 48K. Count real names in *Liked by*. **Advance.** |
-| Stage 6 | Search for something else. "What's Life Academy talking about?" **Advance.** |
+| Stage 1 | Ask how Theo feels. Let them find the meter. Let it fill. *(4:45)* |
+| Stage 2 | "Why did we stop on that one?" "What's missing from this photo?" *(6 min)* |
+| Stage 3 | Vote on the reaction first. Look for *Not interested*. *(5 min)* |
+| Stage 4 | Open the thread, read it aloud, agree on Theo's reply, type it exactly. "Is that what Theo said?" *(3 min)* |
+| Stage 5 | Show of hands on 48K. Count real names in *Liked by*. *(3 min)* |
+| Stage 6 | Search for something else. "What's Life Academy talking about?" *(3 min)* |
 | Stage 7 | The class decides every click. Find *Log off* (or turn ⏪). |
 | Replay | `→` starts the 4× video. `Space` pause on each stage; a student reads "What this really is." `→` jumps a stage. `Shift` + `→` switches everything off. |
 | After | Discussion questions, one per screen. |
 
-Keys: `Shift` + `→` advance · `N` skip animation · `B` blank · `M` mute · `→`/`←` replay stages and screens · `Space` play/pause the replay video · `C` code (optional)
+Stages move on by themselves. Keys: `Shift` + `→` move on early · `N` skip animation · `B` blank · `M` mute · `→`/`←` replay stages and screens · `Space` play/pause the replay video · `C` code (optional)
 · `Shift` + `←` step back · `Shift` + `R` start over.
 
 ## 9. Open questions
