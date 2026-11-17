@@ -183,6 +183,15 @@ the keyboard is open.
   stamped *Just now* / *Xm*, a little after his; only the field-day posts
   from yesterday and the unrelated evening posts say *Yesterday*.
 
+### Seen posts grey out
+
+A post counts as viewed once it has been on screen for 3 seconds. When the
+class scrolls past a viewed post, it fades to grey with a small *"Seen ✓"*
+after its timestamp, and stays that way for the rest of the session (it
+comes back to full color on hover or tap, or when its meter or a
+confirmation is showing). New posts stay bright until they've been viewed,
+so the eye goes to whatever Lens just added. Ads never grey out.
+
 ### Sidebar ads (live, one per post)
 
 Every post has its own invented ad (`LENS.postAds` in `data.js`): the roomba

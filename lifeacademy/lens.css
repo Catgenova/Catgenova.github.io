@@ -621,3 +621,8 @@ body { overflow-x: hidden; }
   .react { font-size: 1.05rem; padding: .25rem .5rem; }
   .more > button { padding: .1rem .3rem; }
 }
+
+/* posts the class has already viewed and scrolled past: greyed out, full color again on hover or tap */
+.item.seen { transition: filter .8s ease, opacity .8s ease; }
+.item.seen:not(:hover):not(.show-meter):not(.flash) { filter: grayscale(.9); opacity: .55; }
+.item.seen .ph .meta::after { content: " · Seen ✓"; color: var(--ink-3); font-weight: 700; }

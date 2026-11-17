@@ -294,6 +294,7 @@
     }
     if (it(id).react) { const b = n.querySelector(`.react[data-r="${it(id).react}"]`); if (b) b.classList.add('chosen'); }
     if (S.stage === 6) n.classList.add('pre');
+    if (it(id).seen && !id.startsWith('ad:')) n.classList.add('seen');
     if (openComments.has(id)) renderComments(id, n);
     if (id === 'video' && !S.s7.autoplay) n.classList.add('paused');
   }
@@ -534,6 +535,8 @@
       nodes.forEach((n, id) => {
         if (!n.isConnected) return;
         const b = n.getBoundingClientRect();
+        // A post that's been on screen 3 s counts as viewed; once the class scrolls past it, it greys out.
+        if (!id.startsWith('ad:') && !it(id).seen && it(id).screen >= 3000 && b.bottom < top + 10) { it(id).seen = 1; n.classList.add('seen'); }
         if (b.bottom > top + 20 && b.top < vh - 20) {
           vis.push(id);
           const d = b.top <= cy && b.bottom >= cy ? 0 : Math.min(Math.abs(b.top - cy), Math.abs(b.bottom - cy));
