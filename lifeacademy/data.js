@@ -96,7 +96,7 @@ LENS.posts = [
     topics: { gaga: 0.6, sports: 0.3 }, text: "Everyone's in the pit, gagaball is open!", r: { like: 15 }, shares: 0, comments: 1, big: 44 },
   { id: 'tM', who: 'noah', time: 'Yesterday · 1:31 PM', min: 331, stage: 2, cat: 'story', short: 'MUD DIVE (1:31)', truth: 1,
     topics: { gaga: 1, drama: 0.3 }, text: 'MUD DIVE 💥 the wall came DOWN', r: { like: 18, laugh: 50 }, shares: 5, comments: 7, big: 980 },
-  { id: 'gossip', who: 'gossip', time: 'Today', live: 0.2, min: 775, stage: 2, cat: 'story', short: 'Gossip: PIT COLLAPSES', loud: 2,
+  { id: 'gossip', who: 'gossip', time: 'Today', live: true, min: 775, stage: 3, cat: 'story', short: 'Gossip: PIT COLLAPSES', loud: 2,
     topics: { gaga: 1, theo: 1, drama: 1 }, repost: 'jaxon', verified: 'stage5', breaking: 1,
     text: 'GAGABALL PIT COLLAPSES — KID HURT IN LIFE ACADEMY CHAOS 😱 are they banning gagaball??',
     img: { photo: 'gossip' }, r: { like: 60, laugh: 210, sad: 30, angry: 140 }, shares: 95, comments: 12, big: 48212 },
@@ -117,12 +117,12 @@ LENS.posts = [
     img: { card: 'trophy' }, r: { like: 25 }, shares: 0, comments: 4, big: 25 },
 
   // Stage 3: "more like this" after Theo reacts.
-  { id: 'kaiBan', who: 'kai', time: 'Today', live: true, min: 1392, stage: 3, cat: 'story', short: 'gagaball BANNED??',
+  { id: 'kaiBan', who: 'kai', time: 'Today', live: true, more: true, min: 1392, stage: 3, cat: 'story', short: 'gagaball BANNED??',
     topics: { gaga: 1, drama: 1, theo: 0.4 }, text: 'gagaball BANNED at Life Academy?? 😭 thanks theo', r: { like: 30, laugh: 41, angry: 60 }, shares: 33, comments: 21, big: 9120 },
-  { id: 'gossip2', who: 'gossip', time: 'Today', live: true, min: 1410, stage: 3, cat: 'story', short: 'Gossip: the moment it fell', loud: 2,
+  { id: 'gossip2', who: 'gossip', time: 'Today', live: true, more: true, min: 1410, stage: 3, cat: 'story', short: 'Gossip: the moment it fell', loud: 2,
     topics: { gaga: 1, drama: 1, theo: 1 }, text: 'EXCLUSIVE: the exact moment the wall fell 👀 #GagaGate',
     img: { photo: 'gossip2' }, r: { like: 44, laugh: 120, angry: 90 }, shares: 61, comments: 30, big: 21480 },
-  { id: 'noahPay', who: 'noah', time: 'Today', live: true, min: 1421, stage: 3, cat: 'story', short: 'Theo should pay',
+  { id: 'noahPay', who: 'noah', time: 'Today', live: true, more: true, min: 1421, stage: 3, cat: 'story', short: 'Theo should pay',
     topics: { gaga: 1, drama: 1, theo: 1 }, text: 'theo needs to pay for that wall fr 💸', r: { like: 22, laugh: 35, angry: 28 }, shares: 12, comments: 18, big: 6044 },
 
   // Stage 6: the bubble.

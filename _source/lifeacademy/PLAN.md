@@ -309,9 +309,9 @@ the mobile layout):
   sits as a slim strip across the top of the post. A tapped post stops
   counting once it scrolls away.
 - **A ⏭ presenter button** appears in the top bar on touch screens (never
-  on a laptop with a mouse): Next stage, Back a stage, Next group (stage 6),
+  on a laptop with a mouse): Next stage, Back a stage, Friends' feeds (stage 6),
   Skip animation, Sound on/off, Start over.
-- **Stage 6 groups:** tap the screen to move to the next group.
+- **Stage 6 friends' feeds:** in the ⏭ menu, or the button in the feed.
 - **Replay:** ‹ ▶ › buttons at the bottom (on every screen size), and swipe
   left or right on touch screens. Charts switch to a narrower layout.
 
@@ -327,7 +327,7 @@ nothing on screen:
 | `N` | Skip the current transition animation |
 | `B` | Blank the screen (to pause or talk) |
 | `M` | Mute or unmute sound |
-| `G` | Stage 6: show the next group's feed |
+| `G` | Stage 6: open or close the friends' feeds |
 | `→` / `←` | In the replay: next or previous chapter |
 | `Space` | In the replay: play or pause the feed replay |
 | `C` | Optional: open the "Under the Hood" code panel (see below) |
@@ -510,7 +510,11 @@ photo**, each one more exaggerated than the last:
 |---|---|---|---|
 | **@maya.k** | a bit tighter; Theo still laughing | brighter | *"theo vs the gagaball wall 😂"* |
 | **@jaxon_** | the laughing and thumbs up cut off | high contrast | *"THEO DESTROYED THE PIT 💀"* |
-| **@lifeacademy.gossip** | just the fallen panel and Theo's muddy sneakers | red tint, grain | *"GAGABALL PIT COLLAPSES — KID HURT IN LIFE ACADEMY CHAOS 😱 are they banning gagaball??"* (huge caps, BREAKING banner) |
+
+Stage 2 is only classmates resharing Mr. French's photo, minutes after he
+posted it, each version a little louder. The gossip account isn't here yet:
+its post is the jump from teasing to *blown out of proportion*, and it lands
+live at the top of the feed as stage 3 opens.
 
 **The meter:** now it also shows when the feed **pauses** on a post (no
 scrolling for a second with the post in the middle of the screen). It shows
@@ -544,6 +548,14 @@ points at them: *"React to show how you feel! 💬"*
 
 **Theo's goal:** *"That gossip post isn't true. I want Lens to know I don't
 like it."*
+
+**The escalation lands.** As stage 3 opens, a brand-new post appears at the
+very top of the feed, *Just now*, with zero reactions: **@lifeacademy.gossip**
+reposting Jaxon's crop down to just the fallen panel and Theo's muddy
+sneakers, red-tinted and grainy, with a BREAKING banner: *"GAGABALL PIT
+COLLAPSES — KID HURT IN LIFE ACADEMY CHAOS 😱 are they banning gagaball??"*
+A notification follows (*"LA Gossip posted about you 👀"*), then a tip points
+at its reaction buttons. Its reactions and comments pour in on the curve.
 
 **Looks like:** the same feed. Every post has had a reaction bar since
 stage 1: 👍 Like, ❤️ Love, 😂 Haha, 😢 Cry, 👎 Dislike, 😡 Angry, and the
@@ -716,30 +728,24 @@ Lens Premium. When the class searches for something else (*"soccer"*,
 *"✓ pre-confirmed"*. Lens doesn't need Theo to look any more. It already
 knows.
 
-**The room splits up.** *"It feels like the whole of Life Academy is talking
-about Theo. Is it?"* Lens shows what other people's feeds look like, but
-the room is split so each group sees **only one**:
+**What are friends seeing?** *"It feels like the whole of Life Academy is
+talking about Theo. Is it?"* The stage 6 feed has a button, **"👀 See what
+your friends are seeing"** (the teacher can also press `G`, or use the ⏭
+menu on a phone). It opens three feeds **side by side, for the whole room at
+once**:
 
-1. The teacher splits the class into **Group 1, Group 2 and Group 3** (sides
-   of the room work well).
-2. The teacher presses `G` and the page calls one group at a time: *"Group
-   1, look at the screen. Everyone else, turn around."* It shows one feed
-   for **20 seconds** with a big countdown, then blanks. `G` again for the
-   next group.
-   - **Group 1 sees June's feed:** her trophy, her friends congratulating
-     her, a cake. One small mention of the wall.
-   - **Group 2 sees Mr. French's feed:** lesson plans, a field trip sign-up,
-     her original post with its 23 likes.
-   - **Group 3 sees Sam's feed:** video games and a dog. No gagaball at all.
-3. The page asks the room: ***"What's Life Academy talking about today?"***
-   Each group answers from the feed it saw (June's win, school stuff,
-   nothing much). Nobody says "Theo." Let that land.
+- **June's feed:** her trophy, her friends congratulating her, a cake. One
+  small mention of the wall.
+- **Mr. French's feed:** lesson plans, a field trip sign-up, his original
+  post with its 23 likes.
+- **Sam's feed:** video games and a dog. No gagaball at all.
 
-**In the room:** the 20 seconds is short on purpose: groups remember a
-feeling, not details, just like scrolling. Check that groups that are
-turned around can't see the screen reflected in a window. Afterwards, ask:
-*"If you were Theo, and your feed looked like this, what would you think
-everyone thought of you?"*
+Under them, one question: ***"What's Life Academy talking about today?"***
+Nobody's feed says "Theo." Let that land, then close it.
+
+**In the room:** ask the class to find the gagaball posts in the three feeds
+before anyone answers. Then: *"If you were Theo, and your feed looked like
+this, what would you think everyone thought of you?"*
 
 **The replay will show:** Theo's feed and ads at the start of the game next
 to his feed now (one topic, every slot), and the three other feeds side by
@@ -975,8 +981,7 @@ way so the class learns to read it:
 - **The bubble (6) needs everything before it.** By then Lens really has
   learned what Theo looks at, so his feed narrowing to one story is earned.
 - **Attention is last** because it's what every other stage is for, and it's
-  the only one where succeeding means *leaving*. After the group split in
-  stage 6, the room comes back together for the loudest stage, which sets
+  the only one where succeeding means *leaving*. Then comes the loudest stage, which sets
   up the quiet of the replay.
 - **The names come last, in the replay.** Holding back what each stage
   "really is" until the class has felt all seven, and then showing it with
@@ -1018,8 +1023,6 @@ give the instructions.
   list (stage 5), the *Log off* link (stage 7).
 - **Everyone:** predicts, argues, votes (the reaction in stage 3, *Stay or
   log off?* in stage 7) and writes Theo's reply together (stage 4).
-- **Stage 6 groups:** three groups. Decide ahead of time how to split the
-  room (by where they sit is easiest).
 - **Replay readers:** a different student reads each chapter's "What this
   really is" line aloud.
 
@@ -1033,7 +1036,7 @@ give the instructions.
 | 3 Reactions | 6 | Vote before clicking |
 | 4 Thread | 10 | Read the thread, write Theo's reply, watch the comments come in |
 | 5 Numbers | 5 | Spot the real names |
-| 6 Bubble | 9 | Group split; let the "nobody said Theo" moment land |
+| 6 Bubble | 8 | Friends' feeds side by side; let the "nobody said Theo" moment land |
 | 7 Notifications | 7 | Loud; the room decides every click |
 | Replay | 12 | About 90 seconds a chapter, then the last screens |
 
@@ -1138,13 +1141,13 @@ linked from the home page.
      confirmations and the signal log.
    - `layers[]`: `enable`/`disable` for each stage.
    - `keys`: the presenter keybinds (advance, back, skip, blank, mute,
-     groups, replay), ignored while the reply box has focus, and the
+     friends' feeds, replay), ignored while the reply box has focus, and the
      "confirm first" beat at the start of each transition.
    - `thread`: the stage 4 thread view, reply box, keystroke log, drafts,
      the loudest-chunk quote, and the timed comments that arrive after
      Theo's.
-   - `groups`: the stage 6 sequence (call a group, 20-second countdown,
-     blank, next group).
+   - `friend feeds`: the stage 6 side-by-side view of June's, Mr. French's
+     and Sam's feeds.
    - `hooks`: stage 7's notifications, looping video, endless feed and the
      dark-pattern dialogs.
    - `replay`: the chapters built from the session record: attention bar
@@ -1199,21 +1202,19 @@ but the stage 7 notifications still arrive (as quiet badges).
 | Stage 3 | Vote on the reaction first. Look for *Not interested*. **Advance.** |
 | Stage 4 | Open the thread, read it aloud, agree on Theo's reply, type it exactly. "Is that what Theo said?" **Advance.** |
 | Stage 5 | Show of hands on 48K. Count real names in *Liked by*. **Advance.** |
-| Stage 6 | Search for something else. Three groups, `G` for each. "What's Life Academy talking about?" **Advance.** |
+| Stage 6 | Search for something else. Open the friends' feeds (`G`). "What's Life Academy talking about?" **Advance.** |
 | Stage 7 | The class decides every click. Find *Log off* (or turn ⏪). |
 | Replay | `→` through chapters, `Space` to play each. A student reads "What this really is." `Shift` + `→` at the end switches everything off. |
 | After | Discussion questions, one per screen. |
 
-Keys: `Shift` + `→` advance · `N` skip animation · `B` blank · `M` mute · `G` next
-group · `→`/`←` replay chapters · `Space` play replay · `C` code (optional)
+Keys: `Shift` + `→` advance · `N` skip animation · `B` blank · `M` mute · `G` friends'
+feeds · `→`/`←` replay chapters · `Space` play replay · `C` code (optional)
 · `Shift` + `←` step back · `Shift` + `R` start over.
 
 ## 9. Open questions
 
 - **The "earned from your attention" number** in the replay: keep it (it's
   made up, but makes the ads concrete), or leave money out?
-- **Class size.** Affects the stage 6 groups (three groups works from about
-  6 students up).
 - **The room:** projector resolution, and whether there are speakers.
 - **The app's name:** "Lens" or something else.
 - **Sound:** on by default (the plan's default, muted with `M`), or off?

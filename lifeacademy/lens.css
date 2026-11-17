@@ -626,3 +626,20 @@ body { overflow-x: hidden; }
 .item.seen { transition: filter .8s ease, opacity .8s ease; }
 .item.seen:not(:hover):not(.show-meter):not(.flash) { filter: grayscale(.9); opacity: .55; }
 .item.seen .ph .meta::after { content: " · Seen ✓"; color: var(--ink-3); font-weight: 700; }
+
+/* stage 6: friends' feeds side by side */
+.banner.peek { border: 0; width: 100%; text-align: left; background: var(--surface); color: var(--ink); box-shadow: var(--shadow); font: inherit; font-weight: 800; font-size: 1.1rem; padding: .8rem 1.1rem; border-radius: var(--radius); }
+.banner.peek:hover { background: var(--accent-soft); }
+#groups { background: rgba(13, 11, 22, .92); display: block; padding: 1.2rem; }
+#groups .ff { max-width: 76rem; margin: 0 auto; }
+#groups .ff-top { display: flex; align-items: center; justify-content: space-between; color: #fff; font-size: 1.4rem; margin-bottom: .9rem; }
+#groups .ff-x { border: 0; background: #fff; color: #111; width: 2.6rem; height: 2.6rem; border-radius: 50%; font-size: 1.5rem; font-weight: 800; }
+#groups .ff-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: left; }
+#groups .ff-cols .g-feed { width: auto; }
+#groups .ff-cols .g-head { font-size: 1.1rem; }
+#groups .ff-q { color: #fff; font-size: 2rem; font-weight: 900; text-align: center; margin-top: 1.2rem; }
+@media (max-width: 860px) {
+  #groups { padding: .8rem; }
+  #groups .ff-cols { grid-template-columns: 1fr; }
+  #groups .ff-q { font-size: 1.4rem; }
+}

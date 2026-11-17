@@ -146,7 +146,7 @@
       }
       case 'crops': {
         const r = S.rec[2];
-        const pause = (id) => r && r.att[id] ? secs(r.att[id].focus) : 0;
+        const pause = (id) => secs([2, 3].reduce((t, k) => t + ((S.rec[k] && S.rec[k].att[id]) ? S.rec[k].att[id].focus : 0), 0));
         const box = (crop, label, color) => { const [x, y, w, hh] = L.crops[crop].split(' ').map(Number); return `<rect x="${x}" y="${y}" width="${w}" height="${hh}" fill="none" stroke="${color}" stroke-width="10"/><rect x="${x}" y="${y - 52}" width="${label.length * 19 + 24}" height="48" fill="${color}"/><text x="${x + 12}" y="${y - 18}" font-size="32" font-weight="800" fill="#fff" font-family="system-ui, sans-serif">${esc(label)}</text>`; };
         html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 2</span><span class="rp-goal">Every repost was a real photo. Just less of it.</span></div>
           <div class="rp-crops"><div class="rp-photo">${L.sceneSVG('full').replace('</svg>', box('maya', "Maya's repost", '#1a6fd6') + box('jaxon', "Jaxon's", '#c2410c') + box('gossip', 'Gossip', '#b91c1c') + '</svg>')}</div>

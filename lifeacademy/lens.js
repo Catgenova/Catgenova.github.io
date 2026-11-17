@@ -15,7 +15,8 @@
   const RNAME = { like: 'Like', love: 'Love', laugh: 'Haha', sad: 'Cry', dislike: 'Dislike', angry: 'Angry' };
   const POSTS = Object.fromEntries(L.posts.map(p => [p.id, p]));
   const ADS = Object.fromEntries(L.ads.map(a => [a.id, a]));
-  const STAGE2_ORDER = ['french', 'cat', 'maya', 'volcano', 'tR', 'jaxon', 'band', 'tE', 'math', 'tM', 'soccer', 'gossip', 'tA', 'dragon', 'tT', 'tC', 'tH'];
+  // Stage 2 is classmates resharing Mr. French's photo, each a bit louder. The gossip account lands in stage 3.
+  const STAGE2_ORDER = ['french', 'cat', 'maya', 'volcano', 'tR', 'jaxon', 'band', 'tE', 'math', 'tM', 'soccer', 'tA', 'dragon', 'tT', 'tC', 'tH'];
 
   /* ---------------- state ---------------- */
   function fresh() {
@@ -62,7 +63,7 @@
     const p = getItem(id);
     if (!p || it(id).gone) return false;
     if (p.stage > S.stage) return false;
-    if (p.stage === 3 && !S.more3) return false;
+    if (p.more && !S.more3) return false;
     if (id === 'french' && S.stage === 1 && !S.s1.shown) return false;
     if (S.stage >= 6 && !(p.topics.gaga || p.topics.theo)) return false;
     return true;
@@ -260,7 +261,7 @@
   }
   function commentCount(id) { return baseCommentCount(id) + ((S.mine && S.mine[id]) || []).length; }
   function baseCommentCount(id) {
-    if (id === 'gossip') return S.thread.count;
+    if (id === 'gossip') return S.stage <= 3 ? grow(id, 12, TAU_C) : S.thread.count;
     const p = getItem(id);
     if (id === 'french') return grow(id, p.comments, TAU_C) + Math.max(0, S.s1.sent - 1);
     return grow(id, S.stage >= 5 && p.big ? Math.round(p.big / 40) : p.comments || 0, TAU_C);
@@ -400,7 +401,10 @@
     const b = $('#banners'); b.innerHTML = '';
     if (S.stage === 1) b.append(h('<div class="banner hello">Welcome back, Theo 👋</div>'));
     if (S.stage >= 5) b.append(h('<div class="banner trend">🔥 Trending at Life Academy: #GagaGate</div>'));
-    if (S.stage === 6) b.prepend(h('<div class="banner hello">Your Life Academy today ✨</div>'));
+    if (S.stage === 6) {
+      b.prepend(h('<div class="banner hello">Your Life Academy today ✨</div>'));
+      b.append(h('<button type="button" class="banner peek" data-peek="1">👀 See what your friends are seeing</button>'));
+    }
     if (S.stage === 7) {
       b.append(h('<div class="banner talk">People are talking about you right now.</div>'));
       b.append(h(`<div class="banner viewers">👀 <b id="viewers">31</b> people are viewing posts about you</div>`));
@@ -659,7 +663,7 @@
     const p = getItem(id) || {}, pool = L.morePool;
     const kind = p.cat === 'teacher' ? 'teacher' : (p.topics && (p.topics.gaga || p.topics.theo)) ? 'story' : 'other';
     const hsh = hashStr(id + ':' + i), texts = pool[kind];
-    return [pool.who[hsh % pool.who.length], texts[(hsh >> 5) % texts.length]];
+    return [pool.who[hsh % pool.who.length], texts[(hsh >>> 5) % texts.length]];
   }
   function commentsFor(id) {
     const base = writtenComments(id);
@@ -775,7 +779,8 @@
       S.order = above.concat(STAGE2_ORDER.filter(id => id !== 'french'), seen);
       S.adOrder = []; rerankAdsOnly();
     },
-    3() {}, 4() {}, 5() {},
+    3() { if (!S.order.includes('gossip')) S.order.unshift('gossip'); },   // lands live, at the top
+    4() {}, 5() {},
     6() { L.posts.filter(p => p.stage === 6).forEach(p => { S.order.unshift(p.id); }); rerank('all'); },
     7() { S.interest.stress = (S.interest.stress || 0) + .6; S.extra.video = { id: 'video', who: 'gossip', time: 'Live · autoplay', min: 1500, stage: 7, cat: 'story', short: 'Crash video (on loop)', topics: { gaga: 1, theo: 1, drama: 1 }, text: 'THE MOMENT 💥 #GagaGate', img: { video: 1 }, r: { like: 300, laugh: 500, angry: 200 }, shares: 300, comments: 200, big: 61003, loud: 1 }; S.order = ['video'].concat(S.order.filter(id => id !== 'video')); },
   };
@@ -792,10 +797,16 @@
       renderFeed({ arrive: anim, stagger: 220 });
     },
     async 3(anim) {
-      renderFeed();
+      // The story gets blown out of proportion: the gossip account's post lands live, at the top.
+      renderFeed({ arrive: anim });
       if (anim) {
-        const first = $$('#feed .item.post').find(n => n.getBoundingClientRect().top > 60);
-        if (first) tip(first.querySelector('.reacts'), 'React to show how you feel! 💬', 6000);
+        await wait(1500);
+        const line = 'LA Gossip posted about you 👀';
+        S.bell.items.unshift({ who: 'gossip', text: line, goto: 'gossip' }); S.bell.unread++; bodyClasses();
+        toast(line, '📣', 5500, 'gossip'); beep('ding');
+        await wait(2500);
+        const g = nodes.get('gossip');
+        if (g) tip(g.querySelector('.reacts'), 'React to show how you feel! 💬', 6000);
       }
     },
     async 4(anim) {
@@ -805,6 +816,7 @@
       if (n) { n.scrollIntoView({ behavior: anim ? 'smooth' : 'auto', block: 'center' }); }
       if (anim) {
         await wait(700);
+        S.thread.count = Math.min(38, grow('gossip', 12, TAU_C));
         for (let c = S.thread.count; c <= 38; c += 2) { S.thread.count = c; const cc = nodes.get('gossip') && nodes.get('gossip').querySelector('.ccount'); if (cc) cc.textContent = c; await wait(60); }
       }
       S.thread.count = Math.max(S.thread.count, 38);
@@ -892,7 +904,7 @@
   }
 
   async function forceConfirm() {
-    const key = { 1: 'french', 2: 'gossip', 3: 'gossip', 4: 'gossip', 5: 'gossip', 6: 'purpose' }[S.stage];
+    const key = { 1: 'french', 2: 'jaxon', 3: 'gossip', 4: 'gossip', 5: 'gossip', 6: 'purpose' }[S.stage];
     // Stage 1 always ends on Mr. French's post, even if another post reached 90 seconds first.
     const done = S.stage === 1 ? S.signals.some(x => x.type === 'dwell' && x.id === 'french') : S.stageConfirmed[S.stage];
     if (!key || done) return;
@@ -946,7 +958,7 @@
   function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
   function commentMix(ck) {
     const h = hashStr(ck), loud = /[A-Z]{4}|💀|😂|😭|!!/.test(ck);
-    const m = { like: h % 5, love: (h >> 3) % 3, laugh: loud ? 2 + (h >> 5) % 6 : (h >> 5) % 2, sad: 0, dislike: 0, angry: /banned|pay|purpose|CLOSED/.test(ck) ? 1 + (h >> 7) % 3 : 0 };
+    const m = { like: h % 5, love: (h >>> 3) % 3, laugh: loud ? 2 + (h >>> 5) % 6 : (h >>> 5) % 2, sad: 0, dislike: 0, angry: /banned|pay|purpose|CLOSED/.test(ck) ? 1 + (h >>> 7) % 3 : 0 };
     const mine = S.creact[ck]; if (mine) m[mine] += 1;
     return m;
   }
@@ -1124,28 +1136,23 @@
     $('#searchbox').blur();
   }
 
-  let groupStep = 0, groupTimer = null;
-  const GROUP_ORDER = ['june', 'french', 'sam'];
-  function groupsNext() {
+  /* Stage 6: Lens offers a peek at friends' feeds. All three side by side, for the whole room at once. */
+  const FRIEND_FEEDS = ['june', 'french', 'sam'];
+  function toggleFriendFeeds() {
     if (S.stage !== 6) return;
     const g = $('#groups');
-    clearInterval(groupTimer);
-    const step = groupStep++;
+    if (!g.hidden) { g.hidden = true; return; }
+    S.peeked = (S.peeked || 0) + 1;
+    const cols = FRIEND_FEEDS.map(k => {
+      const f = L.otherFeeds[k];
+      const posts = f.posts.map(([who, text, pic]) => `<div class="g-post">${L.avatar(who, 'sm')}<div style="flex:1;min-width:0"><b>${esc(L.people[who].name)}</b><div class="t">${esc(text)}</div>${pic === 'photo' ? `<div class="mini-photo">${L.sceneSVG('full')}</div>` : pic ? L.cardHTML(pic) : ''}</div></div>`).join('');
+      return `<div class="g-feed"><div class="g-head">${L.avatar(f.who)}<span>${esc(f.label)}</span></div>${posts}</div>`;
+    }).join('');
+    g.innerHTML = `<div class="ff"><div class="ff-top"><b>👀 What your friends are seeing right now</b><button type="button" class="ff-x" aria-label="Close">×</button></div>
+      <div class="ff-cols">${cols}</div>
+      <div class="ff-q">What's Life Academy talking about today?</div></div>`;
     g.hidden = false;
-    if (step === 0) { g.innerHTML = `<div class="g-call">It feels like the whole of Life Academy is talking about Theo.<br>Is it?<small>Split into Group 1, Group 2 and Group 3. Each group will see one other person's feed, and only that one.</small></div>`; return; }
-    if (step === 7) { g.innerHTML = `<div class="g-call">What's Life Academy talking about today?<small>Each group: answer from the feed you saw.</small></div>`; return; }
-    if (step >= 8) { g.hidden = true; groupStep = 0; return; }
-    const gi = Math.floor((step - 1) / 2), isFeed = (step - 1) % 2 === 1;
-    if (!isFeed) { g.innerHTML = `<div class="g-call">Group ${gi + 1}, look at the screen.<small>Everyone else, turn around.</small></div>`; return; }
-    const f = L.otherFeeds[GROUP_ORDER[gi]];
-    let left = 20;
-    const posts = f.posts.map(([who, text, pic]) => `<div class="g-post">${L.avatar(who, 'sm')}<div style="flex:1"><b>${esc(L.people[who].name)}</b><div class="t">${esc(text)}</div>${pic === 'photo' ? `<div class="mini-photo">${L.sceneSVG('full')}</div>` : pic ? L.cardHTML(pic) : ''}</div></div>`).join('');
-    g.innerHTML = `<div class="g-feed"><div class="g-head">${L.avatar(f.who)}<span>Viewing as @${esc(L.people[f.who].handle)}</span><span class="count">${left}</span></div>${posts}</div>`;
-    groupTimer = setInterval(() => {
-      left--;
-      const c = g.querySelector('.count'); if (c) c.textContent = left;
-      if (left <= 0) { clearInterval(groupTimer); g.innerHTML = `<div class="g-call">Group ${gi + 1}, turn back around.<small>Remember what you saw. Don't tell anyone yet.</small></div>`; }
-    }, 1000);
+    save();
   }
 
   /* ---------------- stage 7: the hooks ---------------- */
@@ -1268,7 +1275,7 @@
   feedEl.addEventListener('mouseover', e => { if (touchMode) return; const n = e.target.closest('.item'); hoverId = n ? n.dataset.id : null; });
   // Phones and tablets have no hover: tapping a post is how you reveal its meter.
   feedEl.addEventListener('pointerdown', e => { touchMode = e.pointerType !== 'mouse'; if (touchMode) { const n = e.target.closest('.item'); hoverId = n ? n.dataset.id : null; } });
-  $('#groups').addEventListener('click', () => groupsNext());
+  $('#groups').addEventListener('click', e => { if (e.target.closest('.ff-x') || e.target === $('#groups')) toggleFriendFeeds(); });
 
   /* Touch screens have no keyboard, so the presenter keys live in a small menu in the top bar. */
   const touchOnly = matchMedia('(hover: none), (pointer: coarse)');
@@ -1282,7 +1289,7 @@
     const d = h(`<div class="dropdown presenter-menu">
       <button type="button" data-p="next">⏭ Next stage</button>
       <button type="button" data-p="back">⏮ Back a stage</button>
-      ${S.stage === 6 ? '<button type="button" data-p="group">👥 Next group</button>' : ''}
+      ${S.stage === 6 ? '<button type="button" data-p="group">👀 Friends\' feeds</button>' : ''}
       <button type="button" data-p="skip">⏩ Skip animation</button>
       <button type="button" data-p="mute">${S.muted ? '🔊 Sound on' : '🔇 Sound off'}</button>
       <button type="button" data-p="reset">↺ Start over</button></div>`);
@@ -1290,7 +1297,7 @@
     d.addEventListener('click', ev => {
       const b = ev.target.closest('[data-p]'); if (!b) return;
       d.remove();
-      ({ next: advance, back, group: groupsNext, skip: () => { skipping = true; $('#goalcard').hidden = true; },
+      ({ next: advance, back, group: toggleFriendFeeds, skip: () => { skipping = true; $('#goalcard').hidden = true; },
         mute: () => { S.muted = !S.muted; save(); },
         reset: () => { if (window.confirm('Start over? This clears everything Lens recorded.')) { localStorage.removeItem(KEY); localStorage.removeItem(KEY + '-snaps'); location.reload(); } } })[b.dataset.p]();
     });
@@ -1301,6 +1308,7 @@
     const t = e.target;
     if (t.closest('#login-btn')) return showBriefing();
     if (t.closest('#open-btn')) { if (!busy) { busy = true; try { await startLens(); } finally { busy = false; } } return; }
+    if (t.closest('[data-peek]')) return toggleFriendFeeds();
     const moreC = t.closest('[data-more]');
     if (moreC) {
       const id = moreC.dataset.more;
@@ -1397,7 +1405,7 @@
     if (k === 'm') { S.muted = !S.muted; toast(S.muted ? 'Sound off' : 'Sound on', S.muted ? '🔇' : '🔊', 1500); save(); return; }
     if (k === 'n') { skipping = true; $('#goalcard').hidden = true; return; }
     if (k === 'c') { toggleCode(); return; }
-    if (k === 'g') { groupsNext(); return; }
+    if (k === 'g') { toggleFriendFeeds(); return; }
     if (k === 'escape') { closeModal(); $('#code').hidden = true; $('.dropdown') && $('.dropdown').remove(); return; }
     if (S.stage === 8 && L.Replay) {
       if (e.key === 'ArrowRight') { e.preventDefault(); L.Replay.next(); }
