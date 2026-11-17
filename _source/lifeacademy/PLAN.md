@@ -176,6 +176,13 @@ posted comment to the algorithm (*COMMENT*). The replay's "what Lens
 learned" list includes these. On phones the bottom ad banner hides while
 the keyboard is open.
 
+Theo's comments start with no reactions; reactions then arrive live on a
+curve (with emoji floating up), and two to four replies come in over the
+next minute, nested under his comment, each with a *"@… replied to your
+comment"* notification. Replies fit the post: friendly under the everyday
+posts, teasing under the gagaball ones. His stage 4 reply on the gossip
+thread fills in the same way (up to 😂 40, 😡 12).
+
 ### Comment reactions, more comments, and live timing
 
 - **Every comment can be reacted to**: a small *👍 Like* button opens the
