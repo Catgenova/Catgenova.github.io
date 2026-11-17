@@ -255,6 +255,24 @@ the next stage rolls in:
 - **Backwards too.** `Shift` + `←` steps back a stage for rehearsal or a
   do-over.
 
+### Phones and tablets
+
+The page also works on phones and tablets (anything under 860px wide gets
+the mobile layout):
+
+- **One column.** The feed fills the screen; the sidebar becomes a live ad
+  banner pinned to the bottom, still showing the top-ranked ad and its
+  *"Because you looked at…"* line.
+- **Tap instead of hover.** Tapping a post reveals its hidden meter, which
+  sits as a slim strip across the top of the post. A tapped post stops
+  counting once it scrolls away.
+- **A ⏭ presenter button** appears in the top bar on touch screens (never
+  on a laptop with a mouse): Next stage, Back a stage, Next group (stage 6),
+  Skip animation, Sound on/off, Start over.
+- **Stage 6 groups:** tap the screen to move to the next group.
+- **Replay:** ‹ ▶ › buttons at the bottom (on every screen size), and swipe
+  left or right on touch screens. Charts switch to a narrower layout.
+
 ### Presenter keys
 
 The teacher is the only operator, so everything is a keyboard shortcut with

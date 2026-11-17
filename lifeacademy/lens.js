@@ -478,8 +478,9 @@
       if (n) {
         const m = n.querySelector('.meter');
         if (m) { m.classList.add('ok'); m.querySelector('.m-msg').textContent = ' ' + a + (b ? ' — ' + b : ''); m.querySelector('.m-bar i').style.width = '100%'; m.querySelector('.m-pct').textContent = '100%'; }
-        n.classList.add('flash', 'show-meter');
+        n.classList.add('flash', 'show-meter', 'just');
         setTimeout(() => n.classList.remove('flash'), 1600);
+        setTimeout(() => n.classList.remove('just'), 4200);
       }
       beep('tick');
     }
@@ -520,6 +521,7 @@
       });
     } else { vis.push('gossip'); ctr = 'gossip'; }
     const still = now - lastScroll > 700 && !blocked;
+    if (hoverId && !threadOpen && !vis.includes(hoverId)) hoverId = null;   // a tapped post that scrolls away stops counting
     S.clock += dt;
     vis.forEach(id => { att(id).screen += dt; it(id).screen += dt; });
     if (ctr && still) { att(ctr).focus += dt; it(ctr).look = (it(ctr).look || 0) + dt; }
@@ -1119,8 +1121,39 @@
 
   /* ---------------- events ---------------- */
   addEventListener('scroll', () => { lastScroll = Date.now(); }, { passive: true });
-  feedEl.addEventListener('mouseover', e => { const n = e.target.closest('.item'); hoverId = n ? n.dataset.id : null; });
-  feedEl.addEventListener('mouseleave', () => { hoverId = null; });
+  // Touch screens fire fake mouse events after a tap (including a mouseleave), so ignore mouse hover while touching.
+  let touchMode = false;
+  feedEl.addEventListener('mouseover', e => { if (touchMode) return; const n = e.target.closest('.item'); hoverId = n ? n.dataset.id : null; });
+  // Phones and tablets have no hover: tapping a post is how you reveal its meter.
+  feedEl.addEventListener('pointerdown', e => { touchMode = e.pointerType !== 'mouse'; if (touchMode) { const n = e.target.closest('.item'); hoverId = n ? n.dataset.id : null; } });
+  $('#groups').addEventListener('click', () => groupsNext());
+
+  /* Touch screens have no keyboard, so the presenter keys live in a small menu in the top bar. */
+  const touchOnly = matchMedia('(hover: none), (pointer: coarse)');
+  const pbtn = h('<button id="presenter" type="button" aria-label="Presenter controls">⏭</button>');
+  $('.top-right').prepend(pbtn);
+  pbtn.hidden = !touchOnly.matches;
+  touchOnly.addEventListener && touchOnly.addEventListener('change', () => { pbtn.hidden = !touchOnly.matches; });
+  pbtn.addEventListener('click', e => {
+    e.stopPropagation();
+    if ($('.dropdown')) return $('.dropdown').remove();
+    const d = h(`<div class="dropdown presenter-menu">
+      <button type="button" data-p="next">⏭ Next stage</button>
+      <button type="button" data-p="back">⏮ Back a stage</button>
+      ${S.stage === 6 ? '<button type="button" data-p="group">👥 Next group</button>' : ''}
+      <button type="button" data-p="skip">⏩ Skip animation</button>
+      <button type="button" data-p="mute">${S.muted ? '🔊 Sound on' : '🔇 Sound off'}</button>
+      <button type="button" data-p="reset">↺ Start over</button></div>`);
+    document.body.append(d);
+    d.addEventListener('click', ev => {
+      const b = ev.target.closest('[data-p]'); if (!b) return;
+      d.remove();
+      ({ next: advance, back, group: groupsNext, skip: () => { skipping = true; $('#goalcard').hidden = true; },
+        mute: () => { S.muted = !S.muted; save(); },
+        reset: () => { if (window.confirm('Start over? This clears everything Lens recorded.')) { localStorage.removeItem(KEY); localStorage.removeItem(KEY + '-snaps'); location.reload(); } } })[b.dataset.p]();
+    });
+  });
+  feedEl.addEventListener('mouseleave', () => { if (!touchMode) hoverId = null; });
 
   document.addEventListener('click', async e => {
     const t = e.target;
@@ -1218,5 +1251,5 @@
     $('#login').hidden = true; bodyClasses();
     window.addEventListener('load', () => L.Replay && L.Replay.open(S.replay));
   }
-  L._debug = { get S() { return S; }, advance, rerank, renderFeed, confirm, nodes };
+  L._debug = { get S() { return S; }, get hover() { return hoverId; }, advance, rerank, renderFeed, confirm, nodes };
 })();

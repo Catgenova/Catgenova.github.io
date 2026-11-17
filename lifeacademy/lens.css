@@ -467,3 +467,110 @@ body.L7 .item > .meter { width: 13rem; font-size: .72rem; }
 #thread-post .item > .meter { top: -.55rem; }
 /* compact sidebar ads: one row */
 .side-card.ad-side.live .ad-art { flex-direction: row; text-align: left; }
+
+/* ---------- replay nav buttons (all screens) ---------- */
+.rp-nav { display: flex; align-items: center; gap: .6rem; }
+.rp-nav button { border: 1px solid var(--line); background: var(--surface); border-radius: 2rem; min-width: 2.6rem; height: 2.6rem; font-size: 1.3rem; font-weight: 800; color: var(--ink-2); box-shadow: var(--shadow); }
+#presenter { background: var(--ink); color: #fff; border: 0; border-radius: 2rem; width: 2.6rem; height: 2.6rem; font-size: 1.05rem; }
+body { overflow-x: hidden; }
+
+/* ---------- tablets and phones: one column ---------- */
+@media (max-width: 860px) {
+  html { font-size: 16px; }
+  body { font-size: 1rem; cursor: auto; }
+  button, a, [role=button], .clickable, label.switch, .react, summary { cursor: pointer; }
+  #topbar { gap: .6rem; padding: 0 .75rem; height: 3.4rem; }
+  .brand { min-width: 0; font-size: 1.25rem; }
+  .brand .logo svg { width: 1.7rem; height: 1.7rem; }
+  #search { min-width: 0; }
+  #searchbox { font-size: .95rem; padding: .4rem .8rem; }
+  .top-right { gap: .5rem; }
+  #me span { display: none; }
+  #me .avatar { width: 2rem; height: 2rem; }
+  #streak { font-size: .85rem; white-space: nowrap; }
+  #streak b ~ * { display: none; }
+  #layout { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 4.2rem .75rem 9rem; }
+  #feedcol { max-width: 40rem; width: 100%; margin: 0 auto; }
+  .item { padding: .85rem .9rem; }
+  .ptext { font-size: 1.05rem; }
+  .loud-1 .ptext { font-size: 1.15rem; }
+  .loud-2 .ptext { font-size: 1.3rem; }
+  .ph .meta { font-size: .8rem; }
+  .counts { gap: .8rem; font-size: .9rem; }
+  .react { font-size: 1.15rem; padding: .3rem .65rem; }
+  .ad .ad-art { flex-wrap: wrap; gap: .7rem; padding: .9rem 1rem; }
+  .ad .ad-art .em { font-size: 2.6rem; }
+  .ad .ad-art .head { font-size: 1.1rem; flex: 1 1 10rem; }
+  #goalpill { font-size: .9rem; border-radius: 1rem; }
+  #goalcard .g { max-width: 92vw; padding: 1.3rem 1.4rem; gap: 1rem; flex-direction: column; text-align: center; }
+  #goalcard .g .avatar { width: 4.5rem; height: 4.5rem; }
+  #goalcard .g p { font-size: 1.35rem; }
+  .banner { font-size: 1rem; padding: .7rem .9rem; }
+
+  /* the hidden meter: one slim strip across the top edge of the post */
+  .item > .meter { left: .5rem; right: .5rem; width: auto; top: -.5rem; display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .5rem; padding: .35rem .6rem; }
+  .item > .meter .m-top { flex: 0 0 auto; gap: .35rem; }
+  .item > .meter .m-time { margin-left: .2rem; font-size: .85rem; }
+  .item > .meter .m-bar { flex: 1 1 4rem; margin: 0; }
+  .item > .meter .m-sub { display: none; }
+  .item > .meter .m-ok { flex: 1 1 100%; }
+  body.L7 .item > .meter { width: auto; }
+
+  /* the sidebar becomes a live ad banner along the bottom */
+  #sidebar { position: fixed; left: .5rem; right: .5rem; bottom: .5rem; top: auto; z-index: 28; display: block; }
+  #side-static { display: none; }
+  #side-ads { gap: 0; }
+  #side-ads > .ad-side:not(:first-child) { display: none; }
+  #side-ads > .ad-side { box-shadow: 0 .4rem 1.6rem rgba(0, 0, 0, .25); }
+  .ad-side.live .ad-art { padding: .55rem .8rem; }
+  .ad-side.live .ad-art .em { font-size: 1.9rem; }
+  .ad-side.live .why { padding: .3rem .8rem .4rem; }
+
+  #toasts { top: 3.9rem; right: .5rem; left: .5rem; width: auto; }
+  .toast { font-size: .95rem; padding: .65rem .8rem; }
+  .dropdown { top: 3.6rem; right: .5rem; left: .5rem; width: auto; }
+  .modal { padding: 1.1rem 1.1rem; max-height: 86vh; }
+  .modal .dialog-text { font-size: 1.25rem; }
+  .btn-big { font-size: 1.2rem; }
+  .btn-tiny { font-size: .78rem; padding: .5rem; }
+  .bubble-tip { white-space: normal; max-width: 80vw; font-size: .95rem; }
+  #newpill { top: 4rem; font-size: .95rem; max-width: 92vw; }
+  #thread { inset: 3.4rem 0 0 0; padding: .75rem .75rem 5rem; }
+  #thread .inner { width: 100%; max-width: 40rem; }
+  .composer textarea { font-size: 1.05rem; }
+  .login-card { width: min(34rem, 92vw); padding: 1.6rem 1.4rem; }
+  #briefing p { font-size: 1.05rem; }
+  #groups .g-call { font-size: 1.8rem; padding: 1.2rem; }
+  #groups .g-call small { font-size: 1.05rem; }
+  #groups .g-feed { width: 94vw; padding: .8rem; }
+  #groups .g-head { font-size: 1.05rem; }
+  #code { width: 100vw; top: 3.4rem; }
+  #loggedout .lo { font-size: 1.8rem; padding: 0 1rem; }
+
+  /* replay */
+  .rp-wrap { padding: 1.2rem .9rem 5rem; place-items: start center; }
+  .rp-logo { font-size: 2.3rem; }
+  .rp-hero p { font-size: 1.25rem; }
+  .rp-head { gap: .5rem; }
+  .rp-goal { font-size: 1.15rem; }
+  .rp-grid, .rp-reveal, .rp-crops, .rp-words { grid-template-columns: 1fr; gap: .9rem; }
+  .rp-tiles, .rp-tiles.four { grid-template-columns: 1fr 1fr; gap: .6rem; }
+  .rp-tile { padding: .8rem .9rem; }
+  .rp-tile b { font-size: 1.7rem; }
+  .rp-tile span { font-size: .9rem; }
+  .rp-big { font-size: 1.1rem; }
+  .rp-revealbig .rp-name { font-size: 2.5rem; }
+  .rp-revealbig .rp-line2 { font-size: 1.15rem; }
+  .rp-truth.big p { font-size: 1.2rem !important; }
+  .rp-line { font-size: 2rem; padding: 0 .5rem; }
+  .rp-q p { font-size: 1.6rem; }
+  .rp-log { font-size: .85rem; padding: 1rem; }
+  blockquote { font-size: 1.1rem; }
+  blockquote.loud { font-size: 1.25rem; }
+  .rp-nav { left: 50%; right: auto; transform: translateX(-50%); bottom: .8rem; background: var(--chart-surface); padding: .3rem .5rem; border-radius: 2rem; }
+}
+
+/* A confirmation message shows for a few seconds, then the meter shrinks back to its bar. */
+.item > .meter.ok .m-ok { display: none; }
+.item.just > .meter.ok .m-ok { display: block; }
+.modal .x { z-index: 5; background: var(--surface); border-radius: 50%; width: 2.4rem; height: 2.4rem; line-height: 1; }

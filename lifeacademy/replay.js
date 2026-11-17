@@ -40,13 +40,13 @@
     // rows: [{id, label, v (seconds), cat}]
     if (!rows.length) return '<p class="rp-empty">Nothing on screen long enough to count.</p>';
     const max = Math.max(...rows.map(r => r.v), 1);
-    const rowH = 46, W = 640, x0 = 250, x1 = 560;
+    const nar = innerWidth < 700, rowH = 46, W = nar ? 420 : 640, x0 = nar ? 168 : 250, x1 = nar ? 350 : 560;
     const body = rows.map((r, i) => {
       const y = 10 + i * rowH, w = Math.max(3, (x1 - x0) * r.v / max), color = CAT_VAR[r.cat];
       const rad = Math.min(4, w / 2);
       const path = `M${x0} ${y + 8} h${w - rad} a${rad} ${rad} 0 0 1 ${rad} ${rad} v${30 - 2 * rad} a${rad} ${rad} 0 0 1 -${rad} ${rad} h-${w - rad} z`;
       const tag = r.cat === 'ad' ? `<rect x="${x0 - 50}" y="${y + 13}" width="40" height="20" rx="4" fill="var(--series-ad)"/><text x="${x0 - 30}" y="${y + 28}" text-anchor="middle" class="rp-tag">AD</text>` : '';
-      return `<g><text x="${r.cat === 'ad' ? x0 - 58 : x0 - 12}" y="${y + 30}" text-anchor="end" class="rp-lab">${esc(trunc(r.label, 22))}</text>${tag}
+      return `<g><text x="${r.cat === 'ad' ? x0 - 58 : x0 - 12}" y="${y + 30}" text-anchor="end" class="rp-lab">${esc(trunc(r.label, nar ? 11 : 22))}</text>${tag}
         <path d="${path}" fill="${color}"><title>${esc(r.label)}: ${r.v}s</title></path>
         <text x="${x0 + w + 10}" y="${y + 30}" class="rp-val">${r.v}s</text></g>`;
     }).join('');
@@ -64,17 +64,18 @@
     const rank = (seq, id) => { const i = seq.indexOf(id); return i < 0 ? null : i + 1; };
     const L1 = ids.filter(id => rank(before, id)).sort((a, b) => rank(before, a) - rank(before, b));
     const R1 = ids.filter(id => rank(after, id)).sort((a, b) => rank(after, a) - rank(after, b));
-    const rowH = 44, top = 46, W = 640, xl = 240, xr = 400, H = top + Math.max(L1.length, R1.length) * rowH + 8;
+    const nar = innerWidth < 700, cl = nar ? 9 : 19, cr = nar ? 9 : 17;
+    const rowH = 44, top = 46, W = nar ? 420 : 640, xl = nar ? 150 : 240, xr = nar ? 262 : 400, H = top + Math.max(L1.length, R1.length) * rowH + 8;
     const yL = (id) => top + L1.indexOf(id) * rowH + 14, yR = (id) => top + R1.indexOf(id) * rowH + 14;
     let lines = '', labels = '';
     ids.forEach(id => {
       const color = CAT_VAR[catOf(id)], rb = rank(before, id), ra = rank(after, id);
       const up = rb && ra ? rb - ra : 0;
       if (rb && ra) lines += `<line x1="${xl}" y1="${yL(id)}" x2="${xr}" y2="${yR(id)}" stroke="${color}" stroke-width="${Math.abs(up) >= 2 ? 4 : 2}"/>`;
-      if (rb) labels += `<circle cx="${xl}" cy="${yL(id)}" r="6" fill="${color}" stroke="var(--chart-surface)" stroke-width="2"/><text x="${xl - 14}" y="${yL(id) + 6}" text-anchor="end" class="rp-lab sm">#${rb} ${esc(trunc(shortOf(id), 19))}</text>`;
+      if (rb) labels += `<circle cx="${xl}" cy="${yL(id)}" r="6" fill="${color}" stroke="var(--chart-surface)" stroke-width="2"/><text x="${xl - 14}" y="${yL(id) + 6}" text-anchor="end" class="rp-lab sm">#${rb} ${esc(trunc(shortOf(id), cl))}</text>`;
       if (ra) {
         const arrow = !rb ? ' new' : up >= 2 ? ` ▲${up}` : up <= -2 ? ` ▼${-up}` : '';
-        labels += `<circle cx="${xr}" cy="${yR(id)}" r="6" fill="${color}" stroke="var(--chart-surface)" stroke-width="2"/><text x="${xr + 14}" y="${yR(id) + 6}" class="rp-lab sm${up >= 2 || !rb ? ' up' : ''}">#${ra} ${esc(trunc(shortOf(id), 17))}${arrow}</text>`;
+        labels += `<circle cx="${xr}" cy="${yR(id)}" r="6" fill="${color}" stroke="var(--chart-surface)" stroke-width="2"/><text x="${xr + 14}" y="${yR(id) + 6}" class="rp-lab sm${up >= 2 || !rb ? ' up' : ''}">#${ra} ${esc(trunc(shortOf(id), cr))}${arrow}</text>`;
       }
     });
     return `<svg class="rp-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Where key posts sat in the feed, before and after this stage">
@@ -139,7 +140,7 @@
         html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage ${s}</span><span class="rp-goal">“${esc(g(s))}”</span><span class="rp-time">${minsec(r.active)}</span></div>
           ${legend(['teacher', 'story', 'other', 'ad'].filter(x => cats.includes(x)))}
           <div class="rp-grid"><section><h3>Where you looked <small>seconds</small></h3>${barsSVG(rows)}</section>
-          <section class="rp-right"><h3>What Lens did with it <small>Space ▶ watch it again</small></h3><div class="rp-slope">${slopeSVG(before, after, rows.slice(0, 3).map(x => x.id))}</div></section></div>
+          <section class="rp-right"><h3>What Lens did with it <small>▶ watch it again</small></h3><div class="rp-slope">${slopeSVG(before, after, rows.slice(0, 3).map(x => x.id))}</div></section></div>
           <div class="rp-concl">${concluded(s)}</div></div>`;
         break;
       }
@@ -252,7 +253,9 @@
         html = `<div class="rp-q"><small>Talk about it · ${c.i + 1} of ${L.questions.length}</small><p>${esc(L.questions[c.i])}</p></div>`;
         break;
     }
-    el.innerHTML = `<div class="rp-wrap">${html}</div><div class="rp-nav">${idx + 1} / ${chapters.length} · ← →</div>`;
+    el.innerHTML = `<div class="rp-wrap">${html}</div><div class="rp-nav"><button type="button" data-rp="prev" aria-label="Previous">‹</button>
+      ${c.k === 'stage' ? '<button type="button" data-rp="play" aria-label="Watch it again">▶</button>' : ''}<span>${idx + 1} / ${chapters.length}</span>
+      <button type="button" data-rp="next" aria-label="Next">›</button></div>`;
   }
 
   function revealBlock(s) {
@@ -275,6 +278,17 @@
       if (t >= r.active) { stopPlay(); setTimeout(() => { if (chapters[idx] === c) render(); }, 2500); }
     }, step);
   }
+
+  // Buttons and swipes, for screens without a keyboard.
+  root().addEventListener('click', e => { const b = e.target.closest('[data-rp]'); if (b) ({ prev: () => L.Replay.prev(), next: () => L.Replay.next(), play })[b.dataset.rp](); });
+  let sx = null, sy = null;
+  root().addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  root().addEventListener('touchend', e => {
+    if (sx == null) return;
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) (dx < 0 ? L.Replay.next : L.Replay.prev)();
+    sx = null;
+  }, { passive: true });
 
   L.Replay = {
     open(at) {
