@@ -598,3 +598,5 @@ body { overflow-x: hidden; }
 
 /* reaction icons beside the count, Facebook-style */
 .likes .ricons { letter-spacing: -.25em; margin-right: .25em; }
+
+.ptext { white-space: pre-line; }

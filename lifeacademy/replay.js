@@ -241,7 +241,7 @@
         const layers = ['Notifications & the endless feed', 'The orange bubble', 'Fake numbers & checkmarks', 'Quote-posts & comments', 'Reactions & ranking', 'Louder reposts', 'Hidden meters'];
         html = `<div class="rp-off"><div class="rp-layers">${layers.map((l, i) => `<div class="rp-layer" style="animation-delay:${0.5 + i * 0.55}s">${esc(l)}</div>`).join('')}</div>
           <div class="rp-true" style="animation-delay:${0.8 + layers.length * 0.55}s"><article class="item post"><div class="ph">${L.avatar('french')}<div class="who"><span class="name">Mr. French</span><div class="meta">@mrfrench · Today · 7:52 AM</div></div></div>
-          <div class="ptext">${esc(L.posts[0].text)}</div><div class="pimg">${L.sceneSVG('full')}</div><div class="pf"><div class="counts"><span class="likes">❤️ <b>23</b></span></div></div></article>
+          <div class="ptext">${esc(L.posts.find(p => p.id === 'french').text)}</div><div class="pimg">${L.sceneSVG('full')}</div><div class="pf"><div class="counts"><span class="likes">❤️ <b>23</b></span></div></div></article>
           <p class="rp-caption">This is what actually happened.</p></div></div>`;
         break;
       }

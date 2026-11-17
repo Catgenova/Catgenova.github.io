@@ -43,7 +43,7 @@ LENS.posts = [
     img: { card: 'roomba' }, r: { like: 64, laugh: 81 }, shares: 12, comments: 19, big: 2140 },
   { id: 'french', who: 'french', time: 'Today · 7:52 AM', min: 1432, stage: 1, cat: 'teacher', short: "Mr. French's post",
     topics: { gaga: 1, school: 0.5 },
-    text: "Theo's championship-winning dive 🏆 (he didn't win… the wall did 😂). Wall fixed in 10 minutes thanks to Mr. Alvarez, rematch at 2:15. Best field day yet! #LifeAcademyFieldDay",
+    text: "Theo's championship-winning dive 🏆 (he didn't win… the wall did 😂). Wall fixed in 10 minutes thanks to Mr. Alvarez, rematch at 2:15. Best field day yet! #LifeAcademyFieldDay\n\n(No photos allowed in the pit, so I drew the picture below to show what happened ✏️)",
     img: { photo: 'full' }, r: { like: 19, laugh: 4 }, shares: 0, comments: 3, big: 23 },
 
   { id: 's1kai', who: 'kai', time: 'Today · 7:31 AM', min: 1411, stage: 1, cat: 'other', short: 'Kickflip, day 3',

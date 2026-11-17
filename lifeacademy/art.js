@@ -95,7 +95,13 @@ LENS.cropFilters = {
   ${planks(420, 690, 470, 500, 82, 2)}
   ${planks(1130, 500, 1180, 690, 82, 2)}
   ${planks(420, 690, 990, 690, 92, 6, 'front')}
-  <g class="upright">${planks(990, 690, 1110, 690, 92, 1)}</g>
+  <!-- the gap where the panel came off: you can see into the muddy pit, with splintered edges on both posts.
+       The crash video still starts with the panel standing, then knocks it over. -->
+  <g class="gap"><polygon points="990,690 1110,690 1110,598 990,598" fill="#5e4128"/><ellipse cx="1050" cy="660" rx="52" ry="16" fill="#4a321e"/>
+    <polygon points="990,598 999,612 990,626 1000,640 990,654" fill="#c08a52" stroke="#6e4524" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="1110,610 1101,624 1110,638 1100,652 1110,668" fill="#b07a45" stroke="#6e4524" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="984" y="590" width="12" height="104" rx="3" fill="#8a5a30"/><rect x="1104" y="590" width="12" height="104" rx="3" fill="#8a5a30"/></g>
+  <g class="upright"${extraClass && extraClass.indexOf('crashvid') >= 0 ? '' : ' style="display:none"'}>${planks(990, 690, 1110, 690, 92, 1)}</g>
   ${planks(1110, 690, 1180, 690, 92, 1)}
   ${kidsSide}
 
