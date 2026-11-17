@@ -112,7 +112,13 @@ LENS.cropFilters = {
     <ellipse cx="1060" cy="730" rx="20" ry="11" fill="#f4f4f4" stroke="#5a3b22" stroke-width="4"/><ellipse cx="1060" cy="750" rx="20" ry="11" fill="#f4f4f4" stroke="#5a3b22" stroke-width="4"/>
     <path d="M1045 734 q10 4 28 -2 M1045 754 q10 4 28 -2" stroke="#7a5636" stroke-width="5" fill="none"/>
     <path d="M815 718 L835 650" stroke="#2fa3a0" stroke-width="24" stroke-linecap="round"/>
-    <circle cx="838" cy="640" r="14" fill="#e3ab84"/><rect x="833" y="608" width="10" height="26" rx="5" fill="#e3ab84"/>
+    <g class="thumbsup">
+      <!-- a clear thumbs-up: a wide fist with curled fingers facing us, and a short, thick thumb leaning off its side -->
+      <rect x="818" y="630" width="38" height="30" rx="9" fill="#e3ab84" stroke="#b5835f" stroke-width="2"/>
+      <path d="M836 638 h16 M836 646 h16 M836 654 h14" stroke="#b5835f" stroke-width="3" stroke-linecap="round"/>
+      <path d="M820 634 C 812 618, 814 604, 824 600 C 832 597, 836 606, 833 616 L 830 634 Z" fill="#e3ab84" stroke="#b5835f" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M820 606 q4 -4 9 -2" stroke="#c9917a" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
     <circle cx="768" cy="728" r="30" fill="#e3ab84"/>
     <path d="M740 716 Q748 688 778 694 Q800 700 798 718 Q780 705 760 712 Z" fill="#6b3e1f"/>
     <path d="M752 724 q5 -6 10 0 M770 722 q5 -6 10 0" stroke="#2b1d16" stroke-width="3" fill="none" stroke-linecap="round"/>
