@@ -150,6 +150,28 @@ and the feed re-sorts. The meter is the thread through the whole thing:
   bars that fill with nobody touching anything.
 - **It records everything** for the replay (section 4).
 
+### Sidebar ads (live, one per post)
+
+Every post has its own invented ad (`LENS.postAds` in `data.js`): the roomba
+post has *SweepBot*, the kickflip post *GripTape Skate*, Mr. French's post
+*FieldDay Co.*, the gossip post *Lens Alerts+*, and so on, 38 in all. The
+sidebar shows the ads for the posts the class has spent the most time on
+(3 slots, 2 from stage 5 when the trending box appears), re-ranked every
+second. Each one says why: *"Because you looked at Kickflip, day 3 for
+15s"*. A new ad slides in with a highlight when it takes a slot. Every
+change is recorded for the replay.
+
+### Reactions and comments, live
+
+A post that lands during the session (Mr. French's, the stage 3 posts, the
+quote-post, the bubble posts, the endless-feed posts) starts with **zero**
+reactions and comments and shows *"Just now"*. Counts then arrive fast and
+slow down on a curve: `target × (1 − e^(−age/τ))`, with τ ≈ 22 s for
+reactions and ≈ 34 s for comments. Older posts already have most of theirs
+and only tick up a little. Whenever a visible post's likes go up, emoji
+from its reaction mix (❤️ 😂 😢 😡) float up off the like count, and Theo's
+own reactions burst ten of the chosen emoji.
+
 ### The ads
 
 From stage 2 on, every fourth item in the feed is an **ad**, clearly

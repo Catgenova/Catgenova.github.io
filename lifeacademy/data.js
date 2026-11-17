@@ -263,3 +263,50 @@ LENS.questions = [
   'If you designed Lens’s algorithm, what would you reward?',
   'Stage 7 made leaving hard. What tricks do apps you use rely on? What helps you stop?',
 ];
+
+/* Sidebar ads: one invented ad for every post. The sidebar shows whichever ads match
+   the posts the class has looked at longest, and re-ranks them live. All brands are made up. */
+LENS.postAds = {
+  // stage 1
+  s1toby:   { brand: 'SweepBot',          art: '🤖', head: 'Robot vacuums that answer to any name',        cta: 'Adopt one', bg: ['#4b6378', '#7f9bb3'] },
+  french:   { brand: 'FieldDay Co.',      art: '🏆', head: 'Trophies & ribbons for every champion',        cta: 'Shop',      bg: ['#2a5fb0', '#4f8fe0'] },
+  s1kai:    { brand: 'GripTape Skate',    art: '🛹', head: 'Boards that land the kickflip for you*',       cta: 'Shop',      bg: ['#2b2b2b', '#5e5e5e'] },
+  s1lulu:   { brand: 'PawPortraits',      art: '🐕', head: 'Turn your pet into royalty',                   cta: 'Order',     bg: ['#8a5a2b', '#c99a5b'] },
+  s1quinn:  { brand: 'SnoozeMax',         art: '⏰', head: 'The alarm clock that negotiates',              cta: 'Try it',    bg: ['#3a3f8f', '#6c72d9'] },
+  s1lily:   { brand: 'FlapJack Molds',    art: '🥞', head: 'Pancake molds in 40 shapes (dad not included)', cta: 'Shop',     bg: ['#c0782a', '#f0b25a'] },
+  s1marcus: { brand: 'DanceFit',          art: '💃', head: 'Zumba for people who walked in by accident',   cta: 'Join',      bg: ['#b0127a', '#e8509b'] },
+  s1dev:    { brand: 'SciKit Labs',       art: '🧪', head: '100 experiments your mom will worry about',    cta: 'Get kit',   bg: ['#14705f', '#2fb193'] },
+  s1ivy:    { brand: 'TipProof Cups',     art: '🥤', head: "Cups your cat can't knock over (probably)",     cta: 'Shop',      bg: ['#2f6f9f', '#5aa6d6'] },
+  s1benji:  { brand: 'GrandText',         art: '📱', head: 'Teach Grandma emojis in 5 minutes',            cta: 'Download',  bg: ['#7a3fb0', '#a874e0'] },
+  s1nora:   { brand: 'Bow & String',      art: '🎻', head: 'Violin lessons. Dog not included.',            cta: 'Book',      bg: ['#6b2737', '#a8475e'] },
+  // stage 2
+  cat:      { brand: 'CouchGuard',        art: '🛋️', head: 'Landing pads for cats who never stick it',     cta: 'Shop',      bg: ['#9a5b2f', '#d08a55'] },
+  maya:     { brand: 'GagaGear',          art: '🏐', head: 'Gaga balls that bounce back',                  cta: 'Shop',      bg: ['#b8441b', '#e8873d'] },
+  volcano:  { brand: 'EruptKit',          art: '🌋', head: 'Volcano kits. Ceiling-safe edition.',          cta: 'Get one',   bg: ['#7a2e2e', '#c25a3a'] },
+  jaxon:    { brand: 'WallFix Pro',       art: '🔨', head: 'Fix anything in 10 minutes',                   cta: 'Shop',      bg: ['#4a4a4a', '#8a6a3a'] },
+  band:     { brand: 'StageReady',        art: '🎶', head: 'Beat stage nerves in one breath',              cta: 'Try free',  bg: ['#2a2a5a', '#5a4a9a'] },
+  tR:       { brand: 'Puddle Boots',      art: '🥾', head: 'Mud? What mud?',                               cta: 'Shop',      bg: ['#2f5f4f', '#5a9a7a'] },
+  math:     { brand: 'ShowYourWork',      art: '✏️', head: 'Explain how you got it. Finally.',             cta: 'Try it',    bg: ['#1e6e7e', '#3dafc0'] },
+  tE:       { brand: 'PitPass',           art: '🎟️', head: 'Never miss an open gaga pit',                  cta: 'Get pass',  bg: ['#a34a1a', '#e07a3a'] },
+  tM:       { brand: 'MudOff',            art: '🧼', head: 'Gets mud out of anything',                     cta: 'Shop',      bg: ['#5a4a3a', '#9a7a5a'] },
+  soccer:   { brand: 'HeaderGuard',       art: '⚽', head: 'Soft headbands for goals scored with your face', cta: 'Shop',    bg: ['#2f7a3a', '#5ab866'] },
+  gossip:   { brand: 'Lens Alerts+',      art: '🚨', head: "Know the second you're mentioned",             cta: 'Turn on',   bg: ['#a31d1d', '#e04848'] },
+  tA:       { brand: 'BandAid Buddies',   art: '🩹', head: 'Bandages with jokes printed on them',          cta: 'Shop',      bg: ['#c26a5a', '#f0a090'] },
+  dragon:   { brand: 'InkWorks',          art: '🐉', head: 'Pro markers for dragon artists',               cta: 'Shop',      bg: ['#2f6a3a', '#4fa060'] },
+  tT:       { brand: 'DrillMaster',       art: '🔧', head: 'Cordless drills, 30% off',                     cta: 'Shop',      bg: ['#3a4a5a', '#6a7a8a'] },
+  tC:       { brand: 'ScoreKeeper',       art: '🏅', head: 'The scoreboard app for every rematch',         cta: 'Download',  bg: ['#8a6a1a', '#d0a83a'] },
+  tH:       { brand: 'TrophyTown',        art: '🏆', head: 'Trophies for champions of every size',         cta: 'Shop',      bg: ['#b08a1a', '#f0c84a'] },
+  // stage 3
+  kaiBan:   { brand: 'Petition+',         art: '📝', head: 'Start a petition in 30 seconds',               cta: 'Start',     bg: ['#3a3a7a', '#6a6ab0'] },
+  gossip2:  { brand: 'SlowMo Cam',        art: '🎥', head: 'Replay every fail in slow motion',             cta: 'Get app',   bg: ['#1a1a1a', '#4a4a4a'] },
+  noahPay:  { brand: 'PayUp',             art: '💸', head: 'Split the bill for anything. Even a wall.',    cta: 'Try it',    bg: ['#1a7a4a', '#3ab07a'] },
+  // stage 4 onward
+  quote:    { brand: 'Reputation Rescue', art: '🧯', head: 'Fix what people say about you online',         cta: 'Get help',  bg: ['#7a1a3a', '#c0406a'] },
+  poll:     { brand: 'PollPal',           art: '🗳️', head: 'Make polls that go viral',                     cta: 'Create',    bg: ['#5a2a8a', '#8a5ac0'] },
+  purpose:  { brand: 'TruthCheck',        art: '🔍', head: 'Find out what really happened (premium)',      cta: 'Upgrade',   bg: ['#2a2a2a', '#5a5a6a'] },
+  jaxon2:   { brand: 'MemeMaker',         art: '😂', head: 'Turn any fail into a meme',                    cta: 'Make one',  bg: ['#c08a1a', '#f0c040'] },
+  ella2:    { brand: 'SleepWell',         art: '😴', head: "Can't stop thinking? Sleep sounds for teens",   cta: 'Listen',    bg: ['#1a2a5a', '#3a5a9a'] },
+  kai2:     { brand: 'FindMy Friends',    art: '📍', head: 'See where everyone is, always',                cta: 'Turn on',   bg: ['#1a5a7a', '#3a8ab0'] },
+  video:    { brand: 'LoopCam',           art: '🔁', head: 'Videos that play forever',                     cta: 'Get app',   bg: ['#3a1a5a', '#7a4ab0'] },
+  rc:       { brand: 'Post Boost',        art: '🚀', head: 'Make your post trend. $19.99.',                cta: 'Boost',     bg: ['#b0127a', '#e8509b'] },
+};

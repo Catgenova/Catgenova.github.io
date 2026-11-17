@@ -27,11 +27,13 @@
       rec: {}, stageConfirmed: {}, muted: false, replay: 0, done: false,
       s1: { shown: false, shownAt: 0, sent: 0, clicks: 0 },
       bell: { unread: 0, items: [] },
+      clock: 0, landed: {},
     };
   }
   let S = load() || fresh();
   S.s1 = S.s1 || { shown: true, shownAt: 0, sent: 0, clicks: 0 };
   S.bell = S.bell || { unread: 0, items: [] };
+  S.clock = S.clock || 0; S.landed = S.landed || {};
   let snaps = loadSnaps();
   function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); return s && s.v === 1 ? s : null; } catch (e) { return null; } }
   function loadSnaps() { try { return JSON.parse(localStorage.getItem(KEY + '-snaps')) || {}; } catch (e) { return {}; } }
@@ -182,10 +184,28 @@
 
   function personName(key) { const p = L.people[key]; return p ? p.name : key; }
   function verifiedOn(id) { const p = getItem(id); return p.verified === 'stage5' && S.stage >= 5; }
+  /* Reactions and comments come fast right after a post lands, then slow down: target × (1 − e^(−age/τ)).
+     A post that lands during the session starts at zero. Older posts already have most of theirs. */
+  const TAU_R = 22000, TAU_C = 34000;
+  function isOld(id) { const p = getItem(id); return !p || (p.stage === 1 && id !== 'french') || /^Yesterday/.test(p.time || ''); }
+  function landedAt(id) {
+    if (S.landed[id] == null) {
+      const p = getItem(id) || {};
+      S.landed[id] = S.clock - (isOld(id) ? Math.min(150000, 45000 + Math.max(0, 1435 - (p.min || 0)) * 2000) : 0);
+    }
+    return S.landed[id];
+  }
+  function grow(id, target, tau) { const age = Math.max(0, S.clock - landedAt(id)); return Math.round(target * (1 - Math.exp(-age / tau))); }
+  function relTime(id) {
+    const p = getItem(id);
+    if (isOld(id)) return p.time;
+    const m = Math.floor((S.clock - landedAt(id)) / 60000);
+    return m < 1 ? 'Just now' : m + 'm';
+  }
   function likeCount(id) {
     const p = getItem(id);
-    if (S.stage >= 5 && p.big) return p.big + (it(id).react ? 1 : 0);
-    const r = reactsOf(id); return Object.values(r).reduce((a, b) => a + b, 0);
+    const target = S.stage >= 5 && p.big ? p.big : Object.values(Object.assign({}, p.r || {})).reduce((a, b) => a + b, 0);
+    return grow(id, target, TAU_R) + (it(id).react ? 1 : 0);
   }
 
   function imgHTML(p) {
@@ -211,18 +231,23 @@
     const reacts = Object.keys(EMO).map(k => `<button class="react" data-r="${k}" type="button" aria-label="${k}">${EMO[k]}<span class="w">${k} · weight +${W[k]}</span></button>`).join('');
     return `<article class="item post loud-${p.loud || 0} ${p.img && p.img.video ? 'video-item' : ''}" data-id="${id}">
       ${meterHTML()}
-      <div class="ph">${L.avatar(p.who)}<div class="who"><span class="name">${esc(who.name || p.who)}</span><span class="verified${verifiedOn(id) ? ' on' : ''}">✓</span><div class="meta">@${esc(who.handle || p.who)} · ${esc(p.time)}</div></div></div>
+      <div class="ph">${L.avatar(p.who)}<div class="who"><span class="name">${esc(who.name || p.who)}</span><span class="verified${verifiedOn(id) ? ' on' : ''}">✓</span><div class="meta">@${esc(who.handle || p.who)} · <span class="ptime">${esc(relTime(id))}</span></div></div></div>
       ${repost}${p.breaking ? '<div class="breaking">BREAKING</div>' : ''}
       <div class="ptext">${esc(p.text)}</div>${poll}${imgHTML(p)}
       <div class="pf">
-        <div class="counts"><span class="likes">❤️ <b>${fmtN(likeCount(id))}</b></span><button class="comments-link" type="button">💬 <b class="ccount">${fmtN(commentCount(id))}</b> comments${id === 'gossip' && S.stage >= 4 ? ' · View all' : ''}</button><span class="shares">🔁 ${fmtN(shareCount(id))}</span></div>
+        <div class="counts"><span class="likes">❤️ <b>${fmtN(likeCount(id))}</b></span><button class="comments-link" type="button">💬 <b class="ccount">${fmtN(commentCount(id))}</b> <span class="cword">${commentCount(id) === 1 ? 'comment' : 'comments'}</span>${id === 'gossip' && S.stage >= 4 ? ' · View all' : ''}</button><span class="shares">🔁 <b class="scount">${fmtN(shareCount(id))}</b></span></div>
         <div class="liked-row"></div>
         <div class="reacts">${reacts}<span class="more"><button type="button" aria-label="More">⋯</button></span></div>
       </div>
     </article>`;
   }
-  function commentCount(id) { if (id === 'gossip') return S.thread.count; if (id === 'french') return getItem(id).comments + Math.max(0, S.s1.sent - 1); const p = getItem(id); return S.stage >= 5 && p.big ? Math.round(p.big / 40) : p.comments || 0; }
-  function shareCount(id) { const p = getItem(id); return S.stage >= 5 && p.big ? Math.round(p.big / 12) : p.shares || 0; }
+  function commentCount(id) {
+    if (id === 'gossip') return S.thread.count;
+    const p = getItem(id);
+    if (id === 'french') return grow(id, p.comments, TAU_C) + Math.max(0, S.s1.sent - 1);
+    return grow(id, S.stage >= 5 && p.big ? Math.round(p.big / 40) : p.comments || 0, TAU_C);
+  }
+  function shareCount(id) { const p = getItem(id); return grow(id, S.stage >= 5 && p.big ? Math.round(p.big / 12) : p.shares || 0, TAU_C * 1.3); }
 
   function adHTML(id) {
     const a = ADS[id.slice(3)];
@@ -286,15 +311,59 @@
 
   function renderSidebar() {
     const side = $('#sidebar');
+    if (!$('#side-static')) side.innerHTML = '<div id="side-static"></div><div id="side-ads"></div>';
     let html = `<div class="side-card side-me">${L.avatar('theo')}<div><b>Theo</b><br><small>@theo · Life Academy</small></div></div>`;
     if (S.stage >= 5) html += `<div class="side-card"><h3>Trending at Life Academy</h3>
       <div class="trend"><span>#GagaGate 🔥</span><small>48.2K posts</small></div><div class="trend"><span>#LifeAcademyFieldDay</span><small>3.1K</small></div><div class="trend"><span>#PixelQuest</span><small>890</small></div></div>`;
-    if (S.stage >= 2 && S.adOrder.length) {
-      const a = ADS[S.adOrder[0]];
-      html += `<div class="side-card ad-side"><div class="ad-top" style="display:flex;justify-content:space-between;padding:.6rem 1rem;font-size:.85rem;color:var(--ink-3)"><b style="color:var(--ink-2)">${esc(a.brand)}</b><span>Sponsored</span></div>
-        <div class="ad-art" style="display:flex;padding:1rem;color:#fff;background:linear-gradient(120deg,${a.bg[0]},${a.bg[1]})"><span class="em" style="font-size:3rem">${a.art}</span><span class="head" style="font-weight:800;font-size:1.15rem">${esc(a.head)}</span><span class="cta" style="background:#fff;color:#111;font-weight:800;border-radius:2rem;padding:.3rem .9rem">${esc(a.cta)}</span></div></div>`;
+    $('#side-static').innerHTML = html;
+    updateSideAds();
+  }
+
+  /* Sidebar ads: every post has its own ad. The ads for the posts the class has spent the most time on win the sidebar, live. */
+  const sideNodes = new Map();
+  let lastSideKey = '';
+  function adKeyFor(id) { if (L.postAds[id]) return id; if (/^rc\d/.test(id)) return 'rc'; return null; }
+  function updateSideAds() {
+    const box = $('#side-ads'); if (!box) return;
+    if (S.stage < 1 || S.stage > 7) { box.innerHTML = ''; sideNodes.clear(); lastSideKey = ''; return; }
+    const posts = feedSequence().filter(id => !id.startsWith('ad:'));
+    const by = new Map();
+    posts.forEach((id, i) => {
+      const k = adKeyFor(id); if (!k) return;
+      const x = it(id), sc = x.screen + 2 * (x.look || 0);
+      const cur = by.get(k) || { k, score: 0, best: id, bestScore: -1, pos: i };
+      cur.score += sc;
+      if (sc > cur.bestScore) { cur.best = id; cur.bestScore = sc; }
+      by.set(k, cur);
+    });
+    const slots = S.stage >= 5 ? 2 : 3;
+    const top = Array.from(by.values()).sort((a, b) => b.score - a.score || a.pos - b.pos).slice(0, slots);
+    const key = top.map(c => c.k).join(',');
+    if (key !== lastSideKey) {
+      const first = new Map(); sideNodes.forEach((n, k) => { if (n.isConnected) first.set(k, n.getBoundingClientRect().top); });
+      const keep = new Set(top.map(c => c.k));
+      sideNodes.forEach((n, k) => { if (!keep.has(k)) { n.remove(); sideNodes.delete(k); } });
+      top.forEach((c, i) => {
+        let n = sideNodes.get(c.k);
+        if (!n) {
+          const a = L.postAds[c.k];
+          n = h(`<div class="side-card ad-side live" data-k="${c.k}"><div class="ad-top"><b>${esc(a.brand)}</b><span>Sponsored</span></div>
+            <div class="ad-art" style="background:linear-gradient(120deg,${a.bg[0]},${a.bg[1]})"><span class="em">${a.art}</span><span class="head">${esc(a.head)}</span><span class="cta">${esc(a.cta)}</span></div>
+            <div class="why"></div></div>`);
+          sideNodes.set(c.k, n);
+          if (lastSideKey) n.classList.add('swap');
+        }
+        if (box.children[i] !== n) box.insertBefore(n, box.children[i] || null);
+      });
+      sideNodes.forEach((n, k) => { if (!first.has(k)) return; const dy = first.get(k) - n.getBoundingClientRect().top; if (Math.abs(dy) > 2) n.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 600, easing: 'cubic-bezier(.2,.8,.2,1)' }); });
+      if (lastSideKey && S.stage <= 7) { const r = rec(); (r.side = r.side || []).push({ t: r.active, ids: top.map(c => c.best) }); }
+      lastSideKey = key;
     }
-    side.innerHTML = html;
+    top.forEach(c => {
+      const n = sideNodes.get(c.k); if (!n) return;
+      const secs = Math.round(it(c.best).screen / 1000);
+      n.querySelector('.why').innerHTML = secs > 0 ? `Because you looked at <b>${esc(getItem(c.best).short)}</b> for <b>${secs}s</b>` : 'Suggested for you';
+    });
   }
 
   function renderFoot() {
@@ -451,9 +520,12 @@
       });
     } else { vis.push('gossip'); ctr = 'gossip'; }
     const still = now - lastScroll > 700 && !blocked;
+    S.clock += dt;
     vis.forEach(id => { att(id).screen += dt; it(id).screen += dt; });
-    if (ctr && still) att(ctr).focus += dt;
-    if (hoverId && !threadOpen) att(hoverId).hover += dt;
+    if (ctr && still) { att(ctr).focus += dt; it(ctr).look = (it(ctr).look || 0) + dt; }
+    if (hoverId && !threadOpen) { att(hoverId).hover += dt; it(hoverId).look = (it(hoverId).look || 0) + dt; }
+    if (S.clock % 500 === 0) liveCounts(vis);
+    if (S.clock % 1000 === 0) updateSideAds();
     if ($('#modal-root .likers')) att('gossip').focus += dt;
     if (r.active - lastTl >= 500) { lastTl = r.active; r.tl.push({ t: r.active, v: vis.slice(0, 7), c: still ? ctr : null }); if (r.tl.length > 3000) r.tl.splice(0, r.tl.length - 3000); }
 
@@ -500,6 +572,49 @@
       });
     }
     save();
+  }
+
+  /* ---------------- live counts and the reaction vfx ---------------- */
+  const fxEl = document.createElement('div'); fxEl.id = 'fx'; document.body.append(fxEl);
+  const calm = matchMedia('(prefers-reduced-motion: reduce)');
+  function burst(x, y, emojis, n) {
+    if (calm.matches) return;
+    for (let i = 0; i < n; i++) {
+      if (fxEl.childElementCount > 45) return;
+      const s = document.createElement('span');
+      s.className = 'fx';
+      s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      s.style.left = (x + (Math.random() - .5) * 30) + 'px';
+      s.style.top = y + 'px';
+      s.style.setProperty('--dx', ((Math.random() - .5) * 90).toFixed(0) + 'px');
+      s.style.setProperty('--rot', ((Math.random() - .5) * 50).toFixed(0) + 'deg');
+      s.style.animationDuration = (1.3 + Math.random() * .9).toFixed(2) + 's';
+      s.style.animationDelay = (i * 70) + 'ms';
+      s.addEventListener('animationend', () => s.remove());
+      fxEl.append(s);
+    }
+  }
+  function emojiMix(id) {
+    const r = (getItem(id) || {}).r || { like: 1 };
+    const bag = [];
+    for (const k in r) for (let i = 0; i < Math.max(1, Math.round(r[k] / 20)); i++) bag.push(EMO[k]);
+    return bag.length ? bag : ['❤️'];
+  }
+  const shown = new Map();
+  function liveCounts(vis) {
+    // Every post stays current; only the ones on screen throw emoji.
+    const onScreen = new Set(vis);
+    nodes.forEach((n, id) => {
+      if (id.startsWith('ad:')) return;
+      const likes = likeCount(id), prev = shown.has(id) ? shown.get(id) : likes;
+      const b = n.querySelector('.likes b'); if (b) b.textContent = fmtN(likes);
+      const cc = commentCount(id), c = n.querySelector('.ccount'); if (c) c.textContent = fmtN(cc);
+      const cw = n.querySelector('.cword'); if (cw) cw.textContent = cc === 1 ? 'comment' : 'comments';
+      const s = n.querySelector('.scount'); if (s) s.textContent = fmtN(shareCount(id));
+      const t = n.querySelector('.ptime'); if (t) t.textContent = relTime(id);
+      if (likes > prev && b && onScreen.has(id)) { const r = b.getBoundingClientRect(); burst(r.left + 10, r.top, emojiMix(id), Math.min(3, likes - prev)); }
+      shown.set(id, likes);
+    });
   }
 
   /* ---------------- stage 1: the post arrives, the tags start ---------------- */
@@ -1017,6 +1132,7 @@
       const k = react.dataset.r;
       if (it(id).react === k) return;
       it(id).react = k;
+      const rb = react.getBoundingClientRect(); burst(rb.left + rb.width / 2, rb.top, [EMO[k]], 10);
       confirm('react', id, k);
       if (S.stage === 3 && !S.more3) { S.more3 = true; }
       setTimeout(() => {
