@@ -39,7 +39,7 @@ the algorithm needs less from him to be sure he wants more:
 
 | # | Theo... | Hidden meter shows | Bar fills in | What it really is (revealed in the replay) |
 |---|---|---|---|---|
-| 1 | **reads** a teacher's joke post | ⏱ time on screen | 90 seconds | **Passive tracking**: watching is a vote |
+| 1 | **scrolls**, then reads a teacher's joke post he gets tagged in | ⏱ time on screen | 90 seconds | **Passive tracking**: watching is a vote |
 | 2 | **scrolls**, and pauses on reposts | ⏸ pause time | about 12 seconds | **Exaggeration**: the story gets cropped, filtered and louder each time it's shared |
 | 3 | **reacts** to show he doesn't like it | reaction weight | one click | **The algorithm**: every reaction is fuel, angry ones most |
 | 4 | **replies** to set the record straight | ⌨ keystrokes, saved drafts | every keystroke | **Context collapse**: his words, cut down to the loudest part |
@@ -338,8 +338,7 @@ design lab where they play a character. Don't mention algorithms yet.
 
 ### Stage 1 — The joke post (passive tracking)
 
-**Theo's goal:** *"Mr. French posted about yesterday. I just want to read
-it."*
+**Theo's goal:** *"Just scrolling before school. What's everyone up to?"*
 
 **Looks like:** a calm, clean Lens feed with very little in it: a "Welcome
 back, Theo" card and **Mr. French's post** at the top:
@@ -368,6 +367,22 @@ and nine below**, from random kids at other schools and a few classmates.
 | below | Ivy (random) | my cat just pushed my water glass off the table while looking me directly in the eyes… |
 | below | Benji (random) | grandma signs every text. even "ok". "Ok. Love, Grandma" 💌 |
 | below | Nora | practiced violin for 2 hours. the neighbor's dog howled for 2 hours… |
+
+**Mr. French's post isn't there at first.** It arrives **60 seconds** into
+the stage, slotting in under Toby's post with a *"↑ New post from Mr.
+French"* pill. Then the notifications start, one about every 9 seconds, each
+ringing the bell, raising the red badge and bumping the post's comment count:
+
+1. *Mr. French tagged you in a post*
+2. *@maya.k mentioned you: "@theo the wall never stood a chance 😂"*
+3. *@kai.plays mentioned you: "@theo LEGEND 🏆"*
+4. *@jaxon_ mentioned you: "@theo rematch when?? 😂"*
+5. *@ella.r mentioned you: "@theo are you ok lol"*
+6. *@noah_b mentioned you: "@theo watch it in slow mo 💀"*
+
+Tapping a notification (or a row in the bell's list) scrolls straight to
+Mr. French's post. The tags are friendly; the point is that they keep
+pulling Theo back to the same post. The replay counts them.
 
 Every post carries its own hidden on-screen timer, so whatever the class
 lingers on is counted. Stage 1 always ends with Mr. French's post being

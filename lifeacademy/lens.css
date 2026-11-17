@@ -427,3 +427,8 @@ blockquote.del { border-left-color: var(--ink-3); text-decoration: line-through;
 .rp-truth.big { border-radius: 1rem; padding: 1.1rem 1.4rem; display: inline-block; }
 .rp-truth.big small { display: block; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; font-size: .85rem; opacity: .8; }
 .rp-truth.big p { font-size: 1.7rem !important; margin: .2rem 0 0; }
+
+/* stage 1: the new-post pill and clickable notifications */
+#newpill { position: fixed; top: 4.4rem; left: 50%; transform: translateX(-50%); z-index: 40; border: 0; border-radius: 2rem; padding: .55rem 1.2rem; background: var(--accent); color: #fff; font-weight: 800; font-size: 1.05rem; box-shadow: 0 .4rem 1.2rem rgba(40, 20, 120, .35); animation: arrive .4s ease both, bob 1.4s ease-in-out infinite .4s; }
+.toast.clickable:hover { background: #2a2636; }
+.dropdown .nrow.clickable:hover { background: var(--bg); }

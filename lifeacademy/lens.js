@@ -25,9 +25,13 @@
       thread: { opened: 0, count: 12 }, more3: false, likesOpened: 0, searches: [],
       s7: { feed: true, notif: true, autoplay: true, streak: true, pulls: 0, attempts: 0, dialogs: [], notifCount: 0, loads: 0, pausedUntil: 0, autoCount: 0, videoPlays: 0, loggedOut: false },
       rec: {}, stageConfirmed: {}, muted: false, replay: 0, done: false,
+      s1: { shown: false, shownAt: 0, sent: 0, clicks: 0 },
+      bell: { unread: 0, items: [] },
     };
   }
   let S = load() || fresh();
+  S.s1 = S.s1 || { shown: true, shownAt: 0, sent: 0, clicks: 0 };
+  S.bell = S.bell || { unread: 0, items: [] };
   let snaps = loadSnaps();
   function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); return s && s.v === 1 ? s : null; } catch (e) { return null; } }
   function loadSnaps() { try { return JSON.parse(localStorage.getItem(KEY + '-snaps')) || {}; } catch (e) { return {}; } }
@@ -54,6 +58,7 @@
     if (!p || it(id).gone) return false;
     if (p.stage > S.stage) return false;
     if (p.stage === 3 && !S.more3) return false;
+    if (id === 'french' && S.stage === 1 && !S.s1.shown) return false;
     if (S.stage >= 6 && !(p.topics.gaga || p.topics.theo)) return false;
     return true;
   }
@@ -216,7 +221,7 @@
       </div>
     </article>`;
   }
-  function commentCount(id) { if (id === 'gossip') return S.thread.count; const p = getItem(id); return S.stage >= 5 && p.big ? Math.round(p.big / 40) : p.comments || 0; }
+  function commentCount(id) { if (id === 'gossip') return S.thread.count; if (id === 'french') return getItem(id).comments + Math.max(0, S.s1.sent - 1); const p = getItem(id); return S.stage >= 5 && p.big ? Math.round(p.big / 40) : p.comments || 0; }
   function shareCount(id) { const p = getItem(id); return S.stage >= 5 && p.big ? Math.round(p.big / 12) : p.shares || 0; }
 
   function adHTML(id) {
@@ -320,8 +325,8 @@
     if (S.stage === 7 && !S.s7.feed) c.push('feed-off');
     document.body.className = c.join(' ');
     $('#streak').hidden = !(S.stage === 7 && S.s7.streak);
-    $('#badge').hidden = !(S.stage === 7 && S.s7.notifCount > 0);
-    $('#badge').textContent = S.s7.notifCount;
+    $('#badge').hidden = !(S.stage >= 1 && S.stage <= 7 && S.bell.unread > 0);
+    $('#badge').textContent = S.bell.unread;
   }
 
   function showGoalPill() {
@@ -339,8 +344,8 @@
   }
 
   /* ---------------- toasts & dialogs ---------------- */
-  function toast(text, icon, ms) {
-    const t = h(`<div class="toast"><span class="ti">${icon || '🔔'}</span><span>${esc(text)}</span></div>`);
+  function toast(text, icon, ms, goto) {
+    const t = h(`<div class="toast${goto ? ' clickable' : ''}"${goto ? ` data-goto="${goto}"` : ''}><span class="ti">${icon || '🔔'}</span><span>${esc(text)}</span></div>`);
     $('#toasts').prepend(t);
     while ($('#toasts').children.length > 4) $('#toasts').lastElementChild.remove();
     setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 400); }, ms || 4200);
@@ -452,6 +457,12 @@
     if ($('#modal-root .likers')) att('gossip').focus += dt;
     if (r.active - lastTl >= 500) { lastTl = r.active; r.tl.push({ t: r.active, v: vis.slice(0, 7), c: still ? ctr : null }); if (r.tl.length > 3000) r.tl.splice(0, r.tl.length - 3000); }
 
+    // Stage 1: Mr. French's post arrives at 60 s, then the tags start coming in.
+    if (S.stage === 1) {
+      if (!S.s1.shown && r.active >= 60000) showFrench();
+      if (S.s1.shown && S.s1.sent < L.s1Tags.length && r.active >= S.s1.shownAt + 4000 + S.s1.sent * 9000) sendTag();
+    }
+
     // Meters
     if (S.stage === 1) {
       // Every post counts its own time on screen; 90 seconds of being looked at is a vote.
@@ -491,11 +502,51 @@
     save();
   }
 
+  /* ---------------- stage 1: the post arrives, the tags start ---------------- */
+  function showFrench() {
+    if (S.s1.shown) return;
+    S.s1.shown = true;
+    S.s1.shownAt = rec(1).active;
+    const above = L.posts.find(p => p.stage === 1 && p.pos === 'above');
+    const at = above ? S.order.indexOf(above.id) + 1 : 0;
+    S.order.splice(at, 0, 'french');
+    renderFeed({ arrive: true });
+    recordOrder();
+    const pill = h('<button id="newpill" type="button" data-goto="french">↑ New post from Mr. French</button>');
+    document.body.append(pill);
+    setTimeout(() => pill.remove(), 12000);
+    beep('tick');
+    save(true);
+  }
+  function sendTag() {
+    const [who, text] = L.s1Tags[S.s1.sent++];
+    const p = L.people[who];
+    const line = who === 'french' ? `${p.name} tagged you in a post` : `@${p.handle} mentioned you: “${text}”`;
+    S.bell.items.unshift({ who, text: line, goto: 'french' });
+    S.bell.unread++;
+    bodyClasses();
+    toast(line, '🔔', 5500, 'french');
+    beep('ding');
+    const n = nodes.get('french');
+    if (n) { const c = n.querySelector('.ccount'); if (c) c.textContent = commentCount('french'); }
+    save();
+  }
+  function gotoPost(id) {
+    const n = nodes.get(id);
+    if (!n) return;
+    if (S.stage === 1) S.s1.clicks++;
+    n.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    n.classList.add('flash'); setTimeout(() => n.classList.remove('flash'), 1600);
+    $('#newpill') && $('#newpill').remove();
+  }
+
   /* ---------------- stage setups ---------------- */
   const stageSetup = {
     1() {
+      // Mr. French's post isn't there yet: it arrives 60 seconds in, under the first post.
       const s1 = L.posts.filter(p => p.stage === 1 && p.id !== 'french');
-      S.order = s1.filter(p => p.pos === 'above').map(p => p.id).concat(['french'], s1.filter(p => p.pos !== 'above').map(p => p.id));
+      S.order = s1.filter(p => p.pos === 'above').map(p => p.id).concat(s1.filter(p => p.pos !== 'above').map(p => p.id));
+      S.s1 = { shown: false, shownAt: 0, sent: 0, clicks: 0 };
     },
     2() {
       // New posts load right under Mr. French's; this morning's goofy posts get pushed further down.
@@ -573,7 +624,7 @@
     async 7(anim) {
       if (anim) {
         beep('ding');
-        for (const c of [1, 3, 9]) { S.s7.notifCount = c; bodyClasses(); await wait(650); if (c < 9) beep('ding'); }
+        for (const c of [1, 3, 9]) { S.s7.notifCount = c; S.bell.unread = c; bodyClasses(); await wait(650); if (c < 9) beep('ding'); }
       }
       renderBanners();
       renderFeed({ arrive: anim });
@@ -626,7 +677,7 @@
     const done = S.stage === 1 ? S.signals.some(x => x.type === 'dwell' && x.id === 'french') : S.stageConfirmed[S.stage];
     if (!key || done) return;
     rec().early = true;
-    if (S.stage === 1) it('french').done = 1;
+    if (S.stage === 1) { if (!S.s1.shown) { showFrench(); await wait(1200); } it('french').done = 1; }
     const type = { 1: 'dwell', 2: 'pause', 3: 'pause', 4: 'thread', 5: 'glance', 6: 'pause' }[S.stage];
     const n = nodes.get(key);
     if (n && !threadOpen) n.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -845,8 +896,9 @@
     let ni = S.s7.notifCount % L.notifications.length;
     hookTimers.push(setInterval(() => {
       if (!S.s7.notif || Date.now() < S.s7.pausedUntil) return;
-      S.s7.notifCount++; bodyClasses();
-      toast(L.notifications[ni++ % L.notifications.length], '🔔');
+      const line = L.notifications[ni++ % L.notifications.length];
+      S.s7.notifCount++; S.bell.unread++; S.bell.items.unshift({ text: line }); S.bell.items.length = Math.min(S.bell.items.length, 30); bodyClasses();
+      toast(line, '🔔');
       S.interest.stress = (S.interest.stress || 0) + .12;
       beep('ding'); save();
     }, 6500));
@@ -998,11 +1050,15 @@
       const d = h(`<div class="dropdown"><button type="button" data-break>⏸ Take a break (pause notifications)</button><button type="button" data-settings>⚙️ Settings</button><button type="button" disabled>👥 Switch account</button><div class="note">Signed in as @theo</div></div>`);
       document.body.append(d); return;
     }
-    if (t.closest('#bell') && S.stage === 7) {
+    if (t.closest('#bell') && S.stage >= 1 && S.stage <= 7) {
       if ($('.dropdown')) return $('.dropdown').remove();
-      const list = L.notifications.slice(0, 6).map(n => `<div class="nrow">🔔 ${esc(n)}</div>`).join('');
-      document.body.append(h(`<div class="dropdown">${list}<button type="button" data-break>⏸ Pause for 1 hour</button></div>`)); return;
+      S.bell.unread = 0; bodyClasses(); save();
+      const items = S.bell.items.slice(0, 6);
+      const list = items.length ? items.map(n => `<div class="nrow${n.goto ? ' clickable' : ''}"${n.goto ? ` data-goto="${n.goto}"` : ''}>🔔 ${esc(n.text)}</div>`).join('') : '<div class="note">No notifications yet.</div>';
+      document.body.append(h(`<div class="dropdown">${list}${S.stage === 7 ? '<button type="button" data-break>⏸ Pause for 1 hour</button>' : ''}</div>`)); return;
     }
+    const go = t.closest('[data-goto]');
+    if (go) { $('.dropdown') && $('.dropdown').remove(); go.classList.contains('toast') && go.remove(); return gotoPost(go.dataset.goto); }
     if (t.closest('[data-break]')) { $('.dropdown') && $('.dropdown').remove(); S.s7.attempts++; S.s7.pausedUntil = Date.now() + 20000; toast('Notifications paused for 1 hour 😴', '⏸'); setTimeout(() => { if (S.stage === 7 && S.s7.notif) { S.s7.pausedUntil = 0; toast("Notifications are back on! We didn't want you to miss anything 💛", '🔔', 5000); beep('ding'); } }, 20000); return; }
     if (t.closest('[data-settings]')) { $('.dropdown') && $('.dropdown').remove(); return settingsModal(); }
     if ($('.dropdown') && !t.closest('.dropdown')) $('.dropdown').remove();

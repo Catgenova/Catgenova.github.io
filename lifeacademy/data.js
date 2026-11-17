@@ -41,7 +41,7 @@ LENS.posts = [
   { id: 's1toby', who: 'toby', time: 'Today · 7:48 AM', min: 1428, stage: 1, pos: 'above', cat: 'other', short: 'Roomba named Steve',
     topics: { pets: 0.5, memes: 1 }, text: "my mom said no pets so I named the roomba Steve 🤖 he's thriving",
     img: { card: 'roomba' }, r: { like: 64, laugh: 81 }, shares: 12, comments: 19, big: 2140 },
-  { id: 'french', who: 'french', time: 'Yesterday · 4:10 PM', min: 490, stage: 1, cat: 'teacher', short: "Mr. French's post",
+  { id: 'french', who: 'french', time: 'Today · 7:52 AM', min: 1432, stage: 1, cat: 'teacher', short: "Mr. French's post",
     topics: { gaga: 1, school: 0.5 },
     text: "Theo's championship-winning dive 🏆 (he didn't win… the wall did 😂). Wall fixed in 10 minutes thanks to Mr. Alvarez, rematch at 2:15. Best field day yet! #LifeAcademyFieldDay",
     img: { photo: 'full' }, r: { like: 19, laugh: 4 }, shares: 0, comments: 3, big: 23 },
@@ -140,6 +140,16 @@ LENS.posts = [
     topics: { gaga: 1, theo: 1, drama: 0.5 }, text: '#GagaGate day 2. Theo where are you 👀', r: { like: 25, laugh: 31 }, shares: 8, comments: 22, big: 4405 },
 ];
 
+/* Stage 1: once Mr. French's post appears, Theo gets tagged in it, one notification at a time. */
+LENS.s1Tags = [
+  ['french', 'tagged you in a post'],
+  ['maya', '@theo the wall never stood a chance 😂'],
+  ['kai', '@theo LEGEND 🏆'],
+  ['jaxon', '@theo rematch when?? 😂'],
+  ['ella', '@theo are you ok lol'],
+  ['noah', '@theo watch it in slow mo 💀'],
+];
+
 /* Captions used to recycle posts forever in stage 7's endless feed. */
 LENS.recycled = [
   ['gossip', 'STILL TRENDING: #GagaGate 🔥 the pit, the wall, the KID'],
@@ -223,7 +233,7 @@ LENS.notifications = [
 
 /* Theo's goal at each stage, in his voice. */
 LENS.goals = {
-  1: "Mr. French posted about yesterday. I just want to read it.",
+  1: "Just scrolling before school. What's everyone up to?",
   2: "OK, enough of that. Let's see what else is on here.",
   3: "That gossip post isn't true. I want Lens to know I don't like it.",
   4: "That's not what happened. I'm going to set the record straight.",

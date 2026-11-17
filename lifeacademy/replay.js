@@ -123,10 +123,11 @@
       }
       case 'start': {
         const dwell = S.signals.find(x => x.type === 'dwell' && x.id === 'french');
-        const sec = dwell ? secs(dwell.t) : secs((S.it.french || {}).screen || 0);
+        const sec = dwell ? secs(dwell.t - ((S.s1 && S.s1.shownAt) || 0)) : secs((S.it.french || {}).screen || 0);
+        const tags = S.s1 ? S.s1.sent : 0, taps = S.s1 ? S.s1.clicks : 0;
         html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 1</span><span class="rp-goal">“${esc(g(1))}”</span></div>
           <div class="rp-tiles"><div class="rp-tile"><b>${sec}s</b><span>looking at Mr. French’s post before Lens decided Theo wanted more</span></div>
-          <div class="rp-tile"><b>0</b><span>clicks needed</span></div><div class="rp-tile"><b>1</b><span>kind post, with the whole story</span></div></div>
+          <div class="rp-tile"><b>0</b><span>clicks needed</span></div><div class="rp-tile"><b>${tags}</b><span>notifications pulling Theo to it${taps ? `, ${taps} tapped` : ''}</span></div></div>
           ${S.rec[1] && S.rec[1].early ? '<p class="rp-big">The class moved on before the 90 seconds were up. Lens decided anyway.</p>' : '<p class="rp-big">Nobody clicked anything. Looking was enough.</p>'}</div>`;
         break;
       }
@@ -238,7 +239,7 @@
       case 'off': {
         const layers = ['Notifications & the endless feed', 'The orange bubble', 'Fake numbers & checkmarks', 'Quote-posts & comments', 'Reactions & ranking', 'Louder reposts', 'Hidden meters'];
         html = `<div class="rp-off"><div class="rp-layers">${layers.map((l, i) => `<div class="rp-layer" style="animation-delay:${0.5 + i * 0.55}s">${esc(l)}</div>`).join('')}</div>
-          <div class="rp-true" style="animation-delay:${0.8 + layers.length * 0.55}s"><article class="item post"><div class="ph">${L.avatar('french')}<div class="who"><span class="name">Mr. French</span><div class="meta">@mrfrench · Yesterday · 4:10 PM</div></div></div>
+          <div class="rp-true" style="animation-delay:${0.8 + layers.length * 0.55}s"><article class="item post"><div class="ph">${L.avatar('french')}<div class="who"><span class="name">Mr. French</span><div class="meta">@mrfrench · Today · 7:52 AM</div></div></div>
           <div class="ptext">${esc(L.posts[0].text)}</div><div class="pimg">${L.sceneSVG('full')}</div><div class="pf"><div class="counts"><span class="likes">❤️ <b>23</b></span></div></div></article>
           <p class="rp-caption">This is what actually happened.</p></div></div>`;
         break;
