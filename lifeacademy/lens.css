@@ -686,15 +686,16 @@ body { overflow-x: hidden; }
 .vp-mbar { grid-column: 1 / -1; height: .26rem; background: rgba(255, 255, 255, .2); border-radius: .2rem; overflow: hidden; }
 .vp-mbar i { display: block; height: 100%; background: var(--meter-bar); transition: width .25s linear; }
 .vp-meter.ok .vp-mbar i { background: #3ad38b; }
-.vp-pushed { grid-column: 1 / -1; color: #3ad38b; font-weight: 900; animation: arrive .25s ease both; }
+.vp-pushed { grid-column: 1 / -1; color: #3ad38b; font-weight: 900; }
 .vp-msg { grid-column: 1 / -1; font-size: .6rem; opacity: .9; line-height: 1.25; }
 .vp-fx { position: absolute; left: 0; right: 0; bottom: .3rem; display: grid; place-items: center; pointer-events: none; }
 .vp-bubble { background: var(--ink); color: #fff; border-radius: 1rem; padding: .2rem .7rem; font-weight: 700; font-size: .7rem; animation: arrive .25s ease both; max-width: 90%; }
 .vp-burst { font-size: 1.7rem; animation: vpburst 1.4s ease-out both; }
 @keyframes vpburst { 0% { transform: scale(.4) translateY(1rem); opacity: 0; } 25% { transform: scale(1.25); opacity: 1; } 100% { transform: scale(1) translateY(-1.6rem); opacity: 0; } }
 .vp-sideads { display: flex; flex-direction: column; gap: .4rem; padding-top: .4rem; min-width: 0; }
-.vp-sa { background: var(--surface); border-radius: .5rem; overflow: hidden; box-shadow: var(--shadow); font-size: .62rem; animation: arrive .4s ease both; }
-.vp-sa.empty { padding: .5rem; color: var(--ink-3); text-align: center; }
+.vp-sa { background: var(--surface); border-radius: .5rem; overflow: hidden; box-shadow: var(--shadow); font-size: .62rem; }
+.vp-sa.fresh { animation: arrive .4s ease both; }
+.vp-sideads.empty::before { content: 'ads load here'; padding: .5rem; color: var(--ink-3); text-align: center; font-size: .62rem; }
 .vp-saart { color: #fff; padding: .35rem .45rem; font-size: .68rem; }
 .vp-sa small { display: block; padding: .25rem .45rem; color: var(--ink-2); line-height: 1.25; }
 .vp-typing { position: absolute; left: .6rem; right: 30%; bottom: 1.6rem; background: var(--ink); color: #fff; border-radius: .6rem; padding: .35rem .7rem; font-weight: 700; font-size: .72rem; z-index: 4; }

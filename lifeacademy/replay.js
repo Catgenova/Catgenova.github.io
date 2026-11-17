@@ -78,7 +78,7 @@
   }
 
   function videoMount() {
-    V = { ...vTimeline(), T: 0, playing: true, last: performance.now(), raf: 0, iTl: -1, iOrd: -1, iSig: 0, iEv: 0, pushed: {}, flashes: [], toasts: [], log: [], rows: new Map(), cards: new Map(), stage: 0, lastDraw: 0 };
+    V = { ...vTimeline(), T: 0, playing: true, last: performance.now(), raf: 0, iTl: -1, iOrd: -1, iSig: 0, iEv: 0, pushed: {}, flashes: [], toasts: [], log: [], rows: new Map(), cards: new Map(), side: new Map(), stage: 0, lastDraw: 0 };
     const el = root(), track = el.querySelector('.vp-track');
     track.innerHTML = V.segs.map(g => `<div class="vp-seg" style="flex:${Math.max(g.dur, 1)}"><span>${g.s}</span></div>`).join('') + '<div class="vp-head"></div>';
     track.addEventListener('click', e => {
@@ -213,7 +213,22 @@
     const bn = (X.bn || []).filter(b => !/^“/.test(b));
     set(el.querySelector('.vp-banners'), bn.map(b => `<div class="vp-banner">${esc(trunc(b, 70))}</div>`).join(''));
     // sidebar ads, and why Lens picked them
-    set(el.querySelector('.vp-sideads'), (X.side || []).map(([k, sc, best, s]) => { const a = L.postAds[k] || {}; return `<div class="vp-sa"><div class="vp-saart" style="background:linear-gradient(120deg,${(a.bg || ['#555', '#888']).join(',')})">${a.art || ''} <b>${esc(a.brand || '')}</b></div><small>${s > 0 ? `Because you looked at <b>${esc(shortOf(best))}</b> for <b>${s}s</b>` : 'Suggested for you'}</small></div>`; }).join('') || '<div class="vp-sa empty">ads load here</div>');
+    // (kept as elements and only their text updated, so the timers ticking don't restart the fade-in)
+    const saEl = el.querySelector('.vp-sideads'), side = X.side || [], sideKeys = new Set(side.map(x => x[0]));
+    V.side = V.side || new Map();
+    V.side.forEach((n, k) => { if (!sideKeys.has(k)) { n.remove(); V.side.delete(k); } });
+    side.forEach(([k, sc, best, s], i) => {
+      let n = V.side.get(k);
+      if (!n) {
+        const a = L.postAds[k] || {};
+        n = document.createElement('div'); n.className = 'vp-sa fresh'; setTimeout(() => n.classList.remove('fresh'), 500);
+        n.innerHTML = `<div class="vp-saart" style="background:linear-gradient(120deg,${(a.bg || ['#555', '#888']).join(',')})">${a.art || ''} <b>${esc(a.brand || '')}</b></div><small></small>`;
+        V.side.set(k, n);
+      }
+      if (saEl.children[i] !== n) saEl.insertBefore(n, saEl.children[i] || null);
+      set(n.querySelector('small'), s > 0 ? `Because you looked at <b>${esc(shortOf(best))}</b> for <b>${s}s</b>` : 'Suggested for you');
+    });
+    saEl.classList.toggle('empty', !side.length);
     // top bar: search, bell, streak, typing, dialogs
     const search = V.flashes.filter(f => f.x.type === 'search' && f.until > now).pop();
     const sb = el.querySelector('.vp-search');
@@ -226,7 +241,12 @@
     const md = el.querySelector('.vp-modal'); md.hidden = !sample.md; if (sample.md) set(md, `<div>${esc(sample.md)}</div>`);
     V.flashes = V.flashes.filter(f => f.until > now);
     V.toasts = V.toasts.filter(t => t.until > now);
-    set(el.querySelector('.vp-toasts'), V.toasts.map(t => `<div class="vp-toast">${t.e.icon} ${esc(trunc(t.e.text, 90))}</div>`).join(''));
+    const tw = el.querySelector('.vp-toasts');
+    [...tw.children].forEach(n => { if (!V.toasts.some(t => t.el === n)) n.remove(); });
+    V.toasts.forEach((t, i) => {
+      if (!t.el) { t.el = document.createElement('div'); t.el.className = 'vp-toast'; t.el.textContent = `${t.e.icon} ${trunc(t.e.text, 90)}`; }
+      if (tw.children[i] !== t.el) tw.insertBefore(t.el, tw.children[i] || null);
+    });
     set(el.querySelector('.vp-scroll'), `scrolled ${fmt(sample.y || 0)}px${sample.c ? ` · centred: ${esc(trunc(shortOf(sample.c), 22))}` : ' · scrolling'}${sample.h ? ` · pointer on: ${esc(trunc(shortOf(sample.h), 22))}` : ''}`);
 
     /* ---- the rest of the feed, zoomed out, reordering underneath ---- */
