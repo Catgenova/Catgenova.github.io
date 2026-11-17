@@ -98,6 +98,7 @@ LIFE ACADEMY CHAOS 😱🔥 48.2K"*.
 | **@lifeacademy.gossip** | A gossip account made today | The worst repost, the quote-posts, and the bought likes |
 | **@june.plays.gaga** | June, 8 | Rematch winner; her post is the one that gets buried |
 | **@alvarez.fixes** | Mr. Alvarez | "Wall's back up!" |
+| **@ella.r**, **@noah_b**, **@kai.plays** | Classmates | Commenters in the stage 4 thread |
 | **@sam** | A classmate | Barely heard about it. Their feed is mostly video games. |
 
 ### The art: one photo, many crops
@@ -553,8 +554,9 @@ more, and anger counts most. A formula, not a person, decides what comes
 first, and it can't tell the difference between 'I love this' and 'I hate
 this'."*
 
-**Transition → 4:** a reply box opens under the gossip post with Theo's
-avatar beside it: *"Say something, Theo 💬"*
+**Transition → 4:** the comment count on the gossip post starts climbing
+(💬 12 → 38), and a speech bubble pops up from it with Theo's avatar:
+*"People are commenting on this. Say something, Theo 💬"*
 
 ---
 
@@ -563,12 +565,27 @@ avatar beside it: *"Say something, Theo 💬"*
 **Theo's goal:** *"That's not what happened. I'm going to set the record
 straight."*
 
-**Looks like:** the gossip post at the top with its comment thread open.
-Replies are piling up (teasing, never cruel: *"the wall had a family 😭"*,
-*"bro just admit it"*, *"wait is gaga actually banned??"*).
+**Looks like:** the gossip post at the top, with *"💬 38 comments · View
+all"* under it. The class tells the teacher to open it, and the post
+**expands into a full thread view**: the post bigger at the top, the
+comments below it. Opening the thread is itself a signal (*"📖 opened
+thread"* on the meter).
 
-**The meter:** it's attached to the **reply box**, and it fills **with
-every keystroke**:
+**The comments already there** (teasing, never cruel), sorted by *Most
+relevant*:
+
+1. **@maya.k:** *"ok this is actually so funny 😂 theo you good?"*
+2. **@jaxon_:** *"the wall had a family 😭"*
+3. **@ella.r:** *"wait is gaga actually banned??"*
+4. **@noah_b:** *"I heard he did it on purpose bc they were losing"*
+5. **@lifeacademy.gossip** (author): *"sources say the pit is CLOSED FOREVER
+   🚨"*
+6. **@kai.plays:** *"theo fr owes everyone a new pit lol"*
+
+Each comment has its own hidden meter, and the class can see which ones
+Lens thinks are "relevant": the loudest are on top.
+
+**The meter:** in the reply box it fills **with every keystroke**:
 
 ```
 ⌨ 41 keystrokes · draft saved · sending to algorithm ▓▓▓▓▓▓▓▓░░
@@ -577,18 +594,33 @@ every keystroke**:
 Deleting doesn't make the count go down, and every version of the draft is
 saved, including the words the class typed and took back.
 
-**Play:** the class dictates Theo's reply and the teacher types it. (The
-teacher is the filter. If the class is stuck or getting silly, the page
-offers three ready-made replies: *"It was the mud lol, the wall's fixed"*,
-*"Stop, it wasn't a big deal"*, *"Whoever runs this account is lying."*)
-When Theo posts it, within seconds **@lifeacademy.gossip quote-posts it**,
-cut down to its most charged few words:
+**Play: Theo's reply is free text.** The class decides what Theo says and
+the teacher types it, word for word. The teacher is the only filter: if a
+suggestion is unkind or not OK for the room, the teacher just doesn't type
+it. There are no ready-made replies; whatever the class writes is Theo's.
 
-> **@lifeacademy.gossip:** *Theo responds 👀: "…the wall's fixed…"* 🙄
-> *(or "…lying…", or "…it wasn't a big deal…": the most dramatic chunk of
-> whatever the class wrote)*
+**Then the comments keep coming.** Over about 30 seconds after Theo posts,
+new comments arrive **below his**, one every few seconds, each with its own
+meter confirming as it lands. They're written to work with any reply, and
+the ones that quote Theo only ever use the "loudest chunk" of a few words
+(see `quotePost()` below), so the class's words are never repeated at
+length:
 
-and the reply count on the gossip post jumps.
+1. **@noah_b:** *"'…{loudest chunk}…' 💀 ok theo"*
+2. **@ella.r:** *"so is gaga banned or not"* (nobody reads the replies)
+3. **@jaxon_:** *"theo really typed all that 😭"*
+4. **@lifeacademy.gossip:** *"we posted Theo's response ⬆️ 👀"*, and at the
+   same moment a **quote-post** appears at the top of the feed:
+   *Theo responds 👀: "…{loudest chunk}…"* 🙄
+5. **@kai.plays:** *"ratio"*
+6. **@maya.k:** *"guys leave him alone lol"*, the only kind one. It
+   arrives last and **sorts to the bottom**, because a calm comment scores
+   lowest under *Most relevant*.
+
+As they come in, the comment count jumps (38 → 61), Theo's own comment
+collects reactions (😂 ×40, 😡 ×12), and the meter on his comment reads
+*"💬 your comment · 6 replies · ✓✓✓ pushed to algorithm"*. His reply has
+made the gossip post *more* popular.
 
 **Code concept:** strings. Events on an input, splitting and slicing text,
 and scoring it. The **Text** tab shows the keystroke log and saved drafts,
@@ -608,7 +640,12 @@ function quotePost(text) {
   const words = text.split(" ");
   return '"…' + loudestChunk(words, 4).join(" ") + '…" 👀';
 }
+
+comments.sort((a, b) => commentScore(b.text) - commentScore(a.text));   // "Most relevant"
 ```
+
+The class can watch Theo's own words go through `quotePost()` and come out
+as four of them, and see why Maya's kind comment ended up last.
 
 **The lock:** *"Theo wants to reply again and fix it. Use `commentScore()`.
 What reply won't feed the algorithm?"* The class can test ideas: the
@@ -622,9 +659,12 @@ teacher types them into a test box that shows their score. Even *"ok"* and
   to blame."*
 
 **In the room:** this is the stage where the class feels most like Theo.
-Let them argue about what he should say. After the quote-post appears, ask
-*"Is that what Theo said?"* Point out the saved drafts: *"Lens read the
-reply you deleted."*
+Read the six existing comments aloud first, then let the class argue about
+what he should say and agree on it before you type. Type exactly what they
+settle on. As the new comments land, let the room react to each one. After
+the quote-post appears, ask *"Is that what Theo said?"* Point out the saved
+drafts: *"Lens read the reply you deleted."* And ask why Maya's comment is
+at the bottom.
 
 **Role in the reveal:** **Context collapse.** *"Once your words are online,
 anyone can cut them down to the loudest few and pass them on. And arguing
@@ -1026,7 +1066,7 @@ give the instructions.
 - **Stage 6 groups:** three groups. Decide ahead of time how to split the
   room (by where they sit is easiest).
 
-### Pacing (about 65 minutes, plus 20 for discussion)
+### Pacing (about 66 minutes, plus 20 for discussion)
 
 | Stage | Minutes | Note |
 |---|---|---|
@@ -1034,7 +1074,7 @@ give the instructions.
 | 1 Watcher | 6 | Let the 90-second bar fill while they watch |
 | 2 Box & Style | 8 | |
 | 3 Logic | 8 | Vote on the reaction before clicking |
-| 4 Text | 9 | Writing Theo's reply takes time; let it |
+| 4 Text | 10 | Read the thread, write Theo's reply, watch the comments come in |
 | 5 Data | 6 | Counting aloud |
 | 6 State | 10 | Group split; let the "nobody said Theo" moment land |
 | 7 Timers | 7 | Loud; the room decides every click |
@@ -1130,7 +1170,8 @@ ending. It can be linked from the home page's Apps section later.
    - `panel`: the Under the Hood split screen and its tabs, with the small
      syntax highlighter.
    - `reply`: the stage 4 reply box, keystroke log, drafts, `commentScore`,
-     the quote-post generator, and the three fallback replies.
+     the quote-post generator, the thread view, and the timed comments that
+     arrive after Theo's (templated with his loudest chunk).
    - `groups`: the stage 6 sequence (call a group, 20-second countdown,
      blank, next group).
    - `finale`: signal log, CONTEXT tile puzzle, layer stack, peel-back,
@@ -1192,10 +1233,9 @@ Print this table and the presenter keys from section 2 for the session.
 - **Mrs. Park:** keep an invented teacher for the first post, or make it you
   (with a made-up name or your own)? Posting the "joke" as the class's own
   teacher could make stage 1 land harder.
-- **Names.** Check that Theo, June, Maya, Jaxon, Sam, Mrs. Park and Mr.
-  Alvarez don't belong to anyone at Life Academy, and swap any that do.
-- **Theo's reply (stage 4):** free text typed by you as the class dictates
-  (the plan's default), or only the three ready-made replies?
+- **Names.** Check that Theo, June, Maya, Jaxon, Ella, Noah, Kai, Sam, Mrs.
+  Park and Mr. Alvarez don't belong to anyone at Life Academy, and swap any
+  that do.
 - **Class size.** Affects the stage 6 groups (three groups works from about
   6 students up).
 - **The room:** projector resolution, and whether there are speakers.
