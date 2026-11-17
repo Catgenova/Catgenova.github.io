@@ -115,8 +115,7 @@ in it:
 
 Every repost is a crop of that same SVG (a different `viewBox`) with heavier
 filters and a louder caption. Each crop cuts out a little more of the
-context, and the laughing goes first. The replay draws every repost's crop
-on the original photo.
+context, and the laughing goes first.
 
 ### The fictional app: **Lens**
 
@@ -128,9 +127,8 @@ without copying any real platform's branding or layout.
 > **Never shown during play.** The meter is hidden for the whole game: no
 > overlay, no *PUSHED TO ALGORITHM* flash, no sound. Lens still times every
 > post, pause, tap and keystroke and pushes signals exactly as described
-> below; the class only sees it in Lens Replay, whose second screen reveals
-> the meter (*"Every post had this on it. You never saw it."*) with the
-> session's real signal counts. Descriptions of the meter elsewhere in this
+> below; the class only sees it in Lens Replay, whose video plays the
+> session back with every post's meter showing, exactly as Lens computed it. Descriptions of the meter elsewhere in this
 > plan describe what Lens does behind the scenes.
 
 Every post (and every ad) has a **hidden meter**, an overlay that appears
@@ -276,8 +274,8 @@ read from the back of the room on a washed-out classroom projector.
   exaggerated so they survive the projector. The only low-contrast elements
   are the ones that are low-contrast *on purpose* (stage 7), and those are
   tuned on the real projector.
-- **One thing at a time.** Theo's goal cards and replay chapters appear big
-  and centered, one at a time.
+- **One thing at a time.** Theo's goal cards and the replay's last screens
+  appear big and centered, one at a time.
 - **Sound** goes through the room's speakers if there are any: a soft tick
   when a meter confirms, and notifications in stage 7. Mute with one key.
 - **Works offline.** The page is one file. Save a copy to the laptop before
@@ -341,8 +339,8 @@ nothing on screen:
 | `N` | Skip the current transition animation |
 | `B` | Blank the screen (to pause or talk) |
 | `M` | Mute or unmute sound |
-| `→` / `←` | In the replay: next or previous chapter |
-| `Space` | In the replay: play or pause the feed replay |
+| `→` / `←` | In the replay: next or previous stage of the video, then the next or previous screen |
+| `Space` | In the replay: play or pause the video |
 | `C` | Optional: open the "Under the Hood" code panel (see below) |
 | `Shift` + `R` | Start over, clearing everything Lens recorded (behind a confirmation) |
 
@@ -388,9 +386,9 @@ cleaned up in `disable()`. The end of the replay switches every layer off.
 Nothing in the experience depends on reading code. For a class that wants
 to see how it's built, `C` opens a split-screen panel with the few lines
 behind the current stage (the hidden meter's CSS, the sorting function, the
-keystroke counter, and so on), in big type. Each replay chapter also shows
-the one short rule that caused what the class just saw, so the code is
-there for anyone curious without being a gate.
+keystroke counter, and so on), in big type. The replay video shows the
+ranking formula and the ad auction worked out live, so the code is there
+for anyone curious without being a gate.
 
 ### Privacy (part of the lesson)
 
@@ -812,85 +810,114 @@ spent on the *Unwind* ad while the app was stressing them out.
 
 After stage 7, Lens presents a cheerful recap of the session, styled like
 the year-in-review features real apps make (*"Your Lens Replay ✨"*). It
-looks like a reward. It's actually everything the app recorded about the
-class, and what it did with it. The teacher steps through it one chapter at
-a time with `→`.
+looks like a reward. It's actually **a video of the whole session at 4×
+speed**, rebuilt from what Lens recorded, with everything the app was
+computing behind the screen laid on top of it. Nothing is hidden any more:
+every number Lens calculated during the game is on screen somewhere.
 
 ### What Lens records (for the replay)
 
 The replay is **built from the class's real session**, never scripted, so
-it always matches what happened in the room. Every quarter-second, Lens
-notes which posts and ads are on screen, which one is in the middle, whether
-the mouse is over it, and whether the feed is scrolling or paused. It also
-records every event:
+it always matches what happened in the room.
 
-- **Attention:** seconds on screen, seconds paused on, and seconds hovered,
-  for every post and every ad, per stage.
-- **Actions:** reactions, thread opens, keystrokes and drafts, the posted
-  reply, *Liked by* opens, searches, attempts to log off, dialogs and which
-  button was chosen.
-- **Results:** the feed order and the ad order at the start of each stage,
-  after every re-sort, and when the key is turned; and the interest profile
-  (`gagaGate: 0.12 → 0.61 → 0.98`) after every confirmation.
+- **Twice a second:** which posts and ads were on screen, which one was in
+  the middle, which one the pointer was on, the scroll position, each
+  visible post's meter exactly as Lens computed it (timer, label,
+  percentage, pushed or not), each visible post's live like, comment and
+  share counts and its "posted" time, any open dialog's text, whatever was
+  being typed, and whether the thread was open.
+- **Once a second:** Theo's whole interest profile (every topic's weight),
+  the pause threshold, the number of signals counted, Lens's guess that
+  Theo wants #GagaGate, the ad auction (each ad's bid and score), the
+  sidebar ads and the "because you looked at…" reason for each, the bell
+  count, keystrokes, the banners, and in stage 7 the hooks' counters
+  (notifications sent, auto-pushes, video autoplays, posts loaded by the
+  endless feed, tries to log off, the streak).
+- **On every re-sort:** the **entire feed order** (all 200+ posts and ads)
+  with the score Lens gave each one.
+- **Every signal:** its type, the post, Lens's own message about it
+  (*"signal: PAUSE 4s — @theo engages with dramatic #LifeAcademyFieldDay →
+  show more like this"*), how much it moved the profile and which topics.
+- **Every notification and toast** that appeared.
+
+The recording is about 80 KB a minute of play, kept in the browser's
+storage, so a full 45-minute session fits comfortably. Snapshots for
+`Shift` + `←` don't copy it.
 
 The ranking is real too. Posts and ads are sorted from the recorded
 attention and reactions, so if the class stares at the cat for a full
 minute, the cat really does rise, and the replay shows it. The content is
-weighted so the gagaball story wins under any normal play, but the replay never
-claims anything the session didn't do.
+weighted so the gagaball story wins under any normal play, but the replay
+never claims anything the session didn't do.
 
-### Chapter layout (stages 2–7)
+### The 200 everyday posts
 
-Each stage after stage 1 gets one full-screen chapter, laid out the same
-way so the class learns to read it:
+Stage 2 loads **200 ordinary posts** from the students (pets, school,
+games, food, sports, music, art, science, everyday life; about a quarter
+with pictures), with the reposts sprinkled through them. They're in the
+data as `LENS.otherPosts`. They are there to make the point visible in the
+replay: all of this was in Theo's feed and available the whole time. Each
+re-sort pushes them further down, the gagaball posts take their places, and
+in stage 6 the last of them are filtered out completely. The replay's
+counter, *everyday posts in the feed*, goes 216 → 0.
+
+### The video
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│ STAGE 3 · "I want Lens to know I don't like it."           ▶ replay │
-├──────────────────────────────┬───────────────────────────────────────┤
-│ WHERE YOU LOOKED             │ WHAT LENS DID WITH IT                 │
-│ gossip post    ████████ 41s  │  before          after                │
-│ jaxon_ repost  █████ 22s     │  #1 Mr. French ─┐ ┌─ #1 gossip post ▲  │
-│ Pit Kit ad     ███ 9s   AD   │  #2 June     ─┼─┘  #2 Pit Kit ad  ▲  │
-│ cat video      █ 3s          │  #3 Pixel ad ─┘ …  #14 June       ▼  │
-│ June's post    ▏ 0.4s        │                                       │
-├──────────────────────────────┴───────────────────────────────────────┤
-│ LENS CONCLUDED: 😡 = "more of this, please"  ·  gagaGate 0.61 → 0.83 │
-│ WHAT THIS REALLY IS: THE ALGORITHM — every reaction is fuel.          │
-│ WHAT WAS TRUE: There was a rematch, and June won it.                  │
-└──────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────┬────────────────────┬──────────────────────┐
+│ ┌ Lens  [Search]    🔥 streak 🔔9 Theo│ STAGE 3            │ RANKING THE POSTS    │
+│ │ banners                    │ side  │ "I want Lens to…"  │ ON SCREEN            │
+│ │ ┌ LA Gossip  [⏸ 00:04 31%] │ ads + │ ┌WHAT THIS REALLY─┐│ interest engage react│
+│ │ │ GAGABALL PIT COLLAPSES   │ why   │ │ The algorithm   ││ 3.38  2.88  ·   6.26 │
+│ │ │ 👍 10 💬 0 ↗ 1  #1 · 6.3  │       │ └─────────────────┘│ AD AUCTION           │
+│ │ └ toasts, dialogs, typing  │       │ 216 everyday · 11  │ bid × (0.2 + match)  │
+│ └ scrolled 600px · centred: …        │ 30% · 6.4s · 2 · 0 │ SIGNALS PUSHED       │
+│ ↓ THE REST OF THEO'S FEED     SCORE  │ INTEREST PROFILE   │ ✓ stopped scrolling  │
+│ #5  Dev    my dog learned…      2.7  │ #gaga  ███████ .75 │   +0.25 #gaga #theo  │
+│ #6  Maya   theo vs the wall     4.7  │ #school ████  .48  │   signal: PAUSE 2s — │
+├──────────────────────────────────────┴────────────────────┴──────────────────────┤
+│ ❚❚  [ 1 | 2 | 3 | 4 | 5 | 6 | 7 ]                               0:47 / 2:03 · 4× │
+└────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- **Where you looked:** a horizontal bar chart of seconds per post and per
-  ad during that stage, longest first, top eight. Ads get an *AD* tag and
-  their own color.
-- **What Lens did with it:** the feed order before and after the stage, side
-  by side, with lines connecting each item. Risers are highlighted, fallers
-  greyed, with the key items labeled big (the gossip post, June's post, Mr.
-  French's post, the top ad).
-- **▶ replay:** `Space` plays the stage back as a fast-forward of the feed
-  at 10× speed, with a rectangle showing where the screen was and each
-  meter filling as it did in class.
-- **Lens concluded:** the signals confirmed in that stage and how the
-  interest profile changed.
-- **What this really is:** the reveal. The manipulation's name and one line
-  about it (below). This is the first time the class hears the names.
-- **What was true:** one fact from what actually happened, which the feed
-  buried.
-- **The rule behind it** (small, optional): the one short line of code that
-  caused the change, e.g. `weight.angry = 5`.
+- **Theo's screen** (top left): the posts that were on screen, in feed
+  order, each with its **meter** (the one the class never saw), its live
+  counts, and its **rank and score**. The post in the middle or under the
+  pointer is outlined. When a signal fires, the meter flashes *✓ PUSHED TO
+  THE ALGORITHM* with Lens's message, and the reaction or comment pops up
+  over the post. The top bar shows the search Lens hijacked, the bell
+  count and the streak; the sidebar shows the ads and why Lens chose them;
+  toasts, dialogs and typing appear as they did. A strip along the bottom
+  says how far down the class had scrolled and what was centred.
+- **The rest of the feed** (below the screen), zoomed out: the next 46
+  items in Lens's order, colored by kind (grey everyday posts, orange
+  posts about Theo, blue Mr. French, green ads), each with its rank and
+  score. When Lens re-sorts, the rows slide to their new places, so the
+  class watches the everyday posts sink and the gagaball posts rise.
+- **Lens's side** (right): the stage and Theo's goal, **What this really
+  is** (the reveal, the first time the class hears the names), counters
+  (everyday posts left, posts about Theo, Lens's #GagaGate guess, the
+  pause needed, signals counted, keystrokes, and in stage 7 the hooks'
+  counts), the interest profile as bars, the ranking formula worked out
+  for each post on screen, the ad auction, and the log of signals.
+- **Controls:** `Space` plays and pauses. `→` jumps to the next stage
+  (from stage 7, on to the last screens); `←` goes back to the start of
+  the stage, or the one before. Click the timeline to seek. On a phone, the
+  panels stack and swipes work the same as the arrow keys.
 
-### The chapters
+Pause on each stage's **What this really is** and have a student read it.
 
-| Chapter | Highlights pulled from the session | What this really is | What was true |
+### What each stage shows
+
+| Stage | Watch for | What this really is | What was true |
 |---|---|---|---|
-| **Where it started** (stage 1) | Seconds on Mr. French's post; the first confirmation | **Passive tracking.** *Watching is a vote. You don't have to click anything.* | Mr. French's post was kind, and had the whole story. |
-| **Stage 2** | Pause times per repost; reposts rising, unrelated posts and generic ads sinking; every repost's crop drawn on the original photo | **Exaggeration.** *Each share crops tighter, filters harder and shouts louder. The version that spreads furthest has the least of what happened.* | Theo was laughing. It was a scraped elbow. |
-| **Stage 3** | The reaction chosen; the gossip post to #1; June's post to the bottom; gagaball ads following | **The algorithm.** *Every reaction is a vote for more, and anger counts most. It can't tell "I love this" from "I hate this."* | There was a rematch, and June won it. |
-| **Stage 4** | Theo's full reply vs. the quoted chunk; saved drafts including deleted words; the six comments that followed; Maya's comment sorted last; Lens Premium rising | **Context collapse.** *Your words can be cut to the loudest few and passed on. Defending yourself counts as engagement.* | It was an accident. Nobody was to blame. |
-| **Stage 5** | 48,212 shown, 48,200 bought, 12 real, vs. 46 kids who played; the Post Boost ad | **Fake popularity.** *Numbers feel like votes. The crowd can be bought, and the voters can be bots.* | 46 kids played gaga. 12 real people liked that post. |
-| **Stage 6** | Theo's feed and ads at login vs. now; the three other feeds | **The filter bubble.** *Your feed is a mirror of what you've looked at. A small story can feel like the whole world.* | Most people at Life Academy weren't talking about it. |
-| **Stage 7** | Time to get out; times pulled back; which trick held longest; seconds on the *Unwind* ad | **Attention engineering.** *Endless feeds, notifications and streaks are built to make leaving hard, hardest of all for someone worried about what people are saying.* | It was a good day. |
+| 1 | The ⏱ timer on every post, Mr. French's filling to 90 s and flashing *pushed* | **Passive tracking.** *Watching is a vote. You don't have to click anything.* | Mr. French's post was kind, and had the whole story. |
+| 2 | 200 everyday posts arrive; each pause fills a bar; reposts climb the rows | **Exaggeration.** *Each share crops tighter, filters harder and shouts louder.* | Theo was laughing. It was a scraped elbow. |
+| 3 | The reaction pops; the gossip post jumps to #1; #gaga's bar grows | **The algorithm.** *Every reaction is a vote for more, and anger counts most.* | There was a rematch, and June won it. |
+| 4 | Every keystroke and the reply; the comment thread | **Context collapse.** *Your words can be cut to the loudest few and passed on.* | It was an accident. Nobody was to blame. |
+| 5 | Like counts jumping to 40K+; *checked who liked it* | **Fake popularity.** *Numbers feel like votes. The crowd can be bought.* | 46 kids played gaga. 12 real people liked that post. |
+| 6 | The search box turning into #GagaGate; *everyday posts* dropping to 0 | **The filter bubble.** *Your feed is a mirror of what you've looked at.* | Most people at Life Academy weren't talking about it. |
+| 7 | Notifications, auto-pushes with nobody touching anything, the dark dialogs | **Attention engineering.** *Leaving is made hard on purpose.* | It was a good day. |
 
 ### The last screens
 
@@ -1015,13 +1042,13 @@ give the instructions.
 - **Teacher (the only one at the laptop):** the class's hands. Clicks,
   scrolls and types only what the class tells them to; filters what gets
   typed as Theo's reply; advances the stages; keeps the look → predict → instruct
-  → watch rhythm going; reads the replay chapters with the class.
+  → watch rhythm going; reads the replay with the class.
 - **Spotters:** "first to spot it" moments: the hidden meter (stage 1),
   what's missing from the reposts (stage 2), real names in the *Liked by*
   list (stage 5), the *Log off* link (stage 7).
 - **Everyone:** predicts, argues, votes (the reaction in stage 3, *Stay or
   log off?* in stage 7) and writes Theo's reply together (stage 4).
-- **Replay readers:** a different student reads each chapter's "What this
+- **Replay readers:** a different student reads each stage's "What this
   really is" line aloud.
 
 ### Pacing (about 65 minutes, plus 20 for discussion)
@@ -1036,7 +1063,7 @@ give the instructions.
 | 5 Numbers | 5 | Spot the real names |
 | 6 Bubble | 6 | Search for anything; every result is #GagaGate |
 | 7 Notifications | 7 | Loud; the room decides every click |
-| Replay | 12 | About 90 seconds a chapter, then the last screens |
+| Replay | 12 | The 4× video, pausing at each stage, then the last screens |
 
 Because the teacher advances by hand, any stage can be shortened or stretched
 on the day. If time is short, move faster through stages 2 and 5; don't
@@ -1054,7 +1081,7 @@ the laptop remembers where the class left off, recording included.
   calls and "who's really out." Let that energy into the stage 4 reply and
   the stage 6 discussion; it's exactly what the algorithm feeds on.
 - **For the curious.** If students want to see how it works, `C` opens the
-  code behind the current stage, and the replay shows one line per chapter.
+  code behind the current stage, and the replay shows the ranking math live.
   None of it is needed to follow along.
 
 ### Discussion questions (shown one per screen at the end, and printable)
@@ -1094,7 +1121,7 @@ lifeacademy/
   data.js             ← people, posts, ads, comments, other feeds, goals, replay text
   art.js              ← Mr. French's photo (one SVG, cropped for every repost), picture cards, avatars
   lens.js             ← engine: state, recorder, ranker, meters, stages, presenter keys
-  replay.js           ← Lens Replay chapters and charts
+  replay.js           ← Lens Replay: the 4× video and the last screens
   img/*.webp          ← 14 student avatars (Pexels stock photos)
   icon.svg            ← Lens favicon
 _source/lifeacademy/
@@ -1146,9 +1173,11 @@ linked from the home page.
      Theo's.
    - `hooks`: stage 7's notifications, looping video, endless feed and the
      dark-pattern dialogs.
-   - `replay`: the chapters built from the session record: attention bar
-     chart, before/after order chart, 10× feed playback, totals, the
-     "what Lens learned" list, and the switch-everything-off ending.
+   - `replay`: the 4× video rebuilt from the session record (screen with
+     meters, counts and scores; the whole feed re-sorting underneath; the
+     interest profile, ranking math, ad auction and signal log), then
+     totals, the "what Lens learned" list, and the switch-everything-off
+     ending.
    - `panel` (optional): the Under the Hood split screen.
 
 ### Milestones
@@ -1161,7 +1190,7 @@ linked from the home page.
 4. **Art:** Mr. French's photo SVG, the crop for every repost, and the ads.
 5. **Stages 1–3.**
 6. **Stages 4–7.**
-7. **Lens Replay:** chapters, charts, playback, totals, and the ending.
+7. **Lens Replay:** the 4× video, totals, and the ending.
 8. **Polish:** transitions, reduced motion, keyboard pass, legibility at
    1280×720, and a read-through of every post and comment for tone
    (teasing, never cruel).
@@ -1200,10 +1229,10 @@ but the stage 7 notifications still arrive (as quiet badges).
 | Stage 5 | Show of hands on 48K. Count real names in *Liked by*. **Advance.** |
 | Stage 6 | Search for something else. "What's Life Academy talking about?" **Advance.** |
 | Stage 7 | The class decides every click. Find *Log off* (or turn ⏪). |
-| Replay | `→` through chapters, `Space` to play each. A student reads "What this really is." `Shift` + `→` at the end switches everything off. |
+| Replay | `→` starts the 4× video. `Space` pause on each stage; a student reads "What this really is." `→` jumps a stage. `Shift` + `→` switches everything off. |
 | After | Discussion questions, one per screen. |
 
-Keys: `Shift` + `→` advance · `N` skip animation · `B` blank · `M` mute · `→`/`←` replay chapters · `Space` play replay · `C` code (optional)
+Keys: `Shift` + `→` advance · `N` skip animation · `B` blank · `M` mute · `→`/`←` replay stages and screens · `Space` play/pause the replay video · `C` code (optional)
 · `Shift` + `←` step back · `Shift` + `R` start over.
 
 ## 9. Open questions

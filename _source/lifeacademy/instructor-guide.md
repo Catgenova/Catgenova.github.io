@@ -94,13 +94,18 @@ replay.
 
 ## Lens Replay (~12 min)
 
-- The second screen is the first time the class sees the hidden meter:
-  *"Every post had this on it. You never saw it."*, with how many signals
-  their choices sent.
-
-- **`→` / `←`** move through chapters. On a stage chart, **`Space`** (or ▶)
-  replays that stage at 10× speed.
-- Have a different student read each **"What this really is"** screen aloud.
+- Press **`→`** on the title screen to start the **video**: the whole
+  session again at 4× speed. Theo's screen is top left with every hidden
+  meter, count and score showing. The rest of the feed is underneath,
+  re-sorting live. Lens's side is on the right: the interest profile, the
+  ranking math, the ad auction and every signal.
+- **`Space`** pauses. Pause at the start of each stage and have a different
+  student read **"What this really is"** aloud. Point at the grey rows
+  sinking and the orange rows rising, and at *everyday posts in the feed*
+  falling to 0 in stage 6.
+- **`→`** jumps to the next stage and **`←`** goes back. Click the timeline
+  to seek. After stage 7, `→` moves on to the totals, what Lens learned,
+  and the last screens.
 - **`Shift` + `→`** jumps to the ending: every layer switches off, leaving
   your original post.
 - Finish with the discussion questions, one per screen (think-pair-share).
@@ -110,6 +115,7 @@ replay.
 | Key | Does |
 |---|---|
 | `Shift` + `→` | Next stage (in the replay: jump to the ending) |
+| `Space` | In the replay: pause or play the video |
 | `Shift` + `←` | Back a stage (re-runs it) |
 | `N` | Skip an animation |
 | `B` | Blank the screen |

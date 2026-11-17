@@ -144,14 +144,16 @@
   /* ---------------- recorder ---------------- */
   function rec(n) {
     n = n || S.stage;
-    return S.rec[n] || (S.rec[n] = { active: 0, att: {}, orders: [], tl: [], i0: { ...S.interest }, i1: null, early: false, sig0: S.signals.length, sig1: null });
+    return S.rec[n] || (S.rec[n] = { active: 0, att: {}, orders: [], tl: [], ev: [], i0: { ...S.interest }, i1: null, early: false, sig0: S.signals.length, sig1: null });
   }
   function att(id) { const r = rec(); return r.att[id] || (r.att[id] = { screen: 0, focus: 0, hover: 0 }); }
   function recordOrder() {
     if (S.stage < 1 || S.stage > 7) return;
-    const r = rec();
-    r.orders.push({ t: r.active, seq: feedSequence().slice(0, 40) });
-    if (r.orders.length > 400) r.orders.splice(1, 1);
+    const r = rec(), seq = feedSequence(), last = r.orders[r.orders.length - 1];
+    if (last && last.seq.length === seq.length && last.seq.every((id, i) => id === seq[i])) return;   // nothing changed
+    const r1 = (x) => Math.round(x * 10) / 10;
+    r.orders.push({ t: r.active, seq, sc: seq.map(id => id.startsWith('ad:') ? r1(adScore(id.slice(3))) : r1(score(id))) });
+    if (r.orders.length > 600) r.orders.splice(1, 1);
   }
   function closeRec(n) {
     const r = rec(n);
@@ -202,7 +204,7 @@
   /* Reactions and comments come fast right after a post lands, then slow down: target × (1 − e^(−age/τ)).
      A post that lands during the session starts at zero. Older posts already have most of theirs. */
   const TAU_R = 22000, TAU_C = 34000;
-  function isOld(id) { const p = getItem(id); return !p || (!p.live && ((p.stage === 1 && id !== 'french') || /^Yesterday/.test(p.time || ''))); }
+  function isOld(id) { const p = getItem(id); return !p || p.old || (!p.live && ((p.stage === 1 && id !== 'french') || /^Yesterday/.test(p.time || ''))); }
   function landedAt(id) {
     if (S.landed[id] == null) {
       const p = getItem(id) || {};
@@ -347,6 +349,7 @@
     }
     renderSidebar();
     renderFoot();
+    recordOrder();
   }
 
   function renderSidebar() {
@@ -399,6 +402,7 @@
       if (lastSideKey && S.stage <= 7) { const r = rec(); (r.side = r.side || []).push({ t: r.active, ids: top.map(c => c.best) }); }
       lastSideKey = key;
     }
+    S.sideTop = top.map(c => [c.k, Math.round(c.score / 100) / 10, c.best, Math.round(it(c.best).screen / 1000)]);
     top.forEach(c => {
       const n = sideNodes.get(c.k); if (!n) return;
       const secs = Math.round(it(c.best).screen / 1000);
@@ -456,6 +460,7 @@
 
   /* ---------------- toasts & dialogs ---------------- */
   function toast(text, icon, ms, goto) {
+    if (S.stage >= 1 && S.stage <= 7) { const r = rec(); (r.ev = r.ev || []).push({ t: r.active, text, icon: icon || '🔔' }); }
     const t = h(`<div class="toast${goto ? ' clickable' : ''}"${goto ? ` data-goto="${goto}"` : ''}><span class="ti">${icon || '🔔'}</span><span>${esc(text)}</span></div>`);
     $('#toasts').prepend(t);
     while ($('#toasts').children.length > 4) $('#toasts').lastElementChild.remove();
@@ -480,7 +485,7 @@
 
   /* ---------------- signals & meters ---------------- */
   const flashUntil = new Map();
-  let hoverId = null, lastScroll = 0, lastTl = 0, threadOpen = false;
+  let hoverId = null, lastScroll = 0, threadOpen = false;
 
   // The meter is never shown while the class plays: Lens tracks and pushes silently. The replay reveals it.
   const SHOW_METERS = false;
@@ -514,7 +519,7 @@
     if (type === 'react' && detail === 'notInterested' && p) for (const t in p.topics) S.interest[t] = Math.max(0, S.interest[t] - .03 * p.topics[t]);
     S.confirmed++;
     S.stageConfirmed[S.stage] = true;
-    if (type !== 'auto') S.signals.push({ stage: S.stage, t: rec().active, type, id, detail: detail || null, share: storyShare() });
+    if (type !== 'auto') { const [ma, mb] = signalText(type, id, detail); S.signals.push({ stage: S.stage, t: rec().active, type, id, detail: detail || null, share: storyShare(), msg: ma + (mb ? ' — ' + mb : ''), amt: Math.round(amt * 100) / 100, topics: p && p.topics ? Object.keys(p.topics) : [] }); }
     else S.s7.autoCount++;
     if (!opts.quiet && SHOW_METERS) {
       const [a, b] = signalText(type, id, detail);
@@ -535,7 +540,9 @@
   L.confirm = confirm;
 
   function meterShow(n, id, on) { if (on) n.classList.add('show-meter'); else if (!(flashUntil.get(id) > Date.now())) n.classList.remove('show-meter'); }
+  const meterNow = new Map();
   function setMeter(n, ico, lab, time, prog, ok, msg) {
+    if (n.dataset && n.dataset.id) meterNow.set(n.dataset.id, [ico, lab, time, Math.min(100, Math.round(prog * 100)), ok ? 1 : 0]);
     const m = n.querySelector('.meter'); if (!m) return;
     if (ok) { const id = n.dataset && n.dataset.id; const text = msg || (id && S.it[id] && S.it[id].msg); if (text) m.querySelector('.m-msg').textContent = ' ' + text; }
     m.querySelector('.m-ico').textContent = ico;
@@ -545,6 +552,28 @@
     m.querySelector('.m-bar i').style.width = pct + '%';
     m.querySelector('.m-pct').textContent = pct + '%';
     m.classList.toggle('ok', !!ok);
+  }
+
+  /* What the replay gets twice a second: what was on screen, each post's meter and live numbers,
+     and once a second everything Lens was calculating behind it. */
+  function sample(r, vis, ctr) {
+    const v = vis.slice(0, 8), x = { t: r.active, v, c: ctr, h: hoverId, y: Math.round(scrollY) };
+    x.m = v.map(id => meterNow.get(id) || 0);
+    x.n = v.map(id => id.startsWith('ad:') ? 0 : [likeCount(id), commentCount(id), shareCount(id), relTime(id)]);
+    if (threadOpen) x.th = 1;
+    const mr = $('#modal-root'); if (mr.children.length) { const md = mr.innerText.split('\n').map(z => z.trim()).filter(z => z && z !== '×' && z !== '✕').join(' · '); if (md) x.md = md.slice(0, 160); }
+    const ty = document.activeElement && /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName) ? document.activeElement.value : null; if (ty) x.ty = ty.slice(-80);
+    if (r.active - (r.lastX || -1e9) >= 1000) {
+      r.lastX = r.active;
+      const i = {}; for (const t in S.interest) if (S.interest[t] > 0.005) i[t] = Math.round(S.interest[t] * 100) / 100;
+      x.x = { i, thr: Math.round(threshold() * 10) / 10, cf: S.confirmed, share: Math.round(storyShare() * 1000) / 10,
+        ads: S.adOrder.slice(0, 6).map(a => [a, Math.round(adScore(a) * 100) / 100]), side: S.sideTop || [],
+        bell: S.bell.unread, keys: (S.reply.keys || 0) + (S.inlineKeys || 0),
+        bn: [...document.querySelectorAll('#banners .banner, #goalpill:not([hidden])')].map(b => b.textContent.trim()).filter(Boolean).slice(0, 4),
+        s7: S.stage === 7 ? [S.s7.notifCount, S.s7.videoPlays || 0, S.s7.pulls, S.s7.loads, S.s7.autoCount, S.s7.attempts, S.s7.streak ? 1 : 0] : null,
+        rk: v.filter(id => !id.startsWith('ad:') && getItem(id)).map(id => { const p = getItem(id), m = 3 * match(p.topics), e = Math.log10(1 + engagement(id)) * 0.9, sc = score(id); return [id, Math.round(m * 100) / 100, Math.round(e * 100) / 100, Math.round((sc - m - e) * 100) / 100, Math.round(sc * 100) / 100]; }) };
+    }
+    return x;
   }
 
   /* The heartbeat: every 250 ms, note what's on screen and move the meters. */
@@ -577,7 +606,7 @@
     if (S.clock % 500 === 0) liveCounts(vis);
     if (S.clock % 1000 === 0) updateSideAds();
     if ($('#modal-root .likers')) att('gossip').focus += dt;
-    if (r.active - lastTl >= 500) { lastTl = r.active; r.tl.push({ t: r.active, v: vis.slice(0, 7), c: still ? ctr : null }); if (r.tl.length > 3000) r.tl.splice(0, r.tl.length - 3000); }
+    if (r.active - (r.lastTl || 0) >= 500 || !r.tl.length) { r.lastTl = r.active; r.tl.push(sample(r, vis, still ? ctr : null)); if (r.tl.length > 3000) r.tl.splice(0, r.tl.length - 3000); }
 
     // Stage 1: Mr. French's post arrives at 60 s, then the tags start coming in.
     if (S.stage === 1) {
@@ -854,7 +883,11 @@
       // New posts load right under Mr. French's; this morning's goofy posts get pushed further down.
       const above = S.order.slice(0, S.order.indexOf('french') + 1);
       const seen = S.order.slice(S.order.indexOf('french') + 1);
-      S.order = above.concat(STAGE2_ORDER.filter(id => id !== 'french'), seen);
+      // ...and the 200 everyday posts, with the field-day posts and reposts sprinkled through them.
+      const story = STAGE2_ORDER.filter(id => id !== 'french'), others = L.otherPosts.map(p => p.id), mixed = [];
+      let oi = 0;
+      story.forEach((id, i) => { mixed.push(...others.slice(oi, oi + (i < 3 ? 2 : 4))); oi += i < 3 ? 2 : 4; mixed.push(id); });
+      S.order = above.concat(mixed, others.slice(oi), seen);
       S.adOrder = []; rerankAdsOnly();
     },
     3() { if (!S.order.includes('gossip')) S.order.unshift('gossip'); },   // lands live, at the top
@@ -926,7 +959,7 @@
       if (anim) toast("We've updated your feed to match your interests ✨", '✨', 5000);
       // unrelated posts leave one by one
       const leaving = [];
-      nodes.forEach((n, id) => { const p = getItem(id); if (!id.startsWith('ad:') && !(p.topics.gaga || p.topics.theo)) leaving.push(n); });
+      nodes.forEach((n, id) => { const p = getItem(id), b = n.getBoundingClientRect(); if (!id.startsWith('ad:') && !(p.topics.gaga || p.topics.theo) && b.bottom > 0 && b.top < innerHeight) leaving.push(n); });
       if (anim) for (const n of leaving) { n.classList.add('leaving'); await wait(350); }
       renderBanners();
       renderFeed({ arrive: anim, stagger: 120 });
@@ -955,12 +988,13 @@
 
   /* ---------------- moving between stages ---------------- */
   let busy = false;
-  function snapshotFor(n) { const c = JSON.parse(JSON.stringify(S)); snaps[n] = c; saveSnaps(); }
+  function snapshotFor(n) { const c = JSON.parse(JSON.stringify({ ...S, rec: {} })); snaps[n] = c; saveSnaps(); }
 
   async function enterStage(n, opts) {
     opts = opts || {};
     skipping = false;
     if (!opts.resume) {
+      closeModal();
       if (S.stage >= 1 && S.stage <= 7) closeRec(S.stage);
       snapshotFor(n);
       S.stage = n;
@@ -1012,7 +1046,9 @@
     if (!snap) return;
     stopHooks(); closeThread(); closeModal();
     $('#loggedout').hidden = true; $('#replay').hidden = true;
+    const keepRec = {}; for (const s in S.rec) if (+s < target) keepRec[s] = S.rec[s];
     S = JSON.parse(JSON.stringify(snap));
+    S.rec = keepRec;
     nodes.forEach(n => n.remove()); nodes.clear(); feedEl.innerHTML = '';
     busy = true;
     try { await enterStage(target); } finally { busy = false; }

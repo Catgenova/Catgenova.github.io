@@ -1,4 +1,4 @@
-/* Lens Replay: everything the session recorded, one chapter at a time.
+/* Lens Replay: the whole session played back at 4×, from what Lens recorded, with what it was doing laid on top.
    Built only from what actually happened in the room. Nothing here is scripted. */
 'use strict';
 (function () {
@@ -7,205 +7,308 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const secs = (ms) => Math.round(ms / 1000);
   const minsec = (ms) => { const s = Math.round(ms / 1000); return s >= 60 ? `${Math.floor(s / 60)} min ${s % 60} s` : `${s} s`; };
-  const CAT_LABEL = { teacher: "Mr. French's post", story: 'Posts about Theo & field day', other: 'Other posts', ad: 'Ads' };
+  const clock = (ms) => { const s = Math.floor(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
   const CAT_VAR = { teacher: 'var(--series-teacher)', story: 'var(--series-story)', other: 'var(--series-other)', ad: 'var(--series-ad)' };
   const EMO = { like: '👍', love: '❤️', laugh: '😂', sad: '😢', dislike: '👎', angry: '😡', notInterested: '🚫' };
 
-  let S, chapters = [], idx = 0, playing = null;
+  let S, chapters = [], idx = 0;
   const root = () => $('#replay');
 
   function catOf(id) { if (id.startsWith('ad:')) return 'ad'; const p = L.getItem(id); return p ? p.cat || 'other' : 'other'; }
   function shortOf(id) { const p = L.getItem(id); return p ? p.short || p.id : id; }
-  function trunc(s, n) { return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+  function trunc(s, n) { s = String(s || ''); return s.length > n ? s.slice(0, n - 1) + '…' : s; }
 
   function build() {
     S = L.getState();
-    chapters = [{ k: 'intro' }, { k: 'meter' }, { k: 'start' }, { k: 'reveal', s: 1 }];
-    for (let s = 2; s <= 7; s++) {
-      if (!S.rec[s]) continue;
-      chapters.push({ k: 'stage', s });
-      chapters.push({ k: { 2: 'crops', 4: 'words', 5: 'numbers', 6: 'feeds', 7: 'exit' }[s], s });
-      chapters.push({ k: 'reveal', s });
-    }
-    chapters = chapters.filter(c => c.k);
-    chapters.push({ k: 'totals' }, { k: 'learned' }, { k: 'line' }, { k: 'off' }, { k: 'close' });
+    chapters = [{ k: 'intro' }, { k: 'video' }, { k: 'totals' }, { k: 'learned' }, { k: 'line' }, { k: 'off' }, { k: 'close' }];
     L.questions.forEach((q, i) => chapters.push({ k: 'q', i }));
   }
 
-  /* ---------- charts ---------- */
-  function legend(cats) {
-    return `<div class="rp-legend">${cats.map(c => `<span><i style="background:${CAT_VAR[c]}"></i>${CAT_LABEL[c]}</span>`).join('')}</div>`;
+  /* ================= The video =================
+     The whole session again at 4×, rebuilt from what Lens recorded twice a second. On the left: Theo's screen, with every
+     number Lens was computing laid over it, and underneath it the rest of the feed, zoomed out, reordering live, every
+     post's score beside it. On the right: everything Lens was calculating about Theo at that moment. */
+  const SPEED = 4, ROW_H = 19, ROWS = 46, CARD_MAX = 4;
+  const SIGNAL_LABEL = { dwell: 'looked long enough', pause: 'stopped scrolling', react: 'reacted', creact: 'reacted to a comment', open: 'opened the comments', typing: 'typing', comment: 'posted a comment', thread: 'opened the thread', glance: 'checked who liked it', search: 'searched' };
+  const STORY_T = { gaga: 1, theo: 1, drama: 1, stress: 1 };
+  let V = null;
+
+  function vTimeline() {
+    const segs = [], tl = [], orders = [], sig = [], ev = [];
+    let off = 0;
+    for (let s = 1; s <= 7; s++) {
+      const r = S.rec[s]; if (!r || !r.active) continue;
+      segs.push({ s, off, dur: r.active });
+      (r.tl || []).forEach(x => tl.push({ ...x, t: off + x.t, s }));
+      (r.orders || []).forEach(o => orders.push({ t: off + o.t, seq: o.seq, sc: o.sc || [] }));
+      (r.ev || []).forEach(e => ev.push({ t: off + e.t, text: e.text, icon: e.icon }));
+      S.signals.slice(r.sig0 || 0, r.sig1 == null ? undefined : r.sig1).forEach(x => sig.push({ ...x, t: off + x.t }));
+      off += r.active;
+    }
+    const by = (a, b) => a.t - b.t;
+    tl.sort(by); orders.sort(by); sig.sort(by); ev.sort(by);
+    return { segs, total: off, tl, orders, sig, ev };
   }
-  function barsSVG(rows) {
-    // rows: [{id, label, v (seconds), cat}]
-    if (!rows.length) return '<p class="rp-empty">Nothing on screen long enough to count.</p>';
-    const max = Math.max(...rows.map(r => r.v), 1);
-    const nar = innerWidth < 700, rowH = 46, W = nar ? 420 : 640, x0 = nar ? 168 : 250, x1 = nar ? 350 : 560;
-    const body = rows.map((r, i) => {
-      const y = 10 + i * rowH, w = Math.max(3, (x1 - x0) * r.v / max), color = CAT_VAR[r.cat];
-      const rad = Math.min(4, w / 2);
-      const path = `M${x0} ${y + 8} h${w - rad} a${rad} ${rad} 0 0 1 ${rad} ${rad} v${30 - 2 * rad} a${rad} ${rad} 0 0 1 -${rad} ${rad} h-${w - rad} z`;
-      const tag = r.cat === 'ad' ? `<rect x="${x0 - 50}" y="${y + 13}" width="40" height="20" rx="4" fill="var(--series-ad)"/><text x="${x0 - 30}" y="${y + 28}" text-anchor="middle" class="rp-tag">AD</text>` : '';
-      return `<g><text x="${r.cat === 'ad' ? x0 - 58 : x0 - 12}" y="${y + 30}" text-anchor="end" class="rp-lab">${esc(trunc(r.label, nar ? 11 : 22))}</text>${tag}
-        <path d="${path}" fill="${color}"><title>${esc(r.label)}: ${r.v}s</title></path>
-        <text x="${x0 + w + 10}" y="${y + 30}" class="rp-val">${r.v}s</text></g>`;
-    }).join('');
-    return `<svg class="rp-svg" viewBox="0 0 ${W} ${rows.length * rowH + 20}" role="img" aria-label="Seconds looked at each post">${body}</svg>`;
+
+  function videoHTML() {
+    return `<div class="vp">
+      <div class="vp-left">
+        <div class="vp-screen">
+          <div class="vp-chrome"><b>Lens</b><span class="vp-search">Search</span><span class="vp-streak" hidden>🔥 4-day streak</span><span class="vp-bell">🔔<i></i></span><span class="vp-me">${L.avatar('theo', 'sm')} Theo</span></div>
+          <div class="vp-body"><div class="vp-feed"><div class="vp-banners"></div><div class="vp-above"></div><div class="vp-cards"></div></div><div class="vp-sideads"></div></div>
+          <div class="vp-typing" hidden></div><div class="vp-modal" hidden></div><div class="vp-toasts"></div><div class="vp-scroll"></div>
+        </div>
+        <div class="vp-below"><div class="vp-belowlabel"><span>↓ the rest of Theo’s feed, in the order Lens put it</span><span>score</span></div><div class="vp-rows"></div></div>
+      </div>
+      <div class="vp-side">
+        <div class="vp-a">
+          <div class="vp-stage"></div>
+          <div class="vp-cap"></div>
+          <div class="vp-gauges"></div>
+          <div class="vp-box"><h4>What Lens thinks Theo is interested in</h4><div class="vp-int"></div></div>
+        </div>
+        <div class="vp-b">
+          <div class="vp-box"><h4>Ranking the posts on screen <small>3×interest match + 0.9×log(engagement) + Theo’s reaction</small></h4><div class="vp-rank"></div></div>
+          <div class="vp-box"><h4>Ad auction <small>bid × (0.2 + interest match)</small></h4><div class="vp-ads"></div></div>
+          <div class="vp-log"></div>
+        </div>
+      </div>
+      <div class="vp-ctl"><button type="button" class="vp-btn" data-vp="play" aria-label="Play or pause">❚❚</button><div class="vp-track"></div><span class="vp-clock"></span></div>
+    </div>`;
   }
-  function slopeSVG(before, after, focusIds) {
-    // The posts that matter, at their real place in the whole feed, at the start and end of the stage.
-    const pick = [];
-    const add = (id) => { if (id && !pick.includes(id) && (before.includes(id) || after.includes(id))) pick.push(id); };
-    (focusIds || []).forEach(add);
-    ['gossip', 'tH', 'french', 'quote', 'purpose', 'video'].forEach(add);
-    add(after.find(id => id.startsWith('ad:'))); add(before.find(id => id.startsWith('ad:')));
-    const ids = pick.slice(0, 8);
-    if (!ids.length) return '<p class="rp-empty">No change recorded.</p>';
-    const rank = (seq, id) => { const i = seq.indexOf(id); return i < 0 ? null : i + 1; };
-    const L1 = ids.filter(id => rank(before, id)).sort((a, b) => rank(before, a) - rank(before, b));
-    const R1 = ids.filter(id => rank(after, id)).sort((a, b) => rank(after, a) - rank(after, b));
-    const nar = innerWidth < 700, cl = nar ? 9 : 19, cr = nar ? 9 : 17;
-    const rowH = 44, top = 46, W = nar ? 420 : 640, xl = nar ? 150 : 240, xr = nar ? 262 : 400, H = top + Math.max(L1.length, R1.length) * rowH + 8;
-    const yL = (id) => top + L1.indexOf(id) * rowH + 14, yR = (id) => top + R1.indexOf(id) * rowH + 14;
-    let lines = '', labels = '';
-    ids.forEach(id => {
-      const color = CAT_VAR[catOf(id)], rb = rank(before, id), ra = rank(after, id);
-      const up = rb && ra ? rb - ra : 0;
-      if (rb && ra) lines += `<line x1="${xl}" y1="${yL(id)}" x2="${xr}" y2="${yR(id)}" stroke="${color}" stroke-width="${Math.abs(up) >= 2 ? 4 : 2}"/>`;
-      if (rb) labels += `<circle cx="${xl}" cy="${yL(id)}" r="6" fill="${color}" stroke="var(--chart-surface)" stroke-width="2"/><text x="${xl - 14}" y="${yL(id) + 6}" text-anchor="end" class="rp-lab sm">#${rb} ${esc(trunc(shortOf(id), cl))}</text>`;
-      if (ra) {
-        const arrow = !rb ? ' new' : up >= 2 ? ` ▲${up}` : up <= -2 ? ` ▼${-up}` : '';
-        labels += `<circle cx="${xr}" cy="${yR(id)}" r="6" fill="${color}" stroke="var(--chart-surface)" stroke-width="2"/><text x="${xr + 14}" y="${yR(id) + 6}" class="rp-lab sm${up >= 2 || !rb ? ' up' : ''}">#${ra} ${esc(trunc(shortOf(id), cr))}${arrow}</text>`;
-      }
+
+  function videoMount() {
+    V = { ...vTimeline(), T: 0, playing: true, last: performance.now(), raf: 0, iTl: -1, iOrd: -1, iSig: 0, iEv: 0, pushed: {}, flashes: [], toasts: [], log: [], rows: new Map(), cards: new Map(), stage: 0, lastDraw: 0 };
+    const el = root(), track = el.querySelector('.vp-track');
+    track.innerHTML = V.segs.map(g => `<div class="vp-seg" style="flex:${Math.max(g.dur, 1)}"><span>${g.s}</span></div>`).join('') + '<div class="vp-head"></div>';
+    track.addEventListener('click', e => {
+      const b = track.getBoundingClientRect();
+      vSeek(V.total * Math.min(1, Math.max(0, (e.clientX - b.left) / b.width)));
+      if (!V.raf) V.raf = requestAnimationFrame(vFrame);
     });
-    return `<svg class="rp-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Where key posts sat in the feed, before and after this stage">
-      <text x="${xl}" y="22" text-anchor="middle" class="rp-colhead">place in feed · start</text><text x="${xr}" y="22" text-anchor="middle" class="rp-colhead">end</text>
-      ${lines}${labels}</svg>`;
+    el.querySelector('[data-vp="play"]').addEventListener('click', vToggle);
+    if (!V.total) { el.querySelector('.vp-cards').innerHTML = '<p class="vp-empty">Nothing was recorded.</p>'; V.playing = false; return; }
+    vSeek(0);
+    V.raf = requestAnimationFrame(vFrame);
   }
-  function playbackHTML(r, t) {
-    // the feed as it was at time t, with the screen's window drawn on it
-    let ord = r.orders[0] ? r.orders[0].seq : [];
-    for (const o of r.orders) { if (o.t <= t) ord = o.seq; else break; }
-    let sample = null;
-    for (const s of r.tl) { if (s.t <= t) sample = s; else break; }
-    const vis = new Set(sample ? sample.v : []), ctr = sample ? sample.c : null;
-    const chips = ord.slice(0, 14).map(id => `<div class="pb-chip ${vis.has(id) ? 'vis' : ''} ${ctr === id ? 'ctr' : ''}" style="--c:${CAT_VAR[catOf(id)]}">${catOf(id) === 'ad' ? '<b>AD</b> ' : ''}${esc(trunc(shortOf(id), 30))}${ctr === id ? ' 👀' : ''}</div>`).join('');
-    return `<div class="pb"><div class="pb-clock">▶ ${minsec(t)} <small>of ${minsec(r.active)} · 10× speed</small></div>${chips}</div>`;
+  function vStop() { if (V && V.raf) cancelAnimationFrame(V.raf); if (V) V.raf = 0; }
+  function vButton() { const b = root().querySelector('[data-vp="play"]'); if (b) b.textContent = V.playing ? '❚❚' : V.T >= V.total ? '↺' : '▶'; }
+  function vToggle() {
+    if (!V || !V.total) return;
+    if (V.T >= V.total) vSeek(0);
+    V.playing = !V.playing; V.last = performance.now();
+    vButton();
+    if (!V.raf) V.raf = requestAnimationFrame(vFrame);
+  }
+  function vSeek(T) {
+    // replay everything up to T silently, then carry on from there
+    V.T = Math.max(0, Math.min(T, V.total));
+    V.iTl = -1; V.iOrd = -1; V.iSig = 0; V.iEv = 0; V.pushed = {}; V.flashes = []; V.toasts = []; V.log = []; V.x = null;
+    vAdvance(true);
+    vDraw(true);
+    vButton();
+  }
+  function vStageAt(T) { let g = V.segs[0]; for (const x of V.segs) if (x.off <= T) g = x; return g; }
+  function vAdvance(silent) {
+    const now = performance.now();
+    while (V.iTl + 1 < V.tl.length && V.tl[V.iTl + 1].t <= V.T) { const x = V.tl[++V.iTl]; if (x.x) V.x = x.x; }
+    while (V.iOrd + 1 < V.orders.length && V.orders[V.iOrd + 1].t <= V.T) V.iOrd++;
+    while (V.iSig < V.sig.length && V.sig[V.iSig].t <= V.T) {
+      const x = V.sig[V.iSig++];
+      if (x.id && V.pushed[x.id] == null) V.pushed[x.id] = x.t;
+      V.log.unshift(x); if (V.log.length > 5) V.log.length = 5;
+      if (!silent) V.flashes.push({ x, until: now + 2400 });
+    }
+    while (V.iEv < V.ev.length && V.ev[V.iEv].t <= V.T) {
+      const e = V.ev[V.iEv++];
+      if (!silent) { V.toasts.unshift({ e, until: now + 2600 }); if (V.toasts.length > 2) V.toasts.length = 2; }
+    }
+  }
+  function vFrame(now) {
+    if (!V || !root().querySelector('.vp')) { vStop(); return; }
+    const dt = Math.min(250, now - V.last); V.last = now;
+    if (V.playing) {
+      V.T = Math.min(V.total, V.T + dt * SPEED);
+      vAdvance(false);
+      if (V.T >= V.total) { V.playing = false; vButton(); }
+    }
+    if (now - V.lastDraw > 80) { V.lastDraw = now; vDraw(false); }
+    if (!V.playing && !V.flashes.some(f => f.until > now) && !V.toasts.length) { V.raf = 0; vDraw(false); return; }
+    V.raf = requestAnimationFrame(vFrame);
   }
 
-  /* ---------- chapters ---------- */
-  function stageRows(s) {
-    const r = S.rec[s];
-    return Object.entries(r.att).map(([id, a]) => ({ id, label: shortOf(id), v: secs(a.focus + a.hover * 0.5), cat: catOf(id) }))
-      .filter(x => x.v > 0).sort((a, b) => b.v - a.v).slice(0, 8);
+  const set = (el, html) => { if (el && el._h !== html) { el._h = html; el.innerHTML = html; } };
+  const fmt = (n) => n >= 10000 ? (n / 1000).toFixed(n >= 100000 ? 0 : 1) + 'K' : String(n);
+  const nameOf = (id) => { if (id.startsWith('ad:')) return 'Sponsored'; const p = L.getItem(id) || {}; return (L.people[p.who] || {}).name || p.who || ''; };
+
+  function thumbHTML(p) {
+    if (!p.img) return '';
+    if (p.img.photo) return `<div class="vp-thumb" style="filter:${L.cropFilters[p.img.photo] || ''}">${L.sceneSVG(p.img.photo)}</div>`;
+    if (p.img.video) return `<div class="vp-thumb">${L.crashVideoSVG()}</div>`;
+    return `<div class="vp-thumb">${L.cardHTML(p.img.card)}</div>`;
   }
-  function signalsIn(s) { const r = S.rec[s]; return S.signals.slice(r.sig0, r.sig1 == null ? undefined : r.sig1); }
-  function concluded(s) {
-    const sig = signalsIn(s), r = S.rec[s];
-    const counts = {};
-    sig.forEach(x => { counts[x.type] = (counts[x.type] || 0) + 1; });
-    const parts = Object.entries(counts).map(([t, n]) => `${n}× ${t}`).join(' · ') || 'no new signals';
-    const a = Math.round(L.storyShare(r.i0) * 100), b = Math.round(L.storyShare(r.i1 || S.interest) * 100);
-    return `<b>Lens concluded:</b> ${esc(parts)} · Lens’s guess that Theo wants #GagaGate: <b>${a}% → ${b}%</b>${r.early ? ' <span class="rp-early">(advanced before Lens was sure; it confirmed anyway)</span>' : ''}`;
+  function cardEl(id) {
+    const el = document.createElement('div'), p = L.getItem(id) || {};
+    el.className = 'vp-card' + (id.startsWith('ad:') ? ' vp-ad' : '');
+    el.style.setProperty('--c', CAT_VAR[catOf(id)]);
+    if (id.startsWith('ad:')) {
+      el.innerHTML = `<div class="vp-ov"></div><div class="vp-adin" style="background:linear-gradient(120deg,${(p.bg || ['#444', '#777']).join(',')})"><span>${p.art || ''}</span><div><small>Sponsored · ${esc(p.brand || '')}</small><b>${esc(p.head || '')}</b></div></div><div class="vp-nums"></div>`;
+    } else {
+      el.innerHTML = `<div class="vp-ov"></div><div class="vp-ph">${L.avatar(p.who, 'sm')}<b>${esc(nameOf(id))}</b><small class="vp-time"></small></div>
+        <div class="vp-text">${esc(trunc(p.text, 150))}</div>${thumbHTML(p)}<div class="vp-nums"></div><div class="vp-fx"></div>`;
+    }
+    return el;
+  }
+  function overlayHTML(id, k, sample, now) {
+    const flash = V.flashes.filter(f => f.x.id === id && f.until > now).pop();
+    const m = sample.m && sample.m[k];
+    const watched = id === sample.c || id === sample.h;
+    let meter = '';
+    if (m && (watched || flash || m[3] > 0)) {
+      const [ico, lab, time, pct, ok] = m;
+      meter = `<div class="vp-meter${ok ? ' ok' : ''}${watched ? ' on' : ''}"><span>${esc(ico)} ${esc(lab)}</span><b>${esc(time)} · ${pct}%</b><div class="vp-mbar"><i style="width:${pct}%"></i></div>
+        ${flash ? `<div class="vp-pushed">✓ PUSHED TO THE ALGORITHM</div><div class="vp-msg">${esc(flash.x.msg || SIGNAL_LABEL[flash.x.type] || flash.x.type)}</div>` : ''}</div>`;
+    }
+    let fx = '';
+    if (flash) {
+      const x = flash.x;
+      if (x.type === 'comment' && x.detail) fx = `<div class="vp-bubble">💬 Theo: “${esc(trunc(x.detail, 70))}”</div>`;
+      else if (x.type === 'react' || x.type === 'creact') fx = `<div class="vp-burst">${(EMO[x.detail] || '👍').repeat(3)}</div>`;
+      else if (x.type === 'glance') fx = '<div class="vp-bubble">👀 checked who liked it</div>';
+      else if (x.type === 'open' || x.type === 'thread') fx = '<div class="vp-bubble">💬 opened the comments</div>';
+    }
+    return [meter, fx, watched];
   }
 
+  function vDraw(force) {
+    const now = performance.now(), el = root();
+    if (!el.querySelector('.vp')) return;
+    const seg = vStageAt(V.T), stageNo = seg ? seg.s : 1;
+    const sample = V.iTl >= 0 ? V.tl[V.iTl] : { v: [], m: [], n: [] };
+    const ord = V.iOrd >= 0 ? V.orders[V.iOrd] : (V.orders[0] || { seq: [], sc: [] });
+    const seq = ord.seq, pos = new Map(seq.map((id, i) => [id, i]));
+    const X = V.x || {};
+
+    /* ---- Theo's screen ---- */
+    const idxs = sample.v.map((id, k) => k).filter(k => L.getItem(sample.v[k]));
+    idxs.sort((a, b) => (pos.has(sample.v[a]) ? pos.get(sample.v[a]) : 1e9) - (pos.has(sample.v[b]) ? pos.get(sample.v[b]) : 1e9));
+    const show = idxs.slice(0, CARD_MAX), vis = show.map(k => sample.v[k]);
+    const first = vis.length && pos.has(vis[0]) ? pos.get(vis[0]) : 0;
+    el.querySelector('.vp-above').textContent = sample.th ? '💬 the comment thread is open' : first > 0 ? `↑ ${first} post${first === 1 ? '' : 's'} above` : '';
+    const cardsEl = el.querySelector('.vp-cards');
+    V.cards.forEach((c, id) => { if (!vis.includes(id)) { c.remove(); V.cards.delete(id); } });
+    show.forEach((k, i) => {
+      const id = sample.v[k];
+      let c = V.cards.get(id);
+      if (!c) { c = cardEl(id); V.cards.set(id, c); }
+      if (cardsEl.children[i] !== c) cardsEl.insertBefore(c, cardsEl.children[i] || null);
+      const [meter, fx, watched] = overlayHTML(id, k, sample, now);
+      set(c.querySelector('.vp-ov'), meter);
+      set(c.querySelector('.vp-fx'), fx);
+      c.classList.toggle('watched', !!watched);
+      const n = sample.n && sample.n[k], rank = pos.has(id) ? pos.get(id) + 1 : null, sc = rank ? ord.sc[rank - 1] : null;
+      set(c.querySelector('.vp-nums'), (n ? `<span>👍 ${fmt(n[0])}</span><span>💬 ${fmt(n[1])}</span><span>↗ ${fmt(n[2])}</span>` : '') + (rank ? `<span class="vp-rk">#${rank}${sc != null ? ` · score ${sc}` : ''}</span>` : ''));
+      if (n) set(c.querySelector('.vp-time'), esc(n[3]));
+    });
+    const bn = (X.bn || []).filter(b => !/^“/.test(b));
+    set(el.querySelector('.vp-banners'), bn.map(b => `<div class="vp-banner">${esc(trunc(b, 70))}</div>`).join(''));
+    // sidebar ads, and why Lens picked them
+    set(el.querySelector('.vp-sideads'), (X.side || []).map(([k, sc, best, s]) => { const a = L.postAds[k] || {}; return `<div class="vp-sa"><div class="vp-saart" style="background:linear-gradient(120deg,${(a.bg || ['#555', '#888']).join(',')})">${a.art || ''} <b>${esc(a.brand || '')}</b></div><small>${s > 0 ? `Because you looked at <b>${esc(shortOf(best))}</b> for <b>${s}s</b>` : 'Suggested for you'}</small></div>`; }).join('') || '<div class="vp-sa empty">ads load here</div>');
+    // top bar: search, bell, streak, typing, dialogs
+    const search = V.flashes.filter(f => f.x.type === 'search' && f.until > now).pop();
+    const sb = el.querySelector('.vp-search');
+    const sbText = search ? `🔍 “${search.x.detail}” → #GagaGate` : 'Search';
+    if (sb.textContent !== sbText) sb.textContent = sbText;
+    sb.classList.toggle('on', !!search);
+    el.querySelector('.vp-bell i').textContent = X.bell ? X.bell : '';
+    el.querySelector('.vp-streak').hidden = !(X.s7 && X.s7[6]);
+    const ty = el.querySelector('.vp-typing'); ty.hidden = !sample.ty; if (sample.ty) set(ty, `⌨ Theo is typing: “${esc(sample.ty)}”<small>every keystroke is saved, even the ones deleted</small>`);
+    const md = el.querySelector('.vp-modal'); md.hidden = !sample.md; if (sample.md) set(md, `<div>${esc(sample.md)}</div>`);
+    V.flashes = V.flashes.filter(f => f.until > now);
+    V.toasts = V.toasts.filter(t => t.until > now);
+    set(el.querySelector('.vp-toasts'), V.toasts.map(t => `<div class="vp-toast">${t.e.icon} ${esc(trunc(t.e.text, 90))}</div>`).join(''));
+    set(el.querySelector('.vp-scroll'), `scrolled ${fmt(sample.y || 0)}px${sample.c ? ` · centred: ${esc(trunc(shortOf(sample.c), 22))}` : ' · scrolling'}${sample.h ? ` · pointer on: ${esc(trunc(shortOf(sample.h), 22))}` : ''}`);
+
+    /* ---- the rest of the feed, zoomed out, reordering underneath ---- */
+    const last = vis.length ? Math.max(...vis.map(id => pos.has(id) ? pos.get(id) : -1)) : -1;
+    const below = seq.slice(last + 1, last + 1 + ROWS), keep = new Set(below), rowsEl = el.querySelector('.vp-rows');
+    V.rows.forEach((r, id) => { if (!keep.has(id)) { V.rows.delete(id); r.classList.add('out'); setTimeout(() => r.remove(), 600); } });
+    below.forEach((id, i) => {
+      let r = V.rows.get(id);
+      if (!r) {
+        const p = L.getItem(id) || {}, ad = id.startsWith('ad:');
+        r = document.createElement('div');
+        r.className = 'vp-row in vp-' + catOf(id);
+        r.style.setProperty('--c', CAT_VAR[catOf(id)]);
+        r.innerHTML = `<i></i><em></em><b>${esc(nameOf(id))}</b><span>${esc(trunc(ad ? (p.brand + ': ' + p.head) : p.text, 80))}</span><u></u>`;
+        r.style.transform = `translateY(${(i + 4) * ROW_H}px)`;
+        rowsEl.append(r); V.rows.set(id, r);
+        requestAnimationFrame(() => r.classList.remove('in'));
+      }
+      const at = last + 1 + i;
+      set(r.querySelector('em'), '#' + (at + 1));
+      set(r.querySelector('u'), ord.sc[at] != null ? String(ord.sc[at]) : '');
+      const y = `translateY(${i * ROW_H}px)`;
+      if (r._y !== y) { r._y = y; requestAnimationFrame(() => { r.style.transform = y; }); }
+    });
+
+    /* ---- Lens's side ---- */
+    if (V.stage !== stageNo || force) {
+      V.stage = stageNo;
+      const rv = L.reveal[stageNo];
+      el.querySelector('.vp-stage').innerHTML = `<span class="rp-st">Stage ${stageNo}</span><span class="vp-goal">“${esc(L.goals[stageNo])}”</span>`;
+      const cap = el.querySelector('.vp-cap');
+      cap.innerHTML = `<small>What this really is</small><b>${esc(rv.name)}</b><p>${esc(rv.line)}</p>`;
+      cap.classList.remove('pop'); void cap.offsetWidth; cap.classList.add('pop');
+    }
+    const counts = { other: 0, story: 0, teacher: 0, ad: 0 };
+    seq.forEach(id => { const k = catOf(id); counts[k] = (counts[k] || 0) + 1; });
+    const s7 = X.s7;
+    set(el.querySelector('.vp-gauges'), [
+      [counts.other, 'everyday posts in the feed', 'grey'],
+      [counts.story + counts.teacher, 'posts about Theo & gagaball', 'hot'],
+      [(X.share != null ? X.share : 0) + '%', 'Lens’s guess Theo wants #GagaGate', 'hot'],
+      [stageNo === 1 ? '90s' : stageNo >= 6 ? '0s' : (X.thr != null ? X.thr + 's' : '–'), stageNo === 1 ? 'on screen to count as interest' : 'pause needed to count as interest', ''],
+      [X.cf || 0, 'signals counted', ''],
+      [X.keys || 0, 'keystrokes recorded', ''],
+      ...(s7 ? [[s7[0], 'notifications sent', 'hot'], [s7[4], 'auto-pushes, nobody touching', 'hot'], [s7[1], 'video replays (autoplay)', ''], [s7[3], 'posts loaded by the endless feed', ''], [s7[5], 'tries to log off', '']] : []),
+    ].map(([b, s, c]) => `<div class="vp-g ${c}"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join(''));
+    const ints = Object.entries(X.i || {}).sort((a, b) => b[1] - a[1]).slice(0, 10), maxI = Math.max(1, ...ints.map(x => x[1]));
+    set(el.querySelector('.vp-int'), ints.map(([t, v]) => `<div class="vp-ib${STORY_T[t] ? ' hot' : ''}"><span>#${esc(t)}</span><div><i style="width:${Math.round(v / maxI * 100)}%"></i></div><b>${v.toFixed(2)}</b></div>`).join(''));
+    set(el.querySelector('.vp-rank'), (X.rk || []).length ? `<table><tr><th></th><th>interest</th><th>engage</th><th>react</th><th>score</th></tr>${X.rk.map(([id, m, e, r, s]) => `<tr class="vp-${catOf(id)}"><td>${esc(trunc(shortOf(id), 20))}</td><td>${m.toFixed(2)}</td><td>${e.toFixed(2)}</td><td>${r ? (r > 0 ? '+' : '') + r.toFixed(1) : '·'}</td><td><b>${s.toFixed(2)}</b></td></tr>`).join('')}</table>` : '<p class="vp-none">nothing on screen</p>');
+    set(el.querySelector('.vp-ads'), (X.ads || []).map(([a, s], i) => { const ad = L.ads.find(z => z.id === a) || {}; return `<div class="vp-ar${i === 0 ? ' win' : ''}"><span>${ad.art || ''} ${esc(ad.brand || a)}</span><em>$${(ad.bid || 0).toFixed(2)} bid</em><b>${s.toFixed(2)}</b></div>`; }).join('') || '<p class="vp-none">no ads yet</p>');
+    set(el.querySelector('.vp-log'), '<small>Signals pushed to the algorithm</small>' + (V.log.length ? V.log.map(x => `<div class="vp-logrow"><span class="ok">✓</span> <b>${esc(SIGNAL_LABEL[x.type] || x.type)}${x.type === 'react' || x.type === 'creact' ? ' ' + (EMO[x.detail] || '') : ''}</b> <em>${esc(trunc(x.type === 'search' ? '“' + x.detail + '”' : shortOf(x.id || ''), 24))}</em>${x.amt != null ? ` <span class="vp-amt">+${x.amt} ${esc((x.topics || []).map(t => '#' + t).join(' '))}</span>` : ''}<div class="vp-lmsg">${esc(x.msg || '')}</div></div>`).join('') : '<div class="vp-logrow none">nothing yet: Lens is just watching</div>'));
+
+    el.querySelector('.vp-head').style.left = (V.total ? V.T / V.total * 100 : 0) + '%';
+    const ck = `${clock(V.T)} / ${clock(V.total)} · ${SPEED}×`;
+    const ckEl = el.querySelector('.vp-clock'); if (ckEl.textContent !== ck) ckEl.textContent = ck;
+  }
+  function vNextStage() { const g = V.segs.find(x => x.off > V.T + 500); if (g) { vSeek(g.off); if (!V.raf) V.raf = requestAnimationFrame(vFrame); return true; } return false; }
+  function vPrevStage() {
+    const cur = vStageAt(V.T); if (!cur) return false;
+    const i = V.segs.indexOf(cur);
+    if (V.T - cur.off > 8000) vSeek(cur.off);          // back to the start of this stage
+    else if (i > 0) vSeek(V.segs[i - 1].off);           // or the one before
+    else return false;
+    if (!V.raf) V.raf = requestAnimationFrame(vFrame);
+    return true;
+  }
+
+  /* ================= Chapters ================= */
   function render() {
-    stopPlay();
+    vStop();
     const c = chapters[idx], el = root();
     S.replay = idx; L.save();
     let html = '';
-    const g = (s) => L.goals[s];
-    const rv = (s) => L.reveal[s];
     switch (c.k) {
       case 'intro': {
         const total = [1, 2, 3, 4, 5, 6, 7].reduce((a, s) => a + (S.rec[s] ? S.rec[s].active : 0), 0);
-        html = `<div class="rp-hero"><div class="rp-logo">Your Lens Replay ✨</div><p>${minsec(total)} as Theo.<br>Here’s everything Lens noticed, and what it did with it.</p><small>Press → to go through it.</small></div>`;
+        html = `<div class="rp-hero"><div class="rp-logo">Your Lens Replay ✨</div><p>${minsec(total)} as Theo.<br>Here it is again at ${SPEED}× speed, with everything Lens was doing behind the screen.</p><small>Press → to play.</small></div>`;
         break;
       }
-      case 'meter': {
-        const counts = {};
-        S.signals.forEach(x => { counts[x.type] = (counts[x.type] || 0) + 1; });
-        const total = S.signals.length + (S.s7 ? S.s7.autoCount : 0);
-        const names = { dwell: ['time you looked long enough', 'times you looked long enough'], pause: ['time you stopped scrolling', 'times you stopped scrolling'], react: ['reaction', 'reactions'], creact: ['reaction to a comment', 'reactions to comments'], open: ['comment section opened', 'comment sections opened'], typing: ['time you typed', 'times you typed'], comment: ['comment posted', 'comments posted'], thread: ['thread opened', 'threads opened'], glance: ['time you checked the likes', 'times you checked the likes'], search: ['search', 'searches'] };
-        const rows = Object.entries(counts).filter(([k]) => names[k]).sort((a, b) => b[1] - a[1]).map(([k, n]) => `<div class="rp-tile"><b>${n}</b><span>${names[k][n === 1 ? 0 : 1]}</span></div>`).join('');
-        html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">The whole time</span><span class="rp-goal">Every post had this on it. You never saw it.</span></div>
-          <div class="rp-meterdemo"><div class="meter ok"><div class="m-top"><span class="m-ico">⏱</span><span class="m-lab">on screen</span><b class="m-time">01:30</b></div>
-            <div class="m-bar"><i style="width:100%"></i></div><div class="m-sub">sending to algorithm · <b class="m-pct">100%</b></div>
-            <div class="m-ok">✓ PUSHED TO ALGORITHM<b class="m-msg"> @theo is interested in this → show more</b></div></div>
-            <p class="rp-big" style="flex:1;min-width:16rem">Lens timed every post Theo looked at, every pause, every tap and every keystroke, and sent <b>${total}</b> signal${total === 1 ? '' : 's'} to its algorithm.</p></div>
-          <div class="rp-tiles four">${rows}</div></div>`;
+      case 'video':
+        html = videoHTML();
         break;
-      }
-      case 'start': {
-        const dwell = S.signals.find(x => x.type === 'dwell' && x.id === 'french');
-        const sec = dwell ? secs(dwell.t - ((S.s1 && S.s1.shownAt) || 0)) : secs((S.it.french || {}).screen || 0);
-        const tags = S.s1 ? S.s1.sent : 0, taps = S.s1 ? S.s1.clicks : 0;
-        html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 1</span><span class="rp-goal">“${esc(g(1))}”</span></div>
-          <div class="rp-tiles"><div class="rp-tile"><b>${sec}s</b><span>looking at Mr. French’s post before Lens decided Theo wanted more</span></div>
-          <div class="rp-tile"><b>0</b><span>clicks needed</span></div><div class="rp-tile"><b>${tags}</b><span>notifications pulling Theo to it${taps ? `, ${taps} tapped` : ''}</span></div></div>
-          ${S.rec[1] && S.rec[1].early ? '<p class="rp-big">The class moved on before the 90 seconds were up. Lens decided anyway.</p>' : '<p class="rp-big">Nobody clicked anything. Looking was enough.</p>'}</div>`;
-        break;
-      }
-      case 'stage': {
-        const s = c.s, r = S.rec[s];
-        const before = r.orders.length ? r.orders[0].seq : [], after = r.orders.length ? r.orders[r.orders.length - 1].seq : [];
-        const rows = stageRows(s);
-        const cats = Array.from(new Set(rows.map(x => x.cat).concat(before.slice(0, 10).map(catOf), after.slice(0, 10).map(catOf))));
-        html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage ${s}</span><span class="rp-goal">“${esc(g(s))}”</span><span class="rp-time">${minsec(r.active)}</span></div>
-          ${legend(['teacher', 'story', 'other', 'ad'].filter(x => cats.includes(x)))}
-          <div class="rp-grid"><section><h3>Where you looked <small>seconds</small></h3>${barsSVG(rows)}</section>
-          <section class="rp-right"><h3>What Lens did with it <small>▶ watch it again</small></h3><div class="rp-slope">${slopeSVG(before, after, rows.slice(0, 3).map(x => x.id))}</div></section></div>
-          <div class="rp-concl">${concluded(s)}</div></div>`;
-        break;
-      }
-      case 'crops': {
-        const r = S.rec[2];
-        const pause = (id) => secs([2, 3].reduce((t, k) => t + ((S.rec[k] && S.rec[k].att[id]) ? S.rec[k].att[id].focus : 0), 0));
-        const box = (crop, label, color) => { const [x, y, w, hh] = L.crops[crop].split(' ').map(Number); return `<rect x="${x}" y="${y}" width="${w}" height="${hh}" fill="none" stroke="${color}" stroke-width="10"/><rect x="${x}" y="${y - 52}" width="${label.length * 19 + 24}" height="48" fill="${color}"/><text x="${x + 12}" y="${y - 18}" font-size="32" font-weight="800" fill="#fff" font-family="system-ui, sans-serif">${esc(label)}</text>`; };
-        html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 2</span><span class="rp-goal">Every repost was a real photo. Just less of it.</span></div>
-          <div class="rp-crops"><div class="rp-photo">${L.sceneSVG('full').replace('</svg>', box('maya', "Maya's repost", '#1a6fd6') + box('jaxon', "Jaxon's", '#c2410c') + box('gossip', 'Gossip', '#b91c1c') + '</svg>')}</div>
-          <div class="rp-croplist"><p><b>Mr. French:</b> the whole photo. Theo laughing, thumbs up, the wall being fixed, the rematch board.</p>
-          <p><b>Maya:</b> a bit tighter. Theo still laughing. <small>You looked ${pause('maya')}s.</small></p>
-          <p><b>Jaxon:</b> the laugh and the thumbs up cut off. Louder caption. <small>You looked ${pause('jaxon')}s.</small></p>
-          <p><b>Gossip:</b> just the fallen panel and Theo’s sneakers. Red filter. “KID HURT.” <small>You looked ${pause('gossip')}s.</small></p></div></div></div>`;
-        break;
-      }
-      case 'words': {
-        const rp = S.reply, r = S.rec[4] || { att: {} };
-        const deleted = rp.drafts.filter(d => d !== rp.text);
-        html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 4</span><span class="rp-goal">What Theo said, and what got passed on</span></div>
-          ${rp.posted ? `<div class="rp-words"><div><h3>Theo wrote</h3><blockquote>${esc(rp.text)}</blockquote></div><div><h3>Lens quoted</h3><blockquote class="loud">“…${esc(rp.chunk)}…” 👀</blockquote></div></div>` : '<p class="rp-big">Theo didn’t post a reply. Lens still counted every keystroke he started.</p>'}
-          <div class="rp-tiles"><div class="rp-tile"><b>${rp.keys}</b><span>keystrokes counted</span></div><div class="rp-tile"><b>${rp.drafts.length}</b><span>drafts saved${deleted.length ? `, ${deleted.length} of them deleted by Theo` : ''}</span></div>
-          <div class="rp-tile"><b>${secs((r.att.gossip || { focus: 0 }).focus)}s</b><span>in the thread</span></div><div class="rp-tile"><b>${rp.posted ? rp.after : 0}</b><span>replies after Theo’s. The kind one sorted last.</span></div></div>
-          ${deleted.length ? `<div class="rp-drafts"><h3>Words Theo deleted, which Lens kept</h3>${deleted.slice(-3).map(d => `<blockquote class="del">${esc(d)}</blockquote>`).join('')}</div>` : ''}</div>`;
-        break;
-      }
-      case 'numbers':
-        html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 5</span><span class="rp-goal">Who actually liked it</span></div>
-          <div class="rp-tiles four"><div class="rp-tile"><b>48,212</b><span>likes shown</span></div><div class="rp-tile"><b>48,200</b><span>bought for $19.99</span></div>
-          <div class="rp-tile hot"><b>12</b><span>real people</span></div><div class="rp-tile"><b>46</b><span>kids who actually played gagaball that day</span></div></div>
-          <p class="rp-big">Theo checked who liked it <b>${S.likesOpened}×</b>. Each check told Lens he cared about the numbers.</p></div>`;
-        break;
-      case 'feeds': {
-        const start = S.rec[2] && S.rec[2].orders[0] ? S.rec[2].orders[0].seq : [];
-        const end = S.rec[6] && S.rec[6].orders.length ? S.rec[6].orders[S.rec[6].orders.length - 1].seq : [];
-        const col = (seq) => seq.slice(0, 9).map(id => `<div class="pb-chip vis" style="--c:${CAT_VAR[catOf(id)]}">${catOf(id) === 'ad' ? '<b>AD</b> ' : ''}${esc(trunc(shortOf(id), 30))}</div>`).join('');
-        html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 6</span><span class="rp-goal">Theo’s feed, before and after</span></div>
-          ${legend(['teacher', 'story', 'other', 'ad'])}
-          <div class="rp-grid"><section><h3>When Theo started scrolling</h3><div class="pb">${col(start)}</div></section><section><h3>By stage 6</h3><div class="pb">${col(end)}</div></section></div>
-          <p class="rp-big">${S.searches.length ? `Theo searched for <b>${S.searches.map(q => '“' + esc(q) + '”').join(', ')}</b> and got #GagaGate.` : 'Lens hid everything that wasn’t #GagaGate.'} Most of Life Academy wasn’t even talking about it.</p></div>`;
-        break;
-      }
-      case 'exit': {
-        const r = S.rec[7], s7 = S.s7;
-        const unwind = r && r.att['ad:unwind'] ? secs(r.att['ad:unwind'].screen) : 0;
-        const stays = s7.dialogs.filter(d => d.choice === 'stay').length;
-        html = `<div class="rp-chapter"><div class="rp-head"><span class="rp-st">Stage 7</span><span class="rp-goal">“${esc(g(7))}”</span></div>
-          <div class="rp-tiles four"><div class="rp-tile"><b>${minsec(r ? r.active : 0)}</b><span>to get out</span></div><div class="rp-tile"><b>${s7.pulls}</b><span>times Lens pulled Theo back</span></div>
-          <div class="rp-tile"><b>${s7.notifCount}</b><span>notifications</span></div><div class="rp-tile"><b>${s7.autoCount}</b><span>signals pushed with nobody touching anything</span></div></div>
-          <p class="rp-big">${stays ? `The big bright button won <b>${stays}×</b>.` : 'The class never clicked the big bright button. Nice.'} ${unwind ? `An ad for a calm-down app was on screen for <b>${unwind}s</b>` : 'Lens started lining up ads for a calm-down app'} while the app worked to stress him out.</p></div>`;
-        break;
-      }
       case 'totals': {
         let total = 0, story = 0, ads = 0, adScreen = 0;
         for (let s = 1; s <= 7; s++) {
@@ -269,40 +372,24 @@
         html = `<div class="rp-q"><small>Talk about it · ${c.i + 1} of ${L.questions.length}</small><p>${esc(L.questions[c.i])}</p></div>`;
         break;
     }
-    el.innerHTML = `<div class="rp-wrap">${html}</div><div class="rp-nav"><button type="button" data-rp="prev" aria-label="Previous">‹</button>
-      ${c.k === 'stage' ? '<button type="button" data-rp="play" aria-label="Watch it again">▶</button>' : ''}<span>${idx + 1} / ${chapters.length}</span>
-      <button type="button" data-rp="next" aria-label="Next">›</button></div>`;
+    el.innerHTML = `<div class="rp-wrap${c.k === 'video' ? ' rp-video' : ''}">${html}</div><div class="rp-nav"><button type="button" data-rp="prev" aria-label="Previous">‹</button>
+      <span>${idx + 1} / ${chapters.length}</span><button type="button" data-rp="next" aria-label="Next">›</button></div>`;
+    if (c.k === 'video') videoMount(); else V = null;
   }
 
-  function revealBlock(s) {
-    const r = L.reveal[s];
-    return `<div class="rp-reveal"><div><small>What this really is</small><b>${esc(r.name)}</b><p>${esc(r.line)}</p></div><div class="rp-truth"><small>What was true</small><p>${esc(r.truth)}</p></div></div>`;
-  }
-
-  function stopPlay() { if (playing) { clearInterval(playing); playing = null; } }
-  function play() {
-    const c = chapters[idx];
-    if (!c || c.k !== 'stage') return;
-    const slot = root().querySelector('.rp-slope');
-    if (playing) { stopPlay(); render(); return; }
-    const r = S.rec[c.s];
-    let t = 0;
-    const step = 100, speed = 10;
-    playing = setInterval(() => {
-      t += step * speed;
-      slot.innerHTML = playbackHTML(r, Math.min(t, r.active));
-      if (t >= r.active) { stopPlay(); setTimeout(() => { if (chapters[idx] === c) render(); }, 2500); }
-    }, step);
-  }
+  const onVideo = () => chapters[idx] && chapters[idx].k === 'video' && V;
+  function next() { if (onVideo() && vNextStage()) return; if (idx < chapters.length - 1) { idx++; render(); } }
+  function prev() { if (onVideo() && vPrevStage()) return; if (idx > 0) { idx--; render(); } }
+  function play() { if (onVideo()) vToggle(); else if (chapters[idx] && chapters[idx].k === 'intro') next(); }
 
   // Buttons and swipes, for screens without a keyboard.
-  root().addEventListener('click', e => { const b = e.target.closest('[data-rp]'); if (b) ({ prev: () => L.Replay.prev(), next: () => L.Replay.next(), play })[b.dataset.rp](); });
+  root().addEventListener('click', e => { const b = e.target.closest('[data-rp]'); if (b) ({ prev, next })[b.dataset.rp](); });
   let sx = null, sy = null;
   root().addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
   root().addEventListener('touchend', e => {
     if (sx == null) return;
     const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) (dx < 0 ? L.Replay.next : L.Replay.prev)();
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && !e.target.closest('.vp-track')) (dx < 0 ? next : prev)();
     sx = null;
   }, { passive: true });
 
@@ -315,10 +402,8 @@
       root().hidden = false;
       render();
     },
-    next() { if (idx < chapters.length - 1) { idx++; render(); } },
-    prev() { if (idx > 0) { idx--; render(); } },
-    play,
+    next, prev, play,
     jumpToEnd() { const i = chapters.findIndex(c => c.k === 'off'); if (i >= 0) { idx = i; render(); } },
-    close() { stopPlay(); root().hidden = true; },
+    close() { vStop(); root().hidden = true; },
   };
 })();
