@@ -643,3 +643,6 @@ body { overflow-x: hidden; }
   #groups .ff-cols { grid-template-columns: 1fr; }
   #groups .ff-q { font-size: 1.4rem; }
 }
+
+#groups .ff-q { margin: 0 0 1rem; text-align: left; font-size: 1.7rem; }
+@media (max-width: 860px) { #groups .ff-q { font-size: 1.25rem; } }

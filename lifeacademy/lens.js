@@ -1149,8 +1149,8 @@
       return `<div class="g-feed"><div class="g-head">${L.avatar(f.who)}<span>${esc(f.label)}</span></div>${posts}</div>`;
     }).join('');
     g.innerHTML = `<div class="ff"><div class="ff-top"><b>👀 What your friends are seeing right now</b><button type="button" class="ff-x" aria-label="Close">×</button></div>
-      <div class="ff-cols">${cols}</div>
-      <div class="ff-q">What's Life Academy talking about today?</div></div>`;
+      <div class="ff-q">What's Life Academy talking about today?</div>
+      <div class="ff-cols">${cols}</div></div>`;
     g.hidden = false;
     save();
   }
