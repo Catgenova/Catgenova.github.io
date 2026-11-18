@@ -115,7 +115,7 @@ export const examples = {
       evaluatorType: R.EVALUATOR_TYPES[0],
       credential: "NYS Professional Certificate, Childhood Education 1–6",
       reviewDate: `${y}-06-15`,
-      reviewMethod: "Review of a portfolio of work samples, tests and reading log, and an interview with the student",
+      reviewMethod: "Interview with the student and review of a portfolio of work samples, tests and reading log",
       summary: `${first} completed the ${ctx.year.replace("-", "–")} program described in the IHIP and met the required hours of instruction. Work samples show steady, independent progress in every subject. ${first} finished the planned math curriculum, reads above grade level, and writes organized multi-paragraph reports.`,
       subjects: d.subjects.map((s) => ({ ...s, progress: s.progress || `Completed the material planned in the IHIP for ${s.name}, with steady, grade-appropriate progress.` })),
       adequate: "yes",
@@ -126,12 +126,12 @@ export const examples = {
     const y = yearStart(ctx.year) + 1;
     return {
       method: "test",
-      testName: "Iowa Assessments",
+      testName: R.TESTS[0],
       testLevel: `Form E, Level ${Number(ctx.grade || 5) + 6}`,
       testDate: `${y}-05-12`,
       testDateEnd: `${y}-05-14`,
       administrator: "Morgan Ellis",
-      administratorType: R.EVALUATOR_TYPES[0],
+      administratorType: R.ADMINISTRATOR_TYPES[2],
       scores: [
         { area: "Reading", score: "SS 231", percentile: "72" },
         { area: "Language", score: "SS 226", percentile: "65" },

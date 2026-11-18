@@ -53,7 +53,7 @@ links:
       - title: Home Instruction Questions and Answers
         url: https://www.nysed.gov/nonpublic-schools/home-instruction-questions-and-answers
         source: NYSED
-        about: Answers on reporting, testing, hours and diplomas. NYSED notes parts of this page are under review, so check answers against the regulation.
+        about: "NYSED's answers on IHIPs, testing, narratives, mid-year starts, records and diplomas. NYSED notes it hasn't been updated for 2019 changes to the immunization law."
       - title: "Section 100.10 Home Instruction"
         url: https://www.nysed.gov/curriculum-instruction/10010-home-instruction
         source: NYSED
@@ -72,12 +72,4 @@ links:
       - title: NYC Public Schools, Home Schooling
         url: https://schools.nyc.gov/enrollment/enrollment-help/home-schooling
         source: NYC Public Schools
-        about: NYC families file with the Central Office of Home Schooling, not a local district.
-      - title: NYC quarterly report form
-        url: https://www.schools.nyc.gov/docs/default-source/default-document-library/home-schooling-quarterly-report.pdf
-        source: NYC Public Schools
-        about: The city's own quarterly report form.
-      - title: NYC annual assessment, written narrative
-        url: https://www.schools.nyc.gov/enrollment/enrollment-help/home-schooling/homeschool-annual-assessment-written-narrative
-        source: NYC Public Schools
-        about: What NYC expects in a written narrative.
+        about: NYC families file with the Central Office of Home Schooling, not a local district. The city's own letter of intent, IHIP, quarterly report and assessment forms are here, in many languages.

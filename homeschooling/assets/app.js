@@ -492,9 +492,9 @@ function subjectsFromIHIP(ctx) {
 
 function assessmentPlanText(ctx, prev) {
   const rule = R.assessmentRule(ctx.grade || 1, prev?.method, prev?.grade);
-  if (rule.narrative && Number(ctx.grade) <= 3) return "A written narrative evaluating the student's progress, prepared by a qualified evaluator, will be filed with the fourth quarterly report.";
-  if (rule.narrative && prev?.method === "test") return "A written narrative evaluating the student's progress, prepared by a qualified evaluator approved under §100.10, will be filed with the fourth quarterly report. (A standardized test was used last year.)";
-  return "A commercially published, nationally normed achievement test will be administered in the spring by a qualified person, and the results filed with the fourth quarterly report.";
+  if (rule.narrative && Number(ctx.grade) <= 3) return "A written narrative, prepared by an evaluator chosen with the superintendent's consent after interviewing the student and reviewing a portfolio of work, will be filed with the fourth quarterly report.";
+  if (rule.narrative && prev?.method === "test") return "A written narrative, prepared by an evaluator chosen with the superintendent's consent after interviewing the student and reviewing a portfolio of work, will be filed with the fourth quarterly report. (A standardized test was used last year.)";
+  return "A commercially published norm-referenced achievement test listed in §100.10(h)(1) will be administered in the spring by a qualified person with the superintendent's consent, and the results filed with the fourth quarterly report.";
 }
 
 function previousAssessment(ctx) {
@@ -741,11 +741,11 @@ function assessmentPage() {
         lastMethod: prev?.method || "",
         lastGrade: prev?.grade || "",
         date: todayISO(),
-        evaluator: "", evaluatorType: R.EVALUATOR_TYPES[0], credential: "", reviewDate: "", reviewMethod: "Portfolio review and interview with the student",
+        evaluator: "", evaluatorType: R.EVALUATOR_TYPES[0], credential: "", reviewDate: "", reviewMethod: "Interview with the student and review of a portfolio of the student's work",
         summary: "",
         subjects: subjectsFromIHIP(ctx).map((name) => ({ name, progress: "" })),
         adequate: "yes",
-        testName: "", testLevel: "", testDate: "", testDateEnd: "", administrator: "", administratorType: R.EVALUATOR_TYPES[0],
+        testName: "", testLevel: "", testDate: "", testDateEnd: "", administrator: "", administratorType: R.ADMINISTRATOR_TYPES[2],
         scores: [
           { area: "Reading", score: "", percentile: "" },
           { area: "Language", score: "", percentile: "" },

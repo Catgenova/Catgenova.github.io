@@ -36,19 +36,20 @@ hs_form: true
   <div data-show="method=narrative">
     <section class="hs-card">
       <h2>Evaluator</h2>
-      <p class="muted">A New York State certified teacher, a home instruction peer review panel, or another person the superintendent agrees to. Check with your district before a parent writes it.</p>
+      <p class="muted">A New York State certified teacher, a home instruction peer review panel, or another person, including a parent, chosen with the superintendent's consent. The evaluator must interview the student and review a portfolio of the student's work. Get the superintendent's consent before the evaluation.</p>
       <div class="hs-grid hs-grid-2">
         <label class="field"><span>Evaluator's name</span><input data-k="evaluator"></label>
         <label class="field"><span>Qualification</span>
           <select data-k="evaluatorType">
             <option>NYS certified teacher</option>
             <option>Home instruction peer review panel</option>
-            <option>Other person approved by the superintendent</option>
+            <option>Other person, with the superintendent's consent</option>
+            <option>Parent, with the superintendent's consent</option>
           </select>
         </label>
         <label class="field"><span>Certificate or credential (optional)</span><input data-k="credential" placeholder="e.g. NYS Professional Certificate, Childhood Education 1–6"></label>
         <label class="field"><span>Date of evaluation</span><input type="date" data-k="reviewDate"></label>
-        <label class="field hs-span-2"><span>Evidence reviewed</span><input data-k="reviewMethod"></label>
+        <label class="field hs-span-2"><span>Interview and portfolio reviewed</span><input data-k="reviewMethod"></label>
       </div>
     </section>
     <section class="hs-card">
@@ -62,10 +63,10 @@ hs_form: true
         <button class="btn" type="button" data-act="add-subject">Add a subject</button>
         <button class="btn btn-quiet" type="button" data-act="subjects-from-ihip">Match subjects to the IHIP</button>
       </div>
-      <h3>Determination</h3>
+      <h3>The evaluator certifies that the student</h3>
       <div class="hs-radios">
-        <label class="hs-radio"><input type="radio" name="adequate" value="yes" data-k="adequate"> <span>Adequate academic progress, commensurate with ability</span></label>
-        <label class="hs-radio"><input type="radio" name="adequate" value="no" data-k="adequate"> <span>Not adequate progress</span></label>
+        <label class="hs-radio"><input type="radio" name="adequate" value="yes" data-k="adequate"> <span>Has made adequate academic progress</span></label>
+        <label class="hs-radio"><input type="radio" name="adequate" value="no" data-k="adequate"> <span>Has failed to make adequate progress<small>The program is then placed on probation.</small></span></label>
       </div>
     </section>
   </div>
@@ -73,6 +74,7 @@ hs_form: true
   <div data-show="method=test">
     <section class="hs-card">
       <h2>Test</h2>
+      <p class="muted">The regulation names the Iowa, California, Stanford, Comprehensive (CTBS) and Metropolitan achievement tests, State tests that measure individual achievement, or another test NYSED approves. If you use a test or tester outside the public school, get the superintendent's consent first. Your district must order a listed test if you ask, at your cost.</p>
       <div class="hs-grid hs-grid-2">
         <label class="field"><span>Test name</span><input data-k="testName" list="hs-tests" placeholder="Choose or type"></label>
         <label class="field"><span>Form / level / edition</span><input data-k="testLevel"></label>
@@ -81,15 +83,16 @@ hs_form: true
         <label class="field"><span>Administered by</span><input data-k="administrator"></label>
         <label class="field"><span>Administrator's qualification</span>
           <select data-k="administratorType">
-            <option>NYS certified teacher</option>
-            <option>Home instruction peer review panel</option>
-            <option>Other person approved by the superintendent</option>
-            <option>Testing service / proctored online</option>
+            <option>Public school professional staff</option>
+            <option>Registered nonpublic school professional staff</option>
+            <option>NYS certified teacher, with the superintendent's consent</option>
+            <option>Other qualified person, with the superintendent's consent</option>
+            <option>Parent, with the superintendent's consent</option>
           </select>
         </label>
       </div>
       <datalist id="hs-tests">
-        <option>Iowa Assessments</option><option>Iowa Tests of Basic Skills (ITBS)</option><option>Stanford Achievement Test, 10th ed. (SAT10)</option><option>TerraNova, 3rd ed.</option><option>California Achievement Test (CAT)</option><option>Metropolitan Achievement Test (MAT)</option><option>Comprehensive Test of Basic Skills (CTBS)</option><option>PASS Test</option><option>NYS Grades 3–8 ELA and Mathematics Tests</option>
+        <option>Iowa Test of Basic Skills (Iowa Assessments)</option><option>California Achievement Test</option><option>Stanford Achievement Test</option><option>Comprehensive Test of Basic Skills</option><option>Metropolitan Achievement Test</option><option>NYS Grades 3–8 English Language Arts and Mathematics Tests</option>
       </datalist>
     </section>
     <section class="hs-card">

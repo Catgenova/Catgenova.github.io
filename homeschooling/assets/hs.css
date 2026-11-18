@@ -283,6 +283,9 @@
 .hs-source { margin-left: 8px; font-size: 0.78rem; color: var(--muted); padding: 1px 8px; border-radius: 999px; background: var(--surface-2); white-space: nowrap; }
 .hs-links p { margin: 3px 0 0; color: var(--muted); font-size: 0.93rem; }
 
+.hs-cite { font-size: 0.8rem; color: var(--muted); white-space: nowrap; font-family: var(--mono); }
+.hs-facts { margin: 14px 0 0; padding-left: 1.1em; display: grid; gap: 8px; max-width: 80ch; color: var(--muted); }
+.hs-facts strong { color: var(--text); }
 .hs-code { display: inline-block; padding: 8px 12px; border-radius: 9px; background: var(--surface-2); overflow-wrap: anywhere; }
 .hs-filenames { padding-left: 1.1em; display: grid; gap: 4px; }
 .hs-filenames code { overflow-wrap: anywhere; }

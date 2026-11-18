@@ -1,6 +1,10 @@
 // What New York's home instruction regulation (8 NYCRR §100.10) asks for.
 // Everything the forms and PDFs say about the rules comes from this file, so
 // when the regulation or NYSED guidance changes, change it here.
+// Checked against the regulation text and NYSED's Home Instruction Q&A on
+// 2026-11-18. Subdivisions: (b) letter of intent, (c)-(d) IHIP, (e) required
+// courses, (f) attendance and hours, (g) quarterly reports, (h) annual
+// assessment, (i) probation.
 
 export const REG = "8 NYCRR §100.10";
 export const REG_LONG = "Section 100.10 of the Regulations of the Commissioner of Education (8 NYCRR §100.10)";
@@ -76,9 +80,11 @@ export const ONCE_1_8 = [
   "Constitutions of the United States and New York State",
 ];
 
+// NYSED recommends naming the assessment method by the end of the third
+// reporting period (Q&A); the regulation files the assessment with the fourth.
 export const QUARTER_NOTES = {
-  3: "Include plans for the annual assessment.",
-  4: "File the annual assessment with this report.",
+  3: "Name the annual assessment method by now (NYSED recommends).",
+  4: "Annual assessment is filed with this report (§100.10(h)).",
 };
 
 // Which annual assessments are allowed this year.
@@ -91,7 +97,7 @@ export function assessmentRule(grade, lastMethod, lastGrade) {
   if (g >= 9) {
     return { narrative: false, test: true, text: "Grades 9–12: a standardized test is required every year. A narrative is not accepted." };
   }
-  const base = "Grades 4–8: a written narrative may be used only in alternate years, so at least every other year must be a standardized test.";
+  const base = "Grades 4–8: a written narrative may be used no more often than every other school year, so at least every other year must be a standardized test.";
   if (lastMethod === "narrative" && Number(lastGrade) >= 4) {
     return { narrative: false, test: true, text: base + " Last year was a narrative, so this year must be a standardized test." };
   }
@@ -101,27 +107,40 @@ export function assessmentRule(grade, lastMethod, lastGrade) {
   return { narrative: true, test: true, text: base + " Check which method you used last year before choosing a narrative." };
 }
 
+// §100.10(h)(2)(iii): who may prepare a written narrative. Whoever it is must
+// have interviewed the child and reviewed a portfolio of the child's work, and
+// is chosen by the parent with the superintendent's consent. NYSED's Q&A
+// confirms a parent may do it with that consent.
 export const EVALUATOR_TYPES = [
   "NYS certified teacher",
   "Home instruction peer review panel",
-  "Other person approved by the superintendent",
+  "Other person, with the superintendent's consent",
+  "Parent, with the superintendent's consent",
 ];
 
+// §100.10(h)(1)(ii): where and by whom the test is given.
+export const ADMINISTRATOR_TYPES = [
+  "Public school professional staff",
+  "Registered nonpublic school professional staff",
+  "NYS certified teacher, with the superintendent's consent",
+  "Other qualified person, with the superintendent's consent",
+  "Parent, with the superintendent's consent",
+];
+
+// §100.10(h)(1)(i) names these, plus "a State Education Department test, or
+// another test approved by the State Education Department".
 export const TESTS = [
-  "Iowa Assessments",
-  "Iowa Tests of Basic Skills (ITBS)",
-  "Stanford Achievement Test, 10th ed. (SAT10)",
-  "TerraNova, 3rd ed.",
-  "California Achievement Test (CAT)",
-  "Metropolitan Achievement Test (MAT)",
-  "Comprehensive Test of Basic Skills (CTBS)",
-  "PASS Test (Personalized Achievement Summary System)",
-  "NYS Grades 3–8 ELA and Mathematics Tests",
+  "Iowa Test of Basic Skills (Iowa Assessments)",
+  "California Achievement Test",
+  "Stanford Achievement Test",
+  "Comprehensive Test of Basic Skills",
+  "Metropolitan Achievement Test",
+  "NYS Grades 3–8 English Language Arts and Mathematics Tests",
 ];
 
 // A test result is adequate if the composite is above the 33rd percentile on
 // national norms, or shows a year of growth over a test from the prior year.
-export const TEST_STANDARD = "above the 33rd percentile on national norms, or one academic year of growth compared with a test taken during or after the prior school year";
+export const TEST_STANDARD = "above the 33rd percentile on national norms, or the score reflects one academic year of growth compared with a test administered during or after the prior school year";
 
 // Default quarterly due dates (month-day). Families set their own on the IHIP.
 export const DEFAULT_QUARTER_DUES = ["11-30", "01-30", "04-30", "06-30"];

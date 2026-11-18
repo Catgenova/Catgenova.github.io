@@ -169,7 +169,7 @@ function buildIHIP(ctx, d) {
   });
 
   r.section("Instructional time");
-  r.paragraph(`Instruction will total at least ${hours} hours over the school year, on the substantial equivalent of 180 days, as required for grade ${ctx.grade || "level"} students. Hours are logged and reported each quarter.`);
+  r.paragraph(`Instruction will total at least ${hours} hours over the school year, on the substantial equivalent of 180 days, as required for grade ${ctx.grade || "level"} students (§100.10(f)). Attendance records are kept and are available to the district on request, and hours are reported each quarter.`);
   if (d.schedule) r.paragraph(d.schedule);
 
   r.section("Required courses", "Syllabi, curriculum materials, textbooks or plan of instruction");
@@ -286,11 +286,12 @@ function buildNarrative(ctx, d) {
     });
   }
 
-  r.section("Determination");
-  r.check(d.adequate !== "no", `${fullName(ctx.child)} has made adequate academic progress, commensurate with ability, during the ${yearDisplay(ctx.year)} school year.`);
-  r.check(d.adequate === "no", "The student has not made adequate academic progress.");
+  r.section("Certification");
+  r.paragraph(`I have interviewed ${fullName(ctx.child)} and reviewed a portfolio of the student's work for the ${yearDisplay(ctx.year)} school year, and I certify that:`);
+  r.check(d.adequate !== "no", "The student has made adequate academic progress.");
+  r.check(d.adequate === "no", "The student has failed to make adequate academic progress.");
   r.space(4);
-  r.paragraph(`This written narrative is submitted as the annual assessment under ${REG}, with the fourth quarterly report.`, { size: 9, color: [92, 100, 116] });
+  r.paragraph(`Written narrative prepared under ${REG}(h)(2) by an evaluator chosen by the parent with the superintendent's consent, and filed as the annual assessment with the fourth quarterly report.`, { size: 9, color: [92, 100, 116] });
   if (d.notes) { r.section("Comments"); r.paragraph(d.notes); }
 
   r.signatures([
@@ -332,7 +333,7 @@ function buildTest(ctx, d, attachments) {
   r.check(meetsPct, "The composite score is above the 33rd percentile on national norms.");
   r.check(!meetsPct && !!d.growth, `The results show at least one academic year of growth compared with the prior test${d.growthNote ? ` (${d.growthNote})` : ""}.`);
   r.space(4);
-  r.paragraph(`Under ${REG}, a test result is adequate if it is ${TEST_STANDARD}.`, { size: 9, color: [92, 100, 116] });
+  r.paragraph(`Under ${REG}(h)(1)(v), a score is adequate if the composite is ${TEST_STANDARD}. Individual subtest scores are not used to decide adequacy.`, { size: 9, color: [92, 100, 116] });
 
   if (attachments.length) {
     r.section("Attached score reports");
