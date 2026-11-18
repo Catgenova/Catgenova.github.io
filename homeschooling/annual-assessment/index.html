@@ -1,0 +1,119 @@
+---
+title: Annual Assessment · NYS Homeschool Forms
+description: Prepare the New York homeschool annual assessment as a written narrative or standardized test results with the score report attached, as one formatted PDF.
+hs_page: assessment
+hs_form: true
+---
+<header class="hs-head">
+  <h1>Annual Assessment</h1>
+  <p class="lede">Filed with the fourth quarterly report. Depending on grade, it's a written narrative or standardized test results. Upload the test's score report and it's attached to the same PDF.</p>
+</header>
+
+<div id="hs-context"></div>
+
+<form id="hs-form" class="hs-form" hidden onsubmit="return false">
+  <section class="hs-card">
+    <h2>Method</h2>
+    <div class="hs-grid hs-grid-2" id="hs-last-wrap">
+      <label class="field"><span>Last year's assessment</span>
+        <select data-k="lastMethod">
+          <option value="">Not sure / first year</option>
+          <option value="test">Standardized test</option>
+          <option value="narrative">Written narrative</option>
+        </select>
+      </label>
+    </div>
+    <div id="hs-rule"></div>
+    <div class="hs-radios" role="radiogroup" aria-label="Assessment method">
+      <label class="hs-radio"><input type="radio" name="method" value="narrative" data-k="method"> <span><strong>Written narrative</strong><small>An evaluator reviews the year's work and states whether progress was adequate.</small></span></label>
+      <label class="hs-radio"><input type="radio" name="method" value="test" data-k="method"> <span><strong>Standardized test</strong><small>A nationally normed achievement test, with the score report attached.</small></span></label>
+    </div>
+    <div class="hs-grid hs-grid-2">
+      <label class="field"><span>Date parent(s) sign</span><input type="date" data-k="date"></label>
+    </div>
+  </section>
+
+  <div data-show="method=narrative">
+    <section class="hs-card">
+      <h2>Evaluator</h2>
+      <p class="muted">A New York State certified teacher, a home instruction peer review panel, or another person the superintendent agrees to. Check with your district before a parent writes it.</p>
+      <div class="hs-grid hs-grid-2">
+        <label class="field"><span>Evaluator's name</span><input data-k="evaluator"></label>
+        <label class="field"><span>Qualification</span>
+          <select data-k="evaluatorType">
+            <option>NYS certified teacher</option>
+            <option>Home instruction peer review panel</option>
+            <option>Other person approved by the superintendent</option>
+          </select>
+        </label>
+        <label class="field"><span>Certificate or credential (optional)</span><input data-k="credential" placeholder="e.g. NYS Professional Certificate, Childhood Education 1–6"></label>
+        <label class="field"><span>Date of evaluation</span><input type="date" data-k="reviewDate"></label>
+        <label class="field hs-span-2"><span>Evidence reviewed</span><input data-k="reviewMethod"></label>
+      </div>
+    </section>
+    <section class="hs-card">
+      <h2>Narrative</h2>
+      <label class="field"><span>Summary of the year</span>
+        <textarea rows="5" data-k="summary" placeholder="Overall progress, hours met, highlights, strengths and next steps"></textarea>
+      </label>
+      <h3>Progress by subject</h3>
+      <div id="hs-n-subjects" class="hs-rows hs-subjects"></div>
+      <div class="game-actions">
+        <button class="btn" type="button" data-act="add-subject">Add a subject</button>
+        <button class="btn btn-quiet" type="button" data-act="subjects-from-ihip">Match subjects to the IHIP</button>
+      </div>
+      <h3>Determination</h3>
+      <div class="hs-radios">
+        <label class="hs-radio"><input type="radio" name="adequate" value="yes" data-k="adequate"> <span>Adequate academic progress, commensurate with ability</span></label>
+        <label class="hs-radio"><input type="radio" name="adequate" value="no" data-k="adequate"> <span>Not adequate progress</span></label>
+      </div>
+    </section>
+  </div>
+
+  <div data-show="method=test">
+    <section class="hs-card">
+      <h2>Test</h2>
+      <div class="hs-grid hs-grid-2">
+        <label class="field"><span>Test name</span><input data-k="testName" list="hs-tests" placeholder="Choose or type"></label>
+        <label class="field"><span>Form / level / edition</span><input data-k="testLevel"></label>
+        <label class="field"><span>First day administered</span><input type="date" data-k="testDate"></label>
+        <label class="field"><span>Last day (if more than one)</span><input type="date" data-k="testDateEnd"></label>
+        <label class="field"><span>Administered by</span><input data-k="administrator"></label>
+        <label class="field"><span>Administrator's qualification</span>
+          <select data-k="administratorType">
+            <option>NYS certified teacher</option>
+            <option>Home instruction peer review panel</option>
+            <option>Other person approved by the superintendent</option>
+            <option>Testing service / proctored online</option>
+          </select>
+        </label>
+      </div>
+      <datalist id="hs-tests">
+        <option>Iowa Assessments</option><option>Iowa Tests of Basic Skills (ITBS)</option><option>Stanford Achievement Test, 10th ed. (SAT10)</option><option>TerraNova, 3rd ed.</option><option>California Achievement Test (CAT)</option><option>Metropolitan Achievement Test (MAT)</option><option>Comprehensive Test of Basic Skills (CTBS)</option><option>PASS Test</option><option>NYS Grades 3–8 ELA and Mathematics Tests</option>
+      </datalist>
+    </section>
+    <section class="hs-card">
+      <h2>Scores</h2>
+      <div id="hs-scores" class="hs-rows hs-rows-scores"></div>
+      <button class="btn" type="button" data-act="add-score">Add a score</button>
+      <div class="hs-grid hs-grid-2 hs-gap-top">
+        <label class="field"><span>Composite national percentile</span><input data-k="composite" inputmode="numeric" placeholder="e.g. 68"></label>
+      </div>
+      <label class="hs-check"><input type="checkbox" data-k="growth"> Composite is 33rd percentile or below, but shows a year of growth over last year's test</label>
+      <label class="field" data-show="growth"><span>Growth details</span><input data-k="growthNote" placeholder="e.g. Grade equivalent 4.1 in May 2025 to 5.3 in May 2026"></label>
+    </section>
+    <section class="hs-card">
+      <h2>Score report</h2>
+      <p class="muted">Add the score report as PDF, JPG or PNG. Its pages are added to the end of the PDF with the same header and page numbers. Files aren't saved in your browser, so add them again if you come back later.</p>
+      <label class="btn hs-file-btn">Add files<input type="file" id="hs-files" multiple accept="application/pdf,image/*" class="visually-hidden"></label>
+      <div id="hs-file-list"></div>
+    </section>
+  </div>
+
+  <section class="hs-card">
+    <h2>Comments (optional)</h2>
+    <label class="field"><span class="visually-hidden">Comments</span><textarea rows="2" data-k="notes"></textarea></label>
+  </section>
+
+  <div id="hs-finish"></div>
+</form>

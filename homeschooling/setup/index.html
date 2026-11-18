@@ -1,0 +1,84 @@
+---
+title: Family setup · NYS Homeschool Forms
+description: Enter your family, school district and students once. Every New York homeschool form on this site fills them in.
+hs_page: setup
+---
+<header class="hs-head">
+  <h1>Family setup</h1>
+  <p class="lede">Enter these once. Every form fills them in, and they're saved in this browser as you type.</p>
+</header>
+
+<form id="hs-setup" class="hs-form" autocomplete="on" onsubmit="return false">
+  <p class="hs-saved" id="hs-setup-saved" role="status" aria-live="polite"></p>
+
+  <section class="hs-card">
+    <h2>Parents and home</h2>
+    <div class="hs-grid hs-grid-2">
+      <label class="field hs-span-2"><span>Parent(s) or guardian(s)</span>
+        <input data-k="family.parents" autocomplete="name" placeholder="e.g. Jordan Rivera & Casey Rivera">
+        <small>Separate two names with “&”. Each gets a signature line.</small>
+      </label>
+      <label class="field hs-span-2"><span>Individuals providing instruction</span>
+        <input data-k="family.instructors" placeholder="Usually the parents; add tutors, co-op or online teachers">
+      </label>
+      <label class="field hs-span-2"><span>Street address</span><input data-k="family.street" autocomplete="street-address"></label>
+      <label class="field"><span>City or town</span><input data-k="family.city" autocomplete="address-level2"></label>
+      <div class="hs-grid hs-grid-2">
+        <label class="field"><span>State</span><input data-k="family.state" autocomplete="address-level1" maxlength="2"></label>
+        <label class="field"><span>ZIP</span><input data-k="family.zip" autocomplete="postal-code" inputmode="numeric"></label>
+      </div>
+      <label class="field"><span>Phone</span><input data-k="family.phone" type="tel" autocomplete="tel"></label>
+      <label class="field"><span>Email</span><input data-k="family.email" type="email" autocomplete="email"></label>
+    </div>
+  </section>
+
+  <section class="hs-card">
+    <h2>School district</h2>
+    <p class="muted">Reports go to the superintendent of the public school district where you live (in New York City, the Central Office of Home Schooling).</p>
+    <div class="hs-grid hs-grid-2">
+      <label class="field hs-span-2"><span>District name</span><input data-k="family.district" placeholder="e.g. Anytown Central School District"></label>
+      <label class="field"><span>Superintendent</span><input data-k="family.superintendent" placeholder="e.g. Dr. Alex Morgan"></label>
+      <label class="field"><span>District email for home instruction</span><input data-k="family.districtEmail" type="email"></label>
+      <label class="field"><span>District street address</span><input data-k="family.districtStreet"></label>
+      <label class="field"><span>District city, state, ZIP</span><input data-k="family.districtCity" placeholder="e.g. Anytown, NY 13000"></label>
+    </div>
+  </section>
+
+  <section class="hs-card">
+    <h2>School year</h2>
+    <div class="hs-grid hs-grid-2">
+      <label class="field"><span>Current school year</span><select id="hs-set-year"></select>
+        <small>Forms open on this year. New York's school year runs July 1 to June 30.</small>
+      </label>
+    </div>
+    <h3>Default quarterly report due dates</h3>
+    <p class="muted hs-small">Used when you start an IHIP. You can change them on each IHIP, and whatever the IHIP says is what the reports use.</p>
+    <div class="hs-grid hs-grid-4">
+      <label class="field"><span>Quarter 1</span><input type="date" data-qdue="1"></label>
+      <label class="field"><span>Quarter 2</span><input type="date" data-qdue="2"></label>
+      <label class="field"><span>Quarter 3</span><input type="date" data-qdue="3"></label>
+      <label class="field"><span>Quarter 4</span><input type="date" data-qdue="4"></label>
+    </div>
+  </section>
+
+  <section class="hs-card">
+    <h2>Students</h2>
+    <p class="muted">One letter of intent, IHIP, set of quarterly reports and annual assessment per student, every year. Set each grade for the current school year. Other years count up or down from it.</p>
+    <div id="hs-children"></div>
+    <div class="game-actions">
+      <button class="btn btn-primary" type="button" data-act="add-child">Add a student</button>
+      <button class="btn btn-quiet" type="button" data-act="example-family">Add an example family</button>
+    </div>
+  </section>
+
+  <section class="hs-card" id="backup">
+    <h2>Back up and move</h2>
+    <p class="muted">Your work lives in this browser only. Clearing site data or switching devices loses it unless you keep a backup file.</p>
+    <div class="game-actions">
+      <button class="btn" type="button" data-act="export">Download backup</button>
+      <button class="btn" type="button" data-act="import">Restore from backup</button>
+      <button class="btn btn-danger" type="button" data-act="wipe">Delete everything</button>
+    </div>
+    <input type="file" id="hs-import" accept="application/json,.json" hidden>
+  </section>
+</form>

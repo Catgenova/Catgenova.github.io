@@ -55,6 +55,10 @@ defaults:
     values: { layout: game }
   - scope: { path: "", type: changelog }
     values: { layout: changelog-entry }
+  # Homeschooling forms: their own layout and stylesheet, and no ad scripts on
+  # pages where families type their children's details.
+  - scope: { path: "homeschooling" }
+    values: { layout: homeschool, extra_css: /homeschooling/assets/hs.css, no_ads: true }
 
 plugins:
   - jekyll-feed
