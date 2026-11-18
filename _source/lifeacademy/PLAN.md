@@ -810,7 +810,7 @@ spent on the *Unwind* ad while the app was stressing them out.
 
 After stage 7, Lens presents a cheerful recap of the session, styled like
 the year-in-review features real apps make (*"Your Lens Replay ✨"*). It
-looks like a reward. It's actually **a video of the whole session at 4×
+looks like a reward. It's actually **a video of the whole session at 7×
 speed**, rebuilt from what Lens recorded, with everything the app was
 computing behind the screen laid on top of it. Nothing is hidden any more:
 every number Lens calculated during the game is on screen somewhere.
@@ -876,7 +876,7 @@ counter, *everyday posts in the feed*, goes 216 → 0.
 │ #5  Dev    my dog learned…      2.7  │ #gaga  ███████ .75 │   +0.25 #gaga #theo  │
 │ #6  Maya   theo vs the wall     4.7  │ #school ████  .48  │   signal: PAUSE 2s — │
 ├──────────────────────────────────────┴────────────────────┴──────────────────────┤
-│ ❚❚  [ 1 | 2 | 3 | 4 | 5 | 6 | 7 ]                               0:47 / 2:03 · 4× │
+│ ❚❚  [ 1 | 2 | 3 | 4 | 5 | 6 | 7 ]                               0:47 / 2:03 · 7× │
 └────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -904,8 +904,8 @@ counter, *everyday posts in the feed*, goes 216 → 0.
   big *What this really is* card, and waits for `Space`. Around each big
   moment (a reaction, a comment, a search, opening the thread, checking who
   liked it, Mr. French's 90 seconds, the gossip post landing) it drops to
-  1× for about five seconds, so the moment can be seen, then speeds back
-  up. The clock shows *1× slow motion* while it does.
+  1× for about five seconds, so the moment can be seen, then speeds back up
+  to 7×. The clock shows *1× slow motion* while it does.
 - **Controls:** `Space` plays and pauses. `→` jumps to the next stage
   (from stage 7, on to the last screens); `←` goes back to the start of
   the stage, or the one before. Click the timeline to seek. On a phone, the
@@ -1082,7 +1082,7 @@ give the instructions.
 | 5 Numbers | 3 | Spot the real names |
 | 6 Bubble | 3 | Search for anything; every result is #GagaGate |
 | 7 Notifications | until they log off | Loud; the room decides every click |
-| Replay | 12 | The 4× video, pausing at each stage, then the last screens |
+| Replay | 12 | The 7× video, pausing at each stage, then the last screens |
 
 The stages run on their own clocks. If time is short, `Shift` + `→` moves
 on early (best in stages 2 and 5); don't cut stage 4, stage 6 or the replay. If the session has to stop partway,
@@ -1139,7 +1139,7 @@ lifeacademy/
   data.js             ← people, posts, ads, comments, other feeds, goals, replay text
   art.js              ← Mr. French's photo (one SVG, cropped for every repost), picture cards, avatars
   lens.js             ← engine: state, recorder, ranker, meters, stages, presenter keys
-  replay.js           ← Lens Replay: the 4× video and the last screens
+  replay.js           ← Lens Replay: the 7× video and the last screens
   img/*.webp          ← 14 student avatars (Pexels stock photos)
   icon.svg            ← Lens favicon
 _source/lifeacademy/
@@ -1191,7 +1191,7 @@ linked from the home page.
      Theo's.
    - `hooks`: stage 7's notifications, looping video, endless feed and the
      dark-pattern dialogs.
-   - `replay`: the 4× video rebuilt from the session record (screen with
+   - `replay`: the 7× video rebuilt from the session record (screen with
      meters, counts and scores; the whole feed re-sorting underneath; the
      interest profile, ranking math, ad auction and signal log), then
      totals, the "what Lens learned" list, and the switch-everything-off
@@ -1208,7 +1208,7 @@ linked from the home page.
 4. **Art:** Mr. French's photo SVG, the crop for every repost, and the ads.
 5. **Stages 1–3.**
 6. **Stages 4–7.**
-7. **Lens Replay:** the 4× video, totals, and the ending.
+7. **Lens Replay:** the 7× video, totals, and the ending.
 8. **Polish:** transitions, reduced motion, keyboard pass, legibility at
    1280×720, and a read-through of every post and comment for tone
    (teasing, never cruel).
@@ -1247,7 +1247,7 @@ but the stage 7 notifications still arrive (as quiet badges).
 | Stage 5 | Show of hands on 48K. Count real names in *Liked by*. *(3 min)* |
 | Stage 6 | Search for something else. "What's Life Academy talking about?" *(3 min)* |
 | Stage 7 | The class decides every click. Find *Log off* (or turn ⏪). |
-| Replay | `→` opens the 4× video; it stops on each stage's reveal card (a student reads it), `Space` plays on. Then *The other feed*. `Shift` + `→` switches everything off. |
+| Replay | `→` opens the 7× video; it stops on each stage's reveal card (a student reads it), `Space` plays on. Then *The other feed*. `Shift` + `→` switches everything off. |
 | After | Discussion questions, one per screen. |
 
 Stages move on by themselves. Keys: `Shift` + `→` move on early · `N` skip animation · `B` blank · `M` mute · `→`/`←` replay stages and screens · `Space` play/pause the replay video · `C` code (optional)

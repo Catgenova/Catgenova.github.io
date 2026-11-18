@@ -1,4 +1,4 @@
-/* Lens Replay: the whole session played back at 4×, from what Lens recorded, with what it was doing laid on top.
+/* Lens Replay: the whole session played back at 7×, from what Lens recorded, with what it was doing laid on top.
    Built only from what actually happened in the room. Nothing here is scripted. */
 'use strict';
 (function () {
@@ -25,10 +25,10 @@
   }
 
   /* ================= The video =================
-     The whole session again at 4×, rebuilt from what Lens recorded twice a second. On the left: Theo's screen, with every
+     The whole session again at 7×, rebuilt from what Lens recorded twice a second. On the left: Theo's screen, with every
      number Lens was computing laid over it, and underneath it the rest of the feed, zoomed out, reordering live, every
      post's score beside it. On the right: everything Lens was calculating about Theo at that moment. */
-  const SPEED = 4, ROW_H = 19, ROWS = 46, CARD_MAX = 4;
+  const SPEED = 7, ROW_H = 19, ROWS = 46, CARD_MAX = 4;
   // The big moments play at normal speed: a little before each one, and a few seconds after.
   const SLOW_BEFORE = 1500, SLOW_AFTER = 4000;
   const isBig = (x) => ['react', 'creact', 'comment', 'search', 'thread', 'glance', 'open'].includes(x.type) || (x.type === 'dwell' && x.id === 'french');
@@ -374,7 +374,7 @@
     switch (c.k) {
       case 'intro': {
         const total = [1, 2, 3, 4, 5, 6, 7].reduce((a, s) => a + (S.rec[s] ? S.rec[s].active : 0), 0);
-        html = `<div class="rp-hero"><div class="rp-logo">Your Lens Replay ✨</div><p>${minsec(total)} as Theo.<br>Here it is again at ${SPEED}× speed, with everything Lens was doing behind the screen.</p><small>Press → to play.</small></div>`;
+        html = `<div class="rp-hero"><div class="rp-logo">Your Lens Replay ✨</div><p>${minsec(total)} as Theo.<br>Here it is again at ${SPEED}× speed (slowing down for the big moments), with everything Lens was doing behind the screen.</p><small>Press → to play.</small></div>`;
         break;
       }
       case 'video':

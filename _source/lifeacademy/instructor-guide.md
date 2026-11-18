@@ -98,7 +98,7 @@ finish (up to a minute). `Shift` + `→` still moves on early if you need it.
 ## Lens Replay (~12 min)
 
 - Press **`→`** on the title screen to open the **video**: the whole session
-  again at 4×. Theo's screen is top left with every hidden meter, count and
+  again at 7×. Theo's screen is top left with every hidden meter, count and
   score showing. The rest of the feed is underneath, re-sorting live. Lens's
   side is on the right: the interest profile, the ranking math, the ad
   auction and every signal.

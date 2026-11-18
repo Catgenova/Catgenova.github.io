@@ -632,7 +632,7 @@ body { overflow-x: hidden; }
 .pcomments .replies { margin-left: 2.6rem; display: flex; flex-direction: column; gap: .4rem; }
 .pcomments .replies .comment { background: var(--surface); border: 1px solid var(--line); }
 
-/* ---------- The replay video: Theo's screen at 4× with every number Lens computed laid over it,
+/* ---------- The replay video: Theo's screen at 7× with every number Lens computed laid over it,
    the feed reordering underneath, and Lens's side of it on the right ---------- */
 .rp-wrap.rp-video { display: block; padding: 0; min-height: 0; }
 .vp { height: 100vh; display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: minmax(0, 1fr) auto; gap: .6rem 1rem; padding: .7rem 1rem .6rem; font-size: .8rem; }
