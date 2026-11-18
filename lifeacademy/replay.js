@@ -28,7 +28,7 @@
      The whole session again at 7×, rebuilt from what Lens recorded twice a second. On the left: Theo's screen, with every
      number Lens was computing laid over it, and underneath it the rest of the feed, zoomed out, reordering live, every
      post's score beside it. On the right: everything Lens was calculating about Theo at that moment. */
-  const SPEED = 7, ROW_H = 19, ROWS = 46, CARD_MAX = 4;
+  const SPEED = 7, ROW_H = 21, ROWS = 40, CARD_MAX = 4;
   // The big moments play at normal speed: a little before each one, and a few seconds after.
   const SLOW_BEFORE = 1500, SLOW_AFTER = 4000;
   const isBig = (x) => ['react', 'creact', 'comment', 'search', 'thread', 'glance', 'open'].includes(x.type) || (x.type === 'dwell' && x.id === 'french');
@@ -77,16 +77,14 @@
         <div class="vp-below"><div class="vp-belowlabel"><span>↓ the rest of Theo’s feed, in the order Lens put it</span><span>score</span></div><div class="vp-rows"></div></div>
       </div>
       <div class="vp-side">
-        <div class="vp-a">
-          <div class="vp-stage"></div>
-          <div class="vp-cap"></div>
-          <div class="vp-gauges"></div>
-          <div class="vp-box"><h4>What Lens thinks Theo is interested in</h4><div class="vp-int"></div></div>
-        </div>
-        <div class="vp-b">
-          <div class="vp-box"><h4>Ranking the posts on screen <small>3×interest match + 0.9×log(engagement) + Theo’s reaction</small></h4><div class="vp-rank"></div></div>
-          <div class="vp-box"><h4>Ad auction <small>bid × (0.2 + interest match)</small></h4><div class="vp-ads"></div></div>
-          <div class="vp-log"></div>
+        <div class="vp-top"><div class="vp-stage"></div><div class="vp-cap"></div></div>
+        <div class="vp-gauges"></div>
+        <div class="vp-box vp-intbox"><h4>What Lens thinks Theo is interested in</h4><div class="vp-int"></div></div>
+        <div class="vp-box vp-eng">
+          <div class="vp-tabs"><span data-tab="rank">Ranking</span><span data-tab="ads">Ad auction</span><span data-tab="sig">Signals</span></div>
+          <div class="vp-pane" data-pane="rank"><small class="vp-f">score = 3 × interest match + 0.9 × log(engagement) + Theo’s reaction</small><div class="vp-rank"></div></div>
+          <div class="vp-pane" data-pane="ads" hidden><small class="vp-f">score = bid × (0.2 + interest match) · the highest score gets the slot</small><div class="vp-ads"></div></div>
+          <div class="vp-pane" data-pane="sig" hidden><div class="vp-log"></div></div>
         </div>
       </div>
       <div class="vp-reveal" hidden></div>
@@ -95,7 +93,7 @@
   }
 
   function videoMount() {
-    V = { ...vTimeline(), T: 0, playing: true, last: performance.now(), raf: 0, iTl: -1, iOrd: -1, iSig: 0, iEv: 0, pushed: {}, flashes: [], toasts: [], log: [], rows: new Map(), cards: new Map(), side: new Map(), stage: 0, lastDraw: 0 };
+    V = { ...vTimeline(), T: 0, playing: true, last: performance.now(), raf: 0, iTl: -1, iOrd: -1, iSig: 0, iEv: 0, pushed: {}, flashes: [], toasts: [], log: [], rows: new Map(), cards: new Map(), side: new Map(), eng: null, stage: 0, lastDraw: 0 };
     const el = root(), track = el.querySelector('.vp-track');
     track.innerHTML = V.segs.map(g => `<div class="vp-seg" style="flex:${Math.max(g.dur, 1)}"><span>${g.s}</span></div>`).join('') + '<div class="vp-head"></div>';
     track.addEventListener('click', e => {
@@ -139,7 +137,7 @@
       const x = V.sig[V.iSig++];
       if (x.id && V.pushed[x.id] == null) V.pushed[x.id] = x.t;
       V.log.unshift(x); if (V.log.length > 5) V.log.length = 5;
-      if (!silent) V.flashes.push({ x, until: now + 2400 });
+      if (!silent) V.flashes.push({ x, until: now + 2400, drawn: false });
     }
     while (V.iEv < V.ev.length && V.ev[V.iEv].t <= V.T) {
       const e = V.ev[V.iEv++];
@@ -287,12 +285,22 @@
         r = document.createElement('div');
         r.className = 'vp-row in vp-' + catOf(id);
         r.style.setProperty('--c', CAT_VAR[catOf(id)]);
-        r.innerHTML = `<i></i><em></em><b>${esc(nameOf(id))}</b><span>${esc(trunc(ad ? (p.brand + ': ' + p.head) : p.text, 80))}</span><u></u>`;
+        r.innerHTML = `<i></i><em></em><b>${esc(nameOf(id))}</b><span>${esc(trunc(ad ? (p.brand + ': ' + p.head) : p.text, 80))}</span><s></s><u></u>`;
         r.style.transform = `translateY(${(i + 4) * ROW_H}px)`;
         rowsEl.append(r); V.rows.set(id, r);
         requestAnimationFrame(() => r.classList.remove('in'));
       }
       const at = last + 1 + i;
+      if (r._at != null && r._at !== at) {
+        const d = r._at - at, badge = r.querySelector('s');
+        r.classList.add('moving'); clearTimeout(r._mt); r._mt = setTimeout(() => r.classList.remove('moving'), 1250);
+      }
+      if (r._at != null && Math.abs(r._at - at) >= 2) {
+        const d = r._at - at, badge = r.querySelector('s');
+        badge.textContent = d > 0 ? `▲${d}` : `▼${-d}`; badge.className = d > 0 ? 'up show' : 'down show';
+        clearTimeout(r._bt); r._bt = setTimeout(() => { badge.className = ''; }, 2600);
+      }
+      r._at = at;
       set(r.querySelector('em'), '#' + (at + 1));
       set(r.querySelector('u'), ord.sc[at] != null ? String(ord.sc[at]) : '');
       const y = `translateY(${i * ROW_H}px)`;
@@ -313,23 +321,56 @@
     const s7 = X.s7;
     set(el.querySelector('.vp-gauges'), [
       [counts.other, 'everyday posts in the feed', 'grey'],
-      [counts.story + counts.teacher, 'posts about Theo & gagaball', 'hot'],
-      [(X.share != null ? X.share : 0) + '%', 'Lens’s guess Theo wants #GagaGate', 'hot'],
-      [stageNo === 1 ? '90s' : stageNo >= 6 ? '0s' : (X.thr != null ? X.thr + 's' : '–'), stageNo === 1 ? 'on screen to count as interest' : 'pause needed to count as interest', ''],
-      [X.cf || 0, 'signals counted', ''],
-      [X.keys || 0, 'keystrokes recorded', ''],
-      ...(s7 ? [[s7[0], 'notifications sent', 'hot'], [s7[4], 'auto-pushes, nobody touching', 'hot'], [s7[1], 'video replays (autoplay)', ''], [s7[3], 'posts loaded by the endless feed', ''], [s7[5], 'tries to log off', '']] : []),
+      [counts.story + counts.teacher, 'posts about Theo', 'hot'],
+      [(X.share != null ? X.share : 0) + '%', 'Lens’s guess: Theo wants #GagaGate', 'hot'],
+      ...(s7 ? [[s7[0], 'notifications sent', 'hot'], [s7[4], 'auto-pushes, nobody touching', 'hot'], [s7[5], 'tries to log off', '']]
+        : [[stageNo === 1 ? '90s' : stageNo >= 6 ? '0s' : (X.thr != null ? X.thr + 's' : '–'), stageNo === 1 ? 'on screen = interest' : 'pause = interest', ''],
+          [X.cf || 0, 'signals counted', ''], [X.keys || 0, 'keystrokes recorded', '']]),
     ].map(([b, s, c]) => `<div class="vp-g ${c}"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join(''));
-    const ints = Object.entries(X.i || {}).sort((a, b) => b[1] - a[1]).slice(0, 10), maxI = Math.max(1, ...ints.map(x => x[1]));
-    set(el.querySelector('.vp-int'), ints.map(([t, v]) => `<div class="vp-ib${STORY_T[t] ? ' hot' : ''}"><span>#${esc(t)}</span><div><i style="width:${Math.round(v / maxI * 100)}%"></i></div><b>${v.toFixed(2)}</b></div>`).join(''));
-    set(el.querySelector('.vp-rank'), (X.rk || []).length ? `<table><tr><th></th><th>interest</th><th>engage</th><th>react</th><th>score</th></tr>${X.rk.map(([id, m, e, r, s]) => `<tr class="vp-${catOf(id)}"><td>${esc(trunc(shortOf(id), 20))}</td><td>${m.toFixed(2)}</td><td>${e.toFixed(2)}</td><td>${r ? (r > 0 ? '+' : '') + r.toFixed(1) : '·'}</td><td><b>${s.toFixed(2)}</b></td></tr>`).join('')}</table>` : '<p class="vp-none">nothing on screen</p>');
+    const ints = Object.entries(X.i || {}).sort((a, b) => b[1] - a[1]).slice(0, 6), maxI = Math.max(1, ...ints.map(x => x[1]));
+    const glow = new Set(V.flashes.filter(f => f.until > now).flatMap(f => f.x.topics || []));
+    set(el.querySelector('.vp-int'), ints.map(([t, v]) => `<div class="vp-ib${STORY_T[t] ? ' hot' : ''}${glow.has(t) ? ' glow' : ''}" data-t="${esc(t)}"><span>#${esc(t)}</span><div><i style="width:${Math.round(v / maxI * 100)}%"></i></div><b>${v.toFixed(2)}</b></div>`).join(''));
+    set(el.querySelector('.vp-rank'), (X.rk || []).length ? `<table><tr><th></th><th>interest</th><th>engage</th><th>react</th><th>score</th></tr>${X.rk.map(([id, m, e, r, s]) => `<tr class="vp-${catOf(id)}"><td>${esc(trunc(shortOf(id), 24))}</td><td>${m.toFixed(2)}</td><td>${e.toFixed(2)}</td><td>${r ? (r > 0 ? '+' : '') + r.toFixed(1) : '·'}</td><td><b>${s.toFixed(2)}</b></td></tr>`).join('')}</table>` : '<p class="vp-none">nothing on screen</p>');
     set(el.querySelector('.vp-ads'), (X.ads || []).map(([a, s], i) => { const ad = L.ads.find(z => z.id === a) || {}; return `<div class="vp-ar${i === 0 ? ' win' : ''}"><span>${ad.art || ''} ${esc(ad.brand || a)}</span><em>$${(ad.bid || 0).toFixed(2)} bid</em><b>${s.toFixed(2)}</b></div>`; }).join('') || '<p class="vp-none">no ads yet</p>');
-    set(el.querySelector('.vp-log'), '<small>Signals pushed to the algorithm</small>' + (V.log.length ? V.log.map(x => `<div class="vp-logrow"><span class="ok">✓</span> <b>${esc(SIGNAL_LABEL[x.type] || x.type)}${x.type === 'react' || x.type === 'creact' ? ' ' + (EMO[x.detail] || '') : ''}</b> <em>${esc(trunc(x.type === 'search' ? '“' + x.detail + '”' : shortOf(x.id || ''), 24))}</em>${x.amt != null ? ` <span class="vp-amt">+${x.amt} ${esc((x.topics || []).map(t => '#' + t).join(' '))}</span>` : ''}<div class="vp-lmsg">${esc(x.msg || '')}</div></div>`).join('') : '<div class="vp-logrow none">nothing yet: Lens is just watching</div>'));
+    set(el.querySelector('.vp-log'), (V.log.length ? V.log.slice(0, 4).map(x => `<div class="vp-logrow"><span class="ok">✓</span> <b>${esc(SIGNAL_LABEL[x.type] || x.type)}${x.type === 'react' || x.type === 'creact' ? ' ' + (EMO[x.detail] || '') : ''}</b> <em>${esc(trunc(x.type === 'search' ? '“' + x.detail + '”' : shortOf(x.id || ''), 24))}</em>${x.amt != null ? ` <span class="vp-amt">+${x.amt} ${esc((x.topics || []).map(t => '#' + t).join(' '))}</span>` : ''}<div class="vp-lmsg">${esc(x.msg || '')}</div></div>`).join('') : '<div class="vp-logrow none">nothing yet: Lens is just watching</div>'));
+
+    // one box for the ranking, the ad auction and the signals: it switches to whichever just changed
+    const E = V.eng || (V.eng = { tab: 'rank', until: 0 });
+    const adsKey = (X.ads || []).map(a => a[0]).join(','), rkKey = (X.rk || []).map(r => r[0] + (r[3] ? '+' : '')).join(',');
+    if (!force && E.ads != null) {
+      const want = V.iSig > E.sig ? 'sig' : adsKey !== E.ads ? 'ads' : rkKey !== E.rk ? 'rank' : null;
+      if (want && (want === 'sig' || now >= E.until)) { E.tab = want; E.until = now + (want === 'sig' ? 4000 : 3000); }
+    }
+    E.sig = V.iSig; E.ads = adsKey; E.rk = rkKey;
+    el.querySelectorAll('.vp-tabs [data-tab]').forEach(t => t.classList.toggle('on', t.dataset.tab === E.tab));
+    el.querySelectorAll('.vp-pane').forEach(p => { p.hidden = p.dataset.pane !== E.tab; });
+    // cause and effect: an arrow from the post Theo touched to the interest it grew
+    V.flashes.forEach(f => { if (!f.drawn) { f.drawn = true; if ((f.x.topics || []).length && !V.card) vArrow(el, f.x); } });
 
     el.querySelector('.vp-head').style.left = (V.total ? V.T / V.total * 100 : 0) + '%';
     const sp = vSpeed(V.T), ck = `${clock(V.T)} / ${clock(V.total)} · ${sp === 1 ? '1× slow motion' : sp + '×'}`;
     const ckEl = el.querySelector('.vp-clock'); if (ckEl.textContent !== ck) ckEl.textContent = ck;
     ckEl.classList.toggle('slow', sp === 1);
+  }
+  let arrowN = 0;
+  function vArrow(el, x) {
+    const vp = el.querySelector('.vp'); if (!vp) return;
+    const box = vp.getBoundingClientRect(), card = x.id && V.cards.get(x.id);
+    const src = (card && card.isConnected ? card : el.querySelector('.vp-screen')).getBoundingClientRect();
+    const t = (x.topics || []).find(t => el.querySelector(`.vp-ib[data-t="${t}"]`));
+    const dst = (t ? el.querySelector(`.vp-ib[data-t="${t}"]`) : el.querySelector('.vp-intbox')).getBoundingClientRect();
+    const x1 = Math.min(src.right, box.left + box.width * 0.53) - box.left - 8, y1 = src.top + Math.min(src.height / 2, 60) - box.top;
+    const x2 = dst.left - box.left - 4, y2 = dst.top + dst.height / 2 - box.top, k = Math.max(60, (x2 - x1) * 0.5);
+    const stack = vp.querySelectorAll('.vp-arrow:not(.out)').length;   // a second arrow at the same moment: its label goes below
+    const id = 'vpah' + (++arrowN), label = `+${x.amt} ${(x.topics || []).map(t => '#' + t).join(' ')}`;
+    const a = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    a.setAttribute('class', 'vp-arrow'); a.setAttribute('width', box.width); a.setAttribute('height', box.height);
+    a.innerHTML = `<defs><marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z"/></marker></defs>
+      <path class="ln" d="M${x1} ${y1} C${x1 + k} ${y1}, ${x2 - k} ${y2}, ${x2} ${y2}" marker-end="url(#${id})"/>
+      <text x="${(x1 + x2) / 2}" y="${(y1 + y2) / 2 - 10 + stack * 22}">${esc(label)}</text>`;
+    vp.append(a);
+    setTimeout(() => a.classList.add('out'), 2000);
+    setTimeout(() => a.remove(), 2600);
   }
   function vNextStage() { const g = V.segs.find(x => x.off > V.T + 500); if (g) { vSeek(g.off); if (!V.raf) V.raf = requestAnimationFrame(vFrame); return true; } return false; }
   function vPrevStage() {

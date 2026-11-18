@@ -1026,6 +1026,7 @@
       if (n >= 2 && n <= 7 && n !== 6) rerankAdsOnly();
       recordOrder();
       save(true);
+      if (n >= 2) showUpdating();
     }
     $('#login').hidden = true;
     if (document.activeElement && document.activeElement.closest && document.activeElement.closest('#login')) document.activeElement.blur();
@@ -1035,6 +1036,16 @@
     await stageIntro[n](!opts.resume);
     recordOrder();
     save(true);
+  }
+
+  // The only sign a stage has changed: the feed refreshes, like any app does.
+  function showUpdating() {
+    $('#newpill') && $('#newpill').remove();   // the stage-1 "new post" pill would sit right under it
+    const u = h('<div class="updating"><span class="spinner"></span>Updating your feed…</div>');
+    document.body.append(u);
+    feedEl.classList.remove('refreshing'); void feedEl.offsetWidth; feedEl.classList.add('refreshing');
+    const r = rec(); (r.ev = r.ev || []).push({ t: r.active, text: 'Updating your feed…', icon: '↻' });
+    setTimeout(() => { u.classList.add('out'); feedEl.classList.remove('refreshing'); setTimeout(() => u.remove(), 450); }, 2200);
   }
 
   async function forceConfirm() {
@@ -1531,6 +1542,16 @@
       if (e.key === ' ') { e.preventDefault(); L.Replay.play(); }
     }
   });
+
+  /* Every click shows on the projector: a ring where it landed, and the button it pressed lights up. */
+  document.addEventListener('pointerdown', e => {
+    if (e.button > 0) return;
+    const ring = document.createElement('div');
+    ring.className = 'click-ring'; ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+    document.body.append(ring); setTimeout(() => ring.remove(), 650);
+    const b = e.target.closest && e.target.closest('button, a, .react, [role=button], .clickable, label.switch, summary, .comments-link, .cr-btn');
+    if (b) { b.classList.remove('pressed'); void b.offsetWidth; b.classList.add('pressed'); setTimeout(() => b.classList.remove('pressed'), 650); }
+  }, true);
 
   /* ---------------- boot ---------------- */
   L.save = save;

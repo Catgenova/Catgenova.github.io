@@ -15,6 +15,10 @@ nothing on screen shows it until the replay.
 | 6 | 3 min | 25:45 |
 | 7 | until the class logs off | |
 
+When a stage ends, an *"Updating your feed…"* pill appears and the feed
+refreshes: that's the class's cue that something changed. Every click you
+make shows as a ring on screen, so the room can follow.
+
 The clocks only run while the page is on screen. If the class is halfway
 through typing a reply when a stage's time is up, Lens waits for them to
 finish (up to a minute). `Shift` + `→` still moves on early if you need it.
@@ -110,6 +114,10 @@ finish (up to a minute). `Shift` + `→` still moves on early if you need it.
   post landing. The clock says *1× slow motion* while it does. Point at the
   grey rows sinking and the orange rows rising, and at *everyday posts in the
   feed* falling to 0 in stage 6.
+- **Orange arrows** run from a post to the interest it grew, each time a
+  signal fires. In the feed underneath, a row that jumps shows how far
+  (▲25). The box at bottom right switches between *Ranking*, *Ad auction*
+  and *Signals* to show whichever just changed.
 - **`Space`** also pauses at any moment. **`→`** jumps to the next stage's
   card, **`←`** goes back. Click the timeline to seek.
 - After stage 7, `→` opens **The other feed**: what Lens showed Theo next to

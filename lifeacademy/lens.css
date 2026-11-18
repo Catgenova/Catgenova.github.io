@@ -810,3 +810,76 @@ body { overflow-x: hidden; }
   .vp-reveal b { font-size: 1.9rem; }
   .vp-reveal > div { margin: 0 1rem; }
 }
+
+/* ---------- replay, projector-sized: one column of big numbers on the right ---------- */
+.vp-side { display: flex; flex-direction: column; gap: .5rem; min-height: 0; overflow: hidden; }
+.vp-top { display: flex; flex-direction: column; gap: .3rem; }
+.vp-cap { padding: .55rem .85rem; }
+.vp-cap > b { font-size: 1.35rem; }
+.vp-cap p { font-size: .8rem; }
+.vp-gauges { grid-template-columns: repeat(3, 1fr); gap: .4rem; }
+.vp-g { padding: .3rem .6rem; }
+.vp-g b { font-size: 1.4rem; }
+.vp-g span { font-size: .68rem; }
+.vp-box { padding: .5rem .7rem; }
+.vp-box h4 { font-size: .74rem; }
+.vp-ib { grid-template-columns: 6em 1fr 3em; font-size: .8rem; gap: .5rem; padding: .05rem .2rem; border-radius: .3rem; transition: background .3s; }
+.vp-ib div { height: .6rem; }
+.vp-ib.glow { background: #fff1e8; box-shadow: 0 0 0 .12rem var(--series-story); }
+.vp-eng { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.vp-tabs { display: flex; gap: .3rem; margin-bottom: .35rem; }
+.vp-tabs span { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: .15rem .6rem; border-radius: 1rem; color: var(--ink-3); background: var(--bg); transition: background .3s, color .3s; }
+.vp-tabs span.on { background: var(--ink); color: #fff; }
+.vp-pane { min-height: 0; overflow: hidden; animation: fade .3s ease both; }
+.vp-f { display: block; color: var(--ink-3); font-size: .68rem; font-weight: 600; margin-bottom: .3rem; }
+.vp-rank table { font-size: .82rem; }
+.vp-rank th { font-size: .64rem; }
+.vp-rank td { padding: .12rem .2rem; }
+.vp-rank td:first-child { max-width: 12em; }
+.vp-ar { font-size: .82rem; padding: .1rem 0; grid-template-columns: 1fr auto 3.2em; }
+.vp-log { font-size: .74rem; line-height: 1.45; padding: .5rem .7rem; }
+.vp-logrow { margin-bottom: .35rem; }
+.vp-lmsg { white-space: normal; }
+
+/* the screen a little bigger too */
+.vp-card { font-size: .8rem; }
+.vp-meter { font-size: .7rem; width: 13.5rem; }
+.vp-nums { font-size: .72rem; }
+.vp-row { height: 19px; line-height: 19px; font-size: 12.5px; }
+.vp-belowlabel { font-size: .7rem; }
+
+/* rows moving: the text hides while it slides, then a badge says how far */
+.vp-row span, .vp-row b { transition: opacity .25s; }
+.vp-row.moving span, .vp-row.moving b { opacity: 0; }
+.vp-row.moving { z-index: 2; box-shadow: 0 .15rem .5rem rgba(0, 0, 0, .15); }
+.vp-row s { flex: none; text-decoration: none; font-weight: 900; font-size: 11px; padding: 0 .35rem; border-radius: 3px; opacity: 0; transition: opacity .3s; }
+.vp-row s.show { opacity: 1; }
+.vp-row s.up { background: var(--series-story); color: #fff; }
+.vp-row s.down { background: var(--line); color: var(--ink-2); }
+
+/* cause and effect */
+.vp { position: relative; }
+.vp-arrow { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 15; overflow: visible; transition: opacity .6s; }
+.vp-arrow.out { opacity: 0; }
+.vp-arrow .ln { fill: none; stroke: var(--series-story); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: vpdraw .7s ease-out forwards; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .25)); }
+.vp-arrow marker path { fill: var(--series-story); }
+.vp-arrow text { font: 900 15px system-ui, sans-serif; fill: var(--series-story); paint-order: stroke; stroke: #fff; stroke-width: 4px; text-anchor: middle; animation: fade .3s .4s ease both; }
+@keyframes vpdraw { to { stroke-dashoffset: 0; } }
+
+@media (max-width: 860px) {
+  .vp-arrow { display: none; }
+  .vp-side { overflow: visible; }
+  .vp-eng { flex: none; }
+}
+
+/* ---------- in the game: show the room what was clicked ---------- */
+.click-ring { position: fixed; width: 3.2rem; height: 3.2rem; margin: -1.6rem 0 0 -1.6rem; border-radius: 50%; border: .28rem solid var(--accent); pointer-events: none; z-index: 300; animation: clickring .6s ease-out forwards; }
+@keyframes clickring { from { transform: scale(.25); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
+.pressed { box-shadow: 0 0 0 .3rem rgba(91, 69, 224, .55) !important; transition: box-shadow .2s; }
+
+/* ---------- a stage changing on its own ---------- */
+.updating { position: fixed; top: 4.4rem; left: 50%; transform: translateX(-50%); z-index: 45; background: var(--ink); color: #fff; font-weight: 800; border-radius: 2rem; padding: .5rem 1.2rem; display: flex; align-items: center; gap: .6rem; box-shadow: 0 .4rem 1.4rem rgba(0, 0, 0, .3); animation: arrive .35s ease both; transition: opacity .4s; }
+.updating.out { opacity: 0; }
+.updating .spinner { width: 1.1rem; height: 1.1rem; }
+#feed.refreshing { animation: feedflash 1.6s ease; }
+@keyframes feedflash { 25% { opacity: .3; filter: blur(2px); } 100% { opacity: 1; filter: none; } }

@@ -309,6 +309,16 @@ screen, so the class never sees a timer or a "next" button:
   steps back a stage (which restarts that stage's clock) for rehearsal or a
   do-over.
 
+### Showing the room what's happening
+
+- **Every click shows.** A ring appears where the teacher clicks, and the
+  button pressed lights up for a moment, so the class can follow what Theo
+  just did from across the room.
+- **Stage changes show.** When a stage's time is up, an *"Updating your
+  feed…"* pill appears and the feed blurs and refreshes for a moment, the
+  way any app reloads. That's the only sign; there's no message in Theo's
+  voice.
+
 ### Phones and tablets
 
 The page also works on phones and tablets (anything under 860px wide gets
@@ -808,6 +818,9 @@ spent on the *Unwind* ad while the app was stressing them out.
 
 ## 4. Lens Replay (the finale)
 
+<!-- The side panel is one column: the reveal, six big counters, Theo's top six interests, and one box that switches
+     between Ranking, Ad auction and Signals to show whichever just changed (a new signal always wins). -->
+
 After stage 7, Lens presents a cheerful recap of the session, styled like
 the year-in-review features real apps make (*"Your Lens Replay ✨"*). It
 looks like a reward. It's actually **a video of the whole session at 7×
@@ -894,7 +907,14 @@ counter, *everyday posts in the feed*, goes 216 → 0.
   posts about Theo, blue Mr. French, green ads), each with its rank and
   score. When Lens re-sorts, the rows slide to their new places, so the
   class watches the everyday posts sink and the gagaball posts rise.
-- **Lens's side** (right): the stage, **What this really
+- **Cause and effect:** whenever a signal fires, an orange arrow is drawn
+  from the post Theo touched to the interest bar it grew, labeled with the
+  amount (*+0.25 #gaga #theo #drama*), and those bars light up.
+- **Re-sorting you can follow:** a row's text hides while it slides, so
+  rows don't collide, and then it shows how far it moved (an orange ▲25,
+  or a grey ▼2) for a couple of seconds.
+- **Lens's side** (right), sized to read from the back of the room: the
+  stage, **What this really
   is** (the reveal, the first time the class hears the names), counters
   (everyday posts left, posts about Theo, Lens's #GagaGate guess, the
   pause needed, signals counted, keystrokes, and in stage 7 the hooks'
