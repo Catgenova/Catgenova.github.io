@@ -292,9 +292,9 @@ screen, so the class never sees a timer or a "next" button:
 | 1 | 45 s until Mr. French posts, then 4 min | 4:45 |
 | 2 | 6 min | 10:45 |
 | 3 | 5 min | 15:45 |
-| 4 | 3 min | 18:45 |
-| 5 | 3 min | 21:45 |
-| 6 | 3 min | 24:45 |
+| 4 | 4 min | 19:45 |
+| 5 | 3 min | 22:45 |
+| 6 | 3 min | 25:45 |
 | 7 | until the class logs off, which opens Lens Replay | |
 
 - **The clock is the stage's active time.** It only runs while the page is
@@ -900,12 +900,31 @@ counter, *everyday posts in the feed*, goes 216 → 0.
   pause needed, signals counted, keystrokes, and in stage 7 the hooks'
   counts), the interest profile as bars, the ranking formula worked out
   for each post on screen, the ad auction, and the log of signals.
+- **Pacing:** the video stops by itself at the start of every stage on a
+  big *What this really is* card, and waits for `Space`. Around each big
+  moment (a reaction, a comment, a search, opening the thread, checking who
+  liked it, Mr. French's 90 seconds, the gossip post landing) it drops to
+  1× for about five seconds, so the moment can be seen, then speeds back
+  up. The clock shows *1× slow motion* while it does.
 - **Controls:** `Space` plays and pauses. `→` jumps to the next stage
   (from stage 7, on to the last screens); `←` goes back to the start of
   the stage, or the one before. Click the timeline to seek. On a phone, the
   panels stack and swipes work the same as the arrow keys.
 
-Pause on each stage's **What this really is** and have a student read it.
+Have a different student read each stage's **What this really is** card.
+
+### The other feed
+
+Right after the video: **what Lens showed Theo** at the end, next to **the
+same posts ranked by the same formula as if Theo had scrolled past
+everything** (no pauses, no reactions, no comments, no searches, so his
+interests never moved from where they started). Both are the first 12
+items, colored by kind, with a few headline rows: everyday posts in the
+first 12 (typically 0 vs 6), posts about Theo (10 vs 4), the #1 post, and
+the top ad (*Lens Premium* vs *Pixel Quest*). The untouched feed still has
+a few loud gossip posts near the top, because engagement alone lifts them;
+it is worth saying so. The difference between the columns is only what the
+class did.
 
 ### What each stage shows
 
@@ -1051,7 +1070,7 @@ give the instructions.
 - **Replay readers:** a different student reads each stage's "What this
   really is" line aloud.
 
-### Pacing (about 50 minutes, plus 20 for discussion)
+### Pacing (about 51 minutes, plus 20 for discussion)
 
 | Stage | Minutes | Note |
 |---|---|---|
@@ -1059,7 +1078,7 @@ give the instructions.
 | 1 Joke post | 4¾ | Mr. French posts at 0:45; the stage runs 4 more minutes |
 | 2 Reposts | 6 | |
 | 3 Reactions | 5 | Vote before clicking |
-| 4 Thread | 3 | Read the thread, write Theo's reply, watch the comments come in |
+| 4 Thread | 4 | Read the thread, write Theo's reply, watch the comments come in |
 | 5 Numbers | 3 | Spot the real names |
 | 6 Bubble | 3 | Search for anything; every result is #GagaGate |
 | 7 Notifications | until they log off | Loud; the room decides every click |
@@ -1224,11 +1243,11 @@ but the stage 7 notifications still arrive (as quiet badges).
 | Stage 1 | Ask how Theo feels. Let them find the meter. Let it fill. *(4:45)* |
 | Stage 2 | "Why did we stop on that one?" "What's missing from this photo?" *(6 min)* |
 | Stage 3 | Vote on the reaction first. Look for *Not interested*. *(5 min)* |
-| Stage 4 | Open the thread, read it aloud, agree on Theo's reply, type it exactly. "Is that what Theo said?" *(3 min)* |
+| Stage 4 | Open the thread, read it aloud, agree on Theo's reply, type it exactly. "Is that what Theo said?" *(4 min)* |
 | Stage 5 | Show of hands on 48K. Count real names in *Liked by*. *(3 min)* |
 | Stage 6 | Search for something else. "What's Life Academy talking about?" *(3 min)* |
 | Stage 7 | The class decides every click. Find *Log off* (or turn ⏪). |
-| Replay | `→` starts the 4× video. `Space` pause on each stage; a student reads "What this really is." `→` jumps a stage. `Shift` + `→` switches everything off. |
+| Replay | `→` opens the 4× video; it stops on each stage's reveal card (a student reads it), `Space` plays on. Then *The other feed*. `Shift` + `→` switches everything off. |
 | After | Discussion questions, one per screen. |
 
 Stages move on by themselves. Keys: `Shift` + `→` move on early · `N` skip animation · `B` blank · `M` mute · `→`/`←` replay stages and screens · `Space` play/pause the replay video · `C` code (optional)

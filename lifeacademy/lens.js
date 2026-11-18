@@ -115,6 +115,21 @@
   function adScore(id) { const a = ADS[id]; return a.bid * (0.2 + match(a.topics)); }
   L.score = score;
 
+  /* For the replay: the same formula and the same posts, but as if Theo had scrolled past everything.
+     No signals, so his interests never moved from where they started, and he never reacted to anything. */
+  L.neutralFeed = function () {
+    const I = L.startInterest, m = (topics) => { let x = 0; for (const t in topics) x += (I[t] || 0) * topics[t]; return x; };
+    const sc = (p) => { const r = p.r || {}; let e = 0; for (const k in r) e += r[k] * (W[k] || 0); e += (p.shares || 0) * 3 + (p.comments || 0) * 2; return 3 * m(p.topics) + Math.log10(1 + e) * 0.9; };
+    const posts = L.posts.filter(p => p.stage <= 7).map(p => [p.id, sc(p)]).sort((a, b) => b[1] - a[1]);
+    const ads = L.ads.map(a => [a.id, a.bid * (0.2 + m(a.topics))]).sort((a, b) => b[1] - a[1]);
+    const seq = []; let ai = 0;
+    posts.forEach(([id, v], i) => {
+      seq.push([id, Math.round(v * 10) / 10]);
+      if ((i === 1 || (i > 1 && (i - 1) % 4 === 0)) && ai < ads.length) { const [a, av] = ads[ai++]; seq.push(['ad:' + a, Math.round(av * 10) / 10]); }
+    });
+    return seq;
+  };
+
   function rerank(mode) {
     // Add newly eligible posts to the end, then sort. 'below' only reorders what the class hasn't scrolled to yet.
     const all = L.posts.map(p => p.id).concat(Object.keys(S.extra));
@@ -568,7 +583,7 @@
   /* How long each stage runs. Stages move on by themselves; stage 7 lasts until the class logs off.
      (Shift + → still moves on early, as a backup.) */
   const FRENCH_AT = 45000;
-  const STAGE_MS = { 2: 6 * 60000, 3: 5 * 60000, 4: 3 * 60000, 5: 3 * 60000, 6: 3 * 60000 };
+  const STAGE_MS = { 2: 6 * 60000, 3: 5 * 60000, 4: 4 * 60000, 5: 3 * 60000, 6: 3 * 60000 };
   function stageOver(r) {
     if (S.stage === 1) return S.s1.shown && r.active >= (S.s1.shownAt || FRENCH_AT) + 4 * 60000;
     return STAGE_MS[S.stage] != null && r.active >= STAGE_MS[S.stage];

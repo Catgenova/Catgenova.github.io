@@ -771,3 +771,42 @@ body { overflow-x: hidden; }
   .vp-a, .vp-b { overflow: visible; }
   .vp-meter { width: 10.5rem; }
 }
+
+/* the stage reveal the video stops on */
+.vp-reveal { position: fixed; inset: 0 0 4rem; display: grid; place-items: center; background: rgba(10, 8, 20, .55); z-index: 20; animation: fade .3s ease both; }
+.vp-reveal > div { background: var(--ink); color: #fff; border-radius: 1.4rem; padding: 1.6rem 2.2rem; max-width: 46rem; box-shadow: 0 1rem 3rem rgba(0, 0, 0, .4); animation: arrive .45s ease both; }
+.vp-reveal .rp-st { background: #fff; color: var(--ink); }
+.vp-reveal small { display: block; margin-top: 1rem; text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; font-weight: 800; opacity: .7; }
+.vp-reveal b { display: block; font-size: 2.6rem; font-weight: 900; color: #ffb48c; line-height: 1.1; margin: .2rem 0 .5rem; }
+.vp-reveal p { margin: 0; font-size: 1.3rem; line-height: 1.4; }
+.vp-reveal em { display: block; margin-top: 1.2rem; font-style: normal; font-weight: 800; opacity: .6; font-size: .9rem; }
+.vp-clock.slow { color: var(--series-story); }
+
+/* the feed Theo would have had */
+.rp-chapter.wo { width: 100%; max-width: 84rem; min-width: 0; }
+.wo-facts { display: grid; gap: .25rem; margin-bottom: 1rem; }
+.wo-fact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 15rem) minmax(0, 15rem); gap: 1rem; align-items: baseline; font-size: .95rem; padding: .2rem .6rem; border-radius: .5rem; background: var(--surface); box-shadow: var(--shadow); }
+.wo-fact.head { background: none; box-shadow: none; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); }
+.wo-fact b { text-align: center; font-size: 1.1rem; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 900; font-variant-numeric: tabular-nums; }
+.wo-fact.head b { font-size: .8rem; font-weight: 800; }
+.wo-fact b.l { color: var(--series-story); }
+.wo-fact b.r { color: var(--ink); }
+.wo-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.4rem; }
+.wo-cols section { min-width: 0; }
+.wo-cols h3 { margin: 0 0 .4rem; font-size: 1rem; }
+.wo-cols h3 small { display: block; font-weight: 600; color: var(--ink-3); font-size: .75rem; }
+.wo-row { display: flex; align-items: center; gap: .5rem; height: 1.35rem; margin-bottom: .18rem; font-size: .78rem; background: color-mix(in srgb, var(--c) 12%, var(--surface)); border-radius: .3rem; overflow: hidden; white-space: nowrap; animation: arrive .4s ease both; }
+.wo-row i { flex: none; width: .4rem; align-self: stretch; background: var(--c); }
+.wo-row em { flex: none; width: 2.2em; font-style: normal; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.wo-row b { flex: none; width: 6.5em; overflow: hidden; text-overflow: ellipsis; color: var(--ink-2); }
+.wo-row span { flex: 1; overflow: hidden; text-overflow: ellipsis; color: var(--ink-3); }
+.wo-row u { flex: none; text-decoration: none; font-weight: 800; padding-right: .4rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.wo-row.vp-story b, .wo-row.vp-story span, .wo-row.vp-teacher b { color: var(--ink); font-weight: 700; }
+@media (max-width: 860px) {
+  .wo-cols { grid-template-columns: minmax(0, 1fr); }
+  .wo-fact { grid-template-columns: minmax(0, 1fr) minmax(0, 6rem) minmax(0, 6rem); font-size: .85rem; }
+  .wo-fact b { white-space: normal; font-size: .95rem; }
+  .wo-fact.head b { font-size: .62rem; }
+  .vp-reveal b { font-size: 1.9rem; }
+  .vp-reveal > div { margin: 0 1rem; }
+}

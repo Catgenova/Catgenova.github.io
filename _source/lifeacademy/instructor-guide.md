@@ -10,9 +10,9 @@ nothing on screen shows it until the replay.
 | 1 | 45 s until Mr. French posts, then 4 min | 4:45 |
 | 2 | 6 min | 10:45 |
 | 3 | 5 min | 15:45 |
-| 4 | 3 min | 18:45 |
-| 5 | 3 min | 21:45 |
-| 6 | 3 min | 24:45 |
+| 4 | 4 min | 19:45 |
+| 5 | 3 min | 22:45 |
+| 6 | 3 min | 25:45 |
 | 7 | until the class logs off | |
 
 The clocks only run while the page is on screen. If the class is halfway
@@ -58,7 +58,7 @@ finish (up to a minute). `Shift` + `→` still moves on early if you need it.
   click it. Hover a reaction to show its hidden weight (😡 = +5).
 - **Watch for:** any reaction jumps the post to the top. Ask: *"Is there any
   button that means 'less of this'?"* (⋯ → *Not interested*, worth −1.)
-## Stage 4: setting the record straight (3 min)
+## Stage 4: setting the record straight (4 min)
 
 - **Do:** click **"38 comments · View all"** on the gossip post. Read the
   comments aloud. Let the class agree on Theo's reply, type it exactly, and
@@ -97,19 +97,28 @@ finish (up to a minute). `Shift` + `→` still moves on early if you need it.
 
 ## Lens Replay (~12 min)
 
-- Press **`→`** on the title screen to start the **video**: the whole
-  session again at 4× speed. Theo's screen is top left with every hidden
-  meter, count and score showing. The rest of the feed is underneath,
-  re-sorting live. Lens's side is on the right: the interest profile, the
-  ranking math, the ad auction and every signal.
-- **`Space`** pauses. Pause at the start of each stage and have a different
-  student read **"What this really is"** aloud. Point at the grey rows
-  sinking and the orange rows rising, and at *everyday posts in the feed*
-  falling to 0 in stage 6.
-- **`→`** jumps to the next stage and **`←`** goes back. Click the timeline
-  to seek. After stage 7, `→` moves on to the totals, what Lens learned,
-  and the last screens.
-- **`Shift` + `→`** jumps to the ending: every layer switches off, leaving
+- Press **`→`** on the title screen to open the **video**: the whole session
+  again at 4×. Theo's screen is top left with every hidden meter, count and
+  score showing. The rest of the feed is underneath, re-sorting live. Lens's
+  side is on the right: the interest profile, the ranking math, the ad
+  auction and every signal.
+- **It stops by itself at the start of every stage** on a big *"What this
+  really is"* card. Have a different student read it aloud, then press
+  **`Space`** to play on.
+- **It slows to normal speed around the big moments**: a reaction, a
+  comment, a search, opening the thread, checking who liked it, the gossip
+  post landing. The clock says *1× slow motion* while it does. Point at the
+  grey rows sinking and the orange rows rising, and at *everyday posts in the
+  feed* falling to 0 in stage 6.
+- **`Space`** also pauses at any moment. **`→`** jumps to the next stage's
+  card, **`←`** goes back. Click the timeline to seek.
+- After stage 7, `→` opens **The other feed**: what Lens showed Theo next to
+  the same posts ranked as if he'd scrolled past everything. Ask: *"What
+  changed between these two feeds?"* (Only what Theo did.) Note that even
+  the untouched feed has a few gossip posts near the top: loud posts get
+  engagement on their own. Lens took them from a few to nearly all of it.
+- Then the totals, what Lens learned, and the last screens.
+  **`Shift` + `→`** jumps to the ending: every layer switches off, leaving
   your original post.
 - Finish with the discussion questions, one per screen (think-pair-share).
 

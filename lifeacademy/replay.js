@@ -20,7 +20,7 @@
 
   function build() {
     S = L.getState();
-    chapters = [{ k: 'intro' }, { k: 'video' }, { k: 'totals' }, { k: 'learned' }, { k: 'line' }, { k: 'off' }, { k: 'close' }];
+    chapters = [{ k: 'intro' }, { k: 'video' }, { k: 'without' }, { k: 'totals' }, { k: 'learned' }, { k: 'line' }, { k: 'off' }, { k: 'close' }];
     L.questions.forEach((q, i) => chapters.push({ k: 'q', i }));
   }
 
@@ -29,6 +29,9 @@
      number Lens was computing laid over it, and underneath it the rest of the feed, zoomed out, reordering live, every
      post's score beside it. On the right: everything Lens was calculating about Theo at that moment. */
   const SPEED = 4, ROW_H = 19, ROWS = 46, CARD_MAX = 4;
+  // The big moments play at normal speed: a little before each one, and a few seconds after.
+  const SLOW_BEFORE = 1500, SLOW_AFTER = 4000;
+  const isBig = (x) => ['react', 'creact', 'comment', 'search', 'thread', 'glance', 'open'].includes(x.type) || (x.type === 'dwell' && x.id === 'french');
   const SIGNAL_LABEL = { dwell: 'looked long enough', pause: 'stopped scrolling', react: 'reacted', creact: 'reacted to a comment', open: 'opened the comments', typing: 'typing', comment: 'posted a comment', thread: 'opened the thread', glance: 'checked who liked it', search: 'searched' };
   const STORY_T = { gaga: 1, theo: 1, drama: 1, stress: 1 };
   let V = null;
@@ -47,8 +50,21 @@
     }
     const by = (a, b) => a.t - b.t;
     tl.sort(by); orders.sort(by); sig.sort(by); ev.sort(by);
-    return { segs, total: off, tl, orders, sig, ev };
+    const slow = [];
+    sig.filter(isBig).concat(ev.filter(e => /posted about you|quoted you/i.test(e.text))).forEach(x => {
+      const a = Math.max(0, x.t - SLOW_BEFORE), b = x.t + SLOW_AFTER, last = slow[slow.length - 1];
+      if (last && a <= last[1]) last[1] = Math.max(last[1], b); else slow.push([a, b]);
+    });
+    return { segs, total: off, tl, orders, sig, ev, slow };
   }
+  function vSpeed(T) { return V.slow.some(([a, b]) => T >= a && T < b) ? 1 : SPEED; }
+  // At the start of each stage the video stops on that stage's reveal, big, until the teacher presses Space.
+  function vCardShow(n) {
+    const c = root().querySelector('.vp-reveal'), rv = L.reveal[n]; if (!c || !rv) return;
+    c.innerHTML = `<div><span class="rp-st">Stage ${n}</span><small>What this really is</small><b>${esc(rv.name)}</b><p>${esc(rv.line)}</p><em>Space ▶ to play</em></div>`;
+    c.hidden = false; V.playing = false; V.card = n;
+  }
+  function vCardHide() { const c = root().querySelector('.vp-reveal'); if (c) c.hidden = true; V.card = 0; }
 
   function videoHTML() {
     return `<div class="vp">
@@ -73,6 +89,7 @@
           <div class="vp-log"></div>
         </div>
       </div>
+      <div class="vp-reveal" hidden></div>
       <div class="vp-ctl"><button type="button" class="vp-btn" data-vp="play" aria-label="Play or pause">❚❚</button><div class="vp-track"></div><span class="vp-clock"></span></div>
     </div>`;
   }
@@ -83,26 +100,31 @@
     track.innerHTML = V.segs.map(g => `<div class="vp-seg" style="flex:${Math.max(g.dur, 1)}"><span>${g.s}</span></div>`).join('') + '<div class="vp-head"></div>';
     track.addEventListener('click', e => {
       const b = track.getBoundingClientRect();
-      vSeek(V.total * Math.min(1, Math.max(0, (e.clientX - b.left) / b.width)));
+      vSeek(V.total * Math.min(1, Math.max(0, (e.clientX - b.left) / b.width)), false);
       if (!V.raf) V.raf = requestAnimationFrame(vFrame);
     });
     el.querySelector('[data-vp="play"]').addEventListener('click', vToggle);
+    el.querySelector('.vp-reveal').addEventListener('click', vToggle);
     if (!V.total) { el.querySelector('.vp-cards').innerHTML = '<p class="vp-empty">Nothing was recorded.</p>'; V.playing = false; return; }
     vSeek(0);
+    V.last = performance.now();
     V.raf = requestAnimationFrame(vFrame);
   }
   function vStop() { if (V && V.raf) cancelAnimationFrame(V.raf); if (V) V.raf = 0; }
   function vButton() { const b = root().querySelector('[data-vp="play"]'); if (b) b.textContent = V.playing ? '❚❚' : V.T >= V.total ? '↺' : '▶'; }
   function vToggle() {
     if (!V || !V.total) return;
-    if (V.T >= V.total) vSeek(0);
+    if (V.T >= V.total) vSeek(0, false);
     V.playing = !V.playing; V.last = performance.now();
+    if (V.playing) vCardHide();
     vButton();
     if (!V.raf) V.raf = requestAnimationFrame(vFrame);
   }
-  function vSeek(T) {
+  function vSeek(T, card) {
     // replay everything up to T silently, then carry on from there
     V.T = Math.max(0, Math.min(T, V.total));
+    const seg = card !== false && V.segs.find(g => g.off === V.T);
+    if (seg) vCardShow(seg.s); else vCardHide();
     V.iTl = -1; V.iOrd = -1; V.iSig = 0; V.iEv = 0; V.pushed = {}; V.flashes = []; V.toasts = []; V.log = []; V.x = null;
     vAdvance(true);
     vDraw(true);
@@ -128,9 +150,14 @@
     if (!V || !root().querySelector('.vp')) { vStop(); return; }
     const dt = Math.min(250, now - V.last); V.last = now;
     if (V.playing) {
-      V.T = Math.min(V.total, V.T + dt * SPEED);
+      const prev = V.T;
+      let nt = Math.min(V.total, prev + dt * vSpeed(prev));
+      const cross = V.segs.find(g => g.off > prev && g.off <= nt);
+      if (cross) nt = cross.off;
+      V.T = nt;
       vAdvance(false);
-      if (V.T >= V.total) { V.playing = false; vButton(); }
+      if (cross) { vCardShow(cross.s); vButton(); }
+      else if (V.T >= V.total) { V.playing = false; vButton(); }
     }
     if (now - V.lastDraw > 80) { V.lastDraw = now; vDraw(false); }
     if (!V.playing && !V.flashes.some(f => f.until > now) && !V.toasts.length) { V.raf = 0; vDraw(false); return; }
@@ -300,8 +327,9 @@
     set(el.querySelector('.vp-log'), '<small>Signals pushed to the algorithm</small>' + (V.log.length ? V.log.map(x => `<div class="vp-logrow"><span class="ok">✓</span> <b>${esc(SIGNAL_LABEL[x.type] || x.type)}${x.type === 'react' || x.type === 'creact' ? ' ' + (EMO[x.detail] || '') : ''}</b> <em>${esc(trunc(x.type === 'search' ? '“' + x.detail + '”' : shortOf(x.id || ''), 24))}</em>${x.amt != null ? ` <span class="vp-amt">+${x.amt} ${esc((x.topics || []).map(t => '#' + t).join(' '))}</span>` : ''}<div class="vp-lmsg">${esc(x.msg || '')}</div></div>`).join('') : '<div class="vp-logrow none">nothing yet: Lens is just watching</div>'));
 
     el.querySelector('.vp-head').style.left = (V.total ? V.T / V.total * 100 : 0) + '%';
-    const ck = `${clock(V.T)} / ${clock(V.total)} · ${SPEED}×`;
+    const sp = vSpeed(V.T), ck = `${clock(V.T)} / ${clock(V.total)} · ${sp === 1 ? '1× slow motion' : sp + '×'}`;
     const ckEl = el.querySelector('.vp-clock'); if (ckEl.textContent !== ck) ckEl.textContent = ck;
+    ckEl.classList.toggle('slow', sp === 1);
   }
   function vNextStage() { const g = V.segs.find(x => x.off > V.T + 500); if (g) { vSeek(g.off); if (!V.raf) V.raf = requestAnimationFrame(vFrame); return true; } return false; }
   function vPrevStage() {
@@ -312,6 +340,29 @@
     else return false;
     if (!V.raf) V.raf = requestAnimationFrame(vFrame);
     return true;
+  }
+
+  /* ================= The feed Theo would have had =================
+     The same posts and the same formula, ranked as if Theo had scrolled past everything without stopping. */
+  function withoutHTML() {
+    let last = null;
+    for (let s = 7; s >= 1 && !last; s--) { const r = S.rec[s]; if (r && r.orders && r.orders.length) last = r.orders[r.orders.length - 1]; }
+    const got = last ? last.seq.map((id, i) => [id, last.sc ? last.sc[i] : null]) : [];
+    const would = L.neutralFeed(), N = 12;
+    const tally = (rows) => { const c = { other: 0, story: 0, teacher: 0, ad: 0 }; rows.slice(0, N).forEach(([id]) => { c[catOf(id)]++; }); return c; };
+    const a = tally(got), b = tally(would);
+    const firstPost = (rows) => { const r = rows.find(([id]) => !id.startsWith('ad:')); return r ? (L.getItem(r[0]) || {}).text || '' : '–'; };
+    const firstAd = (rows) => { const r = rows.find(([id]) => id.startsWith('ad:')); const ad = r && L.getItem(r[0]); return ad ? `${ad.art} ${ad.brand}` : '–'; };
+    const row = ([id, sc], i, d) => { const p = L.getItem(id) || {}, ad = id.startsWith('ad:'); return `<div class="wo-row vp-${catOf(id)}" style="--c:${CAT_VAR[catOf(id)]};animation-delay:${(d + i * 0.07).toFixed(2)}s"><i></i><em>#${i + 1}</em><b>${esc(nameOf(id))}</b><span>${esc(trunc(ad ? (p.brand + ': ' + p.head) : p.text, 70))}</span><u>${sc != null ? sc : ''}</u></div>`; };
+    const fact = (label, x, y) => `<div class="wo-fact"><span>${label}</span><b class="l">${x}</b><b class="r">${y}</b></div>`;
+    return `<div class="rp-chapter wo"><div class="rp-head"><span class="rp-st">The other feed</span><span class="rp-goal">Same posts. Same formula. The only difference is what Theo did.</span></div>
+      <div class="wo-facts"><div class="wo-fact head"><span></span><b class="l">What Lens showed Theo</b><b class="r">If he’d scrolled past everything</b></div>
+        ${fact('Everyday posts in the first 12', a.other, b.other)}
+        ${fact('Posts about Theo &amp; gagaball in the first 12', a.story + a.teacher, b.story + b.teacher)}
+        ${fact('The #1 post', esc(trunc(firstPost(got), 30)), esc(trunc(firstPost(would), 30)))}
+        ${fact('The top ad', esc(firstAd(got)), esc(firstAd(would)))}</div>
+      <div class="wo-cols"><section><h3>What Lens showed Theo <small>after everything he looked at, reacted to and typed</small></h3>${got.slice(0, N).map((r, i) => row(r, i, 0.3)).join('')}</section>
+        <section><h3>If Theo had scrolled past everything <small>no pauses, no reactions, no comments, no searches</small></h3>${would.slice(0, N).map((r, i) => row(r, i, 1.6)).join('')}</section></div></div>`;
   }
 
   /* ================= Chapters ================= */
@@ -328,6 +379,9 @@
       }
       case 'video':
         html = videoHTML();
+        break;
+      case 'without':
+        html = withoutHTML();
         break;
       case 'totals': {
         let total = 0, story = 0, ads = 0, adScreen = 0;
