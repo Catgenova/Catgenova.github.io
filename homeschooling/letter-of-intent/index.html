@@ -1,0 +1,32 @@
+---
+title: Letter of Intent · NYS Homeschool Forms
+description: Write New York's annual letter of intent to provide home instruction and download it as a formatted PDF.
+hs_page: loi
+hs_form: true
+---
+<header class="hs-head">
+  <h1>Letter of Intent</h1>
+  <p class="lede">Tells the superintendent you'll provide home instruction this school year. Due <strong>by July 1</strong> every year, one per child, or within 14 days of starting home instruction mid-year.</p>
+</header>
+
+<div id="hs-context"></div>
+
+<form id="hs-form" class="hs-form" hidden onsubmit="return false">
+  <section class="hs-card">
+    <h2>Letter</h2>
+    <div class="hs-grid hs-grid-2">
+      <div class="field"><span>Addressed to</span><p class="hs-static" id="hs-recipient"></p></div>
+      <label class="field"><span>Date of the letter</span><input type="date" data-k="date"></label>
+    </div>
+    <label class="hs-check"><input type="checkbox" data-k="midYear"> Home instruction starts after the school year has begun</label>
+    <div class="hs-grid hs-grid-2" data-show="midYear">
+      <label class="field"><span>Home instruction begins</span><input type="date" data-k="startDate"></label>
+    </div>
+    <label class="hs-check"><input type="checkbox" data-k="enclosed"> The IHIP is enclosed with this letter</label>
+    <label class="field"><span>Anything else to add (optional)</span>
+      <textarea rows="3" data-k="notes" placeholder="e.g. Please send correspondence by email."></textarea>
+    </label>
+  </section>
+  <p class="muted hs-small">The letter cites §100.10, includes the student's name, date of birth and grade, and asks the district for the IHIP form. It doesn't need to say why you're homeschooling.</p>
+  <div id="hs-finish"></div>
+</form>

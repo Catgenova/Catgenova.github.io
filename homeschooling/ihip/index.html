@@ -1,0 +1,69 @@
+---
+title: IHIP · NYS Homeschool Forms
+description: Build a New York Individualized Home Instruction Plan (IHIP) with every required subject for your child's grade, and download it as a formatted PDF.
+hs_page: ihip
+hs_form: true
+---
+<header class="hs-head">
+  <h1>Individualized Home Instruction Plan</h1>
+  <p class="lede">The year's plan for one child: the curriculum for every required subject, who teaches, and when quarterly reports are due. Due <strong>by August 15</strong>, or within four weeks of receiving the district's IHIP form, whichever is later.</p>
+</header>
+
+<div id="hs-context"></div>
+
+<form id="hs-form" class="hs-form" hidden onsubmit="return false">
+  <section class="hs-card">
+    <h2>Plan details</h2>
+    <div class="hs-grid hs-grid-2">
+      <label class="field"><span>Date of this plan</span><input type="date" data-k="date"></label>
+      <label class="field"><span>Letter of intent submitted on</span><input type="date" data-k="loiDate"></label>
+      <label class="field hs-span-2"><span>Individuals providing instruction</span><input data-k="instructors" placeholder="Parents, tutors, co-op or online teachers"></label>
+    </div>
+  </section>
+
+  <section class="hs-card">
+    <h2>Quarterly report schedule</h2>
+    <p class="muted">Space the four reports evenly. Your quarterly reports pick these dates up automatically.</p>
+    <div id="hs-quarters" class="hs-rows hs-rows-quarters"></div>
+  </section>
+
+  <section class="hs-card">
+    <h2>Instructional time</h2>
+    <label class="field"><span>Schedule (optional)</span>
+      <textarea rows="2" data-k="schedule" placeholder="e.g. Monday to Friday, about 5 hours a day, September through June."></textarea>
+    </label>
+  </section>
+
+  <section class="hs-card">
+    <h2>Required courses</h2>
+    <div id="hs-band-note"></div>
+    <div id="hs-subjects" class="hs-rows hs-subjects"></div>
+    <button class="btn" type="button" data-act="add-subject">Add a subject</button>
+  </section>
+
+  <section class="hs-card">
+    <h2>Other required instruction</h2>
+    <p class="muted">Required at every grade by the Education Law. Most families cover these inside other subjects; say where.</p>
+    <div id="hs-other" class="hs-rows"></div>
+  </section>
+
+  <section class="hs-card" id="hs-once-wrap">
+    <h2>Taught at least once in grades 1–8</h2>
+    <div id="hs-once" class="hs-rows"></div>
+  </section>
+
+  <section class="hs-card">
+    <h2>Annual assessment plan</h2>
+    <label class="field"><span>How you plan to assess this year</span>
+      <textarea rows="3" data-k="assessmentPlan"></textarea>
+    </label>
+    <button class="btn btn-quiet" type="button" data-act="suggest-plan">Suggest wording for this grade</button>
+  </section>
+
+  <section class="hs-card">
+    <h2>Additional notes (optional)</h2>
+    <label class="field"><span class="visually-hidden">Notes</span><textarea rows="2" data-k="notes"></textarea></label>
+  </section>
+
+  <div id="hs-finish"></div>
+</form>

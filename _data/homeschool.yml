@@ -1,0 +1,75 @@
+# pere.games/homeschooling
+#
+# `links` is the list of official guidelines shown on the homeschooling home
+# page. Add, remove or reword entries here; the page updates itself. Update
+# `checked` when you've re-checked the links.
+
+nav:
+  - title: Overview
+    url: /homeschooling/
+  - title: Family setup
+    url: /homeschooling/setup/
+  - title: Letter of Intent
+    url: /homeschooling/letter-of-intent/
+  - title: IHIP
+    url: /homeschooling/ihip/
+  - title: Quarterly Reports
+    url: /homeschooling/quarterly-report/
+  - title: Annual Assessment
+    url: /homeschooling/annual-assessment/
+
+checked: 2026-11-18
+
+links:
+  - group: The regulation and the law
+    items:
+      - title: "Commissioner's Regulation §100.10: Home Instruction"
+        url: https://www.p12.nysed.gov/part100/pages/100_10.html
+        source: NYSED
+        about: The rule itself. Sets the letter of intent, IHIP, quarterly reports, annual assessment, required subjects and hours.
+      - title: "8 NYCRR §100.10, full text"
+        url: https://www.law.cornell.edu/regulations/new-york/8-NYCRR-100.10
+        source: Cornell Law School
+        about: The same regulation on one easy-to-read page.
+      - title: "Education Law §3204: Instruction required"
+        url: https://www.nysenate.gov/legislation/laws/EDN/3204
+        source: NY State Senate
+        about: Allows instruction at home if it is "substantially equivalent" to public school instruction.
+      - title: "Education Law §3205: Compulsory attendance"
+        url: https://www.nysenate.gov/legislation/laws/EDN/3205
+        source: NY State Senate
+        about: Which ages must receive full-time instruction (generally 6 through 16; some districts require through 17).
+      - title: "Education Law §801, §804, §806 and §808"
+        url: https://www.nysenate.gov/legislation/laws/EDN/801
+        source: NY State Senate
+        about: "Patriotism and citizenship; alcohol, drug and tobacco misuse; highway and bicycle safety; fire and arson prevention. Taught at every grade."
+
+  - group: NYSED guidance
+    items:
+      - title: Home Instruction
+        url: https://www.nysed.gov/nonpublic-schools/home-instruction
+        source: NYSED
+        about: The State Education Department's home instruction page and contacts.
+      - title: Home Instruction Questions and Answers
+        url: https://www.nysed.gov/nonpublic-schools/home-instruction-questions-and-answers
+        source: NYSED
+        about: "NYSED's answers on IHIPs, testing, narratives, mid-year starts, records and diplomas. NYSED notes it hasn't been updated for 2019 changes to the immunization law."
+      - title: "Section 100.10 Home Instruction"
+        url: https://www.nysed.gov/curriculum-instruction/10010-home-instruction
+        source: NYSED
+        about: The regulation as presented by NYSED's Curriculum and Instruction office.
+      - title: Special education services for home-instructed students
+        url: https://www.nysed.gov/special-education/requirements-provision-special-education-services-home-instructed-home-schooled
+        source: NYSED
+        about: How districts provide special education services to children taught at home.
+      - title: Find your school district
+        url: https://data.nysed.gov/
+        source: NYSED
+        about: Look up your district and superintendent. Reports go to the superintendent of the district where you live.
+
+  - group: New York City families
+    items:
+      - title: NYC Public Schools, Home Schooling
+        url: https://schools.nyc.gov/enrollment/enrollment-help/home-schooling
+        source: NYC Public Schools
+        about: NYC families file with the Central Office of Home Schooling, not a local district. The city's own letter of intent, IHIP, quarterly report and assessment forms are here, in many languages.

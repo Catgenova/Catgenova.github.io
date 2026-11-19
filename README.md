@@ -32,6 +32,29 @@ source_url: https://github.com/Catgenova/wildermon
 
 Feeds are generated at `/blog/feed.xml` and `/changelog/feed.xml`.
 
+## Homeschooling forms (`/homeschooling/`)
+
+Tools for New York State home instruction paperwork (8 NYCRR §100.10). Everything
+runs in the browser: family details and drafts are kept in `localStorage`, and
+PDFs are made on the visitor's device with jsPDF. Nothing is sent to a server,
+and these pages never load ad scripts (`no_ads: true`, set in `_config.yml`).
+
+| What | Where |
+| --- | --- |
+| Official links list on the overview page | `_data/homeschool.yml` (`links`; bump `checked` when re-checked) |
+| Section nav | `_data/homeschool.yml` (`nav`) |
+| Rules: subjects by grade, hours, assessment rules | `homeschooling/assets/rules.js` |
+| PDF house style (masthead, info grid, tables, signatures, footers) | `homeschooling/assets/pdf.js` |
+| What goes in each document, and file naming | `homeschooling/assets/docs.js` |
+| Form pages | `homeschooling/*/index.html` and `homeschooling/assets/app.js` |
+| Example family and text | `homeschooling/assets/examples.js` |
+| PDF libraries (jsPDF 4.2.1, AutoTable 5.0.9, pdf-lib 1.17.1, MIT) | `homeschooling/assets/lib/` |
+
+PDF file names follow one pattern so a year's paperwork sorts in filing order:
+`{school year}_{Last}-{First}_Gr{grade}_{##}-{document}.pdf`, e.g.
+`2026-27_Rivera-Mila_Gr5_03-Q1-Quarterly-Report.pdf` (01 letter of intent,
+02 IHIP, 03–06 quarterly reports, 07 annual assessment).
+
 ## Ads
 
 Until `ads.adsense_client` is set in `_config.yml`, ad slots show a house

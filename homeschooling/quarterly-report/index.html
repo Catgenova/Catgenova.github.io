@@ -1,0 +1,59 @@
+---
+title: Quarterly Reports · NYS Homeschool Forms
+description: Write New York homeschool quarterly reports (hours, material covered and grades for each subject) and download them as formatted PDFs.
+hs_page: quarterly
+hs_form: true
+---
+<header class="hs-head">
+  <h1>Quarterly Reports</h1>
+  <p class="lede">Four a year per child, due on the dates in the IHIP. Each one gives the hours of instruction, what was covered in each subject, and a grade or evaluation, plus an explanation for any subject where less than 80% of the planned material was covered.</p>
+</header>
+
+<div id="hs-context"></div>
+
+<form id="hs-form" class="hs-form" hidden onsubmit="return false">
+  <section class="hs-card">
+    <h2>Period and hours</h2>
+    <div class="hs-grid hs-grid-4">
+      <label class="field"><span>Period starts</span><input type="date" data-k="from"></label>
+      <label class="field"><span>Period ends</span><input type="date" data-k="to"></label>
+      <label class="field"><span>Report due</span><input type="date" data-k="due"></label>
+      <label class="field"><span>Date signed</span><input type="date" data-k="date"></label>
+      <label class="field"><span>Hours this quarter</span><input type="number" min="0" step="0.5" inputmode="decimal" data-k="hours"></label>
+      <label class="field" id="hs-prior-wrap"><span>Hours in earlier quarters</span><input type="number" min="0" step="0.5" inputmode="decimal" data-k="hoursPrior"></label>
+    </div>
+    <p class="muted hs-small" id="hs-hours-note"></p>
+  </section>
+
+  <section class="hs-card">
+    <h2>Subjects</h2>
+    <p class="muted">List what was covered (units, chapters, books, projects), one per line. For the grade, use whatever you use consistently: a percentage, a letter, or Pass / Satisfactory.</p>
+    <div id="hs-subjects" class="hs-rows hs-subjects"></div>
+    <div class="game-actions">
+      <button class="btn" type="button" data-act="add-subject">Add a subject</button>
+      <button class="btn btn-quiet" type="button" data-act="subjects-from-ihip">Match subjects to the IHIP</button>
+    </div>
+    <datalist id="hs-grade-list">
+      <option>Pass</option><option>Satisfactory</option><option>Excellent</option><option>A</option><option>B</option><option>C</option>
+    </datalist>
+  </section>
+
+  <section class="hs-card" data-show="q=3">
+    <h2>Plan for the annual assessment</h2>
+    <p class="muted">Many districts ask for this with the third report.</p>
+    <label class="field"><span class="visually-hidden">Assessment plan</span><textarea rows="3" data-k="assessmentPlan"></textarea></label>
+  </section>
+
+  <section class="hs-card" data-show="q=4">
+    <h2>Annual assessment</h2>
+    <p class="muted">File the <a href="/homeschooling/annual-assessment/">annual assessment</a> with this report.</p>
+    <label class="field"><span class="visually-hidden">Annual assessment note</span><textarea rows="2" data-k="assessmentNote"></textarea></label>
+  </section>
+
+  <section class="hs-card">
+    <h2>Comments (optional)</h2>
+    <label class="field"><span class="visually-hidden">Comments</span><textarea rows="2" data-k="notes" placeholder="Field trips, extracurriculars, highlights"></textarea></label>
+  </section>
+
+  <div id="hs-finish"></div>
+</form>
