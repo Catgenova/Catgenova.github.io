@@ -25,6 +25,10 @@ finish (up to a minute). `Shift` + `→` still moves on early if you need it.
 
 ## Before class
 
+- The page opens on an **Instructor controls** screen (keys, the stage
+  schedule, a sound test and a *Start over* button). Set up before you
+  project, then press **Enter** to show the login screen. Press **`?`** any
+  time to see it again; Lens's clock stops while it's open.
 - Open **pere.games/lifeacademy** on the projector laptop. If you rehearsed,
   press **`Shift` + `R`** to clear it.
 - Full screen (`F11`), turn off the laptop's own notifications, check the
@@ -143,6 +147,7 @@ finish (up to a minute). `Shift` + `→` still moves on early if you need it.
 | `C` | Optional code panel |
 | `Esc` | Close a window or menu |
 | `Shift` + `R` | Start over (clears everything) |
+| `?` | The controls screen (pauses Lens's clock) |
 
 On a phone or tablet, the **☰** button in the top bar has the same controls
 (except moving on early).

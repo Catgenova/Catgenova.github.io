@@ -309,6 +309,17 @@ screen, so the class never sees a timer or a "next" button:
   steps back a stage (which restarts that stage's clock) for rehearsal or a
   do-over.
 
+### The instructor controls screen
+
+The page opens on an **Instructor controls** screen, before the login
+screen: the before-class checklist (full screen, notifications off, a
+**Test sound** button, a **Start over** button), the stage schedule with the
+time each stage ends, and every key for the game and the replay. **Enter**
+shows the login screen. If a finished session is still saved, the screen
+says so and suggests starting over. **`?`** brings it back at any time
+(also in the ☰ menu on touch screens), and Lens's clock stops while it's
+open, so it doubles as a pause.
+
 ### Showing the room what's happening
 
 - **Every click shows.** A ring appears where the teacher clicks, and the
@@ -352,6 +363,7 @@ nothing on screen:
 | `Space` | In the replay: play or pause the video |
 | `C` | Optional: open the "Under the Hood" code panel (see below) |
 | `Shift` + `R` | Start over, clearing everything Lens recorded (behind a confirmation) |
+| `?` | The instructor controls screen (pauses Lens's clock) |
 
 To rehearse, use the same keys with the projector disconnected, then
 `Shift` + `R` before class so the replay only contains the class's session.

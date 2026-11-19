@@ -599,7 +599,7 @@
 
   /* The heartbeat: every 250 ms, note what's on screen and move the meters. */
   function tick() {
-    if (S.stage < 1 || S.stage > 7 || document.hidden) return;
+    if (S.stage < 1 || S.stage > 7 || document.hidden || !$('#guide').hidden) return;
     const dt = 250, r = rec(), now = Date.now();
     r.active += dt;
     const top = 58, vh = innerHeight, cy = top + (vh - top) / 2;
@@ -1423,12 +1423,13 @@
       <button type="button" data-p="back">⏮ Back a stage</button>
       <button type="button" data-p="skip">⏩ Skip animation</button>
       <button type="button" data-p="mute">${S.muted ? '🔊 Sound on' : '🔇 Sound off'}</button>
-      <button type="button" data-p="reset">↺ Start over</button></div>`);
+      <button type="button" data-p="reset">↺ Start over</button>
+      <button type="button" data-p="guide">❓ Controls</button></div>`);
     document.body.append(d);
     d.addEventListener('click', ev => {
       const b = ev.target.closest('[data-p]'); if (!b) return;
       d.remove();
-      ({ next: advance, back, skip: () => { skipping = true; },
+      ({ next: advance, back, skip: () => { skipping = true; }, guide: () => openGuide(S.stage !== 0),
         mute: () => { S.muted = !S.muted; save(); },
         reset: () => { if (window.confirm('Start over? This clears everything Lens recorded.')) { localStorage.removeItem(KEY); localStorage.removeItem(KEY + '-snaps'); location.reload(); } } })[b.dataset.p]();
     });
@@ -1520,8 +1521,13 @@
   $('#searchbox').addEventListener('focus', e => { if (S.stage < 6) e.target.blur(); });
 
   document.addEventListener('keydown', e => {
+    if (!$('#guide').hidden) {
+      if (e.key === 'Enter' || e.key === 'Escape' || e.key === '?') { e.preventDefault(); closeGuide(); }
+      return;
+    }
     const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement && document.activeElement.tagName);
     if (typing) { if (e.key === 'Escape') document.activeElement.blur(); return; }
+    if (e.key === '?') { e.preventDefault(); openGuide(S.stage !== 0); return; }
     if (e.shiftKey && e.key === 'ArrowRight') { e.preventDefault(); advance(); return; }
     if (e.shiftKey && e.key === 'ArrowLeft') { e.preventDefault(); back(); return; }
     if (e.shiftKey && (e.key === 'R' || e.key === 'r')) {
@@ -1553,6 +1559,66 @@
     if (b) { b.classList.remove('pressed'); void b.offsetWidth; b.classList.add('pressed'); setTimeout(() => b.classList.remove('pressed'), 650); }
   }, true);
 
+  /* ---------------- the instructor's controls screen ----------------
+     Shown before the login screen (and over a finished session, as a reminder to start over).
+     ? brings it back at any time; Lens's clock stops while it's open. */
+  function guideHTML(fromGame) {
+    const min = (ms) => (ms / 60000) + ' min';
+    const rows = [['1', `${FRENCH_AT / 1000} s, then Mr. French posts; 4 min more`], ...[2, 3, 4, 5, 6].map(n => [String(n), min(STAGE_MS[n])]), ['7', 'until the class logs off → the replay']];
+    let end = FRENCH_AT + 4 * 60000; const ends = [end]; [2, 3, 4, 5, 6].forEach(n => { end += STAGE_MS[n]; ends.push(end); });
+    const at = (ms) => `${Math.floor(ms / 60000)}:${String(Math.round(ms / 1000) % 60).padStart(2, '0')}`;
+    const keys = [
+      ['Shift', '→', 'Move on to the next stage early (backup: stages move on by themselves)'],
+      ['Shift', '←', 'Go back a stage and run it again'],
+      ['', 'N', 'Skip an animation'],
+      ['', 'B', 'Blank the screen (press again to bring it back)'],
+      ['', 'M', 'Sound on / off'],
+      ['', 'Esc', 'Close a window or menu'],
+      ['', '?', 'These controls (Lens’s clock stops while they’re open)'],
+      ['', 'C', 'Optional: the code behind the current stage'],
+      ['Shift', 'R', 'Start over: clears everything Lens recorded'],
+    ];
+    const rkeys = [['', 'Space', 'Play / pause the video (it stops itself on each stage’s card)'], ['', '→ ←', 'Next / previous stage, then the next / previous screen'], ['', 'click', 'Click the timeline to jump'], ['Shift', '→', 'Jump to the ending (everything switches off)']];
+    const kbd = (m, k) => (m ? `<kbd>${m}</kbd> + ` : '') + `<kbd>${k}</kbd>`;
+    const saved = !fromGame && S.stage === 8 ? `<div class="g-warn">A finished session is saved on this laptop. If it was a rehearsal, press <b>Start over</b> before the class arrives, so the replay only shows the class.</div>` : '';
+    return `<div class="g-card">
+      <div class="g-head"><div><small>Lens · Life Academy Web Lab</small><h1>Instructor controls</h1><p>For Mr. French. Set up before you project, or the class sees this.</p></div>
+        <button class="primary" type="button" data-g="close">${fromGame ? 'Back to Lens' : S.stage === 8 ? 'Open the replay' : 'Show the login screen'} → <kbd>Enter</kbd></button></div>
+      ${saved}
+      <div class="g-cols">
+        <section><h2>Before class</h2>
+          <ul class="g-check"><li>Press <kbd>F11</kbd> for full screen.</li><li>Turn off the laptop’s own notifications.</li><li>Check the speakers: <button type="button" data-g="sound" class="g-mini">🔔 Test sound</button></li><li>Rehearsed? <button type="button" data-g="reset" class="g-mini">↺ Start over</button></li></ul>
+          <h2>How it runs</h2>
+          <p class="g-note">You click only what the class tells you. Stages move on by themselves; an <i>“Updating your feed…”</i> pill is the class’s cue. Lens waits for anyone mid-typing (up to a minute).</p>
+          <table class="g-sched"><tr><th>Stage</th><th>Runs</th><th>Ends at</th></tr>${rows.map(([n, d], i) => `<tr><td>${n}</td><td>${d}</td><td>${ends[i] != null ? at(ends[i]) : ''}</td></tr>`).join('')}</table>
+        </section>
+        <section><h2>Keys during the game</h2>
+          <table class="g-keys">${keys.map(([m, k, d]) => `<tr><td>${kbd(m, k)}</td><td>${d}</td></tr>`).join('')}</table>
+          <h2>Keys in the replay</h2>
+          <table class="g-keys">${rkeys.map(([m, k, d]) => `<tr><td>${k === 'click' ? '<kbd>click</kbd>' : kbd(m, k)}</td><td>${d}</td></tr>`).join('')}</table>
+          <p class="g-note">On a tablet or phone: the <b>☰</b> button in the top bar has Back, Skip, Sound, Start over and these controls; swipe left / right in the replay.</p>
+        </section>
+      </div></div>`;
+  }
+  function openGuide(fromGame) {
+    const g = $('#guide');
+    g.innerHTML = guideHTML(fromGame); g.hidden = false; g.dataset.from = fromGame ? 'game' : 'boot';
+    $('.dropdown') && $('.dropdown').remove();
+    const btn = g.querySelector('[data-g="close"]'); btn && btn.focus();
+  }
+  function closeGuide() {
+    const g = $('#guide'); if (g.hidden) return;
+    g.hidden = true; g.innerHTML = '';
+    if (document.activeElement) document.activeElement.blur();
+    if (g.dataset.from === 'boot' && S.stage === 8) { $('#login').hidden = true; L.Replay && L.Replay.open(S.replay); }
+  }
+  $('#guide').addEventListener('click', e => {
+    const b = e.target.closest('[data-g]'); if (!b) return;
+    if (b.dataset.g === 'close') closeGuide();
+    if (b.dataset.g === 'sound') { const was = S.muted; S.muted = false; beep('ding'); S.muted = was; }
+    if (b.dataset.g === 'reset' && window.confirm('Start over? This clears everything Lens recorded.')) { localStorage.removeItem(KEY); localStorage.removeItem(KEY + '-snaps'); location.reload(); }
+  });
+
   /* ---------------- boot ---------------- */
   L.save = save;
   L.setStage = (n) => { S.stage = n; bodyClasses(); save(true); };
@@ -1561,8 +1627,10 @@
     $('#login').hidden = true;
     enterStage(S.stage, { resume: true }).then(() => { if (S.stage === 4 && S.thread.opened) { /* stay on feed after reload */ } });
   } else if (S.stage === 8) {
-    $('#login').hidden = true; bodyClasses();
-    window.addEventListener('load', () => L.Replay && L.Replay.open(S.replay));
+    bodyClasses();
+    openGuide(false);   // closing it opens the replay
+  } else {
+    openGuide(false);
   }
   L._debug = { get S() { return S; }, get hover() { return hoverId; }, get busy() { return busy; }, advance, rerank, renderFeed, confirm, nodes };
 })();
