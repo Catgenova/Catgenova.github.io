@@ -92,33 +92,102 @@
       }
     }
 
-    // Archive: every past daily except the one featured above.
-    const past = dailies.slice(1);
-    if (past.length) {
+    // Archive: a month calendar of every daily that's out. Picking a day
+    // shows its theme and a button per difficulty.
+    const byDate = new Map(dailies.map((d) => [d.date, d]));
+    if (dailies.length) {
       $('#archive-section').hidden = false;
-      for (const d of past) {
-        const li = document.createElement('li');
-        const day = document.createElement('div');
-        day.className = 'day';
-        const b = document.createElement('b');
-        b.textContent = longDate(d.date, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-        const t = document.createElement('span');
-        t.textContent = d.title;
-        day.append(b, t);
+      const ym = (iso) => iso.slice(0, 7);
+      const first = ym(dailies[dailies.length - 1].date);
+      const last = ym(dailies[0].date);
+      let view = last;
+      let selected = dailies[0].date;
+
+      const shift = (m, k) => {
+        const [y, mo] = m.split('-').map(Number);
+        const d = new Date(y, mo - 1 + k, 1);
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+      };
+
+      const renderDetail = () => {
+        const box = $('#cal-detail');
+        box.textContent = '';
+        const d = byDate.get(selected);
+        if (!d) return;
+        const h = document.createElement('h3');
+        h.textContent = d.title;
+        const p = document.createElement('p');
+        p.className = 'muted';
+        p.textContent = longDate(d.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
         const chips = document.createElement('div');
-        chips.className = 'chips';
+        chips.className = 'play-levels';
         for (const l of d.levels) {
           const st = status('daily-' + d.date, l);
           const a = document.createElement('a');
-          a.className = 'chip ' + st.kind;
+          a.className = 'play-level ' + st.kind;
           a.href = play({ d: d.date, level: l });
-          a.textContent = (st.kind === 'done' ? '✓ ' : '') + LEVEL_NAMES[l];
-          a.title = LEVEL_NAMES[l] + ': ' + st.text;
+          const b = document.createElement('b');
+          b.textContent = LEVEL_NAMES[l];
+          const s = document.createElement('small');
+          s.textContent = st.text;
+          a.append(b, s);
           chips.append(a);
         }
-        li.append(day, chips);
-        $('#archive').append(li);
-      }
+        box.append(h, p, chips);
+      };
+
+      const renderCal = () => {
+        const [y, mo] = view.split('-').map(Number);
+        $('#cal-month').textContent = new Date(y, mo - 1, 1).toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+        $('#cal-prev').disabled = view <= first;
+        $('#cal-next').disabled = view >= last;
+        const grid = $('#cal-grid');
+        grid.textContent = '';
+        for (let i = 0; i < 7; i++) {
+          const w = document.createElement('span');
+          w.className = 'cal-wd';
+          w.textContent = new Date(2026, 1, 1 + i).toLocaleDateString(undefined, { weekday: 'narrow' }); // Feb 1 2026 is a Sunday
+          w.setAttribute('aria-hidden', 'true');
+          grid.append(w);
+        }
+        const startDay = new Date(y, mo - 1, 1).getDay();
+        const days = new Date(y, mo, 0).getDate();
+        for (let i = 0; i < startDay; i++) grid.append(document.createElement('span'));
+        for (let dnum = 1; dnum <= days; dnum++) {
+          const iso = view + '-' + String(dnum).padStart(2, '0');
+          const d = byDate.get(iso);
+          let cell;
+          if (d) {
+            cell = document.createElement('button');
+            cell.type = 'button';
+            cell.className = 'cal-day has' + (iso === selected ? ' sel' : '') + (iso === now ? ' is-today' : '');
+            const states = d.levels.map((l) => status('daily-' + iso, l).kind);
+            cell.setAttribute('aria-label', longDate(iso, { weekday: 'long', month: 'long', day: 'numeric' }) + ': ' + d.title +
+              (states.includes('done') ? ', solved' : states.includes('started') ? ', started' : ''));
+            cell.setAttribute('aria-pressed', String(iso === selected));
+            const n = document.createElement('span');
+            n.textContent = dnum;
+            const dots = document.createElement('span');
+            dots.className = 'dots';
+            for (const k of states) {
+              const i = document.createElement('i');
+              i.className = 'dot ' + k;
+              dots.append(i);
+            }
+            cell.append(n, dots);
+            cell.addEventListener('click', () => { selected = iso; renderCal(); renderDetail(); });
+          } else {
+            cell = document.createElement('span');
+            cell.className = 'cal-day' + (iso === now ? ' is-today' : '');
+            cell.textContent = dnum;
+          }
+          grid.append(cell);
+        }
+      };
+      $('#cal-prev').addEventListener('click', () => { view = shift(view, -1); renderCal(); });
+      $('#cal-next').addEventListener('click', () => { view = shift(view, 1); renderCal(); });
+      renderCal();
+      renderDetail();
     }
   }
 

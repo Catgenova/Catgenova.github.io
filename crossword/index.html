@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="crossword.css?v=2">
+<link rel="stylesheet" href="crossword.css?v=3">
 </head>
 <body>
 
@@ -46,13 +46,24 @@
   </section>
 
   <section aria-labelledby="archive-title" id="archive-section" hidden>
-    <h2 id="archive-title">Past puzzles</h2>
-    <ul class="archive" id="archive"></ul>
+    <h2 id="archive-title">Browse puzzles</h2>
+    <div class="archive">
+      <div class="cal" id="cal">
+        <div class="cal-head">
+          <button type="button" class="cal-nav" id="cal-prev" aria-label="Previous month">&lsaquo;</button>
+          <h3 id="cal-month" aria-live="polite"></h3>
+          <button type="button" class="cal-nav" id="cal-next" aria-label="Next month">&rsaquo;</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <p class="cal-key"><i class="dot done"></i> solved <i class="dot started"></i> started, one dot per difficulty</p>
+      </div>
+      <div class="cal-detail" id="cal-detail" aria-live="polite"></div>
+    </div>
   </section>
 
   <p class="hub-foot">Your progress and times are saved in this browser. Every daily puzzle comes in three difficulties: the grid is the same, the clues change. Hard hides answer lengths and turns off autocheck.</p>
 </main>
 
-<script src="hub.js?v=1"></script>
+<script src="hub.js?v=2"></script>
 </body>
 </html>

@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="../crossword.css?v=2">
+<link rel="stylesheet" href="../crossword.css?v=3">
 </head>
 <body class="loading">
 
@@ -26,6 +26,10 @@
       <h1 id="title">Crossword</h1>
       <p class="meta" id="meta"></p>
     </div>
+    <nav class="daynav" id="daynav" aria-label="Other days" hidden>
+      <a class="tool icon" id="day-prev" aria-label="Previous day's puzzle">&lsaquo;</a>
+      <a class="tool icon" id="day-next" aria-label="Next day's puzzle">&rsaquo;</a>
+    </nav>
   </div>
 
   <div class="tools" role="toolbar" aria-label="Puzzle tools">
@@ -121,6 +125,6 @@
   </div>
 </dialog>
 
-<script src="../crossword.js?v=2"></script>
+<script src="../crossword.js?v=3"></script>
 </body>
 </html>

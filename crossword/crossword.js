@@ -120,6 +120,24 @@
         box.append(a);
       }
     }
+    if (daily) {
+      // Previous / next day, among puzzles that are out.
+      getJSON('puzzles/index.json').then((index) => {
+        const days = index.daily.map((x) => x.date).filter((x) => x <= today()).sort();
+        const i = days.indexOf(P.date);
+        const link = (el, date) => {
+          if (!date) { el.classList.add('off'); el.removeAttribute('href'); el.setAttribute('aria-disabled', 'true'); return; }
+          const u = new URL(location.href);
+          u.searchParams.set('d', date);
+          u.searchParams.set('level', level);
+          el.href = u.pathname + u.search;
+          el.title = longDate(date);
+        };
+        link($('#day-prev'), i > 0 ? days[i - 1] : null);
+        link($('#day-next'), i >= 0 && i < days.length - 1 ? days[i + 1] : null);
+        $('#daynav').hidden = false;
+      }).catch(() => {});
+    }
     if (hard) {
       autocheckBox.disabled = true;
       $('#autocheck-label').textContent = 'Autocheck (not on Hard)';
