@@ -365,6 +365,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-31",
+   "title": "New Year's Eve",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }
