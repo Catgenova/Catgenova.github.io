@@ -34,22 +34,49 @@ Feeds are generated at `/blog/feed.xml` and `/changelog/feed.xml`.
 
 ## Crossword (`/crossword/`)
 
-A criss-cross crossword player. The page is static: `crossword/index.html`,
-`crossword.css` and `crossword.js`, with the puzzle itself in
-`crossword/puzzles/<slug>.js`. Progress and time are kept in `localStorage`.
+| What | Where |
+| --- | --- |
+| Hub: today's puzzle, specials, archive | `crossword/index.html`, `crossword/hub.js` |
+| Player | `crossword/play/index.html`, `crossword/crossword.js` |
+| Styles (both pages) | `crossword/crossword.css` |
+| Published puzzles (generated) | `crossword/puzzles/` (`index.json`, `daily/<date>.json`, `<special>.json`) |
+| Builders, word list, clue bank | `_source/crossword/` (not published) |
 
-Puzzle files are generated, not hand-edited. The word list and clues live in
-`_source/crossword/<name>.py` (`WORDS`, `TITLE`, `SLUG`). To change a clue or
-an answer, edit that file and rebuild:
+Links: `/crossword/play/` opens the latest daily, `?d=2026-11-27` a given day,
+`?p=thanksgiving` a special, and `&level=easy|medium|hard` a difficulty. A
+daily isn't shown before its date in the visitor's time zone. Progress is
+kept in `localStorage`, per puzzle and per difficulty.
 
-```sh
-python3 _source/crossword/build.py thanksgiving
-```
+**Daily puzzles** are 15×15 newspaper-style grids: symmetric, every letter in
+both an Across and a Down answer, answers at least 3 letters, no repeats.
+Each answer has three clues (easy, medium, hard); Hard also hides answer
+lengths and turns off autocheck.
 
-The builder tries 400 random layouts from a fixed seed and keeps the most compact one
-that places every word. Changing an answer changes the grid, so expect a new
-layout; changing only clue text keeps it. Answers are stored as ROT13 so the
-solution isn't readable at a glance in the page source.
+1. Add the date's theme to `_source/crossword/themes.py`: a title and 2–4
+   theme answers. The first two must be the same length, a third (centre row)
+   must be an odd length. Lengths that fit: 3–11, 13 or 14 (15s rarely fill).
+2. Make the grid: `python3 daily.py fill 2026-12-01` (run in
+   `_source/crossword/`). It tries random black-square patterns and fills them
+   from `wordlist.txt`, preferring common words and words that already have
+   clues. A themed grid can take several minutes. The result is saved as a
+   draft in `daily/<date>.txt`, which is committed so a published grid never
+   changes; delete the draft to get a new grid.
+3. `python3 daily.py missing 2026-12-01` lists answers without clues. Add
+   them to `clues.tsv` (`ANSWER<TAB>easy<TAB>medium<TAB>hard`). If a word is
+   unfit to clue, add it to `banned.txt`, delete the draft and fill again.
+4. `python3 daily.py publish 2026-12-01` writes the puzzle and updates
+   `index.json`.
+
+`wordlist.txt` comes from SCOWL (levels 10–50, see `SCOWL-COPYRIGHT.txt`);
+the number after each word is its level, 10 being the most common.
+
+**Specials** are free-form criss-cross puzzles built from a themed list, for
+example `python3 special.py thanksgiving` from `thanksgiving.py`. The builder
+tries 400 layouts from a fixed seed and keeps the most compact one, so
+changing only clue text keeps the same grid.
+
+Answers are stored as ROT13 so a glance at the page source doesn't spoil a
+puzzle.
 
 ## Homeschooling forms (`/homeschooling/`)
 

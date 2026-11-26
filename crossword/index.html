@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Thanksgiving Crossword · Pere Games</title>
-<meta name="description" content="The Big Thanksgiving Crossword: 200 clues on the food, the history and the traditions of the holiday. Medium difficulty, free to play in your browser.">
+<title>Crossword · Pere Games</title>
+<meta name="description" content="Free crosswords from Pere Games: a new newspaper-style puzzle every day in easy, medium and hard, plus big holiday specials.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f7f1e6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#15110d" media="(prefers-color-scheme: dark)">
-<meta property="og:title" content="The Big Thanksgiving Crossword">
-<meta property="og:description" content="200 clues, medium difficulty. Play free in your browser at pere.games.">
+<meta property="og:title" content="Pere Games Crossword">
+<meta property="og:description" content="A new crossword every day in three difficulties. Play free in your browser.">
 <meta property="og:image" content="https://pere.games/assets/img/games/crossword.png">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="crossword.css?v=1">
+<link rel="stylesheet" href="crossword.css?v=2">
 </head>
 <body>
 
@@ -23,99 +23,36 @@
   <div class="brand">
     <a class="home" href="/" aria-label="Back to pere.games"><span>pere.games</span></a>
     <div class="heading">
-      <h1 id="title">The Big Thanksgiving Crossword</h1>
-      <p class="meta"><span>200 clues</span><span>Medium</span></p>
+      <h1 class="hub-title">Crossword</h1>
+      <p class="meta"><span>A new puzzle every day</span><span>Easy, Medium or Hard</span></p>
     </div>
-  </div>
-
-  <div class="tools" role="toolbar" aria-label="Puzzle tools">
-    <span class="progress" id="progress" aria-live="off">0/200</span>
-    <button type="button" class="tool timer" id="timer" aria-label="Pause timer"><span class="ico-pause" aria-hidden="true"></span><span id="clock">0:00</span></button>
-
-    <details class="menu">
-      <summary class="tool">Check</summary>
-      <div class="pop" role="menu">
-        <button type="button" role="menuitem" data-act="check-cell">Square</button>
-        <button type="button" role="menuitem" data-act="check-word">Word</button>
-        <button type="button" role="menuitem" data-act="check-all">Puzzle</button>
-        <label class="toggle"><input type="checkbox" id="autocheck"> Autocheck as I type</label>
-      </div>
-    </details>
-    <details class="menu">
-      <summary class="tool">Reveal</summary>
-      <div class="pop" role="menu">
-        <button type="button" role="menuitem" data-act="reveal-cell">Square</button>
-        <button type="button" role="menuitem" data-act="reveal-word">Word</button>
-        <button type="button" role="menuitem" data-act="reveal-all">Puzzle</button>
-      </div>
-    </details>
-    <details class="menu">
-      <summary class="tool">Clear</summary>
-      <div class="pop" role="menu">
-        <button type="button" role="menuitem" data-act="clear-word">Word</button>
-        <button type="button" role="menuitem" data-act="clear-wrong">Wrong letters</button>
-        <button type="button" role="menuitem" data-act="clear-all">Puzzle and timer</button>
-      </div>
-    </details>
-
   </div>
 </header>
 
-<main class="layout">
-  <section class="board" aria-label="Grid">
-    <div class="cluebar">
-      <button type="button" class="nav" data-act="prev" aria-label="Previous clue">&lsaquo;</button>
-      <p id="cluebar"><b id="cb-num"></b> <span id="cb-text"></span> <span class="enum" id="cb-enum"></span></p>
-      <button type="button" class="nav" data-act="next" aria-label="Next clue">&rsaquo;</button>
+<main class="hub">
+  <section class="today" id="today" aria-labelledby="today-title">
+    <div>
+      <p class="eyebrow" id="today-eyebrow">Today's puzzle</p>
+      <h1 id="today-title">Loading…</h1>
+      <p class="sub" id="today-sub"></p>
+      <div class="play-levels" id="today-levels"></div>
     </div>
-    <div class="stage">
-      <div class="viewport" id="viewport">
-        <div class="grid" id="grid">
-          <input id="entry" class="entry" type="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" aria-label="Crossword answer">
-        </div>
-      </div>
-      <span class="zoom" role="group" aria-label="Zoom">
-        <button type="button" data-act="zoom-out" aria-label="Zoom out">&minus;</button>
-        <button type="button" data-act="zoom-fit" aria-label="Show the whole grid">Fit</button>
-        <button type="button" data-act="zoom-in" aria-label="Zoom in">+</button>
-      </span>
-    </div>
-    <div class="paused" id="paused" hidden>
-      <p class="paused-title">Paused</p>
-      <button type="button" class="btn" data-act="resume">Keep solving</button>
-    </div>
-    <p class="hint">Type to fill · Space or click again switches direction · Tab for the next clue · Arrows move</p>
+    <div class="preview" id="preview" aria-hidden="true"></div>
   </section>
 
-  <section class="clues" aria-label="Clues">
-    <div class="tabs" role="tablist">
-      <button type="button" role="tab" id="tab-a" aria-selected="true" aria-controls="list-a">Across</button>
-      <button type="button" role="tab" id="tab-d" aria-selected="false" aria-controls="list-d">Down</button>
-    </div>
-    <div class="list show" id="list-a" role="tabpanel" aria-labelledby="tab-a">
-      <h2>Across</h2>
-      <ol id="across"></ol>
-    </div>
-    <div class="list" id="list-d" role="tabpanel" aria-labelledby="tab-d">
-      <h2>Down</h2>
-      <ol id="down"></ol>
-    </div>
+  <section aria-labelledby="specials-title" id="specials-section" hidden>
+    <h2 id="specials-title">Specials</h2>
+    <div class="specials" id="specials"></div>
   </section>
+
+  <section aria-labelledby="archive-title" id="archive-section" hidden>
+    <h2 id="archive-title">Past puzzles</h2>
+    <ul class="archive" id="archive"></ul>
+  </section>
+
+  <p class="hub-foot">Your progress and times are saved in this browser. Every daily puzzle comes in three difficulties: the grid is the same, the clues change. Hard hides answer lengths and turns off autocheck.</p>
 </main>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<dialog id="done" aria-labelledby="done-title">
-  <p class="done-leaf" aria-hidden="true">🦃</p>
-  <h2 id="done-title">Solved!</h2>
-  <p id="done-text"></p>
-  <div class="done-actions">
-    <button type="button" class="btn primary" data-act="close-done">Admire the grid</button>
-    <a class="btn" href="/games/">More from Pere Games</a>
-  </div>
-</dialog>
-
-<script src="puzzles/thanksgiving.js?v=1"></script>
-<script src="crossword.js?v=1"></script>
+<script src="hub.js?v=1"></script>
 </body>
 </html>

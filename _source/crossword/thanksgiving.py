@@ -4,6 +4,8 @@
 
 TITLE = "The Big Thanksgiving Crossword"
 SLUG = "thanksgiving"
+BLURB = "200 clues on the food, the history and the traditions of the holiday, in one giant grid."
+DATE = "2026-11-26"
 
 WORDS = [
     # The table

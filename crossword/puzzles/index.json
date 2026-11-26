@@ -1,0 +1,27 @@
+{
+ "specials": [
+  {
+   "id": "thanksgiving",
+   "title": "The Big Thanksgiving Crossword",
+   "blurb": "200 clues on the food, the history and the traditions of the holiday, in one giant grid.",
+   "date": "2026-11-26",
+   "levels": [
+    "medium"
+   ],
+   "style": "crisscross",
+   "count": 200
+  }
+ ],
+ "daily": [
+  {
+   "date": "2026-11-27",
+   "title": "Black Friday",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
+  }
+ ]
+}
