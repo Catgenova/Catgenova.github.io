@@ -245,6 +245,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-20",
+   "title": "Snow Removal",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }
