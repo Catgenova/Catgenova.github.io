@@ -47,6 +47,16 @@
    ]
   },
   {
+   "date": "2026-11-29",
+   "title": "Game Night",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
+  },
+  {
    "date": "2026-11-30",
    "title": "Under the Sea",
    "count": 80,
