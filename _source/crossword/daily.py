@@ -30,6 +30,8 @@ SIZE = 15
 # Word quality by SCOWL level: common words first, obscure ones only to rescue a corner.
 LEVEL_SCORE = {10: 60, 20: 55, 35: 40, 40: 20, 50: 0}
 CLUED_BONUS = 8
+# Answers of 5+ letters aren't reused within this many days.
+REPEAT_DAYS = 7
 
 
 def word_scores():
@@ -57,7 +59,8 @@ def _init():
 
 
 def _attempt(args):
-    theme, seed = args
+    theme, seed, recent = args
+    scores = {w: v for w, v in _SCORES.items() if w not in recent} if recent else _SCORES
     rng = random.Random(seed)
     g = grid.make_pattern(rng, n=SIZE, theme=theme, blocks=(36, 46), max_words=80, dic=_DIC0, tries=60)
     if g is None:
@@ -65,7 +68,7 @@ def _attempt(args):
     for k in range(3):
         h = [row[:] for row in g]
         r2 = random.Random(seed * 1000 + k)
-        if grid.fill(h, grid.Dictionary(_SCORES, r2), r2, node_limit=1500):
+        if grid.fill(h, grid.Dictionary(scores, r2), r2, node_limit=1500):
             return grid.grid_text(h)
     return None
 
@@ -77,17 +80,31 @@ def quality(text, levels):
     return sum(scored) / max(1, len(scored))
 
 
+def recent_words(date, days=REPEAT_DAYS, min_len=5):
+    """Answers of min_len+ letters used in the drafts of the days before date."""
+    import datetime
+    d0 = datetime.date.fromisoformat(date)
+    out = set()
+    for k in range(1, days + 1):
+        path = DRAFTS / f"{d0 - datetime.timedelta(days=k)}.txt"
+        if path.exists():
+            _, _, g = read_draft(path.stem)
+            out.update(w for *_, w in answers(g) if len(w) >= min_len)
+    return frozenset(out)
+
+
 def cmd_fill(dates, attempts=320, want=2):
     _, levels = word_scores()
     with Pool(initializer=_init) as pool:
         for date in dates:
             title, entries = DAILY[date]
             theme = [lib.clean(e) for e in entries]
+            recent = recent_words(date)
             seed0 = int(date.replace("-", "")) * 1000
             t0 = time.time()
             found = []
             for batch in range(0, attempts, 16):
-                res = pool.map(_attempt, [(theme, seed0 + batch + i) for i in range(16)])
+                res = pool.map(_attempt, [(theme, seed0 + batch + i, recent) for i in range(16)])
                 found += [r for r in res if r]
                 print(f"{date}: {batch + 16} tries, {len(found)} grids, {time.time() - t0:.0f}s", flush=True)
                 if len(found) >= want:
