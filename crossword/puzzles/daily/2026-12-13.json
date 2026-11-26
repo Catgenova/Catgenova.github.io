@@ -47,7 +47,7 @@
 {"n": 4, "d": "d", "r": 0, "c": 3, "a": "RZH", "q": {"e": "Big flightless Australian bird", "m": "Ostrich's cousin", "h": "Bird on Australia's coat of arms"}, "len": "(3)"},
 {"n": 5, "d": "d", "r": 0, "c": 4, "a": "FNEQVARF", "q": {"e": "Canned fish", "m": "Packed-in fish", "h": "Hide-and-seek game variant"}, "len": "(8)"},
 {"n": 6, "d": "d", "r": 0, "c": 6, "a": "FCRRQF", "q": {"e": "Rates", "m": "Races", "h": "Gears on a bike"}, "len": "(6)"},
-{"n": 7, "d": "d", "r": 0, "c": 7, "a": "GUVF", "q": {"e": "The one here", "m": "Present", "h": "\"___ is it!\""}, "len": "(4)"},
+{"n": 7, "d": "d", "r": 0, "c": 7, "a": "GUVF", "q": {"e": "The one here", "m": "Nearby item", "h": "\"___ is it!\""}, "len": "(4)"},
 {"n": 8, "d": "d", "r": 0, "c": 8, "a": "ENT", "q": {"e": "Cleaning cloth", "m": "Tease", "h": "Ragtime piece"}, "len": "(3)"},
 {"n": 9, "d": "d", "r": 0, "c": 9, "a": "NFU", "q": {"e": "Fireplace residue", "m": "Wood for baseball bats", "h": "Word before Wednesday"}, "len": "(3)"},
 {"n": 10, "d": "d", "r": 0, "c": 10, "a": "CRGRE", "q": {"e": "Dwindle, with \"out\"", "m": "Fade (out)", "h": "Fizzle, with \"out\""}, "len": "(5)"},
