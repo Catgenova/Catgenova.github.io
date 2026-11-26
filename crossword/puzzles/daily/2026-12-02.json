@@ -50,7 +50,7 @@
 {"n": 9, "d": "d", "r": 0, "c": 10, "a": "ERFG", "q": {"e": "Relax", "m": "Remainder", "h": "Musical pause"}, "len": "(4)"},
 {"n": 10, "d": "d", "r": 0, "c": 12, "a": "NVQRF", "q": {"e": "Assistants", "m": "Helpers on a staff", "h": "Right-hand people"}, "len": "(5)"},
 {"n": 11, "d": "d", "r": 0, "c": 13, "a": "PEBBX", "q": {"e": "Thief", "m": "Bend in the arm", "h": "Shepherd's staff"}, "len": "(5)"},
-{"n": 12, "d": "d", "r": 0, "c": 14, "a": "GRRAF", "q": {"e": "Ages 13 to 19", "m": "Adolescents", "h": "High schoolers"}, "len": "(5)"},
+{"n": 12, "d": "d", "r": 0, "c": 14, "a": "GRRAF", "q": {"e": "Thirteen to nineteen", "m": "Adolescents", "h": "High schoolers"}, "len": "(5)"},
 {"n": 14, "d": "d", "r": 1, "c": 5, "a": "FUR", "q": {"e": "That woman", "m": "Pronoun for a ship, traditionally", "h": "\"Thar ___ blows!\""}, "len": "(3)"},
 {"n": 18, "d": "d", "r": 2, "c": 6, "a": "CEBCRE", "q": {"e": "Correct", "m": "Polite", "h": "Strictly speaking"}, "len": "(6)"},
 {"n": 23, "d": "d", "r": 4, "c": 0, "a": "HCCRE", "q": {"e": "Higher", "m": "Shoe's top", "h": "Stimulant"}, "len": "(5)"},
