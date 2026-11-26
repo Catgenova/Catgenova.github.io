@@ -255,6 +255,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-21",
+   "title": "First Day of Winter",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }
