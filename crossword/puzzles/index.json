@@ -97,6 +97,16 @@
    ]
   },
   {
+   "date": "2026-12-04",
+   "title": "Festival of Lights",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
+  },
+  {
    "date": "2026-12-05",
    "title": "Space Walk",
    "count": 76,
