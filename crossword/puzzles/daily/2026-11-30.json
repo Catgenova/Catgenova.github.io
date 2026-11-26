@@ -75,7 +75,7 @@
 {"n": 54, "d": "d", "r": 10, "c": 10, "a": "ZNE", "q": {"e": "Spoil", "m": "Scratch", "h": "Damage the finish of"}, "len": "(3)"},
 {"n": 56, "d": "d", "r": 11, "c": 5, "a": "HFRF", "q": {"e": "Puts to work", "m": "Purposes", "h": "Takes advantage of"}, "len": "(4)"},
 {"n": 57, "d": "d", "r": 11, "c": 9, "a": "CHER", "q": {"e": "Unmixed", "m": "Clean", "h": "Sheer"}, "len": "(4)"},
-{"n": 60, "d": "d", "r": 12, "c": 7, "a": "NTB", "q": {"e": "In the past", "m": "\"Long, long ___\"", "h": "Back, timewise"}, "len": "(3)"},
+{"n": 60, "d": "d", "r": 12, "c": 7, "a": "NTB", "q": {"e": "Back then", "m": "\"Long, long ___\"", "h": "Back, timewise"}, "len": "(3)"},
 {"n": 61, "d": "d", "r": 12, "c": 8, "a": "GRA", "q": {"e": "Number of fingers", "m": "Perfect score, often", "h": "Hang ___ (surfing move)"}, "len": "(3)"},
 {"n": 62, "d": "d", "r": 12, "c": 12, "a": "YVR", "q": {"e": "Fib", "m": "Recline", "h": "Golf ball's position"}, "len": "(3)"},
 {"n": 63, "d": "d", "r": 12, "c": 13, "a": "REN", "q": {"e": "Period of history", "m": "Age", "h": "Pitcher's stat"}, "len": "(3)"},

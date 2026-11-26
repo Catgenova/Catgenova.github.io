@@ -59,7 +59,7 @@
 {"n": 26, "d": "d", "r": 5, "c": 1, "a": "UVQR", "q": {"e": "Get out of sight", "m": "Animal skin", "h": "Leather source, or conceal"}, "len": "(4)"},
 {"n": 27, "d": "d", "r": 5, "c": 2, "a": "NGBZ", "q": {"e": "Tiny unit of matter", "m": "Smallest bit of an element", "h": "Particle once thought uncuttable"}, "len": "(4)"},
 {"n": 28, "d": "d", "r": 5, "c": 6, "a": "GBEA", "q": {"e": "Ripped", "m": "Undecided", "h": "Pulled two ways"}, "len": "(4)"},
-{"n": 32, "d": "d", "r": 6, "c": 7, "a": "NTB", "q": {"e": "In the past", "m": "\"Long, long ___\"", "h": "Back, timewise"}, "len": "(3)"},
+{"n": 32, "d": "d", "r": 6, "c": 7, "a": "NTB", "q": {"e": "Back then", "m": "\"Long, long ___\"", "h": "Back, timewise"}, "len": "(3)"},
 {"n": 33, "d": "d", "r": 6, "c": 8, "a": "ZNEF", "q": {"e": "The Red Planet", "m": "Fourth planet from the sun", "h": "Spoils the finish of"}, "len": "(4)"},
 {"n": 35, "d": "d", "r": 6, "c": 12, "a": "FGVE", "q": {"e": "Mix with a spoon", "m": "Commotion", "h": "Cause a ___"}, "len": "(4)"},
 {"n": 36, "d": "d", "r": 6, "c": 13, "a": "GNPB", "q": {"e": "Folded tortilla dish", "m": "Tuesday meal, alliteratively", "h": "Shell game?"}, "len": "(4)"},

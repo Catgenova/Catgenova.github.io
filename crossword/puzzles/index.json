@@ -135,6 +135,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-10",
+   "title": "At the Zoo",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }

@@ -18,7 +18,7 @@
 {"n": 36, "d": "a", "r": 6, "c": 0, "a": "EBOF", "q": {"e": "Steals from", "m": "Holds up", "h": "Burgles"}, "len": "(4)"},
 {"n": 37, "d": "a", "r": 6, "c": 6, "a": "EBZNA", "q": {"e": "From Rome", "m": "Upright typeface", "h": "Kind of numeral"}, "len": "(5)"},
 {"n": 39, "d": "a", "r": 6, "c": 12, "a": "CEB", "q": {"e": "Expert", "m": "In favor of", "h": "Paid player"}, "len": "(3)"},
-{"n": 40, "d": "a", "r": 7, "c": 0, "a": "NTB", "q": {"e": "In the past", "m": "\"Long, long ___\"", "h": "Back, timewise"}, "len": "(3)"},
+{"n": 40, "d": "a", "r": 7, "c": 0, "a": "NTB", "q": {"e": "Back then", "m": "\"Long, long ___\"", "h": "Back, timewise"}, "len": "(3)"},
 {"n": 41, "d": "a", "r": 7, "c": 4, "a": "FCNGHYN", "q": {"e": "Flat tool for flipping pancakes", "m": "Pancake turner", "h": "Flipper in a kitchen drawer"}, "len": "(7)", "t": 1},
 {"n": 43, "d": "a", "r": 7, "c": 12, "a": "RBA", "q": {"e": "Very long time", "m": "Ages and ages", "h": "Geologic span"}, "len": "(3)"},
 {"n": 44, "d": "a", "r": 8, "c": 0, "a": "FHA", "q": {"e": "Center of our solar system", "m": "Daytime light", "h": "Bask"}, "len": "(3)"},
