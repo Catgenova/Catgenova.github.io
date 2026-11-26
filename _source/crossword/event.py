@@ -24,6 +24,7 @@ from themes import EVENTS
 
 DRAFTS = lib.HERE / "events"
 VOCAB_BONUS = 45
+SEED0 = int(__import__("os").environ.get("EVENT_SEED0", "9000"))
 
 _SCORES = None
 _DIC0 = None
@@ -89,7 +90,7 @@ def cmd_fill(eid, attempts=400, want=1):
     found = []
     with Pool(initializer=_init, initargs=(cfg,)) as pool:
         for batch in range(0, attempts, 16):
-            res = pool.map(_attempt, [9000 + batch + i for i in range(16)])
+            res = pool.map(_attempt, [SEED0 + batch + i for i in range(16)])
             found += [r for r in res if r]
             print(f"{eid}: {batch + 16} tries, {len(found)} grids, {time.time() - t0:.0f}s", flush=True)
             if len(found) >= want:
