@@ -103,6 +103,22 @@ def quality(text, levels):
     return sum(scored) / max(1, len(scored))
 
 
+def theme_parts(entries):
+    """Words inside the theme answers (MUSIC BOXES -> MUSIC, BOXES, BOX...),
+    which shouldn't also turn up elsewhere in the same grid."""
+    out = set()
+    for e in entries:
+        for part in e.upper().replace("-", " ").split():
+            part = "".join(ch for ch in part if ch.isalpha())
+            if len(part) >= 3:
+                out |= {part, part + "S", part + "ES"}
+                if part.endswith("ES"):
+                    out.add(part[:-2])
+                if part.endswith("S"):
+                    out.add(part[:-1])
+    return frozenset(out)
+
+
 def recent_words(date, days=REPEAT_DAYS, min_len=5):
     """Answers of min_len+ letters used in drafts within `days` of date
     (before or after, so a refilled day doesn't clash with its neighbours)."""
@@ -123,7 +139,7 @@ def cmd_fill(dates, attempts=320, want=2):
         for date in dates:
             title, entries = DAILY[date]
             theme = [lib.clean(e) for e in entries]
-            recent = recent_words(date)
+            recent = recent_words(date) | theme_parts(entries)
             seed0 = int(date.replace("-", "")) * 1000
             t0 = time.time()
             found = []
