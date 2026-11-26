@@ -67,7 +67,7 @@ PROMO	Advertisement	Ad, for short	___ code
 REAR	Back	Raise, as children	Bring up
 RELISH	Hot dog topping	Enjoy greatly	Savor
 RILLS	Small streams	Brooklets	Tiny watercourses
-ROE	Fish eggs	Caviar	Shad's eggs
+ROE	Caviar source	Sushi bar topping, sometimes	Shad delicacy
 ROOM	Space	Kitchen or den	Elbow ___
 RUSTS	Turns reddish-brown, like old iron	Corrodes	Gets out of practice
 SEE	Look at	Understand	Bishop's district
@@ -132,7 +132,7 @@ ROT	Decay	Go bad	Nonsense
 RUN	Move fast on foot	Manage	Snag in tights
 SAT	Took a seat	Was seated	College entrance test, briefly
 SIT	Take a seat	Command for a dog	Babysit, informally
-SON	Male child	Junior, maybe	Heir, perhaps
+SON	Male child	Junior, maybe	Boy, to a parent
 SUN	Center of our solar system	Daytime light	Bask
 TOP	Highest point	Spinning toy	Outdo
 USE	Put to work	Utilize	Purpose
@@ -326,7 +326,7 @@ BAGUETTES	Long French loaves	Crusty breads	Long, rectangular gem cuts
 SOURDOUGH	Tangy bread made with a starter	San Francisco bread	Loaf from a bubbling jar on the counter
 MUFFINS	Breakfast baked goods in cups	Blueberry treats	English ___
 LAB REPORTS	Written results of experiments	Science-class write-ups	Documents that end with conclusions
-HYPOTHESIS	Educated guess	Testable idea	Science fair starting point
+HYPOTHESIS	Educated guess	Proposition to be tested	Start of the scientific method
 MAGNETS	Fridge decorations that stick	Things with north and south poles	Attractive objects
 WOOL SWEATER	Knitted warm top	Itchy but cozy layer	Cable-knit pullover
 SPACE HEATER	Portable warmer	Plug-in warmer for a chilly room	Appliance under many office desks in December
@@ -1588,3 +1588,54 @@ TAKES	Grabs	Film shots	Opinions
 UNITES	Joins	Brings together	Merges
 WARS	Conflicts	Battles	Star ___
 WOLF	Pack animal	Gobble	Howler
+ABIDES	Puts up with	Stays	Tolerates
+ABODE	Home	Dwelling	Humble ___
+ADIEU	Farewell	Goodbye, in French	"So long"
+AGONY	Great pain	Torment	Anguish
+ARIAS	Opera solos	Divas' songs	Airs at the opera
+ARROW	Pointer	Archer's shot	Cupid's weapon
+ASSERT	State firmly	Insist	Declare
+ATONE	Make amends	Make up (for)	Repent
+AURA	Glow	Vibe	Distinctive air
+BEHALF	On ___ of	Interest	Part, as in "on my ___"
+CAWED	Called like a crow	Croaked	Made a crow sound
+COMET	Icy space traveler	Halley's, for one	One of Santa's reindeer
+CRIB	Baby bed	Copy, as answers	Nativity manger
+DACHA	Russian country house	Summer cottage outside Moscow	Rural retreat in Russia
+DOTTY	Eccentric	Slightly crazy	Batty
+DOUR	Gloomy	Stern	Sullen
+DRAW	Sketch	Tie game	Attraction
+EUROS	European money	Coins in Paris	Currency in Rome
+FACETS	Gem faces	Aspects	Sides
+FORGO	Do without	Skip	Give up
+FRAYS	Unravels	Wears at the edges	Brawls
+GRATE	Shred	Fireplace frame	Irritate
+HEIR	Inheritor	Successor	Crown prince, e.g.
+HOARDER	Collector of stuff	Pack rat	Squirrel, figuratively
+HOIST	Lift	Raise	Crane
+IDLY	Lazily	Without purpose	Doing nothing
+LADLE	Soup spoon	Big dipper	Serve, as soup
+LENDS	Loans	Gives temporarily	Adds, as charm
+MANIACAL	Crazed	Wild-eyed	Like a cartoon villain's laugh
+MINES	Coal pits	Belongs to me, plural	Sources of riches
+ODOR	Smell	Scent	Whiff
+OUTCLASS	Far surpass	Outshine	Leave in the dust
+OUTWEAR	Outlast	Last longer than	Wear out
+PASHA	Ottoman official	Bigwig	Turkish title
+PLACE	Spot	Location	Second, in a race
+POT	Cooking vessel	Kitty in poker	Pan's partner
+PROP	Stage object	Support	Airplane spinner
+RAPT	Engrossed	Spellbound	Absorbed
+RIM	Edge	Hoop part	Wheel's outer edge
+RUSE	Trick	Ploy	Subterfuge
+SCIENCE	Physics or biology	Lab subject	Body of knowledge
+SIDEBAR	Box beside an article	Private chat at the bench	Aside
+SING	Carol	Croon	Rat out, slangily
+STENT	Artery tube	Medical insert	Wire-mesh tube
+TRAIT	Characteristic	Feature	Quality
+TYPES	Kinds	Keyboards	Sorts
+UGLY	Unattractive	Unpleasant	Hideous
+WAGS	Jokers	Shakes, as a tail	Wits
+WIGS	Hairpieces	Toupees	Judges' headgear in Britain
+WON	Triumphed	Came in first	Korean currency
+YAPS	Barks shrilly	Chatters	Small-dog sounds

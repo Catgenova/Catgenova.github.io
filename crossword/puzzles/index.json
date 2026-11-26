@@ -127,6 +127,16 @@
    ]
   },
   {
+   "date": "2026-12-08",
+   "title": "Science Fair",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
+  },
+  {
    "date": "2026-12-09",
    "title": "Bundle Up",
    "count": 80,
