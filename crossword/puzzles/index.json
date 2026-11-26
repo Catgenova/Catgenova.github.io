@@ -155,6 +155,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-12",
+   "title": "Baking Season",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }
