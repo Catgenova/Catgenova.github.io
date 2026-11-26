@@ -82,6 +82,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-05",
+   "title": "Space Walk",
+   "count": 76,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }

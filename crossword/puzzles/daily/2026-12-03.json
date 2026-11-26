@@ -2,7 +2,7 @@
 "entries": [
 {"n": 1, "d": "a", "r": 0, "c": 0, "a": "FYHZ", "q": {"e": "Run-down neighborhood", "m": "Poor district", "h": "Go downmarket, with \"it\""}, "len": "(4)"},
 {"n": 5, "d": "a", "r": 0, "c": 6, "a": "FPHON", "q": {"e": "Underwater breathing gear", "m": "Diving gear", "h": "Acronym that became a word"}, "len": "(5)"},
-{"n": 10, "d": "a", "r": 0, "c": 12, "a": "NFU", "q": {"e": "Fireplace residue", "m": "Tree with winged seeds", "h": "Word before Wednesday"}, "len": "(3)"},
+{"n": 10, "d": "a", "r": 0, "c": 12, "a": "NFU", "q": {"e": "Fireplace residue", "m": "Wood for baseball bats", "h": "Word before Wednesday"}, "len": "(3)"},
 {"n": 13, "d": "a", "r": 1, "c": 0, "a": "UBAR", "q": {"e": "Sharpen", "m": "Refine", "h": "Whet"}, "len": "(4)"},
 {"n": 14, "d": "a", "r": 1, "c": 5, "a": "CBBYRQ", "q": {"e": "Combined", "m": "Shared, as resources", "h": "Collected in puddles"}, "len": "(6)"},
 {"n": 15, "d": "a", "r": 1, "c": 12, "a": "FCN", "q": {"e": "Place for a massage", "m": "Resort with hot springs", "h": "Pampering place"}, "len": "(3)"},
@@ -56,7 +56,7 @@
 {"n": 21, "d": "d", "r": 3, "c": 11, "a": "FRRF", "q": {"e": "Notices", "m": "Dates", "h": "Understands"}, "len": "(4)"},
 {"n": 24, "d": "d", "r": 4, "c": 10, "a": "GUVA", "q": {"e": "Slim", "m": "Slender", "h": "Dilute"}, "len": "(4)"},
 {"n": 25, "d": "d", "r": 5, "c": 0, "a": "PBO", "q": {"e": "Corn holder", "m": "Male swan", "h": "Stocky horse"}, "len": "(3)"},
-{"n": 26, "d": "d", "r": 5, "c": 1, "a": "RTB", "q": {"e": "Self-image", "m": "Sense of self", "h": "It might need stroking"}, "len": "(3)"},
+{"n": 26, "d": "d", "r": 5, "c": 1, "a": "RTB", "q": {"e": "Self-image", "m": "Sense of self", "h": "It can be bruised"}, "len": "(3)"},
 {"n": 27, "d": "d", "r": 5, "c": 5, "a": "NIBJ", "q": {"e": "Declare openly", "m": "Swear", "h": "Admit frankly"}, "len": "(4)"},
 {"n": 28, "d": "d", "r": 5, "c": 6, "a": "YVC", "q": {"e": "Mouth edge", "m": "Back talk", "h": "Rim of a cup"}, "len": "(3)"},
 {"n": 32, "d": "d", "r": 6, "c": 7, "a": "NPG", "q": {"e": "Perform on stage", "m": "Part of a play", "h": "Law passed by Congress"}, "len": "(3)"},

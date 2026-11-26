@@ -43,6 +43,12 @@ def check(path):
                 errs.append(f"{e['n']}{e['d']}: no {k} clue")
             elif a.lower() in "".join(ch for ch in q.lower() if ch.isalpha()) and len(a) > 3:
                 errs.append(f"{e['n']}{e['d']} {a}: clue contains the answer: {q}")
+            else:
+                # A clue shouldn't name another answer in the same grid.
+                words = {w.strip(".,!?\"'()").upper() for w in q.split()}
+                for other in answers:
+                    if other != a and len(other) >= 4 and other in words:
+                        errs.append(f"{e['n']}{e['d']} {a}: clue names another answer ({other}): {q}")
     if p.get("style") == "grid":
         n = p["width"]
         blocks = {(r, c) for r, row in enumerate(p["blocks"]) for c, ch in enumerate(row) if ch == "1"}
