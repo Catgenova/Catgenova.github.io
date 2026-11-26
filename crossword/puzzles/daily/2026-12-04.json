@@ -78,6 +78,6 @@
 {"n": 59, "d": "d", "r": 11, "c": 8, "a": "RLRF", "q": {"e": "Peepers", "m": "Looks at", "h": "Potato spots"}, "len": "(4)"},
 {"n": 61, "d": "d", "r": 12, "c": 0, "a": "TRG", "q": {"e": "Obtain", "m": "Understand", "h": "Fetch"}, "len": "(3)"},
 {"n": 63, "d": "d", "r": 12, "c": 6, "a": "YBC", "q": {"e": "Cut off", "m": "Chop off a branch", "h": "Prune"}, "len": "(3)"},
-{"n": 64, "d": "d", "r": 12, "c": 10, "a": "BER", "q": {"e": "Mined rock", "m": "Iron source", "h": "Lode load"}, "len": "(3)"},
+{"n": 64, "d": "d", "r": 12, "c": 10, "a": "BER", "q": {"e": "Mined rock", "m": "Metal source", "h": "Lode load"}, "len": "(3)"},
 {"n": 65, "d": "d", "r": 12, "c": 11, "a": "ARJ", "q": {"e": "Not old", "m": "Fresh", "h": "Unused"}, "len": "(3)"}
 ]}

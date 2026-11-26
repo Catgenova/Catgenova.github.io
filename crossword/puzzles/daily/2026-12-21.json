@@ -79,5 +79,5 @@
 {"n": 59, "d": "d", "r": 12, "c": 4, "a": "JNF", "q": {"e": "Existed", "m": "Had been", "h": "Used to be"}, "len": "(3)"},
 {"n": 60, "d": "d", "r": 12, "c": 5, "a": "VYY", "q": {"e": "Sick", "m": "Unwell", "h": "Badly"}, "len": "(3)"},
 {"n": 61, "d": "d", "r": 12, "c": 10, "a": "PNA", "q": {"e": "Soda container", "m": "Is able to", "h": "Fire, informally"}, "len": "(3)"},
-{"n": 62, "d": "d", "r": 12, "c": 11, "a": "BER", "q": {"e": "Mined rock", "m": "Iron source", "h": "Lode load"}, "len": "(3)"}
+{"n": 62, "d": "d", "r": 12, "c": 11, "a": "BER", "q": {"e": "Mined rock", "m": "Metal source", "h": "Lode load"}, "len": "(3)"}
 ]}

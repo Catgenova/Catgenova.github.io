@@ -27,7 +27,7 @@
 {"n": 46, "d": "a", "r": 9, "c": 3, "a": "BVY", "q": {"e": "Car engine fluid", "m": "Grease", "h": "Painter's medium"}, "len": "(3)"},
 {"n": 48, "d": "a", "r": 9, "c": 8, "a": "FCNEEBJ", "q": {"e": "Small brown bird", "m": "Common songbird", "h": "House ___ (city-dwelling bird)"}, "len": "(7)"},
 {"n": 51, "d": "a", "r": 10, "c": 0, "a": "ZVFCYNPR", "q": {"e": "Lose for a while", "m": "Put in the wrong spot", "h": "Can't remember where you left"}, "len": "(8)"},
-{"n": 56, "d": "a", "r": 10, "c": 9, "a": "BER", "q": {"e": "Mined rock", "m": "Iron source", "h": "Lode load"}, "len": "(3)"},
+{"n": 56, "d": "a", "r": 10, "c": 9, "a": "BER", "q": {"e": "Mined rock", "m": "Metal source", "h": "Lode load"}, "len": "(3)"},
 {"n": 57, "d": "a", "r": 11, "c": 0, "a": "BTYR", "q": {"e": "Stare at rudely", "m": "Gawk", "h": "Eye too openly"}, "len": "(4)"},
 {"n": 58, "d": "a", "r": 11, "c": 5, "a": "FNYRFPYREX", "q": {"e": "Store worker at the register", "m": "Person who rings you up", "h": "One handling all those returns in January"}, "len": "(5,5)", "t": 1},
 {"n": 63, "d": "a", "r": 12, "c": 0, "a": "NYR", "q": {"e": "Pub drink", "m": "Brewpub pour", "h": "Stout relative"}, "len": "(3)"},

@@ -295,6 +295,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-27",
+   "title": "Book Nook",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }

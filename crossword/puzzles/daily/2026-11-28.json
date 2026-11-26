@@ -36,7 +36,7 @@
 {"n": 70, "d": "a", "r": 13, "c": 12, "a": "TRR", "q": {"e": "Mild exclamation", "m": "\"Golly!\"", "h": "Horse command to turn right"}, "len": "(3)"},
 {"n": 71, "d": "a", "r": 14, "c": 0, "a": "FGNGR", "q": {"e": "Ohio or Iowa", "m": "Declare", "h": "Condition"}, "len": "(5)"},
 {"n": 72, "d": "a", "r": 14, "c": 7, "a": "FBQF", "q": {"e": "Grass patches", "m": "Turf pieces", "h": "Lays grass"}, "len": "(4)"},
-{"n": 73, "d": "a", "r": 14, "c": 12, "a": "BER", "q": {"e": "Mined rock", "m": "Iron source", "h": "Lode load"}, "len": "(3)"},
+{"n": 73, "d": "a", "r": 14, "c": 12, "a": "BER", "q": {"e": "Mined rock", "m": "Metal source", "h": "Lode load"}, "len": "(3)"},
 {"n": 1, "d": "d", "r": 0, "c": 0, "a": "UNEFU", "q": {"e": "Severe", "m": "Rough", "h": "Grating"}, "len": "(5)"},
 {"n": 2, "d": "d", "r": 0, "c": 1, "a": "NERAN", "q": {"e": "Big indoor venue", "m": "Sports venue", "h": "Field of conflict"}, "len": "(5)"},
 {"n": 3, "d": "d", "r": 0, "c": 2, "a": "GRABE", "q": {"e": "High male singing voice", "m": "Pavarotti, for one", "h": "General gist"}, "len": "(5)"},
