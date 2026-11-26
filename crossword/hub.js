@@ -23,9 +23,8 @@
     return h ? h + ':' + String(m).padStart(2, '0') + ':' + ss : m + ':' + ss;
   }
   // Progress for one puzzle at one level: { kind: 'done'|'started'|'new', text }
-  function status(id, level) {
-    let s = store('pere-crossword:' + id + ':' + level);
-    if (!s && id === 'thanksgiving' && level === 'medium') s = store('pere-crossword:thanksgiving');
+  function status(id, level, rev) {
+    const s = store('pere-crossword:' + id + (rev > 1 ? '@' + rev : '') + ':' + level);
     if (!s) return { kind: 'new', text: 'Not started' };
     if (s.solved) return { kind: 'done', text: '✓ ' + fmt(s.time || 0) + (s.helped ? ' (helped)' : '') };
     const pct = s.pct != null ? s.pct : Math.round(((s.fill || '').replace(/\./g, '').length / Math.max(1, (s.fill || '').length)) * 100);
@@ -84,7 +83,7 @@
         h.textContent = sp.title;
         const p = document.createElement('p');
         p.textContent = sp.blurb || sp.count + ' clues';
-        const st = status(sp.id, sp.levels.includes('medium') ? 'medium' : sp.levels[0]);
+        const st = status(sp.id, sp.levels.includes('medium') ? 'medium' : sp.levels[0], sp.rev);
         const s = document.createElement('span');
         s.className = 'status-line';
         s.textContent = st.kind === 'new' ? sp.count + ' clues' : st.text;

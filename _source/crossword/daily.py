@@ -81,11 +81,12 @@ def quality(text, levels):
 
 
 def recent_words(date, days=REPEAT_DAYS, min_len=5):
-    """Answers of min_len+ letters used in the drafts of the days before date."""
+    """Answers of min_len+ letters used in drafts within `days` of date
+    (before or after, so a refilled day doesn't clash with its neighbours)."""
     import datetime
     d0 = datetime.date.fromisoformat(date)
     out = set()
-    for k in range(1, days + 1):
+    for k in [*range(-days, 0), *range(1, days + 1)]:
         path = DRAFTS / f"{d0 - datetime.timedelta(days=k)}.txt"
         if path.exists():
             _, _, g = read_draft(path.stem)

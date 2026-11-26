@@ -23,3 +23,20 @@ DAILY = {
     "2026-12-11": ("Garden Party", ["FLOWER BEDS", "GARDEN HOSE", "PETUNIA"]),
     "2026-12-12": ("Baking Season", ["GINGERBREAD", "CANDLELIGHT", "WREATHS"]),
 }
+
+# Special events: one-off newspaper-style puzzles, built with event.py.
+# size: 15 (daily size) or 21 (Sunday size). vocab: a word-list module whose
+# WORDS the filler strongly prefers, so the fill leans into the event's theme.
+# rev: bump when a published event gets a new grid, so old saved progress
+# (for the old grid) isn't applied to the new one.
+EVENTS = {
+    "thanksgiving": {
+        "title": "The Big Thanksgiving Crossword",
+        "blurb": "A Sunday-size grid packed with the food, the history and the traditions of the holiday.",
+        "date": "2026-11-26",
+        "size": 21,
+        "theme": ["MASHED POTATOES", "CRANBERRY SAUCE"],
+        "vocab": "thanksgiving",
+        "rev": 2,
+    },
+}

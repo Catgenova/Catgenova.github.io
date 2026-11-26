@@ -61,7 +61,7 @@ def write_index():
         if p.name == "index.json":
             continue
         d = json.loads(p.read_text())
-        specials.append({k: d[k] for k in ("id", "title", "blurb", "date", "levels", "style") if k in d}
+        specials.append({k: d[k] for k in ("id", "rev", "title", "blurb", "date", "levels", "style") if k in d}
                         | {"count": len(d["entries"])})
     for p in sorted((SITE / "daily").glob("*.json")):
         d = json.loads(p.read_text())

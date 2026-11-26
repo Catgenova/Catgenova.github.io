@@ -81,7 +81,8 @@
     const W = P.width;
     const H = P.height;
     const lk = LEVEL_KEYS[level];
-    const KEY = 'pere-crossword:' + P.id + ':' + level;
+    // A puzzle that gets a new grid bumps its rev, so old progress isn't reused.
+    const KEY = 'pere-crossword:' + P.id + (P.rev > 1 ? '@' + P.rev : '') + ':' + level;
     const isGrid = P.style === 'grid';
     const hard = level === 'hard';
     const daily = P.kind === 'daily';
@@ -101,7 +102,7 @@
     $('#title').textContent = daily ? 'Daily Crossword' : P.title;
     document.title = (daily ? 'Daily Crossword, ' + longDate(P.date) : P.title) + ' · Pere Games';
     const meta = $('#meta');
-    const bits = daily ? [longDate(P.date), P.title] : [P.entries.length + ' clues', LEVEL_NAMES[level]];
+    const bits = daily ? [longDate(P.date), P.title] : [P.width + '\u00d7' + P.height, P.entries.length + ' clues'];
     for (const b of bits) { const s = document.createElement('span'); s.textContent = b; meta.append(s); }
     if (P.levels.length > 1) {
       const box = $('#levels');
@@ -688,9 +689,7 @@
         const z = ZOOMS.indexOf(prefs.zoom || (window.matchMedia('(max-width: 899px)').matches ? 34 : 30));
         if (z >= 0) zoom = z;
       }
-      let s = store.get(KEY);
-      // Progress saved before difficulty levels existed.
-      if (!s && P.id === 'thanksgiving' && level === 'medium') s = store.get('pere-crossword:thanksgiving');
+      const s = store.get(KEY);
       let at = null;
       if (s && s.fill && s.fill.length === cellList.length) {
         cellList.forEach((c, i) => {

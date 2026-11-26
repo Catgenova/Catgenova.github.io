@@ -7,6 +7,7 @@ Rules every grid follows (the usual American crossword conventions):
   - all white squares are connected;
   - no answer appears twice.
 """
+import math
 import random
 from pathlib import Path
 
@@ -173,7 +174,7 @@ def place_theme(n, entries, rows=None):
                 g[n - 1 - r][n - 1 - cc] = BLOCK
         return True
 
-    if len(entries) not in (2, 3, 4):
+    if len(entries) not in (2, 3, 4, 5):
         return None
     a, b = entries[0], entries[1]
     if len(a) != len(b):
@@ -182,14 +183,28 @@ def place_theme(n, entries, rows=None):
         rows = [3, n - 4] if len(entries) != 4 else [2, n - 3]
     # First of the pair starts at the left edge (one in for a 13 in a 15
     # grid, so no 1-square gap is left); its partner is the mirror image.
-    gap = n - len(a)
-    start = 0 if gap in (0, 1) or gap >= 4 else 1 if gap == 2 else None
+    def start_for(length):
+        gap = n - length
+        return 0 if gap in (0, 1) or gap >= 4 else 1 if gap == 2 else None
+
+    start = start_for(len(a))
     if start is None:
         return None
     if not put(rows[0], start, a) or not put(rows[1], n - start - len(b), b):
         return None
-    if len(entries) == 3:
-        c = entries[2]
+    if len(entries) == 5:
+        # Second pair: right-aligned on the upper row, mirrored below.
+        c, d = entries[2], entries[3]
+        s2 = start_for(len(c))
+        if len(c) != len(d) or s2 is None or len(rows) < 4:
+            return None
+        if not put(rows[2], n - s2 - len(c), c) or not put(rows[3], s2, d):
+            return None
+    if len(entries) in (3, 5):
+        c = entries[-1]
+        half = (n - len(c)) // 2
+        if half not in (0,) and half < 4:
+            return None
         if len(c) % 2 != n % 2:
             return None
         if not put(mid, (n - len(c)) // 2, c):
@@ -211,12 +226,29 @@ def place_theme(n, entries, rows=None):
 def make_pattern(rng, n=15, theme=None, max_len=8, blocks=(36, 42), max_words=78, tries=400, dic=None):
     """Random symmetric pattern. Theme entries (if any) keep their slots."""
     for _ in range(tries):
-        if theme:
+        if theme and len(theme) == 5:
+            r0 = rng.choice((2, 3))
+            r1 = rng.choice((6, 7)) if n >= 19 else r0 + 3
+            g = place_theme(n, theme, [r0, n - 1 - r0, r1, n - 1 - r1])
+        elif theme:
             r0 = rng.choice((2, 3, 4)) if len(theme) != 4 else 2
             g = place_theme(n, theme, [r0, n - 1 - r0])
         else:
             g = [[EMPTY] * n for _ in range(n)]
         if g is None:
+            continue
+        # Black out any 1- or 2-square stub the theme rows leave behind.
+        while True:
+            stubs = [cells for _, _, _, cells in slots_of(g) if len(cells) < 3]
+            if not stubs:
+                break
+            if any(g[r][c] != EMPTY for cells in stubs for r, c in cells):
+                g = None
+                break
+            for cells in stubs:
+                for r, c in cells:
+                    g[r][c] = g[n - 1 - r][n - 1 - c] = BLOCK
+        if g is None or not connected(g):
             continue
         theme_slots = set()
         if theme:
@@ -228,7 +260,7 @@ def make_pattern(rng, n=15, theme=None, max_len=8, blocks=(36, 42), max_words=78
         guard = 0
         while True:
             guard += 1
-            if guard > 400:
+            if guard > 400 * (n * n) // 225:
                 failed = True
                 break
             count = sum(row.count(BLOCK) for row in g)
@@ -270,13 +302,15 @@ def make_pattern(rng, n=15, theme=None, max_len=8, blocks=(36, 42), max_words=78
                     for p in ("".join(g[r][c] for r, c in cells) for _, _, _, cells in slots_of(g))
                     if EMPTY in p and p.strip(EMPTY)):
                 continue
+            if dic is not None and theme and not fill([row[:] for row in g], dic, rng, check_only=True):
+                continue
             return g
     return None
 
 
 # ---- Fill -------------------------------------------------------------------
 
-def fill(g, dic, rng, node_limit=3000, beam=6):
+def fill(g, dic, rng, node_limit=3000, beam=6, look=120, rank_weight=0.02, check_only=False):
     """Fill the EMPTY squares of g in place. Returns True on success.
 
     Each unfilled answer keeps the set of dictionary words that still fit
@@ -377,18 +411,30 @@ def fill(g, dic, rng, node_limit=3000, beam=6):
         if best is None:
             return ms
         i = best[1]
-        tried = 0
+        n_i = lens[i]
+        mk_i = dic.masks[n_i]
+        # Rank candidate words by the room they leave each crossing answer.
+        ranked = []
         m = ms[i]
-        while m and tried < beam:
+        k = 0
+        while m and k < look:
             low = m & -m
             m ^= low
-            # Mostly best-first; sometimes skip ahead for variety.
-            if tried == 0 and rng.random() < 0.15 and m:
-                low2 = m & -m
-                m ^= low2
-                m |= low
-                low = low2
-            tried += 1
+            k += 1
+            w = dic.words[n_i][low.bit_length() - 1]
+            room = 0.0
+            ok = True
+            for p, j, q in links[i]:
+                x = dic.masks[lens[j]].get((q, w[p]))
+                c = (ms[j] & x).bit_count() if x else 0
+                if not c:
+                    ok = False
+                    break
+                room += math.log(c + 1)
+            if ok:
+                ranked.append((room - k * rank_weight + rng.random() * 0.3, low))
+        ranked.sort(reverse=True)
+        for _, low in ranked[:beam]:
             child = list(ms)
             child[i] = low
             if propagate(child, [i]):
@@ -402,6 +448,8 @@ def fill(g, dic, rng, node_limit=3000, beam=6):
     ms = list(masks)
     if any(not m for m in ms) or not propagate(ms, range(len(slots))):
         return False
+    if check_only:
+        return True
     out = search(ms)
     if out is None:
         return False
