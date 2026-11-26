@@ -73,6 +73,29 @@ def _attempt(args):
     return None
 
 
+def stem(w):
+    for end in ("IES", "ES", "IS", "S", "ED", "ING", "EST", "ER", "Y"):
+        if w.endswith(end) and len(w) - len(end) >= 3:
+            return w[: -len(end)]
+    return w
+
+
+def near_dupes(text):
+    """Answers that are forms of one word (SPEEDS and SPEEDY, OASES and
+    OASIS), which editors avoid putting in one grid."""
+    g = grid.parse_grid(text)
+    seen = {}
+    out = []
+    for *_, w in answers(g):
+        if len(w) < 4:
+            continue
+        k = stem(w)
+        if k in seen and seen[k] != w:
+            out.append((seen[k], w))
+        seen.setdefault(k, w)
+    return out
+
+
 def quality(text, levels):
     g = grid.parse_grid(text)
     ws = ["".join(g[r][c] for r, c in cells) for _, _, _, cells in grid.slots_of(g)]
@@ -113,7 +136,9 @@ def cmd_fill(dates, attempts=320, want=2):
             if not found:
                 print(f"{date}: no grid found; try a different theme or more attempts")
                 continue
-            best = min(found, key=lambda t: quality(t, levels))
+            # Prefer grids without near-duplicate answers (OASES and OASIS).
+            clean = [t for t in found if not near_dupes(t)] or found
+            best = min(clean, key=lambda t: quality(t, levels))
             DRAFTS.mkdir(exist_ok=True)
             (DRAFTS / f"{date}.txt").write_text(
                 f"# {title}\n# theme: {' | '.join(entries)}\n{best}\n")

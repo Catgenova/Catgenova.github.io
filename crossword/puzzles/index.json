@@ -215,6 +215,36 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-16",
+   "title": "Winter Games",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
+  },
+  {
+   "date": "2026-12-17",
+   "title": "Cookie Swap",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
+  },
+  {
+   "date": "2026-12-18",
+   "title": "Night Sky",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }
