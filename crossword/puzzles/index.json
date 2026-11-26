@@ -287,6 +287,16 @@
    ]
   },
   {
+   "date": "2026-12-24",
+   "title": "Christmas Eve",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
+  },
+  {
    "date": "2026-12-26",
    "title": "The Day After",
    "count": 80,
