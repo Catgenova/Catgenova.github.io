@@ -82,4 +82,10 @@ if __name__ == "__main__":
         for e in errs[:20]:
             print("   ", e)
         bad += bool(errs)
+    # Every daily draft should have been published.
+    published = {f.stem for f in (lib.SITE / "daily").glob("*.json")}
+    for d in sorted((lib.HERE / "daily").glob("*.txt")):
+        if d.stem not in published:
+            print(f"_source/crossword/daily/{d.name}: draft not published (run daily.py publish {d.stem})")
+            bad += 1
     sys.exit(1 if bad else 0)

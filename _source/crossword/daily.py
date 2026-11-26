@@ -166,11 +166,12 @@ def cmd_publish(dates):
                     n += 1
                     nums[(r, c)] = n
         entries = []
+        missing = False
         for d, r, c, w in answers(g):
             cl = clues.get(w)
             if not cl:
                 print(f"{date}: no clues for {w}")
-                bad = True
+                missing = bad = True
                 continue
             display = theme_display.get(w, cl["display"])
             entries.append({
@@ -179,7 +180,7 @@ def cmd_publish(dates):
                 "len": lib.enumeration(display),
                 **({"t": 1} if w in theme_display else {}),
             })
-        if bad:
+        if missing:
             continue
         entries.sort(key=lambda e: (e["d"], e["n"]))
         lib.write_json(lib.SITE / "daily" / f"{date}.json", {
