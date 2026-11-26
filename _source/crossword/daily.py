@@ -111,11 +111,13 @@ def theme_parts(entries):
         for part in e.upper().replace("-", " ").split():
             part = "".join(ch for ch in part if ch.isalpha())
             if len(part) >= 3:
-                out |= {part, part + "S", part + "ES"}
-                if part.endswith("ES"):
-                    out.add(part[:-2])
-                if part.endswith("S"):
-                    out.add(part[:-1])
+                bases = {part}
+                for end in ("ERS", "ER", "ING", "ES", "S", "ED"):
+                    if part.endswith(end) and len(part) - len(end) >= 3:
+                        bases.add(part[: -len(end)])
+                        bases.add(part[: -len(end)] + "E")
+                for b in bases:
+                    out |= {b, b + "S", b + "ES", b + "ER", b + "ERS", b + "ED", b + "ING"}
     return frozenset(out)
 
 
