@@ -125,6 +125,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-09",
+   "title": "Bundle Up",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }
