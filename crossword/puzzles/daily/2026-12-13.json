@@ -2,7 +2,7 @@
 "entries": [
 {"n": 1, "d": "a", "r": 0, "c": 0, "a": "UNERF", "q": {"e": "Fast bunnies", "m": "Tortoises' rivals", "h": "Long-eared runners"}, "len": "(5)"},
 {"n": 6, "d": "a", "r": 0, "c": 6, "a": "FGENC", "q": {"e": "Band", "m": "Belt", "h": "Fasten"}, "len": "(5)"},
-{"n": 11, "d": "a", "r": 0, "c": 12, "a": "GNO", "q": {"e": "Restaurant bill", "m": "Pull-ring on a can", "h": "Browser item"}, "len": "(3)"},
+{"n": 11, "d": "a", "r": 0, "c": 12, "a": "GNO", "q": {"e": "Restaurant bill", "m": "Pull-ring on a can", "h": "Open page in a browser"}, "len": "(3)"},
 {"n": 14, "d": "a", "r": 1, "c": 0, "a": "RQRZN", "q": {"e": "Swelling", "m": "Fluid buildup", "h": "Puffiness, medically"}, "len": "(5)"},
 {"n": 15, "d": "a", "r": 1, "c": 6, "a": "CUNFR", "q": {"e": "Stage", "m": "Moon shape", "h": "Period"}, "len": "(5)"},
 {"n": 16, "d": "a", "r": 1, "c": 12, "a": "NYR", "q": {"e": "Pub drink", "m": "Brewpub pour", "h": "Stout relative"}, "len": "(3)"},
