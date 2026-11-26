@@ -265,6 +265,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-22",
+   "title": "Holiday Baking",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }
