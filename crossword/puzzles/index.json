@@ -14,6 +14,16 @@
  ],
  "daily": [
   {
+   "date": "2026-11-26",
+   "title": "Kitchen Duty",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
+  },
+  {
    "date": "2026-11-27",
    "title": "Black Friday",
    "count": 80,
