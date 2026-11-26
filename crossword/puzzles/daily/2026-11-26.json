@@ -1,7 +1,7 @@
 {"id": "daily-2026-11-26", "kind": "daily", "date": "2026-11-26", "title": "Kitchen Duty", "style": "grid", "levels": ["easy", "medium", "hard"], "width": 15, "height": 15, "blocks": ["000001000100000", "000001000100000", "000001000100000", "000000000010000", "111000110000111", "000000001000000", "000011000001000", "000100000001000", "000100000110000", "000000100000000", "111000011000111", "000010000000000", "000001000100000", "000001000100000", "000001000100000"],
 "entries": [
 {"n": 1, "d": "a", "r": 0, "c": 0, "a": "FRESF", "q": {"e": "Medieval peasants", "m": "Feudal workers", "h": "Those bound to the land"}, "len": "(5)"},
-{"n": 6, "d": "a", "r": 0, "c": 6, "a": "OEN", "q": {"e": "Undergarment with cups", "m": "Lingerie item", "h": "Sports ___"}, "len": "(3)"},
+{"n": 6, "d": "a", "r": 0, "c": 6, "a": "OEN", "q": {"e": "Undergarment with cups", "m": "Lingerie item", "h": "Support garment"}, "len": "(3)"},
 {"n": 9, "d": "a", "r": 0, "c": 10, "a": "BCGVP", "q": {"e": "Of the eye", "m": "Visual", "h": "Kind of nerve"}, "len": "(5)"},
 {"n": 14, "d": "a", "r": 1, "c": 0, "a": "GENVY", "q": {"e": "Hiking path", "m": "Follow behind", "h": "Lag"}, "len": "(5)"},
 {"n": 15, "d": "a", "r": 1, "c": 6, "a": "ENC", "q": {"e": "Knock", "m": "Music genre", "h": "Bad ___ (unfair blame)"}, "len": "(3)"},

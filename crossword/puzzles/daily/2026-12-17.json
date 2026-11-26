@@ -75,7 +75,7 @@
 {"n": 53, "d": "d", "r": 11, "c": 8, "a": "BCRA", "q": {"e": "Not closed", "m": "Unlock", "h": "Candid"}, "len": "(4)"},
 {"n": 54, "d": "d", "r": 12, "c": 0, "a": "PNE", "q": {"e": "Automobile", "m": "Sedan or coupe", "h": "Part of a train"}, "len": "(3)"},
 {"n": 55, "d": "d", "r": 12, "c": 1, "a": "NPR", "q": {"e": "Top card", "m": "Expert", "h": "Nail, as an exam"}, "len": "(3)"},
-{"n": 56, "d": "d", "r": 12, "c": 2, "a": "OEN", "q": {"e": "Undergarment with cups", "m": "Lingerie item", "h": "Sports ___"}, "len": "(3)"},
+{"n": 56, "d": "d", "r": 12, "c": 2, "a": "OEN", "q": {"e": "Undergarment with cups", "m": "Lingerie item", "h": "Support garment"}, "len": "(3)"},
 {"n": 58, "d": "d", "r": 12, "c": 6, "a": "REN", "q": {"e": "Period of history", "m": "Age", "h": "Pitcher's stat"}, "len": "(3)"},
 {"n": 59, "d": "d", "r": 12, "c": 12, "a": "VER", "q": {"e": "Anger", "m": "Wrath", "h": "Fury"}, "len": "(3)"},
 {"n": 60, "d": "d", "r": 12, "c": 13, "a": "ARJ", "q": {"e": "Not old", "m": "Fresh", "h": "Unused"}, "len": "(3)"},
