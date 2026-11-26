@@ -40,7 +40,7 @@
 {"n": 66, "d": "a", "r": 14, "c": 5, "a": "LNJAF", "q": {"e": "Sleepy gapes", "m": "Bores", "h": "Shows boredom"}, "len": "(5)"},
 {"n": 67, "d": "a", "r": 14, "c": 11, "a": "FRJA", "q": {"e": "Stitched", "m": "Mended", "h": "Wrapped up, with \"up\""}, "len": "(4)"},
 {"n": 1, "d": "d", "r": 0, "c": 0, "a": "QBF", "q": {"e": "Hairstyles", "m": "Parties", "h": "Musical notes"}, "len": "(3)"},
-{"n": 2, "d": "d", "r": 0, "c": 1, "a": "HTU", "q": {"e": "Disgusted grunt", "m": "\"Yuck!\"", "h": "\"Not again!\""}, "len": "(3)"},
+{"n": 2, "d": "d", "r": 0, "c": 1, "a": "HTU", "q": {"e": "Disgusted grunt", "m": "\"Yuck!\"", "h": "Sound of dismay"}, "len": "(3)"},
 {"n": 3, "d": "d", "r": 0, "c": 2, "a": "SEB", "q": {"e": "To's partner", "m": "Back, in \"to and ___\"", "h": "Afro, briefly"}, "len": "(3)"},
 {"n": 4, "d": "d", "r": 0, "c": 3, "a": "SREEVRF", "q": {"e": "Boats across a river", "m": "Shuttles across water", "h": "Transports"}, "len": "(7)"},
 {"n": 5, "d": "d", "r": 0, "c": 5, "a": "ROORQ", "q": {"e": "Receded", "m": "Waned", "h": "Went out, as the tide"}, "len": "(5)"},

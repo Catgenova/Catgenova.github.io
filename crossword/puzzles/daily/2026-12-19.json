@@ -40,7 +40,7 @@
 {"n": 64, "d": "a", "r": 14, "c": 5, "a": "UBZRL", "q": {"e": "Cozy", "m": "Comfortable", "h": "Snug"}, "len": "(5)"},
 {"n": 65, "d": "a", "r": 14, "c": 12, "a": "GRR", "q": {"e": "Golf ball holder", "m": "T-shirt", "h": "Start of a golf hole"}, "len": "(3)"},
 {"n": 1, "d": "d", "r": 0, "c": 0, "a": "FNP", "q": {"e": "Pouch", "m": "Sac fly", "h": "Baglike part"}, "len": "(3)"},
-{"n": 2, "d": "d", "r": 0, "c": 1, "a": "HTU", "q": {"e": "Disgusted grunt", "m": "\"Yuck!\"", "h": "\"Not again!\""}, "len": "(3)"},
+{"n": 2, "d": "d", "r": 0, "c": 1, "a": "HTU", "q": {"e": "Disgusted grunt", "m": "\"Yuck!\"", "h": "Sound of dismay"}, "len": "(3)"},
 {"n": 3, "d": "d", "r": 0, "c": 2, "a": "OBB", "q": {"e": "Spooky shout", "m": "Jeer", "h": "\"Peekaboo\" ending"}, "len": "(3)"},
 {"n": 4, "d": "d", "r": 0, "c": 5, "a": "ENYYL", "q": {"e": "Recover", "m": "Assemble", "h": "Long tennis exchange"}, "len": "(5)"},
 {"n": 5, "d": "d", "r": 0, "c": 6, "a": "BENY", "q": {"e": "Spoken", "m": "Like some exams", "h": "Dental, broadly"}, "len": "(4)"},
