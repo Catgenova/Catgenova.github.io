@@ -22,6 +22,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-11-28",
+   "title": "Snow Day",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }
