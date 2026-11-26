@@ -115,6 +115,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-07",
+   "title": "Bakery Run",
+   "count": 78,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }

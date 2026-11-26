@@ -27,7 +27,7 @@
 {"n": 43, "d": "a", "r": 9, "c": 1, "a": "TBRF", "q": {"e": "Leaves", "m": "Turns", "h": "Attempts"}, "len": "(4)"},
 {"n": 45, "d": "a", "r": 9, "c": 8, "a": "RZCVERF", "q": {"e": "Large realms", "m": "Kingdoms", "h": "Business giants"}, "len": "(7)"},
 {"n": 47, "d": "a", "r": 10, "c": 0, "a": "UNENFFRF", "q": {"e": "Bothers repeatedly", "m": "Pesters", "h": "Hounds"}, "len": "(8)"},
-{"n": 51, "d": "a", "r": 10, "c": 10, "a": "NYR", "q": {"e": "Pub drink", "m": "Brewpub pour", "h": "Pale or brown order"}, "len": "(3)"},
+{"n": 51, "d": "a", "r": 10, "c": 10, "a": "NYR", "q": {"e": "Pub drink", "m": "Brewpub pour", "h": "Stout relative"}, "len": "(3)"},
 {"n": 52, "d": "a", "r": 11, "c": 0, "a": "NYNF", "q": {"e": "\"Sadly...\"", "m": "Word of regret", "h": "\"___, poor Yorick!\""}, "len": "(4)"},
 {"n": 53, "d": "a", "r": 11, "c": 5, "a": "CYBGGJVFGF", "q": {"e": "Story surprises", "m": "Unexpected turns in a thriller", "h": "Things spoilers give away"}, "len": "(4,6)", "t": 1},
 {"n": 58, "d": "a", "r": 12, "c": 0, "a": "IRG", "q": {"e": "Animal doctor", "m": "Former soldier", "h": "Check carefully"}, "len": "(3)"},

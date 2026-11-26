@@ -51,7 +51,7 @@
 {"n": 10, "d": "d", "r": 0, "c": 10, "a": "GRFGF", "q": {"e": "Exams", "m": "Trials", "h": "Quizzes"}, "len": "(5)"},
 {"n": 11, "d": "d", "r": 0, "c": 12, "a": "CNTVANGR", "q": {"e": "Number the pages", "m": "Set page numbers", "h": "Print folios on"}, "len": "(8)"},
 {"n": 12, "d": "d", "r": 0, "c": 13, "a": "RYRPGVBA", "q": {"e": "Vote", "m": "Polling event", "h": "Choice"}, "len": "(8)"},
-{"n": 13, "d": "d", "r": 0, "c": 14, "a": "NYR", "q": {"e": "Pub drink", "m": "Brewpub pour", "h": "Pale or brown order"}, "len": "(3)"},
+{"n": 13, "d": "d", "r": 0, "c": 14, "a": "NYR", "q": {"e": "Pub drink", "m": "Brewpub pour", "h": "Stout relative"}, "len": "(3)"},
 {"n": 18, "d": "d", "r": 2, "c": 5, "a": "ANL", "q": {"e": "No vote", "m": "\"No\"", "h": "Opposing vote"}, "len": "(3)"},
 {"n": 23, "d": "d", "r": 3, "c": 11, "a": "URE", "q": {"e": "That woman", "m": "\"Me and ___\"", "h": "Pronoun for a ship"}, "len": "(3)"},
 {"n": 25, "d": "d", "r": 4, "c": 3, "a": "ANO", "q": {"e": "Catch", "m": "Arrest", "h": "Collar"}, "len": "(3)"},

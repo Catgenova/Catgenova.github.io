@@ -30,7 +30,7 @@
 {"n": 56, "d": "a", "r": 10, "c": 9, "a": "BER", "q": {"e": "Mined rock", "m": "Iron source", "h": "Lode load"}, "len": "(3)"},
 {"n": 57, "d": "a", "r": 11, "c": 0, "a": "BTYR", "q": {"e": "Stare at rudely", "m": "Gawk", "h": "Eye too openly"}, "len": "(4)"},
 {"n": 58, "d": "a", "r": 11, "c": 5, "a": "FNYRFPYREX", "q": {"e": "Store worker at the register", "m": "Person who rings you up", "h": "One handling all those returns in January"}, "len": "(5,5)", "t": 1},
-{"n": 63, "d": "a", "r": 12, "c": 0, "a": "NYR", "q": {"e": "Pub drink", "m": "Brewpub pour", "h": "Pale or brown order"}, "len": "(3)"},
+{"n": 63, "d": "a", "r": 12, "c": 0, "a": "NYR", "q": {"e": "Pub drink", "m": "Brewpub pour", "h": "Stout relative"}, "len": "(3)"},
 {"n": 64, "d": "a", "r": 12, "c": 4, "a": "QREVIR", "q": {"e": "Get from a source", "m": "Work out, as a formula", "h": "Trace back to an origin"}, "len": "(6)"},
 {"n": 65, "d": "a", "r": 12, "c": 11, "a": "VPBA", "q": {"e": "Small picture on a screen", "m": "Desktop symbol", "h": "Legend in one's field"}, "len": "(4)"},
 {"n": 66, "d": "a", "r": 13, "c": 0, "a": "GBR", "q": {"e": "Foot digit", "m": "Sock end", "h": "___ the line"}, "len": "(3)"},
