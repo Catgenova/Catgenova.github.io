@@ -185,6 +185,26 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-13",
+   "title": "On the Ice",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
+  },
+  {
+   "date": "2026-12-14",
+   "title": "Season's Greetings",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }
