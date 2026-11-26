@@ -28,6 +28,10 @@ VOCAB_BONUS = 45
 _SCORES = None
 _DIC0 = None
 _CFG = None
+_BONUS = None
+# How much an on-theme word is favored when the filler ranks candidates
+# (each crossing's room counts about 1-4).
+VOCAB_RANK_BONUS = 4.0
 
 
 def vocab(cfg):
@@ -47,9 +51,10 @@ def scores_for(cfg):
 
 
 def _init(cfg):
-    global _SCORES, _DIC0, _CFG
+    global _SCORES, _DIC0, _CFG, _BONUS
     _CFG = cfg
     _SCORES = scores_for(cfg)
+    _BONUS = {w: VOCAB_RANK_BONUS for w in vocab(cfg)}
     _DIC0 = grid.Dictionary(_SCORES, random.Random(0))
 
 
@@ -66,7 +71,7 @@ def _attempt(seed):
     for k in range(4):
         h = [row[:] for row in g]
         r2 = random.Random(seed * 1000 + k)
-        if grid.fill(h, grid.Dictionary(_SCORES, r2), r2, node_limit=4000):
+        if grid.fill(h, grid.Dictionary(_SCORES, r2, bonus=_BONUS), r2, node_limit=4000):
             return grid.grid_text(h)
     return None
 
@@ -77,7 +82,7 @@ def on_theme(text, words):
     return sum(1 for w in ws if w in words)
 
 
-def cmd_fill(eid, attempts=400, want=2):
+def cmd_fill(eid, attempts=400, want=1):
     cfg = EVENTS[eid]
     words = vocab(cfg)
     t0 = time.time()

@@ -48,8 +48,10 @@ class Dictionary:
     the lowest set bit of a candidate mask is always the best candidate.
     """
 
-    def __init__(self, scores, rng, noise=12.0):
+    def __init__(self, scores, rng, noise=12.0, bonus=None):
         self.score = scores
+        # Extra weight when ranking candidates, e.g. an event's theme words.
+        self.bonus = bonus or {}
         self.by_len = {}
         for w, s in scores.items():
             self.by_len.setdefault(len(w), []).append((s + rng.random() * noise, w))
@@ -432,7 +434,7 @@ def fill(g, dic, rng, node_limit=3000, beam=6, look=120, rank_weight=0.02, check
                     break
                 room += math.log(c + 1)
             if ok:
-                ranked.append((room - k * rank_weight + rng.random() * 0.3, low))
+                ranked.append((room - k * rank_weight + dic.bonus.get(w, 0.0) + rng.random() * 0.3, low))
         ranked.sort(reverse=True)
         for _, low in ranked[:beam]:
             child = list(ms)
