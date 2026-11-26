@@ -145,6 +145,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2026-12-11",
+   "title": "Garden Party",
+   "count": 80,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }
