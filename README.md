@@ -32,6 +32,25 @@ source_url: https://github.com/Catgenova/wildermon
 
 Feeds are generated at `/blog/feed.xml` and `/changelog/feed.xml`.
 
+## Crossword (`/crossword/`)
+
+A criss-cross crossword player. The page is static: `crossword/index.html`,
+`crossword.css` and `crossword.js`, with the puzzle itself in
+`crossword/puzzles/<slug>.js`. Progress and time are kept in `localStorage`.
+
+Puzzle files are generated, not hand-edited. The word list and clues live in
+`_source/crossword/<name>.py` (`WORDS`, `TITLE`, `SLUG`). To change a clue or
+an answer, edit that file and rebuild:
+
+```sh
+python3 _source/crossword/build.py thanksgiving
+```
+
+The builder tries 400 random layouts from a fixed seed and keeps the most compact one
+that places every word. Changing an answer changes the grid, so expect a new
+layout; changing only clue text keeps it. Answers are stored as ROT13 so the
+solution isn't readable at a glance in the page source.
+
 ## Homeschooling forms (`/homeschooling/`)
 
 Tools for New York State home instruction paperwork (8 NYCRR §100.10). Everything
