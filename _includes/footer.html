@@ -3,6 +3,7 @@
     <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
     <ul class="footer-links">
       <li><a href="{{ '/privacy/' | relative_url }}">Privacy</a></li>
+      <li><a href="{{ '/links/' | relative_url }}">Other Links</a></li>
       {% if site.sections.blog %}<li><a href="{{ '/blog/feed.xml' | relative_url }}">Blog RSS</a></li>{% endif %}
       {% if site.social.itch %}<li><a href="https://{{ site.social.itch }}.itch.io">itch.io</a></li>{% endif %}
       {% if site.social.bluesky %}<li><a href="https://bsky.app/profile/{{ site.social.bluesky }}">Bluesky</a></li>{% endif %}

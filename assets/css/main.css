@@ -234,3 +234,9 @@ section + section, section + .ad-slot, .ad-slot + .split, .ad-slot + section { m
 
 .game-card[hidden] { display: none; }
 .tag-more { background: transparent; border: 1px dashed var(--border); }
+
+/* Other Links page */
+.link-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; max-width: 68ch; }
+.link-list li { padding: 16px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.link-list a { font-weight: 700; font-size: 1.1rem; }
+.link-list p { margin: 4px 0 0; }
