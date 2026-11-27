@@ -1,5 +1,5 @@
 ---
-title: Ashenveil
+title: Prehistorextraction
 tagline: An extraction hunting autobattler. Kit out a squad of three, raid for monster parts, and get out before you lose everything you're wearing.
 status: Live
 tags:
@@ -12,7 +12,7 @@ tags:
 featured: true
 order: 6
 play_url: /prehistorextraction/
-cover: /assets/img/games/ashenveil.png
+cover: /assets/img/games/prehistorextraction.png
 source_url: https://github.com/Catgenova/prehistorextraction
 ---
 
