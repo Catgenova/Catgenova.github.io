@@ -4,20 +4,17 @@
     {% if game.cover %}
     <img src="{{ game.cover | relative_url }}" alt="" loading="lazy">
     {% else %}
-    <span class="game-cover-fallback">{{ game.title | slice: 0 }}</span>
+    <span class="cover-fallback">{{ game.title | slice: 0 }}</span>
     {% endif %}
   </a>
-  <div class="game-body">
-    <div class="game-meta">
-      <span class="status status-{{ game.status | slugify }}">{{ game.status }}</span>
-      {% for tag in game.tags limit: 4 %}{% include tag-link.html tag=tag %}{% endfor %}
-      {% if game.tags.size > 4 %}<a class="tag tag-more" href="{{ game.url | relative_url }}">+{{ game.tags.size | minus: 4 }} more</a>{% endif %}
-    </div>
-    <h3><a href="{{ game.url | relative_url }}">{{ game.title }}</a></h3>
-    <p>{{ game.tagline }}</p>
-    <div class="game-actions">
-      {% if game.play_url %}<a class="btn btn-primary" href="{{ game.play_url }}">Play</a>{% endif %}
-      <a class="btn" href="{{ game.url | relative_url }}">Details</a>
-    </div>
-  </div>
+  <p class="meta">
+    <span class="status status-{{ game.status | slugify }}">{{ game.status }}</span>
+    {% for tag in game.tags limit: 2 %}{% include tag-link.html tag=tag %}{% endfor %}
+  </p>
+  <h3><a href="{{ game.url | relative_url }}">{{ game.title }}</a></h3>
+  <p class="card-text">{{ game.tagline }}</p>
+  <p class="card-actions">
+    {% if game.play_url %}<a class="text-link strong" href="{{ game.play_url }}">Play <span aria-hidden="true">&#8599;</span></a>{% endif %}
+    <a class="text-link" href="{{ game.url | relative_url }}">Details</a>
+  </p>
 </article>

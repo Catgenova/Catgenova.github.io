@@ -1,75 +1,135 @@
 ---
 layout: default
+full_bleed: true
 ---
 {% assign games = site.games | sort: "order" %}
 {% assign featured = games | where: "featured", true %}
+{% if featured.size == 0 %}{% assign featured = games %}{% endif %}
 {% assign updates = site.changelog | sort: "date" | reverse %}
 {% assign apps = site.apps | where_exp: "app", "app.hidden != true" | sort: "order" %}
+{% assign all_tags = featured | map: "tags" | join: "|" | split: "|" | uniq | sort_natural %}
+{% comment %}
+  The spotlight is the game marked `spotlight: true`, else the first featured
+  game that has a cover.
+{% endcomment %}
+{% assign spot = games | where: "spotlight", true | first %}
+{% unless spot %}{% assign with_cover = featured | where_exp: "g", "g.cover" %}{% assign spot = with_cover | first %}{% endunless %}
+{% unless spot %}{% assign spot = featured | first %}{% endunless %}
 
-<section class="hero hero-home">
-  <h1 class="hero-logo">
-    <picture>
-      <source media="(prefers-reduced-motion: reduce)" srcset="{{ '/assets/img/logo/pere-logo.webp' | relative_url }}">
-      <img class="hero-logo-img" src="{{ '/assets/img/logo/pere-logo-anim.webp' | relative_url }}" alt="{{ site.title }}" width="800" height="507" fetchpriority="high">
-    </picture>
-  </h1>
-  <p class="lede">{{ site.tagline }} Play in your browser, no installs, and follow every update as it ships.</p>
-  <div class="game-actions">
-    <a class="btn btn-primary btn-lg" href="{{ '/games/' | relative_url }}">Browse games</a>
-    <a class="btn btn-lg" href="{{ '/changelog/' | relative_url }}">What's new</a>
-  </div>
-</section>
-
-<section aria-labelledby="featured-heading">
-  <div class="section-head">
-    <h2 id="featured-heading">Featured games</h2>
-    <a href="{{ '/games/' | relative_url }}">All games &rarr;</a>
-  </div>
-  <div class="game-grid">
-    {% if featured.size > 0 %}{% assign shown = featured %}{% else %}{% assign shown = games %}{% endif %}
-    {% for game in shown limit: 6 %}
-      {% include game-card.html game=game %}
-    {% endfor %}
-  </div>
-</section>
-
-{% if apps.size > 0 %}
-<section aria-labelledby="apps-heading">
-  <div class="section-head">
-    <h2 id="apps-heading">Apps</h2>
-  </div>
-  <div class="game-grid">
-    {% for app in apps %}
-      {% include app-card.html app=app %}
-    {% endfor %}
+{% if spot %}
+{% assign spot_updates = site.changelog | where: "game", spot.slug | sort: "date" | reverse %}
+<section class="band band-grey spotlight" aria-labelledby="spot-heading">
+  <div class="wrap spotlight-inner">
+    <div class="spotlight-text">
+      <p class="label">Featured game</p>
+      <h1 id="spot-heading" class="display">{{ spot.title }}</h1>
+      <p class="spotlight-lede">{{ spot.tagline }}</p>
+      <p class="meta">
+        <span>{{ spot.tags | first }}</span>
+        <span>{{ spot.status }}</span>
+        {% assign last = spot_updates | first %}{% if last %}<span>Updated {{ last.date | date: "%b %-d, %Y" }}</span>{% endif %}
+      </p>
+      <div class="actions">
+        {% if spot.play_url %}<a class="btn btn-primary" href="{{ spot.play_url }}">Play {{ spot.title }} <span aria-hidden="true">&#8599;</span></a>{% endif %}
+        <a class="btn" href="{{ spot.url | relative_url }}">Details</a>
+      </div>
+    </div>
+    <a class="spotlight-art" href="{{ spot.url | relative_url }}" tabindex="-1" aria-hidden="true">
+      {% if spot.cover %}<img src="{{ spot.cover | relative_url }}" alt="" fetchpriority="high">{% else %}<span class="cover-fallback">{{ spot.title | slice: 0 }}</span>{% endif %}
+    </a>
   </div>
 </section>
 {% endif %}
 
-{% include ad-slot.html slot="home" %}
-
-<section aria-labelledby="updates-heading">
-  <div class="section-head">
-    <h2 id="updates-heading">Latest updates</h2>
-    <a href="{{ '/changelog/' | relative_url }}">Changelog &rarr;</a>
+<section class="band" aria-labelledby="games-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="label">01 / Games</p>
+        <h2 id="games-heading" class="display-2">Worlds to get<br><span class="dim">lost in.</span></h2>
+      </div>
+      <a class="btn" href="{{ '/games/' | relative_url }}">All games <span aria-hidden="true">&#8599;</span></a>
+    </div>
+    <nav class="tabs" aria-label="Browse by tag">
+      <a href="{{ '/games/' | relative_url }}" aria-current="true">All</a>
+      {% for tag in all_tags %}<a href="{{ '/games/' | relative_url }}?tag={{ tag | slugify }}">{{ tag }}</a>{% endfor %}
+    </nav>
+    <div class="game-grid">
+      {% for game in featured limit: 9 %}
+        {% include game-card.html game=game %}
+      {% endfor %}
+    </div>
   </div>
-  {% assign recent = updates | slice: 0, 4 %}
-  {% include changelog-list.html entries=recent %}
 </section>
 
-{% if site.sections.blog %}
-<section aria-labelledby="blog-heading">
-  <div class="section-head">
-    <h2 id="blog-heading">From the blog</h2>
-    <a href="{{ '/blog/' | relative_url }}">Blog &rarr;</a>
+{% if updates.size > 0 %}
+<section class="band band-dark" aria-labelledby="updates-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="label">Latest updates</p>
+        <h2 id="updates-heading" class="display-2">What's new<br><span class="dim">in the studio.</span></h2>
+      </div>
+      <a class="btn btn-invert" href="{{ '/changelog/' | relative_url }}">Changelog <span aria-hidden="true">&#8599;</span></a>
+    </div>
+    <ol class="numbered">
+      {% for entry in updates limit: 5 %}
+      {% assign game = site.games | where: "slug", entry.game | first %}
+      {% unless game %}{% assign game = site.apps | where: "slug", entry.game | first %}{% endunless %}
+      <li>
+        <a href="{{ entry.url | relative_url }}">
+          <span class="num">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+          <span class="numbered-title">{{ entry.title }}</span>
+          <span class="mono">{% if game %}{{ game.title }}{% endif %}</span>
+          <span class="mono">{{ entry.date | date: "%b %-d" }}</span>
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
   </div>
-  <ul class="post-list">
-    {% for post in site.posts limit: 4 %}
-    <li>
-      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-    </li>
-    {% endfor %}
-  </ul>
+</section>
+{% endif %}
+
+{% if apps.size > 0 %}
+<section class="band band-grey" aria-labelledby="apps-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="label">02 / Apps</p>
+        <h2 id="apps-heading" class="display-2">Tools we've<br><span class="dim">built.</span></h2>
+      </div>
+    </div>
+    <div class="app-grid">
+      {% for app in apps %}
+        {% include app-card.html app=app %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% capture ad %}{% include ad-slot.html slot="home" %}{% endcapture %}
+{% if ad contains "<aside" %}<div class="band"><div class="wrap">{{ ad }}</div></div>{% endif %}
+
+{% if site.sections.blog %}
+<section class="band" aria-labelledby="blog-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="label">Journal</p>
+        <h2 id="blog-heading" class="display-2">From the blog.</h2>
+      </div>
+      <a class="btn" href="{{ '/blog/' | relative_url }}">Blog <span aria-hidden="true">&#8599;</span></a>
+    </div>
+    <ul class="post-list">
+      {% for post in site.posts limit: 4 %}
+      <li>
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
 </section>
 {% endif %}

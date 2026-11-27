@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   {% seo %}
   {% feed_meta %}
   <link rel="alternate" type="application/atom+xml" title="{{ site.title }} changelog" href="{{ '/changelog/feed.xml' | relative_url }}">
   <link rel="icon" href="{{ '/assets/img/favicon.svg' | relative_url }}" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   {% if page.extra_css %}<link rel="stylesheet" href="{{ page.extra_css | relative_url }}?v={{ site.time | date: '%s' }}">{% endif %}
   {% if site.ads.adsense_client != "" and page.no_ads != true %}
@@ -21,7 +21,7 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   {% include header.html %}
-  <main id="main" class="wrap">
+  <main id="main" class="{% if page.full_bleed %}bleed{% else %}wrap page-main{% endif %}">
     {{ content }}
   </main>
   {% include footer.html %}

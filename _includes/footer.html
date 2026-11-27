@@ -1,13 +1,59 @@
 <footer class="site-footer">
-  <div class="wrap footer-inner">
-    <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
-    <ul class="footer-links">
-      <li><a href="{{ '/privacy/' | relative_url }}">Privacy</a></li>
-      <li><a href="{{ '/links/' | relative_url }}">Other Links</a></li>
-      {% if site.sections.blog %}<li><a href="{{ '/blog/feed.xml' | relative_url }}">Blog RSS</a></li>{% endif %}
-      {% if site.social.itch %}<li><a href="https://{{ site.social.itch }}.itch.io">itch.io</a></li>{% endif %}
-      {% if site.social.bluesky %}<li><a href="https://bsky.app/profile/{{ site.social.bluesky }}">Bluesky</a></li>{% endif %}
-      {% if site.social.discord %}<li><a href="{{ site.social.discord }}">Discord</a></li>{% endif %}
-    </ul>
+  <div class="wrap">
+    <div class="footer-top">
+      <p class="footer-line">{{ site.tagline | split: ", " | first }},<br><span class="dim">{{ site.tagline | split: ", " | last }}</span></p>
+      <div class="footer-cols">
+        <div>
+          <p class="label">Explore</p>
+          <ul>
+            <li><a href="{{ '/' | relative_url }}">Home</a></li>
+            <li><a href="{{ '/games/' | relative_url }}">Games</a></li>
+            <li><a href="{{ '/changelog/' | relative_url }}">Changelog</a></li>
+            {% if site.sections.blog %}<li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>{% endif %}
+          </ul>
+        </div>
+        <div>
+          <p class="label">Studio</p>
+          <ul>
+            <li><a href="{{ '/links/' | relative_url }}">Other Links</a></li>
+            <li><a href="{{ '/privacy/' | relative_url }}">Privacy</a></li>
+            {% if site.contact_email != "" %}<li><a href="mailto:{{ site.contact_email }}">Contact</a></li>{% endif %}
+          </ul>
+        </div>
+        <div>
+          <p class="label">Follow</p>
+          <ul>
+            <li><a href="{{ '/changelog/feed.xml' | relative_url }}">Changelog RSS</a></li>
+            {% if site.social.github %}<li><a href="https://github.com/{{ site.social.github }}">GitHub</a></li>{% endif %}
+            {% if site.social.itch %}<li><a href="https://{{ site.social.itch }}.itch.io">itch.io</a></li>{% endif %}
+            {% if site.social.bluesky %}<li><a href="https://bsky.app/profile/{{ site.social.bluesky }}">Bluesky</a></li>{% endif %}
+            {% if site.social.discord %}<li><a href="{{ site.social.discord }}">Discord</a></li>{% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% comment %}
+      The giant wordmark. It shows the finished logo, and plays the animation
+      once the first time it scrolls into view (the animated file is only
+      fetched then).
+    {% endcomment %}
+    <div class="footer-mark">
+      <img src="{{ '/assets/img/logo/pere-logo.webp' | relative_url }}" data-anim="{{ '/assets/img/logo/pere-logo-anim.webp' | relative_url }}" alt="{{ site.title }}" width="844" height="412" loading="lazy">
+    </div>
+    <p class="footer-legal">&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
   </div>
 </footer>
+<script>
+  (function () {
+    var img = document.querySelector(".footer-mark img");
+    if (!img || !("IntersectionObserver" in window)) return;
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      img.closest(".footer-mark").classList.add("is-playing");
+      img.src = img.dataset.anim;
+    }, { threshold: 0.35 });
+    io.observe(img);
+  })();
+</script>

@@ -5,11 +5,13 @@ description: Every update to every Pere Games title.
 ---
 {% assign entries = site.changelog | sort: "date" | reverse %}
 {% assign games = site.games | sort: "order" %}
-<div class="section-head">
-  <h1>Changelog</h1>
-  <a href="{{ '/changelog/feed.xml' | relative_url }}">RSS</a>
+<div class="section-head page-head">
+  <div>
+    <p class="label">Changelog</p>
+    <h1 class="display-2">Every update,<br><span class="dim">newest first.</span></h1>
+  </div>
+  <a class="btn" href="{{ '/changelog/feed.xml' | relative_url }}">RSS <span aria-hidden="true">&#8599;</span></a>
 </div>
-<p class="lede">Every update to every game, newest first.</p>
 
 <div class="filters" role="group" aria-label="Filter by game" data-filters hidden>
   <button type="button" class="chip" data-filter="" aria-pressed="true">All</button>

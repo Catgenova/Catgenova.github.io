@@ -1,3 +1,18 @@
+{% assign ticker = site.changelog | sort: "date" | reverse %}
+<div class="ticker" aria-label="Latest updates">
+  <div class="ticker-track">
+    {% for pass in (1..2) %}
+    <ul class="ticker-list"{% if pass == 2 %} aria-hidden="true"{% endif %}>
+      {% for entry in ticker limit: 6 %}
+      <li><a href="{{ entry.url | relative_url }}"{% if pass == 2 %} tabindex="-1"{% endif %}>New &mdash; {{ entry.title }}</a></li>
+      {% else %}
+      <li>{{ site.tagline }}</li>
+      {% endfor %}
+    </ul>
+    {% endfor %}
+  </div>
+  <a class="ticker-end" href="{{ '/changelog/' | relative_url }}">Changelog <span aria-hidden="true">&#8599;</span></a>
+</div>
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="{{ '/' | relative_url }}">
@@ -5,6 +20,7 @@
     </a>
     <nav aria-label="Main">
       <ul class="nav">
+        <li><a href="{{ '/' | relative_url }}"{% if page.url == '/' %} aria-current="page"{% endif %}>Home</a></li>
         {% for item in site.data.nav %}
         {% if item.section and site.sections[item.section] == false %}{% continue %}{% endif %}
         {% assign active = false %}
@@ -13,5 +29,6 @@
         {% endfor %}
       </ul>
     </nav>
+    <a class="btn btn-primary header-cta" href="{{ '/games/' | relative_url }}">Browse games <span aria-hidden="true">&#8599;</span></a>
   </div>
 </header>

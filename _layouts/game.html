@@ -12,7 +12,7 @@ layout: default
       {% for tag in page.tags %}{% include tag-link.html tag=tag %}{% endfor %}
     </div>
     <div class="game-actions">
-      {% if page.play_url %}<a class="btn btn-primary btn-lg" href="{{ page.play_url }}">Play {{ page.title }}</a>{% endif %}
+      {% if page.play_url %}<a class="btn btn-primary btn-lg" href="{{ page.play_url }}">Play {{ page.title }} <span aria-hidden="true">&#8599;</span></a>{% endif %}
       {% if page.source_url %}<a class="btn btn-lg" href="{{ page.source_url }}">Source</a>{% endif %}
     </div>
   </div>
