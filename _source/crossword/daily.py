@@ -63,10 +63,22 @@ def word_scores():
         if len(w) <= 4 and level > 35:
             continue  # short obscure words are the worst kind of crosswordese
         scores[w] = LEVEL_SCORE[level] + (CLUED_BONUS if w in clued else 0)
+    exact, prefixes = banned_words()
     for w in clued:
-        if w not in scores and 3 <= len(w) <= SIZE:
+        # Clued answers outside the word list (phrases, names) still obey banned.txt.
+        if w not in scores and 3 <= len(w) <= SIZE and w not in exact and not w.startswith(prefixes):
             scores[w] = LEVEL_SCORE[35] + CLUED_BONUS
     return scores, words
+
+
+def banned_words():
+    """banned.txt as (exact words, prefixes)."""
+    exact, prefixes = set(), []
+    for line in (lib.HERE / "banned.txt").read_text().splitlines():
+        line = line.strip().upper()
+        if line and not line.startswith("#"):
+            (prefixes.append(line[:-1]) if line.endswith("*") else exact.add(line))
+    return exact, tuple(prefixes)
 
 
 _SCORES = None

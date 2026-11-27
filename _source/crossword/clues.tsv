@@ -106,7 +106,7 @@ TEN	Number of fingers	Perfect score, often	Hang ___ (surfing move)
 ANT	Small picnic pest	Colony insect	Aunt's homophone
 TAN	Get brown in the sun	Beach goal	Khaki-like shade
 SEA	Big body of salt water	Mediterranean, e.g.	A lot, as in "a ___ of faces"
-SET	Put down	Ready, in "Ready, ___, go!"	Group of tennis games
+SET	Put down	"Ready, ___, go!"	Group of tennis games
 TIE	Necktie	Even score	Knot, or a draw
 NOR	"Neither a borrower ___ a lender be"	Or's partner after "neither"	Conjunction with neither
 NOT	Word of denial	Opposite of "is"	Logic gate that flips
@@ -117,7 +117,7 @@ EEL	Snakelike fish	Slippery swimmer	Sushi bar unagi
 EGG	Breakfast item that may be scrambled	Omelet need	Urge, with "on"
 ELM	Leafy shade giver	Dutch ___ disease	Street of nightmares, in film
 ERR	Make a mistake	Goof	It's human to do this
-EYE	Body part for seeing	Needle's hole	Center of a storm
+EYE	Body part for seeing	Needle's opening	Center of a storm
 IRE	Anger	Wrath	Fury
 ODD	Strange	Like 3 or 5	Out of the ordinary
 OWE	Be in debt	Have an IOU out	Be beholden
@@ -250,7 +250,7 @@ DROOL	Slobber	Dribble	Show obvious desire
 DUE	Owed	Expected	Payable
 DYE	Color fabric	Hair coloring	Tie-___
 EBONY	Black wood	Piano key wood	Ivory's partner, in song
-EON	Very long time	Ages and ages	Geologic span
+EON	Very long time	Very long stretch	Geologic span
 ERAS	Historical periods	Ages	Epochs
 ERASED	Rubbed out	Deleted	Wiped clean
 ERGO	Therefore	Hence	"Cogito, ___ sum"
@@ -430,7 +430,7 @@ PEAR	Fruit with a narrow top	Bartlett, for one	Bosc or Anjou
 PIER	Dock	Wharf	Fishing spot
 RACE	Run against others	Competition	Speed
 RAIN	Water from clouds	Drizzle	___ check
-RATE	Score	Speed	Price per unit
+RATE	Score	Pace	Price per unit
 READ	Look at words	Study	Interpret
 REAL	Genuine	Not fake	Spanish coin of old
 RENT	Monthly housing payment	Lease	Torn
@@ -915,7 +915,7 @@ GUY	Fellow	Dude	Tent rope
 HOE	Garden tool	Weed	Till
 JAR	Glass container	Shake up	Pickle holder
 JOT	Write quickly	Note (down)	Tiny bit
-LAW	Rule	Legal code	Police, informally
+LAW	Rule	Statute	Police, informally
 MOB	Crowd	Swarm	Organized crime
 MUM	Silent	Mother, in Britain	Chrysanthemum
 NEW	Not old	Fresh	Unused
@@ -1937,7 +1937,7 @@ REACH	Arrive at	Extend	Range
 READY	Prepared	Set	Willing
 REALM	Kingdom	Domain	Sphere
 REIGN	Rule	Sovereignty	Period on the throne
-RELAY	Team race	Pass along	Transmit
+RELAY	Team race	Pass on	Transmit
 RIVAL	Competitor	Opponent	Match
 ROUND	Circular	Lap	Stage of a game
 ROUTE	Path	Course	Way
@@ -2080,7 +2080,7 @@ PERSPIRE	Sweat	Glisten	Get damp in the heat
 PIANO	88-key instrument	Upright or grand	Soft, on a score
 ROB	Steal from	Hold up	Burgle
 RUFFLE	Frill	Disturb	Ripple
-SAGAS	Epics	Long tales	Family chronicles
+SAGAS	Epics	Epic stories	Family chronicles
 SAGS	Droops	Sinks	Dips
 SAVED	Rescued	Kept	Banked
 SEEDIER	Shabbier	More run-down	Sleazier
@@ -3340,7 +3340,7 @@ LOCKET	Pendant that holds a photo	Hinged keepsake necklace	Charm with a picture 
 TEA PARTY	Mad Hatter's gathering	Afternoon get-together with scones	Boston protest of 1773
 MIMOSA	Orange juice and bubbly	Brunch cocktail	Tree with fluffy pink flowers
 PICNIC	Meal on a blanket	Basket outing	Easy task, as in "no ___"
-LOVE	Deep affection	Zero, in tennis	Word before letter or seat
+LOVE	Deep affection	Zero, in tennis	Word before letter or song
 RECIPE	Cooking instructions	Family card in a tin box	Formula for success
 BEACH TOWEL	Big terry cloth for the sand	Seaside lounging cloth	Spread that saves your spot
 SAND CASTLE	Moat-ringed beach creation	Bucket-built fort	Structure doomed by the tide
@@ -3542,7 +3542,7 @@ ASTRONAUT	Space traveler	Spacewalker	Crew member on the ISS
 MOON LANDING	1969 milestone	Apollo 11 feat	Giant leap event
 METEOR	Shooting star	Space rock in the atmosphere	Rapid rise
 GALAXY	Star system	Milky Way, for one	Glittering assembly
-NEBULA	Cloud of gas and dust in space	Star nursery	Orion's glowing patch
+NEBULA	Cloud of gas and dust in space	Glowing cloud of cosmic dust	Orion's glowing patch
 SATURN	Ringed planet	Sixth planet from the sun	Roman god of agriculture
 VENUS	Second planet	Evening star	Goddess born of sea foam
 PLUTO	Dwarf planet since 2006	Mickey's dog	Roman ruler of the underworld
@@ -4230,3 +4230,81 @@ TWANG	Banjo sound	Southern accent feature	Nasal quality
 VAT	Large tub	Brewing tank	Value-added tax, in Britain
 VOTES	Ballots	Weighs in at the polls	Ayes and nays
 WILED	Lured	Enticed	Passed pleasantly, as time ("___ away")
+ABSENT	Not present	Missing from class	Like a mind that's wandered
+BOLD	Daring	Heavy, as type	Brazen
+GAPES	Stares open-mouthed	Gawks	Opens wide, as a chasm
+GIRTS	Girds	Fastens with a band	Encircles, as a saddle strap does
+HOMES	Houses	Residences	Zeroes (in on)
+NOD	Sign of agreement	Bob of the head	Land of ___ (sleep, fancifully)
+NOSES	Sniffers	Smells out	Wins by a whisker, at the track
+PANES	Window glass pieces	Sheets in a sash	Squares in a window
+REPOSE	Rest	Lie at ease	Calm composure
+STUB	Ticket remnant	Stump of a pencil	Bump, as a toe
+UNSENT	Still in drafts, as an email	Never mailed	Like a letter left on the desk
+ABBOT	Head of a monastery	Monks' superior	Father figure in a cloister
+ADDLES	Confuses	Muddles	Scrambles, as one's brain
+AGREED	Said yes	Saw eye to eye	"Deal!"
+ALLOT	Give out as a share	Apportion	Set aside, as time
+ALTOS	Low female voices	Choir section	Singers below sopranos
+ANGLED	Slanted	Fished with a rod	Schemed (for)
+APPALL	Horrify	Shock deeply	Fill with dismay
+ARGOTS	Special jargons	Slangs of a group	Thieves' cants, say
+BASAL	Fundamental	At the base	___ metabolic rate
+BOATS	Sailing vessels	Things in a marina	Gravy holders
+BRAT	Spoiled child	Little terror	Sausage, for short
+BUG	Insect	Annoy	Software glitch
+BUGBEAR	Persistent annoyance	Pet peeve	Bogeyman, originally
+EBBS	Recedes	Goes out, as the tide	Wanes
+EDUCATE	Teach	School	Enlighten
+ESTEEM	High regard	Respect	Hold dear
+GENE	Unit of heredity	DNA segment	Kelly of "Singin' in the Rain"
+GOGGLE	Stare with wide eyes	Gawk	Ski ___ (eye protector, singular)
+HOLLY	Evergreen with red berries	Christmas greenery	"Deck the halls with boughs of ___"
+HOSE	Garden watering tube	Stockings	Spray down
+IMPALA	African antelope	Graceful leaper of the savanna	Chevy model
+IONS	Charged particles	Atoms with a charge	Electrolyte bits
+LATHERS	Soapy foams	Works up a froth	Gets all worked up
+LAWN	Grassy yard	Area to mow	Fine linen fabric
+LEAKAGE	Escape of liquid	Seepage	Unauthorized disclosure
+LOATHE	Hate	Detest	Can't stand
+LOONIE	Canadian dollar coin	Coin with a bird on it	Money north of the border
+MOTIFS	Recurring designs	Themes in music or art	Repeated elements
+NUANCE	Subtle shade of meaning	Fine distinction	Shading
+OMITS	Leaves out	Skips	Fails to include
+OPTS	Chooses	Decides, with "for"	Goes (for)
+PARTY	Celebration	Political group	Person in a contract
+PAVE	Cover with asphalt	Surface, as a road	___ the way (make easier)
+PODS	Pea holders	Groups of whales	Sleek capsules
+POKE	Prod	Jab with a finger	Snoop, with "around"
+PRATES	Chatters idly	Babbles on	Talks foolishly
+PRONE	Lying face down	Likely (to)	Inclined
+PSALM	Sacred song	Hymn from a biblical book	The 23rd, for one
+RAWER	Less cooked	More sore	Even more inexperienced
+REASON	Cause	Logic	Think things through
+RENEGE	Go back on a promise	Break one's word	Fail to follow suit, in cards
+REPLACE	Swap out	Substitute for	Put back
+RESULT	Outcome	Consequence	Final score
+RHEAS	Flightless South American birds	Ostrich relatives	Birds of the pampas
+RIOTOUS	Boisterous	Wild and noisy	Uproarious
+RISES	Gets up	Goes up	What bread dough does before baking
+RUT	Groove in a road	Boring routine	Stuck place
+SCENT	Smell	Aroma	Trail for a bloodhound
+SEWED	Stitched	Used a needle and thread	Hemmed
+SHOES	Footwear	Sneakers and loafers	Horse's iron fittings
+SHUT	Closed	Close	___-eye (sleep)
+SINK	Kitchen basin	Go under	Drop, as a putt
+SLOP	Pig feed	Spill carelessly	Mushy mess
+SMOTE	Struck hard, old-style	Hit, biblically	Afflicted
+SOURCE	Origin	Where a river begins	Informant
+STEPS	Stairs	Dance moves	Measures taken
+STRAIT	Narrow channel of water	Gibraltar, for one	Tight spot, with "dire"
+STROKES	Swimming movements	Caresses	Golf shots
+SUED	Took to court	Filed a lawsuit against	Pleaded (for), as peace
+TEETH	Biting parts	Molars and incisors	Gear points
+TOGA	Roman robe	Frat party garment	Senator's wrap of old
+TRUSTS	Has faith in	Relies on	Financial arrangements for heirs
+TUFTS	Clumps of hair or grass	Bunches	Fluffy bits
+UTTERED	Said	Spoke	Voiced
+WATCH	Look at	Timepiece on a wrist	Lookout duty
+WIN	Victory	Come in first	Earn, as praise
+YOKE	Wooden frame for oxen	Burden	Link together

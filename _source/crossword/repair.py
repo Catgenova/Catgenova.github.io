@@ -12,6 +12,10 @@ import daily
 import grid
 
 
+def pairs(ws):
+    return {(w, w + e) for w in ws for e in ("S", "ES") if w + e in ws}
+
+
 def main():
     date, bad = sys.argv[1], set(w.upper() for w in sys.argv[2:])
     title, entries, g = daily.read_draft(date)
@@ -34,6 +38,7 @@ def main():
             clear.update(cells)
     for x, y in clear - keep:
         g[x][y] = grid.EMPTY
+    before = pairs([w for *_, w in daily.answers(g)])
     scores, _ = daily.word_scores()
     # Don't put the removed words straight back.
     scores = {w: v for w, v in scores.items() if w not in bad}
@@ -42,8 +47,10 @@ def main():
         rng = random.Random(seed)
         if grid.fill(h, grid.Dictionary(scores, rng), rng, node_limit=3000):
             ws = [w for *_, w in daily.answers(h)]
-            if len(ws) != len(set(ws)) or any(w + "S" in ws or w + "ES" in ws for w in ws):
-                continue  # a repeat, or a word with its plural (ERA and ERAS)
+            # No repeats, and no new word-and-plural pair (ERA and ERAS);
+            # pairs already elsewhere in the grid aren't this repair's doing.
+            if len(ws) != len(set(ws)) or pairs(ws) - before:
+                continue
             (daily.DRAFTS / f"{date}.txt").write_text(
                 f"# {title}\n# theme: {' | '.join(entries)}\n{grid.grid_text(h)}\n")
             print(grid.grid_text(h))

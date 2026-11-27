@@ -51,352 +51,562 @@
   {
    "date": "2026-11-28",
    "title": "Snow Day",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-11-29",
    "title": "Game Night",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-11-30",
    "title": "Under the Sea",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-12-01",
    "title": "Road Trip",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-12-02",
    "title": "Coffee Break",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-12-03",
    "title": "Movie Night",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 144
   },
   {
    "date": "2026-12-04",
    "title": "Festival of Lights",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-12-05",
    "title": "Space Walk",
-   "count": 76,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 142
   },
   {
    "date": "2026-12-06",
    "title": "Music Lesson",
-   "count": 76,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 142
   },
   {
    "date": "2026-12-07",
    "title": "Bakery Run",
-   "count": 78,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-12-08",
    "title": "Science Fair",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 150
   },
   {
    "date": "2026-12-09",
    "title": "Bundle Up",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-12-10",
    "title": "At the Zoo",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-12-11",
    "title": "Garden Party",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-12-12",
    "title": "Baking Season",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-12-13",
    "title": "On the Ice",
-   "count": 78,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 144
   },
   {
    "date": "2026-12-14",
    "title": "Season's Greetings",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-12-15",
    "title": "Trimming the Tree",
-   "count": 78,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-12-16",
    "title": "Winter Games",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-12-17",
    "title": "Cookie Swap",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-12-18",
    "title": "Night Sky",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 150
   },
   {
    "date": "2026-12-19",
    "title": "Sweet Shop",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-12-20",
    "title": "Snow Removal",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 150
   },
   {
    "date": "2026-12-21",
    "title": "First Day of Winter",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-12-22",
    "title": "Holiday Baking",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2026-12-23",
    "title": "Last-Minute Gifts",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 150
   },
   {
    "date": "2026-12-24",
    "title": "Christmas Eve",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-12-25",
    "title": "Merry Christmas",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 150
   },
   {
    "date": "2026-12-26",
    "title": "The Day After",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 150
   },
   {
    "date": "2026-12-27",
    "title": "Book Nook",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-12-28",
    "title": "Puzzle Day",
-   "count": 74,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 140
   },
   {
    "date": "2026-12-29",
    "title": "Resolutions",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-12-30",
    "title": "Keepsakes",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-12-31",
    "title": "New Year's Eve",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 148
   },
   {
    "date": "2027-01-01",
    "title": "New Year's Day",
-   "count": 76,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 142
   }
  ]
 }

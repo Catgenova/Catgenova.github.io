@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Grid pools for Crossword Run, the roguelike mode (/crossword/run/).
 
-  python3 run.py build [count per size]   # writes crossword/run/pool/<n>.json
-  python3 run.py topics                   # writes crossword/run/pool/topics.json
+  python3 run.py build [size ...]   # writes crossword/run/pool/<n>/<k>.json + manifest.json
+  python3 run.py topics             # writes crossword/run/pool/topics.json
 
 A run picks its puzzles from these pools by seed, so every grid is made
 here ahead of time. Grids use only answers that already have clues in
@@ -13,6 +13,12 @@ Every grid is symmetric, every letter is in an Across and a Down answer,
 answers are 3+ letters, and a grid never repeats an answer or pairs a word
 with its plural. Each grid lists the topics (topics.py) whose words it uses,
 so an act themed on a topic can prefer them.
+
+Pools are big and varied: once a word has been used much more than others
+of its length, it's left out of later grids, so the vocabulary spreads over
+the whole clue bank instead of SEA and ERA turning up everywhere. A pool is
+split into files of CHUNK grids so the game only downloads what it plays.
+(7x7 isn't used: with this vocabulary only one 7x7 shape ever fills.)
 """
 import json
 import random
@@ -26,8 +32,19 @@ import lib
 import topics
 
 OUT = lib.ROOT / "crossword" / "run" / "pool"
-# size: (black squares min-max, longest answer, how many grids by default)
-SIZES = {5: ((0, 4), 5, 400), 7: ((6, 12), 7, 300), 9: ((10, 20), 7, 200), 11: ((16, 30), 8, 80)}
+# size: (black squares min-max, longest answer, how many grids)
+SIZES = {
+    5: ((0, 4), 5, 2000),
+    6: ((0, 8), 6, 1200),
+    7: ((6, 12), 7, 0),  # daily Small only (daily.py sizes)
+    8: ((6, 14), 8, 2000),
+    9: ((10, 20), 7, 2000),
+    11: ((16, 30), 8, 600),
+}
+CHUNK = 100
+POOL_VERSION = 2
+# A word can be used up to SPREAD times the average for its length.
+SPREAD = 2.5
 
 _DIC = None
 _SC = None
@@ -138,7 +155,8 @@ def encode(text, clues, topic_sets):
         if " " in cl["display"] or "-" in cl["display"]:
             e.append(lib.enumeration(cl["display"]))
         entries.append(e)
-    tags = sorted(t for t, ws in topic_sets.items() if words & ws)
+    need = 1 if n <= 6 else 2
+    tags = sorted(t for t, ws in topic_sets.items() if len(words & ws) >= need)
     return {
         "b": "".join("1" if ch == grid.BLOCK else "0" for row in g for ch in row),
         "e": entries,
@@ -146,28 +164,64 @@ def encode(text, clues, topic_sets):
     }
 
 
-def cmd_build(count=None):
+def overused(usage, vocab):
+    """Words used SPREAD times more than the average for their length."""
+    total = {}
+    for w, c in usage.items():
+        total[len(w)] = total.get(len(w), 0) + c
+    return frozenset(w for w, c in usage.items()
+                     if c >= max(3, SPREAD * total[len(w)] / max(1, vocab.get(len(w), 1))))
+
+
+def cmd_build(sizes=None):
+    import collections
+    import shutil
     clues = lib.load_clues()
     topic_sets = {t: topics.bonus_words(t) for t in topics.TOPICS}
+    _init()
+    vocab = collections.Counter(len(w) for w in _SC)
     OUT.mkdir(parents=True, exist_ok=True)
+    manifest_path = OUT / "manifest.json"
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
+    if manifest.get("v") != POOL_VERSION:
+        manifest = {"v": POOL_VERSION, "chunk": CHUNK, "sizes": {}}
     with Pool(initializer=_init) as pool:
-        for n, (_, _, default) in SIZES.items():
-            want = count or default
-            seen, out = set(), []
-            seed = n * 1_000_000
+        for n, (_, _, want) in SIZES.items():
+            if not want or (sizes and n not in sizes):
+                continue
+            seen, out, usage = set(), [], collections.Counter()
+            seed = n * 10_000_000 + 1
             t0 = time.time()
             while len(out) < want:
-                res = pool.map(_make, [(n, seed + i) for i in range(64)])
+                exclude = overused(usage, vocab)
+                res = pool.map(_make, [(n, seed + i, exclude) for i in range(64)])
                 seed += 64
                 for text in res:
                     if text and text not in seen and good(text):
+                        ws = [w for *_, w in daily.answers(grid.parse_grid(text))]
+                        if any(usage[w] >= 3 and w in exclude for w in ws):
+                            continue
                         seen.add(text)
+                        usage.update(ws)
                         out.append(encode(text, clues, topic_sets))
-                print(f"{n}x{n}: {len(out)}/{want}, {time.time() - t0:.0f}s", flush=True)
+                print(f"{n}x{n}: {len(out)}/{want}, {len(usage)} distinct answers, "
+                      f"{len(exclude)} resting, {time.time() - t0:.0f}s", flush=True)
             out = out[:want]
-            path = OUT / f"{n}.json"
-            path.write_text(json.dumps({"size": n, "grids": out}, ensure_ascii=False, separators=(",", ":")) + "\n")
-            print(f"wrote {path} ({path.stat().st_size // 1024} KB)")
+            d = OUT / str(n)
+            if d.exists():
+                shutil.rmtree(d)
+            d.mkdir()
+            for k in range(0, len(out), CHUNK):
+                (d / f"{k // CHUNK}.json").write_text(
+                    json.dumps({"size": n, "grids": out[k:k + CHUNK]}, ensure_ascii=False, separators=(",", ":")) + "\n")
+            old = OUT / f"{n}.json"
+            if old.exists():
+                old.unlink()
+            manifest["sizes"][str(n)] = len(out)
+            manifest_path.write_text(json.dumps(manifest) + "\n")
+            top = usage.most_common(3)
+            print(f"wrote {d}: {len(out)} grids in {len(out) // CHUNK + bool(len(out) % CHUNK)} files, "
+                  f"{len(usage)} distinct answers, most used {top}", flush=True)
 
 
 def cmd_topics():
@@ -195,5 +249,5 @@ if __name__ == "__main__":
     if sys.argv[1] == "topics":
         cmd_topics()
     else:
-        cmd_build(int(sys.argv[2]) if len(sys.argv) > 2 else None)
+        cmd_build({int(x) for x in sys.argv[2:]} or None)
         cmd_topics()
