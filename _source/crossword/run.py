@@ -35,7 +35,7 @@ OUT = lib.ROOT / "crossword" / "run" / "pool"
 # size: (black squares min-max, longest answer, how many grids)
 SIZES = {
     5: ((0, 4), 5, 800),
-    6: ((0, 8), 6, 1000),
+    6: ((4, 12), 6, 400),  # few 6-letter words have clues: more blocks
     7: ((6, 12), 7, 0),  # daily Small only (daily.py sizes)
     8: ((6, 14), 8, 1500),
     9: ((10, 20), 7, 1500),
