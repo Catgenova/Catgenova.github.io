@@ -7,9 +7,9 @@ tags:
   - Crossword
   - Word Game
   - Daily
-featured: true
 order: 2
-play_url: /crossword/
+# Where the Open button goes.
+app_url: /crossword/
 cover: /assets/img/games/crossword.png
 ---
 

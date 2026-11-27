@@ -5,10 +5,11 @@
 <ol class="changelog">
   {% for entry in include.entries %}
   {% assign game = site.games | where: "slug", entry.game | first %}
+  {% unless game %}{% assign game = site.apps | where: "slug", entry.game | first %}{% endunless %}
   <li class="changelog-item" data-game="{{ entry.game }}">
     <div class="changelog-head">
       <time datetime="{{ entry.date | date_to_xmlschema }}">{{ entry.date | date: "%b %-d, %Y" }}</time>
-      {% if game %}<a class="tag" href="{{ game.url | relative_url }}">{{ game.title }}</a>{% endif %}
+      {% if game %}<a class="tag" href="{% if game.app_url %}{{ game.app_url | relative_url }}{% else %}{{ game.url | relative_url }}{% endif %}">{{ game.title }}</a>{% endif %}
       {% if entry.version %}<code class="version">v{{ entry.version }}</code>{% endif %}
     </div>
     <h3><a href="{{ entry.url | relative_url }}">{{ entry.title }}</a></h3>
