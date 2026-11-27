@@ -1,0 +1,15 @@
+---
+layout: default
+title: Other Links
+description: Other Pere Games projects and resources.
+---
+<h1>Other Links</h1>
+<p class="lede">Other projects and resources from Pere Games.</p>
+<ul class="link-list">
+  {% for link in site.data.other_links %}
+  <li>
+    <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
+    {% if link.description %}<p class="muted">{{ link.description }}</p>{% endif %}
+  </li>
+  {% endfor %}
+</ul>

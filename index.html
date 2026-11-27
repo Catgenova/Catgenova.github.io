@@ -4,7 +4,7 @@ layout: default
 {% assign games = site.games | sort: "order" %}
 {% assign featured = games | where: "featured", true %}
 {% assign updates = site.changelog | sort: "date" | reverse %}
-{% assign apps = site.apps | sort: "order" %}
+{% assign apps = site.apps | where_exp: "app", "app.hidden != true" | sort: "order" %}
 
 <section class="hero hero-home">
   <h1 class="hero-logo">
