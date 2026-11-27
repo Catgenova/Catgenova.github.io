@@ -64,7 +64,7 @@
   const LV_NAME = ['Easy', 'Medium', 'Hard'];
   // n: grid size, or a list of sizes to pick from (fixed per map node).
   const ACTS = [
-    { name: 'Act I', puzzle: { n: [5, 5, 6], lv: 0 }, elite: { n: 8, lv: 0, curse: true }, boss: { n: 8, lv: 1 } },
+    { name: 'Act I', puzzle: { n: [5, 6], lv: 0 }, elite: { n: 8, lv: 0, curse: true }, boss: { n: 8, lv: 1 } },
     { name: 'Act II', puzzle: { n: 8, lv: 1 }, elite: { n: 9, lv: 1, curse: true }, boss: { n: 9, lv: 1, curse: true } },
     { name: 'Act III', puzzle: { n: 9, lv: 1 }, elite: { n: 9, lv: 2, curse: true }, boss: { n: 11, lv: 2, curse: true } },
   ];
