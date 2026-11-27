@@ -23,6 +23,10 @@ const DEFAULT_ORIGINS = "https://pere.games,https://www.pere.games,https://catge
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // Binding names are case-sensitive and the dashboard lets you type any;
+    // take the usual spellings so a lowercase "plays" works too.
+    const kv = env.PLAYS || env.plays || env["pere-plays"];
+    if (!kv) return new Response("KV namespace not bound: add a KV binding named PLAYS", { status: 500 });
     const origins = (env.ALLOWED_ORIGINS || DEFAULT_ORIGINS).split(",").map((s) => s.trim());
     const origin = request.headers.get("Origin") || "";
     const cors = {
@@ -38,7 +42,7 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
 
     if (request.method === "GET" && url.pathname === "/counts") {
-      const entries = await Promise.all(games.map(async (g) => [g, Number(await env.PLAYS.get("plays:" + g)) || 0]));
+      const entries = await Promise.all(games.map(async (g) => [g, Number(await kv.get("plays:" + g)) || 0]));
       return json(Object.fromEntries(entries), 200, { "Cache-Control": "public, max-age=60" });
     }
 
@@ -53,12 +57,12 @@ export default {
       const ip = request.headers.get("CF-Connecting-IP") || "";
       const day = new Date().toISOString().slice(0, 10);
       const seenKey = "seen:" + (await sha256(ip + "|" + slug + "|" + day)) + ":" + slug;
-      if (ip && (await env.PLAYS.get(seenKey))) {
-        return json({ slug, plays: Number(await env.PLAYS.get(key)) || 0, counted: false });
+      if (ip && (await kv.get(seenKey))) {
+        return json({ slug, plays: Number(await kv.get(key)) || 0, counted: false });
       }
-      const plays = (Number(await env.PLAYS.get(key)) || 0) + 1;
-      await env.PLAYS.put(key, String(plays));
-      if (ip) await env.PLAYS.put(seenKey, "1", { expirationTtl: REPEAT_WINDOW });
+      const plays = (Number(await kv.get(key)) || 0) + 1;
+      await kv.put(key, String(plays));
+      if (ip) await kv.put(seenKey, "1", { expirationTtl: REPEAT_WINDOW });
       return json({ slug, plays, counted: true });
     }
 
