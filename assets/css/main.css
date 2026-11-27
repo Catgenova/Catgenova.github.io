@@ -339,3 +339,7 @@ a.tag:hover { color: var(--text); text-decoration: underline; }
 .filters + .changelog { border-top: 0; }
 .filters + .changelog .changelog-item:first-child { padding-top: 0; }
 .split .prose > h2:first-child { margin-top: 0; }
+
+/* Play counts (filled in by assets/js/plays.js) */
+.plays { color: var(--text); }
+.plays[hidden] { display: none; }

@@ -4,7 +4,7 @@ title: Privacy Policy
 description: How Pere Games handles your data, including cookies used for advertising.
 ---
 
-*Last updated: October 8, 2026*
+*Last updated: November 27, 2026*
 
 This policy covers pere.games and the games hosted on it.
 
@@ -20,6 +20,12 @@ progress is saved online. Those games store your account details (such as
 your email address or sign-in provider) and your game data with our database
 provider, Supabase. We use this only to run the game. You can ask us to
 delete your account and data at any time.
+
+**Play counts.** When you click a game's Play button, we count one play for
+that game, shown on the site as its play total. To stop repeat clicks counting
+twice, a one-way scrambled code made from your IP address is kept for 10
+minutes and then deleted; your IP address itself is never stored, and no
+cookies are used. The counter runs on Cloudflare.
 
 **Browser storage.** Our games may store settings and progress in your
 browser's local storage. This stays on your device.

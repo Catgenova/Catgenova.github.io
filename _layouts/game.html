@@ -10,9 +10,10 @@ layout: default
     <div class="game-meta">
       <span class="status status-{{ page.status | slugify }}">{{ page.status }}</span>
       {% for tag in page.tags %}{% include tag-link.html tag=tag %}{% endfor %}
+      {% if page.play_url %}<span class="plays" data-plays="{{ page.slug }}" hidden></span>{% endif %}
     </div>
     <div class="game-actions">
-      {% if page.play_url %}<a class="btn btn-primary btn-lg" href="{{ page.play_url }}">Play {{ page.title }} <span aria-hidden="true">&#8599;</span></a>{% endif %}
+      {% if page.play_url %}<a class="btn btn-primary btn-lg" href="{{ page.play_url }}" data-play="{{ page.slug }}">Play {{ page.title }} <span aria-hidden="true">&#8599;</span></a>{% endif %}
       {% if page.source_url %}<a class="btn btn-lg" href="{{ page.source_url }}">Source</a>{% endif %}
     </div>
   </div>

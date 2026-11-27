@@ -25,5 +25,6 @@
     {{ content }}
   </main>
   {% include footer.html %}
+  {% if site.plays_api != "" %}<script src="{{ '/assets/js/plays.js' | relative_url }}" data-api="{{ site.plays_api }}" defer></script>{% endif %}
 </body>
 </html>

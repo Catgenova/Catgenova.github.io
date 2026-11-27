@@ -28,9 +28,10 @@ full_bleed: true
         <span>{{ spot.tags | first }}</span>
         <span>{{ spot.status }}</span>
         {% assign last = spot_updates | first %}{% if last %}<span>Updated {{ last.date | date: "%b %-d, %Y" }}</span>{% endif %}
+        {% if spot.play_url %}<span class="plays" data-plays="{{ spot.slug }}" hidden></span>{% endif %}
       </p>
       <div class="actions">
-        {% if spot.play_url %}<a class="btn btn-primary" href="{{ spot.play_url }}">Play {{ spot.title }} <span aria-hidden="true">&#8599;</span></a>{% endif %}
+        {% if spot.play_url %}<a class="btn btn-primary" href="{{ spot.play_url }}" data-play="{{ spot.slug }}">Play {{ spot.title }} <span aria-hidden="true">&#8599;</span></a>{% endif %}
         <a class="btn" href="{{ spot.url | relative_url }}">Details</a>
       </div>
     </div>

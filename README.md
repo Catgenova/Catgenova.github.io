@@ -147,6 +147,15 @@ PDF file names follow one pattern so a year's paperwork sorts in filing order:
 `2026-27_Rivera-Mila_Gr5_03-Q1-Quarterly-Report.pdf` (01 letter of intent,
 02 IHIP, 03–06 quarterly reports, 07 annual assessment).
 
+## Play counts
+
+Each game card, the home page spotlight and each game page show "N plays":
+clicks on that game's Play button, counted by a Cloudflare Worker
+(`_source/plays-worker/`, with deploy steps). `assets/js/plays.js` fetches the
+totals and counts clicks on any link with `data-play="<slug>"`. Nothing shows
+while `plays_api` in `_config.yml` is empty. A new game with a Play button
+needs its slug added to the Worker's `GAMES` variable.
+
 ## Ads
 
 Until `ads.adsense_client` is set in `_config.yml`, ad slots show a house

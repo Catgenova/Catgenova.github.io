@@ -10,11 +10,12 @@
   <p class="meta">
     <span class="status status-{{ game.status | slugify }}">{{ game.status }}</span>
     {% for tag in game.tags limit: 2 %}{% include tag-link.html tag=tag %}{% endfor %}
+    {% if game.play_url %}<span class="plays" data-plays="{{ game.slug }}" hidden></span>{% endif %}
   </p>
   <h3><a href="{{ game.url | relative_url }}">{{ game.title }}</a></h3>
   <p class="card-text">{{ game.tagline }}</p>
   <p class="card-actions">
-    {% if game.play_url %}<a class="text-link strong" href="{{ game.play_url }}">Play <span aria-hidden="true">&#8599;</span></a>{% endif %}
+    {% if game.play_url %}<a class="text-link strong" href="{{ game.play_url }}" data-play="{{ game.slug }}">Play <span aria-hidden="true">&#8599;</span></a>{% endif %}
     <a class="text-link" href="{{ game.url | relative_url }}">Details</a>
   </p>
 </article>
