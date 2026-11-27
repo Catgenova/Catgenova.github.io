@@ -1,6 +1,6 @@
 ---
 title: Daily Crossword
-tagline: A new newspaper-style crossword every day, in Easy, Medium or Hard, plus big holiday specials like the 200-clue Thanksgiving puzzle.
+tagline: Three new newspaper-style crosswords every day, Small, Medium and Large, plus big holiday specials like the Thanksgiving puzzle.
 status: Live
 tags:
   - Puzzle
@@ -13,14 +13,16 @@ play_url: /crossword/
 cover: /assets/img/games/crossword.png
 ---
 
-A fresh 15×15 crossword every day, built the way newspaper puzzles are: a
-symmetric grid where every letter belongs to both an Across and a Down
-answer, and a light theme running through the longest entries.
+Three fresh crosswords every day, built the way newspaper puzzles are:
+symmetric grids where every letter belongs to both an Across and a Down
+answer.
 
-Each daily comes in three difficulties. The grid is the same; the clues
-change. Easy clues are plain definitions, Medium adds a little misdirection,
-and Hard leans on wordplay, hides the answer lengths and turns off
-autocheck.
+- **Small**: a quick 7×7 with easy, plain-definition clues.
+- **Medium**: an 11×11 with clues that add a little misdirection.
+- **Large**: the classic 15×15, with a light theme running through the
+  longest entries and clues that lean on wordplay.
+
+Each one has its own answers, so you can play all three.
 
 There are also specials for big occasions, starting with the Big
 Thanksgiving Crossword: 200 clues in one giant free-form grid.

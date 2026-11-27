@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Sanity-check published puzzles: python3 check.py
 
-For daily (newspaper-style) grids: 180-degree symmetry, every white square
-in both an Across and a Down answer, answers 3+ letters, numbering in
-reading order, no repeated answers, all three clue levels present and no
-clue that contains its own answer. For specials: every answer crosses
+For daily (newspaper-style) grids: each of the day's three puzzles has
+180-degree symmetry, every white square in both an Across and a Down
+answer, answers 3+ letters, no repeated answers (within a puzzle or across
+the day's three), a clue for every answer and no clue that contains its
+own answer. For specials: every answer crosses
 another and the clues are present.
 """
 import json
@@ -27,6 +28,22 @@ def letters(p):
 
 def check(path):
     p = json.loads(path.read_text())
+    if "sizes" not in p:
+        return check_one(p)
+    # A day of three puzzles (Small, Medium, Large): check each, and that no
+    # answer appears in more than one of them.
+    errs, seen = [], {}
+    for size, sub in p["sizes"].items():
+        errs += [f"{size}: {e}" for e in check_one({**sub, "style": p["style"], "levels": [size]})]
+        for e in sub["entries"]:
+            a = lib.rot13(e["a"])
+            if a in seen:
+                errs.append(f"{a} is in both {seen[a]} and {size}")
+            seen.setdefault(a, size)
+    return errs
+
+
+def check_one(p):
     errs = []
     try:
         cells = letters(p)
@@ -35,10 +52,10 @@ def check(path):
     answers = [lib.rot13(e["a"]) for e in p["entries"]]
     if len(set(answers)) != len(answers):
         errs.append("repeated answer")
-    keys = [lib.LEVEL_KEYS[l] for l in p["levels"]]
+    keys = [lib.LEVEL_KEYS.get(l, l) for l in p["levels"]]
     for e, a in zip(p["entries"], answers):
         for k in keys:
-            q = e["q"].get(k, "")
+            q = e["q"] if isinstance(e["q"], str) else e["q"].get(k, "")
             if not q:
                 errs.append(f"{e['n']}{e['d']}: no {k} clue")
             elif a.lower() in "".join(ch for ch in q.lower() if ch.isalpha()) and len(a) > 3:
@@ -87,5 +104,8 @@ if __name__ == "__main__":
     for d in sorted((lib.HERE / "daily").glob("*.txt")):
         if d.stem not in published:
             print(f"_source/crossword/daily/{d.name}: draft not published (run daily.py publish {d.stem})")
+            bad += 1
+        elif "sizes" not in json.loads((lib.SITE / "daily" / f"{d.stem}.json").read_text()):
+            print(f"{d.stem}: published as one grid; run daily.py sizes {d.stem} and publish it")
             bad += 1
     sys.exit(1 if bad else 0)

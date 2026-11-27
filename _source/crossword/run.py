@@ -95,16 +95,23 @@ def pattern(rng, n, blocks, max_len, tries=200):
 
 
 def _make(args):
-    n, seed = args
+    """One grid of size n, or None. Optional: answers to leave out, and a
+    {word: bonus} the filler should lean toward (a topic's words)."""
+    n, seed, *rest = args
+    exclude = rest[0] if rest else frozenset()
+    bonus = rest[1] if len(rest) > 1 else None
     blocks, max_len, _ = SIZES[n]
     rng = random.Random(seed)
     g = pattern(rng, n, blocks, max_len)
     if g is None:
         return None
+    sc = {w: v for w, v in _SC.items() if w not in exclude} if exclude else _SC
+    if bonus:
+        sc = {w: v + (25 if w in bonus else 0) for w, v in sc.items()}
     for k in range(3):
         h = [row[:] for row in g]
         r2 = random.Random(seed * 10 + k)
-        if grid.fill(h, grid.Dictionary(_SC, r2, noise=20.0), r2, node_limit=1500):
+        if grid.fill(h, grid.Dictionary(sc, r2, noise=20.0, bonus=bonus), r2, node_limit=1500):
             return grid.grid_text(h)
     return None
 

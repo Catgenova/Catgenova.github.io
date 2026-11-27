@@ -19,22 +19,34 @@
   {
    "date": "2026-11-26",
    "title": "Kitchen Duty",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 150
   },
   {
    "date": "2026-11-27",
    "title": "Black Friday",
-   "count": 80,
+   "rev": 2,
    "levels": [
-    "easy",
+    "small",
     "medium",
-    "hard"
-   ]
+    "large"
+   ],
+   "sizes": {
+    "small": 7,
+    "medium": 11,
+    "large": 15
+   },
+   "count": 146
   },
   {
    "date": "2026-11-28",

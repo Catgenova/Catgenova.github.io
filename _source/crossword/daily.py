@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 """Daily 15x15 newspaper-style crosswords.
 
-  python3 daily.py fill 2026-11-26 [more dates]   # make the grid (slow-ish)
+  python3 daily.py fill 2026-11-26 [more dates]   # the Large themed 15x15 (slow-ish)
+  python3 daily.py sizes 2026-11-26 [...] | all   # the Small and Medium grids
   python3 daily.py missing 2026-11-26 [...]       # answers that still need clues
   python3 daily.py publish 2026-11-26 [...]       # write crossword/puzzles/daily/*.json
   python3 daily.py publish all
 
-`fill` writes a draft grid to _source/crossword/daily/<date>.txt. Drafts are
-committed, so a published grid never changes when the word list or clue bank
+Each day has three different puzzles: Small (7x7, easy clues), Medium
+(11x11, medium clues) and Large (the themed 15x15, hard clues). No answer
+is used in more than one of a day's puzzles.
+
+`fill` writes the Large draft to _source/crossword/daily/<date>.txt and
+`sizes` writes daily/small/<date>.txt and daily/medium/<date>.txt, using
+only answers that already have clues. Drafts are committed, so a published grid never changes when the word list or clue bank
 does. Delete a draft and run `fill` again to get a new grid for that date.
 
 Every answer needs three clues (easy, medium, hard) in clues.tsv before
@@ -15,6 +21,7 @@ Every answer needs three clues (easy, medium, hard) in clues.tsv before
 clues, so the bank gets reused as it grows. A daily can name a topic from
 topics.py (third item in its themes.py entry) to lean the fill toward it.
 """
+import json
 import random
 import re
 import sys
@@ -42,6 +49,10 @@ REPEAT_DAYS = 7
 TOPIC_SCORE_BONUS = 25
 TOPIC_RANK_BONUS = 3.0
 TOPIC_WANT = 4
+# A day's three puzzles: grid size and clue level.
+DAY_SIZES = {"small": (7, "e"), "medium": (11, "m"), "large": (SIZE, "h")}
+EXTRAS = ("small", "medium")  # made by `sizes`; large is the themed `fill` grid
+EXTRA_WANT = 6  # grids to compare for each; the one with the commonest words wins
 
 
 def word_scores():
@@ -149,11 +160,24 @@ def recent_words(date, days=REPEAT_DAYS, min_len=5):
     d0 = datetime.date.fromisoformat(date)
     out = set()
     for k in [*range(-days, 0), *range(1, days + 1)]:
-        path = DRAFTS / f"{d0 - datetime.timedelta(days=k)}.txt"
-        if path.exists():
-            _, _, g = read_draft(path.stem)
-            out.update(w for *_, w in answers(g) if len(w) >= min_len)
+        day = str(d0 - datetime.timedelta(days=k))
+        for path in [DRAFTS / f"{day}.txt"] + [DRAFTS / size / f"{day}.txt" for size in EXTRAS]:
+            if path.exists():
+                out.update(w for w in draft_words(path) if len(w) >= min_len)
     return frozenset(out)
+
+
+def draft_words(path):
+    """Answers in a draft file (any size)."""
+    text = "\n".join(l for l in path.read_text().splitlines() if not l.startswith("# "))
+    return [w for *_, w in answers(grid.parse_grid(text))]
+
+
+def read_extra(size, date):
+    path = DRAFTS / size / f"{date}.txt"
+    if not path.exists():
+        return None
+    return grid.parse_grid("\n".join(l for l in path.read_text().splitlines() if not l.startswith("# ")))
 
 
 def cmd_fill(dates, attempts=320, want=2):
@@ -188,6 +212,51 @@ def cmd_fill(dates, attempts=320, want=2):
                   f"{f', {hits} topic words' if topic_words else ''})\n{best}\n")
 
 
+def cmd_sizes(dates):
+    """Small and Medium grids for each date, from answers that already have
+    clues, with no answer shared with the day's other puzzles."""
+    import run
+    if dates == ["all"]:
+        dates = sorted(p.stem for p in DRAFTS.glob("*.txt"))
+    _, levels = word_scores()
+    with Pool(initializer=run._init) as pool:
+        for date in dates:
+            if not (DRAFTS / f"{date}.txt").exists():
+                print(f"{date}: no Large grid yet; run `daily.py fill {date}` first")
+                continue
+            title, entries, g = read_draft(date)
+            used = {w for *_, w in answers(g)} | theme_parts(entries)
+            spec = DAILY.get(date, ())
+            topic = spec[2] if len(spec) > 2 else None
+            bonus = {w: TOPIC_RANK_BONUS for w in topics.bonus_words(topic)} if topic else None
+            for size in EXTRAS:
+                path = DRAFTS / size / f"{date}.txt"
+                if path.exists():
+                    used |= set(draft_words(path))
+                    continue
+                n = DAY_SIZES[size][0]
+                exclude = frozenset(used | recent_words(date))
+                seed0 = (int(date.replace("-", "")) * 100 + n) * 10_000
+                found, seen, t0 = [], set(), time.time()
+                for batch in range(0, 960, 32):
+                    res = pool.map(run._make, [(n, seed0 + batch + i, exclude, bonus) for i in range(32)])
+                    for text in res:
+                        if text and text not in seen and run.good(text):
+                            seen.add(text)
+                            found.append(text)
+                    if len(found) >= EXTRA_WANT:
+                        break
+                if not found:
+                    print(f"{date} {size}: no grid found")
+                    continue
+                best = min(found, key=lambda t: quality(t, levels))
+                path.parent.mkdir(exist_ok=True)
+                path.write_text(f"# {size} {n}x{n}\n{best}\n")
+                used |= set(draft_words(path))
+                print(f"{date} {size}: {len(found)} grids in {time.time() - t0:.0f}s, "
+                      f"average word level {quality(best, levels):.1f}\n{best}\n", flush=True)
+
+
 def read_draft(date):
     lines = (DRAFTS / f"{date}.txt").read_text().splitlines()
     title = lines[0][2:].strip()
@@ -205,12 +274,61 @@ def cmd_missing(dates):
     need = {}
     for date in dates:
         _, _, g = read_draft(date)
-        for _, _, _, w in answers(g):
-            if w not in clues:
-                need.setdefault(w, []).append(date)
+        grids = [g] + [x for x in (read_extra(size, date) for size in EXTRAS) if x]
+        for gg in grids:
+            for _, _, _, w in answers(gg):
+                if w not in clues:
+                    need.setdefault(w, []).append(date)
     for w in sorted(need):
         print(w)
     print(f"# {len(need)} answers need clues", file=sys.stderr)
+
+
+def encode(g, clues, lk, theme_display=None):
+    """One grid as published: size, black squares and numbered entries with
+    their clue at level lk. Returns (puzzle, answers missing a clue)."""
+    theme_display = theme_display or {}
+    n = len(g)
+    nums = {}
+    k = 0
+    for r in range(n):
+        for c in range(n):
+            if g[r][c] == grid.BLOCK:
+                continue
+            starts_a = (c == 0 or g[r][c - 1] == grid.BLOCK) and c + 1 < n and g[r][c + 1] != grid.BLOCK
+            starts_d = (r == 0 or g[r - 1][c] == grid.BLOCK) and r + 1 < n and g[r + 1][c] != grid.BLOCK
+            if starts_a or starts_d:
+                k += 1
+                nums[(r, c)] = k
+    entries, missing = [], []
+    for d, r, c, w in answers(g):
+        cl = clues.get(w)
+        if not cl:
+            missing.append(w)
+            continue
+        display = theme_display.get(w, cl["display"])
+        entries.append({
+            "n": nums[(r, c)], "d": d, "r": r, "c": c, "a": lib.rot13(w), "q": cl[lk],
+            "len": lib.enumeration(display), **({"t": 1} if w in theme_display else {}),
+        })
+    entries.sort(key=lambda e: (e["d"], e["n"]))
+    return {
+        "width": n, "height": n,
+        "blocks": ["".join("1" if ch == grid.BLOCK else "0" for ch in row) for row in g],
+        "entries": entries,
+    }, missing
+
+
+def write_daily(path, data):
+    """Like lib.write_json, one entry per line, for each size."""
+    head = {k: v for k, v in data.items() if k != "sizes"}
+    parts = []
+    for size, sub in data["sizes"].items():
+        meta = json.dumps({k: v for k, v in sub.items() if k != "entries"}, ensure_ascii=False)[:-1]
+        body = ",\n".join(json.dumps(e, ensure_ascii=False) for e in sub["entries"])
+        parts.append(f'"{size}": {meta}, "entries": [\n{body}\n]}}')
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(head, ensure_ascii=False)[:-1] + ',\n"sizes": {\n' + ",\n".join(parts) + "\n}}\n")
 
 
 def cmd_publish(dates):
@@ -221,53 +339,41 @@ def cmd_publish(dates):
     for date in dates:
         title, theme, g = read_draft(date)
         theme_display = {lib.clean(t): t for t in theme}
-        # Number squares in reading order.
-        nums = {}
-        n = 0
-        for r in range(SIZE):
-            for c in range(SIZE):
-                if g[r][c] == grid.BLOCK:
-                    continue
-                starts_a = (c == 0 or g[r][c - 1] == grid.BLOCK) and c + 1 < SIZE and g[r][c + 1] != grid.BLOCK
-                starts_d = (r == 0 or g[r - 1][c] == grid.BLOCK) and r + 1 < SIZE and g[r + 1][c] != grid.BLOCK
-                if starts_a or starts_d:
-                    n += 1
-                    nums[(r, c)] = n
-        entries = []
-        missing = False
-        for d, r, c, w in answers(g):
-            cl = clues.get(w)
-            if not cl:
-                print(f"{date}: no clues for {w}")
-                missing = bad = True
-                continue
-            display = theme_display.get(w, cl["display"])
-            entries.append({
-                "n": nums[(r, c)], "d": d, "r": r, "c": c, "a": lib.rot13(w),
-                "q": {"e": cl["e"], "m": cl["m"], "h": cl["h"]},
-                "len": lib.enumeration(display),
-                **({"t": 1} if w in theme_display else {}),
-            })
-        if missing:
+        grids = {"large": g}
+        for size in EXTRAS:
+            grids[size] = read_extra(size, date)
+        if not all(grids.values()):
+            print(f"{date}: no {' or '.join(s for s, x in grids.items() if not x)} grid; run `daily.py sizes {date}`")
+            bad = True
             continue
-        entries.sort(key=lambda e: (e["d"], e["n"]))
-        lib.write_json(lib.SITE / "daily" / f"{date}.json", {
-            "id": "daily-" + date, "kind": "daily", "date": date, "title": title,
-            "style": "grid", "levels": list(lib.LEVELS), "width": SIZE, "height": SIZE,
-            "blocks": ["".join("1" if ch == grid.BLOCK else "0" for ch in row) for row in g],
-            "entries": entries,
+        sizes, missing = {}, []
+        for size in DAY_SIZES:
+            sub, miss = encode(grids[size], clues, DAY_SIZES[size][1], theme_display if size == "large" else None)
+            sizes[size] = sub
+            missing += miss
+        if missing:
+            for w in missing:
+                print(f"{date}: no clues for {w}")
+            bad = True
+            continue
+        # rev 2: three different puzzles a day (before, one grid at three
+        # clue levels). Saved progress is keyed by rev, so old saves aren't
+        # applied to the new Small and Medium grids.
+        write_daily(lib.SITE / "daily" / f"{date}.json", {
+            "id": "daily-" + date, "kind": "daily", "date": date, "title": title, "rev": 2,
+            "style": "grid", "levels": list(DAY_SIZES), "sizes": sizes,
         })
-        print(f"{date}: published {len(entries)} answers")
+        print(f"{date}: published " + ", ".join(f"{s} {len(x['entries'])}" for s, x in sizes.items()))
     lib.write_index()
     if bad:
         sys.exit(1)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3 or sys.argv[1] not in ("fill", "missing", "publish"):
+    if len(sys.argv) < 3 or sys.argv[1] not in ("fill", "sizes", "missing", "publish"):
         sys.exit(__doc__)
     cmd, dates = sys.argv[1], sys.argv[2:]
     for d in dates:
         if d != "all" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", d):
             sys.exit(f"bad date {d}")
-    {"fill": cmd_fill, "missing": cmd_missing, "publish": cmd_publish}[cmd](dates)
+    {"fill": cmd_fill, "sizes": cmd_sizes, "missing": cmd_missing, "publish": cmd_publish}[cmd](dates)

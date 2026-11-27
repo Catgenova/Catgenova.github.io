@@ -43,14 +43,25 @@ Feeds are generated at `/blog/feed.xml` and `/changelog/feed.xml`.
 | Builders, word list, clue bank | `_source/crossword/` (not published) |
 
 Links: `/crossword/play/` opens the latest daily, `?d=2026-11-27` a given day,
-`?p=thanksgiving` a special, and `&level=easy|medium|hard` a difficulty. A
-daily isn't shown before its date in the visitor's time zone. Progress is
-kept in `localStorage`, per puzzle and per difficulty.
+`?p=thanksgiving` a special, and `&level=small|medium|large` one of the day's
+three puzzles (old `easy|medium|hard` links map to those). A daily isn't
+shown before its date in the visitor's time zone. Progress is kept in
+`localStorage`, per puzzle.
 
-**Daily puzzles** are 15×15 newspaper-style grids: symmetric, every letter in
-both an Across and a Down answer, answers at least 3 letters, no repeats.
-Each answer has three clues (easy, medium, hard); Hard also hides answer
-lengths and turns off autocheck.
+**Daily puzzles**: each day has three different newspaper-style grids, all
+symmetric, every letter in both an Across and a Down answer, answers at
+least 3 letters, and no answer used twice across the day's three:
+
+| Puzzle | Grid | Clues | Made by |
+| --- | --- | --- | --- |
+| Small | 7×7 | easy | `daily.py sizes` |
+| Medium | 11×11 | medium | `daily.py sizes` |
+| Large | 15×15, themed | hard | `daily.py fill` |
+
+The clue bank still has three clues per answer; a puzzle uses the level its
+size calls for. Published files are `rev` 2 (one file per day holding all
+three grids); saved progress from the old one-grid dailies carries over to
+that day's Large puzzle, which is the same grid.
 
 1. Add the date's theme to `_source/crossword/themes.py`: a title and 2–4
    theme answers. The first two must be the same length, a third (centre row)
@@ -63,11 +74,16 @@ lengths and turns off autocheck.
    clues. A themed grid can take several minutes. The result is saved as a
    draft in `daily/<date>.txt`, which is committed so a published grid never
    changes; delete the draft to get a new grid.
-3. `python3 daily.py missing 2026-12-01` lists answers without clues. Add
+3. `python3 daily.py sizes 2026-12-01` makes the Small and Medium grids
+   (seconds to a minute). They use only answers that already have clues and
+   leave out the day's Large answers and anything 5+ letters used within a
+   week, picking the grid with the most common words. Drafts go to
+   `daily/small/` and `daily/medium/`.
+4. `python3 daily.py missing 2026-12-01` lists answers without clues. Add
    them to `clues.tsv` (`ANSWER<TAB>easy<TAB>medium<TAB>hard`). If a word is
    unfit to clue, add it to `banned.txt`, delete the draft and fill again.
-4. `python3 daily.py publish 2026-12-01` writes the puzzle and updates
-   `index.json`.
+5. `python3 daily.py publish 2026-12-01` writes the day's three puzzles and
+   updates `index.json`. Then `python3 check.py`.
 
 **Topics** (`topics.py`) are themed vocabularies, about 40 answers each, every
 one already clued: holidays through the year (New Year, MLK Day, Lunar New

@@ -1,6 +1,8 @@
 // Pere Games crossword player.
 //
-// /crossword/play/?d=2026-11-27&level=hard   a daily puzzle (default: today's)
+// /crossword/play/?d=2026-11-27&level=large  a daily puzzle (default: today's)
+//   Each day has three different puzzles: small (7x7, easy clues), medium
+//   (11x11, medium clues) and large (the themed 15x15, hard clues).
 // /crossword/play/?p=thanksgiving            a special puzzle
 //
 // Puzzles are JSON files in /crossword/puzzles/ (built by _source/crossword).
@@ -11,7 +13,9 @@
 
   const BASE = new URL('./', document.currentScript.src).href; // /crossword/
   const ZOOMS = [14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 37, 40, 44, 48];
-  const LEVEL_NAMES = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+  const LEVEL_NAMES = { easy: 'Easy', medium: 'Medium', hard: 'Hard', small: 'Small', large: 'Large' };
+  // Old daily links and preferences named clue levels; they map to sizes.
+  const OLD_LEVEL = { easy: 'small', medium: 'medium', hard: 'large' };
   const LEVEL_KEYS = { easy: 'e', medium: 'm', hard: 'h' };
   const SENTINEL = '​';
   const PREFS = 'pere-crossword:prefs';
@@ -73,7 +77,15 @@
     }
     const prefs = store.get(PREFS) || {};
     let level = params.get('level');
-    if (!P.levels.includes(level)) level = P.levels.includes(prefs.level) ? prefs.level : (P.levels.includes('medium') ? 'medium' : P.levels[0]);
+    if (P.sizes) {
+      // A day of three puzzles: pick one and play it like a single grid.
+      const want = [level, OLD_LEVEL[level], prefs.size, 'medium'].find((x) => x && P.sizes[x]);
+      level = want || P.levels[0];
+      const { sizes, ...day } = P;
+      P = { ...day, ...sizes[level] };
+    } else if (!P.levels.includes(level)) {
+      level = P.levels.includes(prefs.level) ? prefs.level : (P.levels.includes('medium') ? 'medium' : P.levels[0]);
+    }
     start(P, level);
   }
 
@@ -86,6 +98,13 @@
     const isGrid = P.style === 'grid';
     const hard = level === 'hard';
     const daily = P.kind === 'daily';
+    // The old one-grid dailies (rev 1) are today's Large puzzle: carry over
+    // progress from whichever clue level got furthest.
+    if (daily && P.rev === 2 && level === 'large' && !store.get(KEY)) {
+      const olds = ['hard', 'medium', 'easy'].map((l) => store.get('pere-crossword:' + P.id + ':' + l)).filter(Boolean);
+      olds.sort((a, b) => (b.solved - a.solved) || ((b.pct || 0) - (a.pct || 0)));
+      if (olds.length) store.set(KEY, olds[0]);
+    }
 
     const gridEl = $('#grid');
     const viewport = $('#viewport');
@@ -102,7 +121,9 @@
     $('#title').textContent = daily ? 'Daily Crossword' : P.title;
     document.title = (daily ? 'Daily Crossword, ' + longDate(P.date) : P.title) + ' · Pere Games';
     const meta = $('#meta');
-    const bits = daily ? [longDate(P.date), P.title] : [P.width + '\u00d7' + P.height, P.entries.length + ' clues'];
+    const bits = !daily ? [P.width + '\u00d7' + P.height, P.entries.length + ' clues']
+      : level === 'large' || !P.levels.includes('large') ? [longDate(P.date), P.title]
+      : [longDate(P.date), LEVEL_NAMES[level] + ' ' + P.width + '\u00d7' + P.height];
     for (const b of bits) { const s = document.createElement('span'); s.textContent = b; meta.append(s); }
     if (P.levels.length > 1) {
       const box = $('#levels');
@@ -116,7 +137,7 @@
         if (daily && !u.searchParams.get('d')) u.searchParams.set('d', P.date);
         a.href = u.pathname + u.search;
         if (l === level) a.setAttribute('aria-current', 'true');
-        a.addEventListener('click', () => { const p = store.get(PREFS) || {}; p.level = l; store.set(PREFS, p); });
+        a.addEventListener('click', () => { const p = store.get(PREFS) || {}; p[daily ? 'size' : 'level'] = l; store.set(PREFS, p); });
         box.append(a);
       }
     }
@@ -151,7 +172,7 @@
       const ans = rot13(e.a);
       const dr = e.d === 'd' ? 1 : 0;
       const dc = e.d === 'a' ? 1 : 0;
-      const ent = { n: e.n, dir: e.d, clue: e.q[lk] || e.q.m, enumr: e.len, ans, cells: [] };
+      const ent = { n: e.n, dir: e.d, clue: typeof e.q === 'string' ? e.q : (e.q[lk] || e.q.m), enumr: e.len, ans, cells: [] };
       for (let k = 0; k < ans.length; k++) {
         const r = e.r + dr * k;
         const c = e.c + dc * k;
@@ -607,20 +628,20 @@
       for (const c of cellList) { c.locked = true; c.wrong = false; paintCell(c); }
       document.body.classList.add('solved');
       const t = fmt(elapsed);
-      const where = daily ? ' on ' + LEVEL_NAMES[level] : '';
+      const where = daily ? (P.levels.includes('large') ? ' (' + LEVEL_NAMES[level] + ')' : ' on ' + LEVEL_NAMES[level]) : '';
       let text;
       if (helped) text = 'Finished in ' + t + where + ', with ' + helped + (helped === 1 ? ' square' : ' squares') + ' revealed.';
       else if (checks) text = 'Solved in ' + t + where + ', with a little checking along the way.';
       else text = 'A clean solve in ' + t + where + ': no checks, no reveals.';
       $('#done-text').textContent = text;
-      const harder = { easy: 'medium', medium: 'hard' }[level];
+      const harder = { easy: 'medium', medium: P.levels.includes('large') ? 'large' : 'hard', small: 'medium' }[level];
       const btn = $('#done-harder');
       if (harder && P.levels.includes(harder)) {
         const u = new URL(location.href);
         u.searchParams.set('level', harder);
         if (daily && !u.searchParams.get('d')) u.searchParams.set('d', P.date);
         btn.href = u.pathname + u.search;
-        btn.textContent = 'Try it on ' + LEVEL_NAMES[harder];
+        btn.textContent = P.levels.includes('large') ? 'Next: the ' + LEVEL_NAMES[harder] + ' puzzle' : 'Try it on ' + LEVEL_NAMES[harder];
         btn.hidden = false;
       }
       setTimeout(() => { if (doneDlg.showModal) doneDlg.showModal(); }, reduceMotion ? 0 : 900);

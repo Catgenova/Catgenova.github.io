@@ -65,5 +65,10 @@ def write_index():
                         | {"count": len(d["entries"])})
     for p in sorted((SITE / "daily").glob("*.json")):
         d = json.loads(p.read_text())
-        daily.append({"date": d["date"], "title": d["title"], "count": len(d["entries"]), "levels": d["levels"]})
+        if "sizes" in d:  # three puzzles a day: Small, Medium, Large
+            daily.append({"date": d["date"], "title": d["title"], "rev": d.get("rev", 1), "levels": d["levels"],
+                          "sizes": {k: v["width"] for k, v in d["sizes"].items()},
+                          "count": sum(len(v["entries"]) for v in d["sizes"].values())})
+        else:
+            daily.append({"date": d["date"], "title": d["title"], "count": len(d["entries"]), "levels": d["levels"]})
     (SITE / "index.json").write_text(json.dumps({"specials": specials, "daily": daily}, indent=1) + "\n")

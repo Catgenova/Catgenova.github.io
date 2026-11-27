@@ -1,9 +1,23 @@
-// Crossword hub: today's daily, specials and the archive, with this
-// browser's progress for each puzzle and difficulty.
+// Crossword hub: today's daily (three puzzles: Small, Medium, Large),
+// specials and the archive, with this browser's progress for each.
 (() => {
   'use strict';
 
-  const LEVEL_NAMES = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+  const LEVEL_NAMES = { easy: 'Easy', medium: 'Medium', hard: 'Hard', small: 'Small', large: 'Large' };
+  const CLUES = { small: 'easy', medium: 'medium', large: 'hard, themed' };
+  // One button per puzzle (a day's Small, Medium and Large) or per level.
+  function levelButton(d, l) {
+    const st = status('daily-' + d.date, l, d.rev);
+    const a = document.createElement('a');
+    a.className = 'play-level ' + st.kind;
+    a.href = play({ d: d.date, level: l });
+    const b = document.createElement('b');
+    b.textContent = LEVEL_NAMES[l];
+    const s = document.createElement('small');
+    s.textContent = st.kind === 'new' && d.sizes ? d.sizes[l] + '\u00d7' + d.sizes[l] + ' · ' + CLUES[l] : st.text;
+    a.append(b, s);
+    return a;
+  }
   const $ = (s) => document.querySelector(s);
   const store = (k) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
 
@@ -42,23 +56,14 @@
     if (cur) {
       $('#today-eyebrow').textContent = cur.date === now ? 'Today’s puzzle' : 'Latest puzzle';
       $('#today-title').textContent = cur.title;
-      $('#today-sub').textContent = longDate(cur.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) + ' · ' + cur.count + ' clues';
+      $('#today-sub').textContent = longDate(cur.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) +
+        (cur.sizes ? ' · three puzzles, pick a size' : ' · ' + cur.count + ' clues');
       const box = $('#today-levels');
-      for (const l of cur.levels) {
-        const st = status('daily-' + cur.date, l);
-        const a = document.createElement('a');
-        a.className = 'play-level ' + st.kind;
-        a.href = play({ d: cur.date, level: l });
-        const b = document.createElement('b');
-        b.textContent = LEVEL_NAMES[l];
-        const s = document.createElement('small');
-        s.textContent = st.text;
-        a.append(b, s);
-        box.append(a);
-      }
+      for (const l of cur.levels) box.append(levelButton(cur, l));
       // Small picture of the grid's black squares.
       try {
-        const P = await (await fetch('puzzles/daily/' + cur.date + '.json', { cache: 'no-cache' })).json();
+        const day = await (await fetch('puzzles/daily/' + cur.date + '.json', { cache: 'no-cache' })).json();
+        const P = day.sizes ? day.sizes.large : day;
         const pv = $('#preview');
         pv.style.setProperty('--n', P.width);
         for (const row of P.blocks) for (const ch of row) {
@@ -121,18 +126,7 @@
         p.textContent = longDate(d.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
         const chips = document.createElement('div');
         chips.className = 'play-levels';
-        for (const l of d.levels) {
-          const st = status('daily-' + d.date, l);
-          const a = document.createElement('a');
-          a.className = 'play-level ' + st.kind;
-          a.href = play({ d: d.date, level: l });
-          const b = document.createElement('b');
-          b.textContent = LEVEL_NAMES[l];
-          const s = document.createElement('small');
-          s.textContent = st.text;
-          a.append(b, s);
-          chips.append(a);
-        }
+        for (const l of d.levels) chips.append(levelButton(d, l));
         box.append(h, p, chips);
       };
 
@@ -161,7 +155,7 @@
             cell = document.createElement('button');
             cell.type = 'button';
             cell.className = 'cal-day has' + (iso === selected ? ' sel' : '') + (iso === now ? ' is-today' : '');
-            const states = d.levels.map((l) => status('daily-' + iso, l).kind);
+            const states = d.levels.map((l) => status('daily-' + iso, l, d.rev).kind);
             cell.setAttribute('aria-label', longDate(iso, { weekday: 'long', month: 'long', day: 'numeric' }) + ': ' + d.title +
               (states.includes('done') ? ', solved' : states.includes('started') ? ', started' : ''));
             cell.setAttribute('aria-pressed', String(iso === selected));
