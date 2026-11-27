@@ -36,8 +36,12 @@ VOCAB_RANK_BONUS = 4.0
 
 
 def vocab(cfg):
+    """An event's preferred words: a topic from topics.py, or a module with WORDS."""
     if not cfg.get("vocab"):
         return {}
+    import topics
+    if cfg["vocab"] in topics.TOPICS:
+        return {w: None for w in topics.bonus_words(cfg["vocab"])}
     mod = importlib.import_module(cfg["vocab"])
     return {lib.clean(a): c for a, c in mod.WORDS}
 
@@ -113,7 +117,7 @@ def cmd_missing(eid):
     words = vocab(EVENTS[eid])
     need = sorted({w for *_, w in daily.answers(read(eid)) if w not in clues})
     for w in need:
-        print(w + (f"\t(list clue: {words[w]})" if w in words else ""))
+        print(w + (f"\t(list clue: {words[w]})" if words.get(w) else ""))
     print(f"# {len(need)} answers need clues", file=sys.stderr)
 
 

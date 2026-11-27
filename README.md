@@ -54,7 +54,9 @@ lengths and turns off autocheck.
 
 1. Add the date's theme to `_source/crossword/themes.py`: a title and 2–4
    theme answers. The first two must be the same length, a third (centre row)
-   must be an odd length. Lengths that fit: 3–11, 13 or 14 (15s rarely fill).
+   must be an odd length. Lengths that fit: 3–11, 13 or 14 (15s rarely fill);
+   10/10/7 and 11/11/7 fill most reliably. Optionally name a topic as a third
+   item (`"newyear"`): the filler then leans toward that topic's words.
 2. Make the grid: `python3 daily.py fill 2026-12-01` (run in
    `_source/crossword/`). It tries random black-square patterns and fills them
    from `wordlist.txt`, preferring common words and words that already have
@@ -67,13 +69,23 @@ lengths and turns off autocheck.
 4. `python3 daily.py publish 2026-12-01` writes the puzzle and updates
    `index.json`.
 
+**Topics** (`topics.py`) are themed vocabularies, about 40 answers each, every
+one already clued: holidays through the year (New Year, MLK Day, Lunar New
+Year, Valentine's, St. Patrick's, Easter, Fourth of July, Halloween...) and
+evergreen subjects (space, ocean, pirates, mysteries, music...). `python3
+topics.py list` shows them, `python3 topics.py themes valentines` suggests
+theme sets that fit a 15×15 grid, and `python3 topics.py missing` lists any
+topic entry that still needs clues. A special can also use a topic as its
+`vocab` in `themes.py`.
+
 `wordlist.txt` comes from SCOWL (levels 10–50, see `SCOWL-COPYRIGHT.txt`);
 the number after each word is its level, 10 being the most common.
 
-**Specials** are free-form criss-cross puzzles built from a themed list, for
-example `python3 special.py thanksgiving` from `thanksgiving.py`. The builder
-tries 400 layouts from a fixed seed and keeps the most compact one, so
-changing only clue text keeps the same grid.
+**Specials** are bigger newspaper-style grids (21×21) listed in `EVENTS` in
+`themes.py`, built with `python3 event.py fill thanksgiving`, then `missing`
+and `publish` like the dailies. An event's `vocab` (a topic, or a module with
+`WORDS` such as `thanksgiving.py`) gets a strong fill bonus so the whole grid
+leans into the theme. Bump `rev` when a published special gets a new grid.
 
 Answers are stored as ROT13 so a glance at the page source doesn't spoil a
 puzzle.

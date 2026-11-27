@@ -3,6 +3,8 @@
 # a third (centre row) must be odd, a fourth must match the third.
 # Lengths that fit a 15x15 grid: 3-11, 13, 14 or 15 (15s are hard to fill).
 # Write answers with spaces between words; that sets the (4,5) enumeration.
+# An optional third item names a topic from topics.py; the filler then leans
+# toward that topic's words. `python3 topics.py themes <topic>` suggests sets.
 
 DAILY = {
     "2026-11-26": ("Kitchen Duty", ["ROLLING PIN", "DISHWASHER", "SPATULA"]),
@@ -41,6 +43,7 @@ DAILY = {
     "2026-12-29": ("Resolutions", ["GOAL SETTING", "FRESH STARTS", "JOURNAL"]),
     "2026-12-30": ("Keepsakes", ["SNOW GLOBES", "MUSIC BOXES", "TRINKET"]),
     "2026-12-31": ("New Year's Eve", ["TIMES SQUARE", "NOISEMAKERS", "NEW YEAR"]),
+    "2027-01-01": ("New Year's Day", ["CLEAN SLATE", "RESOLUTION", "NEW LEAF"], "newyear"),
 }
 
 # Special events: one-off newspaper-style puzzles, built with event.py.

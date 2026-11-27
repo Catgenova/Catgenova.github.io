@@ -12,7 +12,8 @@ does. Delete a draft and run `fill` again to get a new grid for that date.
 
 Every answer needs three clues (easy, medium, hard) in clues.tsv before
 `publish` will write the puzzle. The filler prefers words that already have
-clues, so the bank gets reused as it grows.
+clues, so the bank gets reused as it grows. A daily can name a topic from
+topics.py (third item in its themes.py entry) to lean the fill toward it.
 """
 import random
 import re
@@ -23,6 +24,7 @@ from pathlib import Path
 
 import grid
 import lib
+import topics
 from themes import DAILY
 
 DRAFTS = lib.HERE / "daily"
@@ -32,6 +34,14 @@ LEVEL_SCORE = {10: 60, 20: 55, 35: 40, 40: 20, 50: 0}
 CLUED_BONUS = 8
 # Answers of 5+ letters aren't reused within this many days.
 REPEAT_DAYS = 7
+# A daily that names a topic (topics.py) nudges the fill toward that topic's
+# words: a higher base score, so they're tried earlier, plus a ranking bonus,
+# and among the grids found, the one with the most topic words wins. (Most
+# squares are forced by their crossings, so expect one to three extra topic
+# words a grid; these settings didn't lower the fill rate in tests.)
+TOPIC_SCORE_BONUS = 25
+TOPIC_RANK_BONUS = 3.0
+TOPIC_WANT = 4
 
 
 def word_scores():
@@ -59,8 +69,15 @@ def _init():
 
 
 def _attempt(args):
-    theme, seed, recent = args
+    theme, seed, recent, topic_words = args
     scores = {w: v for w, v in _SCORES.items() if w not in recent} if recent else _SCORES
+    bonus = None
+    if topic_words:
+        scores = dict(scores)
+        for w in topic_words:
+            if w in scores:
+                scores[w] += TOPIC_SCORE_BONUS
+        bonus = {w: TOPIC_RANK_BONUS for w in topic_words if w in scores}
     rng = random.Random(seed)
     g = grid.make_pattern(rng, n=SIZE, theme=theme, blocks=(36, 46), max_words=80, dic=_DIC0, tries=60)
     if g is None:
@@ -68,7 +85,7 @@ def _attempt(args):
     for k in range(3):
         h = [row[:] for row in g]
         r2 = random.Random(seed * 1000 + k)
-        if grid.fill(h, grid.Dictionary(scores, r2), r2, node_limit=1500):
+        if grid.fill(h, grid.Dictionary(scores, r2, bonus=bonus), r2, node_limit=1500):
             return grid.grid_text(h)
     return None
 
@@ -101,6 +118,10 @@ def quality(text, levels):
     ws = ["".join(g[r][c] for r, c in cells) for _, _, _, cells in grid.slots_of(g)]
     scored = [levels.get(w, 35) for w in ws if w in levels]
     return sum(scored) / max(1, len(scored))
+
+
+def topic_hits(text, words):
+    return len({w for *_, w in answers(grid.parse_grid(text))} & words) if words else 0
 
 
 def theme_parts(entries):
@@ -139,28 +160,32 @@ def cmd_fill(dates, attempts=320, want=2):
     _, levels = word_scores()
     with Pool(initializer=_init) as pool:
         for date in dates:
-            title, entries = DAILY[date]
+            title, entries, *rest = DAILY[date]
             theme = [lib.clean(e) for e in entries]
             recent = recent_words(date) | theme_parts(entries)
+            topic_words = frozenset(topics.bonus_words(rest[0]) - recent - set(theme)) if rest else frozenset()
+            need = max(want, TOPIC_WANT) if topic_words else want
             seed0 = int(date.replace("-", "")) * 1000
             t0 = time.time()
             found = []
             for batch in range(0, attempts, 16):
-                res = pool.map(_attempt, [(theme, seed0 + batch + i, recent) for i in range(16)])
+                res = pool.map(_attempt, [(theme, seed0 + batch + i, recent, topic_words) for i in range(16)])
                 found += [r for r in res if r]
                 print(f"{date}: {batch + 16} tries, {len(found)} grids, {time.time() - t0:.0f}s", flush=True)
-                if len(found) >= want:
+                if len(found) >= need:
                     break
             if not found:
                 print(f"{date}: no grid found; try a different theme or more attempts")
                 continue
             # Prefer grids without near-duplicate answers (OASES and OASIS).
             clean = [t for t in found if not near_dupes(t)] or found
-            best = min(clean, key=lambda t: quality(t, levels))
+            best = min(clean, key=lambda t: (-topic_hits(t, topic_words), quality(t, levels)))
             DRAFTS.mkdir(exist_ok=True)
             (DRAFTS / f"{date}.txt").write_text(
                 f"# {title}\n# theme: {' | '.join(entries)}\n{best}\n")
-            print(f"{date}: wrote draft (average word level {quality(best, levels):.1f})\n{best}\n")
+            hits = topic_hits(best, topic_words)
+            print(f"{date}: wrote draft (average word level {quality(best, levels):.1f}"
+                  f"{f', {hits} topic words' if topic_words else ''})\n{best}\n")
 
 
 def read_draft(date):
