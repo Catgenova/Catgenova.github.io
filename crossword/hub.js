@@ -193,3 +193,15 @@
 
   main().catch(() => { $('#today-title').textContent = 'Puzzles couldn’t be loaded. Try reloading the page.'; });
 })();
+
+// Crossword Run card: show a run in progress or the player's record.
+(() => {
+  const el = document.getElementById('run-status');
+  if (!el) return;
+  try {
+    const run = JSON.parse(localStorage.getItem('pere-crossword-run:v1'));
+    const st = JSON.parse(localStorage.getItem('pere-crossword-run:stats'));
+    if (run && !run.over) el.textContent = `Run in progress: Act ${run.act + 1} of 3`;
+    else if (st && st.runs) el.textContent = `${st.runs} run${st.runs === 1 ? '' : 's'} · ${st.wins} won`;
+  } catch (e) { /* storage unavailable */ }
+})();

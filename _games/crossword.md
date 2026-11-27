@@ -27,3 +27,7 @@ Thanksgiving Crossword: 200 clues in one giant free-form grid.
 
 Your progress and solve times are saved in your browser, and past puzzles
 stay playable in the archive.
+
+For something different, try Crossword Run, a roguelike mode made for
+phones: climb three acts of small grids with limited ink, collect perks and
+tools, and beat the boss puzzles.

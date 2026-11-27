@@ -626,6 +626,7 @@ body.has-notice .layout, body.has-notice .tools { display: none; }
 .special:hover { border-color: var(--accent); }
 .special h3 { margin: 0; font: 700 1.15rem/1.25 var(--display); }
 .special p { margin: 0; color: var(--muted); }
+.special .tag { font: 700 0.7rem/1 var(--ui); letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 7px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); vertical-align: 3px; margin-left: 4px; }
 .special .status-line { font-weight: 700; font-size: 0.85rem; color: var(--accent); }
 
 .archive {

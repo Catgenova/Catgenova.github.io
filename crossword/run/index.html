@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Crossword Run · Pere Games</title>
+<meta name="description" content="Crossword Run: a roguelike crossword. Climb through three acts of small crosswords, spend your ink wisely, collect perks and beat the boss grids.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f1e6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15110d" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Crossword Run · Pere Games">
+<meta property="og:description" content="A roguelike crossword: three acts of small grids, limited ink, perks and boss puzzles.">
+<meta property="og:image" content="https://pere.games/assets/img/games/crossword.png">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="run.css?v=1">
+</head>
+<body>
+
+<header class="bar">
+  <a class="back" href="../" aria-label="Back to all crosswords">Crosswords</a>
+  <h1 class="name">Crossword <em>Run</em></h1>
+  <div class="hud" id="hud" hidden>
+    <span class="stat ink" title="Ink: wrong letters cost ink. Run out and the run ends."><i aria-hidden="true">✒️</i><b id="hud-ink">0</b><span class="sr">ink</span></span>
+    <span class="stat coins" title="Coins: spend them at shops."><i aria-hidden="true">🪙</i><b id="hud-coins">0</b><span class="sr">coins</span></span>
+  </div>
+</header>
+
+<main id="app" aria-live="polite">
+  <!-- Title screen -->
+  <section class="screen" id="s-title" hidden>
+    <div class="card hero">
+      <p class="eyebrow">A roguelike crossword</p>
+      <h2>Three acts. Limited ink. How far can you climb?</h2>
+      <ul class="rules">
+        <li><b>Pick your path</b> through each act: puzzles, tougher elite grids, shops, rest stops and odd encounters.</li>
+        <li><b>Ink is your life.</b> Finish a word wrong and every wrong letter costs a drop. Correct words lock in.</li>
+        <li><b>Collect perks and tools</b> after each win, and beat the boss grid at the end of every act.</li>
+      </ul>
+      <div class="actions" id="title-actions"></div>
+    </div>
+    <div class="card stats" id="title-stats"></div>
+  </section>
+
+  <!-- Map -->
+  <section class="screen" id="s-map" hidden>
+    <div class="act-head">
+      <p class="eyebrow" id="map-act"></p>
+      <h2 id="map-topic"></h2>
+    </div>
+    <ol class="path" id="map-path"></ol>
+    <div class="kit" id="map-kit"></div>
+    <p class="foot"><button type="button" class="link" data-act="abandon">Abandon run</button></p>
+  </section>
+
+  <!-- Puzzle -->
+  <section class="screen puzzle" id="s-puzzle" hidden>
+    <div class="ptop">
+      <span class="ptitle" id="p-title"></span>
+      <span class="curse" id="p-curse" hidden></span>
+      <span class="timer" id="p-timer" hidden></span>
+    </div>
+    <div class="gridwrap"><div class="grid" id="grid" role="grid" aria-label="Crossword grid"></div></div>
+    <div class="cluebar">
+      <button type="button" class="nav" data-act="prev" aria-label="Previous clue">‹</button>
+      <button type="button" class="clue" id="cluebar" data-act="clues" aria-label="Show all clues"><b id="cb-num"></b> <span id="cb-text"></span></button>
+      <button type="button" class="nav" data-act="next" aria-label="Next clue">›</button>
+    </div>
+    <div class="tools" id="tools" role="toolbar" aria-label="Tools"></div>
+    <div class="kb" id="kb" aria-label="Keyboard"></div>
+  </section>
+
+  <!-- Choice screens: reward, shop, rest, event, end -->
+  <section class="screen" id="s-panel" hidden>
+    <div class="card panel" id="panel"></div>
+  </section>
+</main>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-head"><h3 id="sheet-title">Clues</h3><button type="button" class="x" data-act="close-sheet" aria-label="Close">×</button></div>
+    <div id="sheet-content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="run.js?v=1"></script>
+</body>
+</html>

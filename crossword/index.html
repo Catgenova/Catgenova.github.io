@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="crossword.css?v=3">
+<link rel="stylesheet" href="crossword.css?v=4">
 </head>
 <body>
 
@@ -38,6 +38,17 @@
       <div class="play-levels" id="today-levels"></div>
     </div>
     <div class="preview" id="preview" aria-hidden="true"></div>
+  </section>
+
+  <section aria-labelledby="modes-title">
+    <h2 id="modes-title">Game modes</h2>
+    <div class="specials">
+      <a class="special" href="run/">
+        <h3>Crossword Run <span class="tag">New</span></h3>
+        <p>A roguelike: climb three acts of small grids, spend your ink wisely, pick up perks and tools, and beat the boss puzzles. Made for phones.</p>
+        <span class="status-line" id="run-status">Start a run</span>
+      </a>
+    </div>
   </section>
 
   <section aria-labelledby="specials-title" id="specials-section" hidden>
@@ -64,6 +75,6 @@
   <p class="hub-foot">Your progress and times are saved in this browser. Every daily puzzle comes in three difficulties: the grid is the same, the clues change. Hard hides answer lengths and turns off autocheck.</p>
 </main>
 
-<script src="hub.js?v=2"></script>
+<script src="hub.js?v=3"></script>
 </body>
 </html>

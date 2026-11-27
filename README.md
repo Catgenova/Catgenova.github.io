@@ -87,6 +87,18 @@ and `publish` like the dailies. An event's `vocab` (a topic, or a module with
 `WORDS` such as `thanksgiving.py`) gets a strong fill bonus so the whole grid
 leans into the theme. Bump `rev` when a published special gets a new grid.
 
+**Crossword Run** (`crossword/run/`) is an optional roguelike mode: three
+acts of small grids (5×5 up to an 11×11 final boss) with ink as health,
+perks, tools, shops and encounters. Everything lives in `run.js` (rules and
+balance numbers are near the top) and `run.css`. Its grids come from pools
+built ahead of time: `python3 run.py build` (in `_source/crossword/`) writes
+`crossword/run/pool/<size>.json` using only answers that already have clues,
+and `python3 run.py topics` writes the act themes. A run's choices all come
+from its seed. Rebuilding a pool changes which grids future runs get; a run
+saved in the middle of a puzzle notices the change and starts that node on
+a fresh grid. Bump `?v=` on the pool URLs in `run.js` after a rebuild so
+browsers fetch the new files. Runs and records are kept in `localStorage`.
+
 Answers are stored as ROT13 so a glance at the page source doesn't spoil a
 puzzle.
 
