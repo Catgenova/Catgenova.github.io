@@ -112,7 +112,8 @@ Its grids come from pools built ahead of time with `python3 run.py build`
 (in `_source/crossword/`; `run.py build 8 9` rebuilds just those sizes).
 Pools use only answers that already have clues; words used more than
 average are ranked lower as a pool grows, so the vocabulary spreads across
-the clue bank. Output is `crossword/run/pool/manifest.json` plus
+the clue bank. A size stops early, keeping what it has, once new distinct
+grids dry up (`STALL` rounds with none) or after `MAX_MINUTES`. Output is `crossword/run/pool/manifest.json` plus
 `pool/<size>/<k>.json` files of 100 grids each, so the game downloads only
 the files it plays. `python3 run.py topics` writes the act themes. The game
 remembers which grids this browser has played and avoids them in new runs

@@ -34,7 +34,7 @@ import topics
 OUT = lib.ROOT / "crossword" / "run" / "pool"
 # size: (black squares min-max, longest answer, how many grids)
 SIZES = {
-    5: ((0, 4), 5, 1200),
+    5: ((0, 4), 5, 800),
     6: ((0, 8), 6, 1000),
     7: ((6, 12), 7, 0),  # daily Small only (daily.py sizes)
     8: ((6, 14), 8, 1500),
@@ -46,6 +46,10 @@ POOL_VERSION = 2
 # Words used more than average for their length are ranked lower, the more
 # so the more they're used; past HARD_CAP times the average they rest.
 HARD_CAP = 5
+# A size stops early, keeping what it has, after STALL rounds in a row with
+# no new grid (its distinct grids are running out) or MAX_MINUTES.
+STALL = 40
+MAX_MINUTES = 30
 
 _DIC = None
 _SC = None
@@ -200,16 +204,19 @@ def cmd_build(sizes=None):
             seen, out, usage = set(), [], collections.Counter()
             seed = n * 10_000_000 + 1
             t0 = time.time()
-            while len(out) < want:
+            idle = 0
+            while len(out) < want and idle < STALL and time.time() - t0 < MAX_MINUTES * 60:
                 exclude, weight = spread(usage, vocab)
                 res = pool.map(_make, [(n, seed + i, exclude, weight) for i in range(64)])
                 seed += 64
+                idle += 1
                 for text in res:
                     if text and text not in seen and good(text):
                         ws = [w for *_, w in daily.answers(grid.parse_grid(text))]
                         if any(w in exclude for w in ws):
                             continue
                         seen.add(text)
+                        idle = 0
                         usage.update(ws)
                         out.append(encode(text, clues, topic_sets))
                 print(f"{n}x{n}: {len(out)}/{want}, {len(usage)} distinct answers, "
