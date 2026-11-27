@@ -73,6 +73,11 @@ feed:
 markdown: kramdown
 excerpt_separator: <!--more-->
 
+# Jekyll skips dot-folders by default. Android app links are checked at the
+# origin root, so Fantasy Frontiers' Play app statement lives here.
+include:
+  - .well-known
+
 exclude:
   - README.md
   - CLAUDE.md
