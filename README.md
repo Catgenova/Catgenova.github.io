@@ -104,16 +104,21 @@ and `publish` like the dailies. An event's `vocab` (a topic, or a module with
 leans into the theme. Bump `rev` when a published special gets a new grid.
 
 **Crossword Run** (`crossword/run/`) is an optional roguelike mode: three
-acts of small grids (5×5 up to an 11×11 final boss) with ink as health,
-perks, tools, shops and encounters. Everything lives in `run.js` (rules and
-balance numbers are near the top) and `run.css`. Its grids come from pools
-built ahead of time: `python3 run.py build` (in `_source/crossword/`) writes
-`crossword/run/pool/<size>.json` using only answers that already have clues,
-and `python3 run.py topics` writes the act themes. A run's choices all come
-from its seed. Rebuilding a pool changes which grids future runs get; a run
-saved in the middle of a puzzle notices the change and starts that node on
-a fresh grid. Bump `?v=` on the pool URLs in `run.js` after a rebuild so
-browsers fetch the new files. Runs and records are kept in `localStorage`.
+acts of small grids (5×5 and 6×6 up to an 11×11 final boss) with ink as
+health, perks, tools, shops and encounters. Everything lives in `run.js`
+(rules and balance numbers are near the top) and `run.css`.
+
+Its grids come from pools built ahead of time with `python3 run.py build`
+(in `_source/crossword/`; `run.py build 8 9` rebuilds just those sizes).
+Pools use only answers that already have clues; words used more than
+average are ranked lower as a pool grows, so the vocabulary spreads across
+the clue bank. Output is `crossword/run/pool/manifest.json` plus
+`pool/<size>/<k>.json` files of 100 grids each, so the game downloads only
+the files it plays. `python3 run.py topics` writes the act themes. The game
+remembers which grids this browser has played and avoids them in new runs
+(daily runs ignore that, so everyone gets the same grids). After a rebuild,
+bump `POOL_VERSION` in `run.py` and `POOL_V` in `run.js` together; a run
+saved mid-puzzle then starts that node on a fresh grid.
 
 Answers are stored as ROT13 so a glance at the page source doesn't spoil a
 puzzle.

@@ -62,11 +62,23 @@
   const STEPS = 5; // choice steps per act; the boss comes after them
   const LV = ['e', 'm', 'h'];
   const LV_NAME = ['Easy', 'Medium', 'Hard'];
+  // n: grid size, or a list of sizes to pick from (fixed per map node).
   const ACTS = [
-    { name: 'Act I', puzzle: { n: 5, lv: 0 }, elite: { n: 7, lv: 0, curse: true }, boss: { n: 7, lv: 1 } },
-    { name: 'Act II', puzzle: { n: 7, lv: 1 }, elite: { n: 9, lv: 1, curse: true }, boss: { n: 9, lv: 1, curse: true } },
+    { name: 'Act I', puzzle: { n: [5, 6], lv: 0 }, elite: { n: 8, lv: 0, curse: true }, boss: { n: 8, lv: 1 } },
+    { name: 'Act II', puzzle: { n: 8, lv: 1 }, elite: { n: 9, lv: 1, curse: true }, boss: { n: 9, lv: 1, curse: true } },
     { name: 'Act III', puzzle: { n: 9, lv: 1 }, elite: { n: 9, lv: 2, curse: true }, boss: { n: 11, lv: 2, curse: true } },
   ];
+  // Pools of pre-built grids (see _source/crossword/run.py): a manifest of
+  // how many grids each size has, and files of CHUNK grids each. Bump POOL_V
+  // after a rebuild so browsers fetch the new files.
+  const POOL_V = 2;
+  const SEEN_KEY = 'pere-crossword-run:seen';
+  // Grid size for a map node: fixed by the run's seed so the label and the
+  // puzzle agree.
+  function sizeOf(type, a, s, i) {
+    const n = ACTS[a][type].n;
+    return Array.isArray(n) ? pick(rng(S.seed, 'size', a, s, i), n) : n;
+  }
   const BASE_COINS = { puzzle: 10, elite: 20, boss: 30 };
   const NODES = {
     puzzle: { ico: '✏️', lbl: 'Puzzle' },
@@ -123,9 +135,33 @@
     if (!res.ok) throw new Error(`${path}: ${res.status}`);
     return res.json();
   }
-  async function pool(n) {
-    if (!pools[n]) pools[n] = await loadJSON(`pool/${n}.json?v=1`);
-    return pools[n];
+  let manifest = null;
+  async function poolCount(n) {
+    if (!manifest) manifest = await loadJSON(`pool/manifest.json?v=${POOL_V}`);
+    return manifest.sizes[n] || 0;
+  }
+  async function chunk(n, k) {
+    const key = `${n}/${k}`;
+    if (!pools[key]) pools[key] = await loadJSON(`pool/${n}/${k}.json?v=${POOL_V}`);
+    return pools[key];
+  }
+  async function gridAt(n, idx) {
+    if (!manifest) await poolCount(n);
+    const c = await chunk(n, Math.floor(idx / manifest.chunk));
+    return c.grids[idx % manifest.chunk];
+  }
+  // Grids this browser has played recently, per size, so new runs don't
+  // repeat them (daily runs ignore this so everyone gets the same grids).
+  function seenGrids() {
+    const s = store.get(SEEN_KEY);
+    return s && s.v === POOL_V ? s : { v: POOL_V, sizes: {} };
+  }
+  function markSeen(n, idx, count) {
+    const s = seenGrids();
+    const list = (s.sizes[n] = (s.sizes[n] || []).filter((x) => x !== idx));
+    list.push(idx);
+    if (list.length > count * 0.8) list.splice(0, Math.ceil(list.length / 2)); // forget the oldest half
+    store.set(SEEN_KEY, s);
   }
   async function topicsJSON() {
     if (!topicData) topicData = await loadJSON('pool/topics.json?v=1');
@@ -255,7 +291,8 @@
       const nodes = opts.map((t, i) => {
         const node = NODES[t];
         const cfg = ACTS[S.act][t];
-        const sub = cfg ? `${cfg.n}×${cfg.n}` : node.lbl;
+        const sz = cfg ? sizeOf(t, S.act, s, i) : 0;
+        const sub = cfg ? `${sz}×${sz}` : node.lbl;
         return `<button type="button" class="node ${t === 'boss' ? 'boss' : ''} ${picked === i ? 'picked' : ''}"
           ${state === 'now' ? `data-act="go" data-i="${i}"` : 'disabled'}
           aria-label="${node.lbl}${cfg ? ', ' + sub : ''}">
@@ -286,7 +323,7 @@
   async function go(i) {
     const type = S.map[S.act][S.step][i];
     S.picks[S.act][S.step] = i;
-    if (type === 'puzzle' || type === 'elite' || type === 'boss') await startPuzzle(type);
+    if (type === 'puzzle' || type === 'elite' || type === 'boss') await startPuzzle(type, sizeOf(type, S.act, S.step, i));
     else if (type === 'shop') openShop();
     else if (type === 'rest') openRest();
     else openEvent();
@@ -303,18 +340,34 @@
   }
 
   // ---------- Puzzle ----------
-  async function startPuzzle(type) {
+  async function startPuzzle(type, n) {
     const cfg = ACTS[S.act][type];
-    const n = cfg.n;
-    const data = await pool(n);
+    n = n || sizeOf(type, S.act, S.step, S.picks[S.act][S.step] || 0);
+    const count = await poolCount(n);
+    const per = manifest.chunk;
     const used = new Set(S.used[n] || []);
+    const seen = new Set(S.daily ? [] : seenGrids().sizes[n] || []);
     const r = rng(S.seed, 'grid', S.act, S.step);
-    let cands = data.grids.map((_, i) => i).filter((i) => !used.has(i));
-    if (!cands.length) cands = data.grids.map((_, i) => i);
+    // Pick a file of grids at random, then a grid in it this player hasn't
+    // had lately (in this run or a recent one).
+    let data;
+    let cands = [];
+    let base = 0;
+    for (let tries = 0; tries < 4 && cands.length < 3; tries++) {
+      const k = Math.floor(r() * Math.ceil(count / per));
+      data = await chunk(n, k);
+      base = k * per;
+      cands = data.grids.map((_, i) => base + i).filter((i) => !used.has(i) && !seen.has(i));
+    }
+    if (!cands.length) cands = data.grids.map((_, i) => base + i).filter((i) => !used.has(i));
+    if (!cands.length) cands = data.grids.map((_, i) => base + i);
+    // Lean toward grids that use the act's topic words.
     const topic = S.topics[S.act];
-    const tagged = cands.filter((i) => data.grids[i].t.includes(topic));
-    const idx = pick(r, tagged.length && r() < 0.75 ? tagged : cands);
+    const tagged = cands.filter((i) => data.grids[i - base].t.includes(topic));
+    const idx = pick(r, tagged.length && r() < 0.5 ? tagged : cands);
+    const g = data.grids[idx - base];
     (S.used[n] = S.used[n] || []).push(idx);
+    if (!S.daily) markSeen(n, idx, count);
     let curse = null;
     if (cfg.curse) curse = pick(r, Object.keys(CURSES));
     const lv = Math.min(2, cfg.lv + (S.hard ? 1 : 0));
@@ -324,10 +377,10 @@
       st: Array(n * n).fill(0), // 0 open, 1 solved, 2 revealed
       solved: [], tries: {}, thriftyUsed: false,
       elapsed: 0, freePencil: has('pencilcase') ? 1 : 0, done: false,
-      b: data.grids[idx].b, // to spot a rebuilt pool on resume
+      b: g.b, pv: POOL_V, // to spot a rebuilt pool on resume
     };
     S.screen = 'puzzle';
-    buildP(data.grids[idx], n);
+    buildP(g, n);
     if (has('headstart')) {
       const w = P.words.find((x) => x.d === 'a');
       if (w) for (const c of w.cells) { S.puzzle.letters[c] = w.ans[w.cells.indexOf(c)]; S.puzzle.st[c] = 2; }
@@ -1112,8 +1165,7 @@
     if (!S) return showTitle();
     await topicsJSON();
     if (S.screen === 'puzzle' && S.puzzle) {
-      const data = await pool(S.puzzle.n);
-      const g = data.grids[S.puzzle.idx];
+      const g = S.puzzle.pv === POOL_V ? await gridAt(S.puzzle.n, S.puzzle.idx).catch(() => null) : null;
       if (!g || (S.puzzle.b && g.b !== S.puzzle.b)) {
         // The pool was rebuilt since this puzzle started: start a fresh one.
         toast('This puzzle was updated, so here is a fresh grid.', 3000);

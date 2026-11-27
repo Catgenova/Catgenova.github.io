@@ -34,17 +34,18 @@ import topics
 OUT = lib.ROOT / "crossword" / "run" / "pool"
 # size: (black squares min-max, longest answer, how many grids)
 SIZES = {
-    5: ((0, 4), 5, 2000),
-    6: ((0, 8), 6, 1200),
+    5: ((0, 4), 5, 1200),
+    6: ((0, 8), 6, 1000),
     7: ((6, 12), 7, 0),  # daily Small only (daily.py sizes)
-    8: ((6, 14), 8, 2000),
-    9: ((10, 20), 7, 2000),
-    11: ((16, 30), 8, 600),
+    8: ((6, 14), 8, 1500),
+    9: ((10, 20), 7, 1500),
+    11: ((16, 30), 8, 500),
 }
 CHUNK = 100
 POOL_VERSION = 2
-# A word can be used up to SPREAD times the average for its length.
-SPREAD = 2.5
+# Words used more than average for their length are ranked lower, the more
+# so the more they're used; past HARD_CAP times the average they rest.
+HARD_CAP = 5
 
 _DIC = None
 _SC = None
@@ -116,7 +117,7 @@ def _make(args):
     {word: bonus} the filler should lean toward (a topic's words)."""
     n, seed, *rest = args
     exclude = rest[0] if rest else frozenset()
-    bonus = rest[1] if len(rest) > 1 else None
+    bonus = rest[1] if len(rest) > 1 else None  # {word: +/- weight}
     blocks, max_len, _ = SIZES[n]
     rng = random.Random(seed)
     g = pattern(rng, n, blocks, max_len)
@@ -124,7 +125,8 @@ def _make(args):
         return None
     sc = {w: v for w, v in _SC.items() if w not in exclude} if exclude else _SC
     if bonus:
-        sc = {w: v + (25 if w in bonus else 0) for w, v in sc.items()}
+        # Favored words (a topic) move up the list; overused ones move down.
+        sc = {w: v + (25 if bonus.get(w, 0) > 0 else 6 * bonus[w] if w in bonus else 0) for w, v in sc.items()}
     for k in range(3):
         h = [row[:] for row in g]
         r2 = random.Random(seed * 10 + k)
@@ -164,13 +166,19 @@ def encode(text, clues, topic_sets):
     }
 
 
-def overused(usage, vocab):
-    """Words used SPREAD times more than the average for their length."""
+def spread(usage, vocab):
+    """(words to leave out, {word: negative weight}) from use so far."""
     total = {}
     for w, c in usage.items():
         total[len(w)] = total.get(len(w), 0) + c
-    return frozenset(w for w, c in usage.items()
-                     if c >= max(3, SPREAD * total[len(w)] / max(1, vocab.get(len(w), 1))))
+    out, weight = set(), {}
+    for w, c in usage.items():
+        mean = max(1.0, total[len(w)] / max(1, vocab.get(len(w), 1)))
+        if c >= max(6, HARD_CAP * mean):
+            out.add(w)
+        elif c > mean:
+            weight[w] = -min(4.0, c / mean)
+    return frozenset(out), weight
 
 
 def cmd_build(sizes=None):
@@ -193,13 +201,13 @@ def cmd_build(sizes=None):
             seed = n * 10_000_000 + 1
             t0 = time.time()
             while len(out) < want:
-                exclude = overused(usage, vocab)
-                res = pool.map(_make, [(n, seed + i, exclude) for i in range(64)])
+                exclude, weight = spread(usage, vocab)
+                res = pool.map(_make, [(n, seed + i, exclude, weight) for i in range(64)])
                 seed += 64
                 for text in res:
                     if text and text not in seen and good(text):
                         ws = [w for *_, w in daily.answers(grid.parse_grid(text))]
-                        if any(usage[w] >= 3 and w in exclude for w in ws):
+                        if any(w in exclude for w in ws):
                             continue
                         seen.add(text)
                         usage.update(ws)
