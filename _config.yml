@@ -25,7 +25,7 @@ social:
 # Use the full id from AdSense, e.g. "ca-pub-1234567890123456".
 # Play counter: the Cloudflare Worker in _source/plays-worker/. Leave empty to
 # hide the counts (e.g. until the Worker is deployed), e.g. "https://api.pere.games".
-plays_api: ""
+plays_api: "https://calm-truth-4f4d.perecatgenova.workers.dev"
 
 ads:
   adsense_client: ""
