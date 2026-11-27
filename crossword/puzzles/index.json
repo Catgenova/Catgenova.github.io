@@ -375,6 +375,16 @@
     "medium",
     "hard"
    ]
+  },
+  {
+   "date": "2027-01-01",
+   "title": "New Year's Day",
+   "count": 76,
+   "levels": [
+    "easy",
+    "medium",
+    "hard"
+   ]
   }
  ]
 }

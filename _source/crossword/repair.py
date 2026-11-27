@@ -2,8 +2,8 @@
 """Replace words in a daily draft: python3 repair.py 2026-11-28 WORD [WORD ...]
 
 Clears the given answers and every answer crossing them (theme answers stay),
-then refills that patch from the word list. Add the words to banned.txt
-first so they can't come back.
+then refills that patch from the word list. The given words can't come back
+in this refill; add them to banned.txt too if they should never be used.
 """
 import random
 import sys
@@ -35,12 +35,15 @@ def main():
     for x, y in clear - keep:
         g[x][y] = grid.EMPTY
     scores, _ = daily.word_scores()
+    # Don't put the removed words straight back.
+    scores = {w: v for w, v in scores.items() if w not in bad}
     for seed in range(200):
         h = [row[:] for row in g]
         rng = random.Random(seed)
         if grid.fill(h, grid.Dictionary(scores, rng), rng, node_limit=3000):
             ws = [w for *_, w in daily.answers(h)]
-            assert len(ws) == len(set(ws))
+            if len(ws) != len(set(ws)) or any(w + "S" in ws or w + "ES" in ws for w in ws):
+                continue  # a repeat, or a word with its plural (ERA and ERAS)
             (daily.DRAFTS / f"{date}.txt").write_text(
                 f"# {title}\n# theme: {' | '.join(entries)}\n{grid.grid_text(h)}\n")
             print(grid.grid_text(h))
