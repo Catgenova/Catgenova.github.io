@@ -16,6 +16,12 @@ description: Every update to every Pere Games title.
   {% for game in games %}
   <button type="button" class="chip" data-filter="{{ game.slug }}" aria-pressed="false">{{ game.title }}</button>
   {% endfor %}
+  {% comment %}Apps get a chip only once they have an entry.{% endcomment %}
+  {% assign apps = site.apps | sort: "order" %}
+  {% for app in apps %}
+  {% assign app_entries = site.changelog | where: "game", app.slug %}
+  {% if app_entries.size > 0 %}<button type="button" class="chip" data-filter="{{ app.slug }}" aria-pressed="false">{{ app.title }}</button>{% endif %}
+  {% endfor %}
 </div>
 
 {% include changelog-list.html entries=entries %}

@@ -2,12 +2,13 @@
 layout: default
 ---
 {% assign game = site.games | where: "slug", page.game | first %}
+{% unless game %}{% assign game = site.apps | where: "slug", page.game | first %}{% endunless %}
 <article class="prose">
   <p class="eyebrow"><a href="{{ '/changelog/' | relative_url }}">&larr; Changelog</a></p>
   <h1>{{ page.title }}</h1>
   <p class="byline">
     <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
-    {% if game %} · <a href="{{ game.url | relative_url }}">{{ game.title }}</a>{% endif %}
+    {% if game %} · <a href="{% if game.app_url %}{{ game.app_url | relative_url }}{% else %}{{ game.url | relative_url }}{% endif %}">{{ game.title }}</a>{% endif %}
     {% if page.version %} · <code class="version">v{{ page.version }}</code>{% endif %}
   </p>
   {{ content }}

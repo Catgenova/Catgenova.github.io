@@ -7,7 +7,7 @@ sitemap: false
 <script>
   // Games that moved: send old links to the new path, keeping the rest of the URL.
   (function () {
-    var moved = { wurm: "wildermon" };
+    var moved = { wurm: "wildermon", creaturecollector: "fusionforce", linerider: "cyberrider" };
     var m = location.pathname.match(/^\/([^\/]+)(\/.*)?$/);
     var to = m && moved[m[1].toLowerCase()];
     if (to) location.replace("/" + to + (m[2] || "/") + location.search + location.hash);
